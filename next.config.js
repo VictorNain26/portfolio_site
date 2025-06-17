@@ -1,6 +1,2 @@
-const nextConfig = {
-  experimental: {
-    appDir: true
-  }
-}
+const nextConfig = {}
 export default nextConfig
