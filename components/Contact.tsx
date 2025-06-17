@@ -9,7 +9,7 @@ export default function Contact() {
         Une idée de projet ou une mission ? Parlons-en.
       </p>
       <Button size="lg" asChild>
-        <a href="mailto:ton.email@domaine.tld">
+        <a href="mailto:victor.lenain26@gmail.com">
           <Mail className="mr-2 h-4 w-4" />
           M’envoyer un e-mail
         </a>
