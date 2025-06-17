@@ -23,7 +23,11 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${poppins.variable}`}>
+    <html
+      lang="fr"
+      className={`dark ${inter.variable} ${poppins.variable}`}
+      style={{ colorScheme: 'dark' }}
+    >
       <body className="bg-gray-900 text-gray-100 font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {children}
