@@ -1,0 +1,17 @@
+# Dépendances
+./node_modules/
+.pnpm-store/
+.pnpm/
+
+# Next.js
+.next/
+out/
+
+# Logs & env
+*.log
+.env.local
+.env*
+node_modules/
+.pnpm/
+.next/
+
