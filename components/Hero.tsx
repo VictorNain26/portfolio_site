@@ -15,7 +15,7 @@ export default function Hero() {
         transition={{ duration: 0.7 }}
         className="text-4xl md:text-6xl font-display font-extrabold leading-tight"
       >
-        Salut, moi c'est <span className="text-primary">Ton Prénom</span>
+        Salut, moi c'est <span className="text-primary">Victor Lenain</span>
         <br />
         Développeur Web & Ingénieur DevOps
       </motion.h1>
