@@ -1,7 +1,7 @@
 import './globals.css'
 import { Inter, Poppins } from 'next/font/google'
 import { ReactNode } from 'react'
-import { ThemeProvider } from '@/components/theme-provider'
+
 
 const inter = Inter({
   subsets: ['latin'],
@@ -22,16 +22,11 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+
   return (
-    <html
-      lang="fr"
-      className={`dark ${inter.variable} ${poppins.variable}`}
-      style={{ colorScheme: 'dark' }}
-    >
+    <html lang="fr" className={`${inter.variable} ${poppins.variable}`}> 
       <body className="bg-gray-900 text-gray-100 font-sans antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          {children}
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   )
