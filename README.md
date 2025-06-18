@@ -7,7 +7,7 @@ pnpm create next-app@latest mon-portfolio
 # ou yarn create next-app, npm create next-app
 # Copie ensuite les fichiers de ce repo ou clone-le
 pnpm i
-pnpm dlx shadcn@latest init
+pnpm dlx shadcn-ui@latest init
 pnpm dev
 ```
 

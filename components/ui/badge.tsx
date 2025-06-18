@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { clsx } from 'clsx'
 
 export function Badge({
   children,
@@ -9,7 +9,7 @@ export function Badge({
 }) {
   return (
     <span
-      className={cn(
+      className={clsx(
         'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold',
         variant === 'default'
           ? 'bg-primary text-primary-foreground'
