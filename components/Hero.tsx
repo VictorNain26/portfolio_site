@@ -18,19 +18,27 @@ export default function Hero() {
     import('./ThreeHero').then(() => setLoaded(true))
   }, [])
 
-  if (!loaded) {
-    return (
-      <section id="accueil" className="h-screen flex items-center justify-center">
-        <Spinner className="size-10" />
-      </section>
-    )
-  }
+  useEffect(() => {
+    if (!loaded) {
+      document.body.classList.add('overflow-hidden')
+    } else {
+      document.body.classList.remove('overflow-hidden')
+    }
+    return () => {
+      document.body.classList.remove('overflow-hidden')
+    }
+  }, [loaded])
 
   return (
     <section
       id="accueil"
-      className="h-screen flex flex-col justify-center items-center text-center px-6"
+      className="relative h-screen flex flex-col justify-center items-center text-center px-6"
     >
+      {!loaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-background">
+          <Spinner className="size-10" />
+        </div>
+      )}
       <motion.h1
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -58,7 +66,7 @@ export default function Hero() {
         transition={{ delay: 0.25, duration: 0.7 }}
         className="w-full max-w-md mt-10"
       >
-        <ThreeHero />
+        {loaded ? <ThreeHero /> : <div className="w-full h-96" />}
       </motion.div>
 
       <motion.div
