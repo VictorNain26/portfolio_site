@@ -1,35 +1,26 @@
 'use client'
-import { motion } from 'framer-motion'
+
+import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Spinner } from '@/components/ui/spinner'
+import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
+
+/**
+ * Canvas + three.js sont chargés uniquement côté client.
+ * `suspense: true` permet d’utiliser <Suspense>.
+ */
 const ThreeHero = dynamic(() => import('@/components/ThreeHero'), {
   ssr: false,
-  loading: () => null,
+  suspense: true,
 })
 
 export default function Hero() {
-  const [loaded, setLoaded] = useState(false)
-
-  useEffect(() => {
-    import('./ThreeHero').then(() => setLoaded(true))
-  }, [])
-
-  if (!loaded) {
-    return (
-      <section id="accueil" className="h-screen flex items-center justify-center">
-        <Spinner className="size-10" />
-      </section>
-    )
-  }
-
   return (
     <section
       id="accueil"
-      className="h-screen flex flex-col justify-center items-center text-center px-6"
+      className="h-screen flex flex-col items-center justify-center text-center px-6"
     >
       <motion.h1
         initial={{ opacity: 0, y: 16 }}
@@ -37,9 +28,9 @@ export default function Hero() {
         transition={{ duration: 0.7 }}
         className="text-4xl md:text-6xl font-display font-extrabold leading-tight"
       >
-        Salut, moi c&apos;est <span className="text-primary">Victor Lenain</span>
+        Salut, moi c&#39;est <span className="text-primary">Victor Lenain</span>
         <br />
-        Développeur Web & Ingénieur DevOps
+        Développeur Web &amp; Ingénieur DevOps
       </motion.h1>
 
       <motion.p
@@ -52,14 +43,13 @@ export default function Hero() {
         cloud robustes et des apps React performantes.
       </motion.p>
 
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25, duration: 0.7 }}
-        className="w-full max-w-md mt-10"
-      >
-        <ThreeHero />
-      </motion.div>
+      {/* Canvas : même hauteur qu’après hydratation → pas de layout-shift */}
+      <div className="w-full max-w-md h-96 mt-10">
+        {/* On n’affiche plus rien pendant le chargement du bundle */}
+        <Suspense fallback={null}>
+          <ThreeHero />
+        </Suspense>
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}
