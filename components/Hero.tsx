@@ -3,11 +3,16 @@ import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
+import { Spinner } from '@/components/ui/spinner'
 
 const ThreeHero = dynamic(() => import('@/components/ThreeHero'), {
   ssr: false,
-  // Reserve space while loading to avoid layout shift
-  loading: () => <div className="w-full h-96" />,
+  // Display a spinner while loading to avoid layout shift
+  loading: () => (
+    <div className="w-full h-96 flex items-center justify-center">
+      <Spinner className="size-10 text-primary" />
+    </div>
+  ),
 })
 
 export default function Hero() {
