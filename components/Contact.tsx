@@ -5,7 +5,7 @@ export default function Contact() {
   return (
     <section id="contact" className="max-w-4xl mx-auto px-4 scroll-mt-20">
       <h2 className="text-3xl font-display font-bold mb-6">Contact</h2>
-      <p className="text-gray-300 mb-4">
+      <p className="text-muted-foreground mb-4">
         Une idée de projet ou une mission ? Parlons-en.
       </p>
       <Button size="lg" asChild>
