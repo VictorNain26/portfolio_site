@@ -5,18 +5,18 @@ import { OrbitControls, Loader } from '@react-three/drei'
 import { useRef } from 'react'
 import type { Mesh } from 'three'
 
-function Box() {
+function TorusKnot() {
   const mesh = useRef<Mesh>(null!)
 
   useFrame((_, delta) => {
-    mesh.current.rotation.x += delta * 0.6
-    mesh.current.rotation.y += delta * 0.6
+    mesh.current.rotation.x += delta * 0.5
+    mesh.current.rotation.y += delta * 0.5
   })
 
   return (
-    <mesh ref={mesh}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color="orange" />
+    <mesh ref={mesh} scale={1}>
+      <torusKnotGeometry args={[0.8, 0.3, 128, 32]} />
+      <meshStandardMaterial color="#6366f1" />
     </mesh>
   )
 }
@@ -24,15 +24,16 @@ function Box() {
 export default function ThreeHero() {
   return (
     <>
-      <Canvas className="w-full h-full" camera={{ position: [2, 2, 2] }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} />
-        <Box />
-        <OrbitControls />
+      <Canvas
+        className="w-full h-full"
+        camera={{ position: [2.5, 2, 2.5], fov: 60 }}
+      >
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[3, 4, 5]} intensity={0.8} />
+        <TorusKnot />
+        <OrbitControls enableZoom={false} enablePan={false} />
       </Canvas>
 
-      {/* Overlay de chargement (progress bar ou spinner),
-          fourni par @react-three/drei */}
       <Loader />
     </>
   )

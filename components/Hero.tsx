@@ -1,19 +1,13 @@
 'use client'
 
-import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-
 import { Button } from '@/components/ui/button'
 
-/**
- * Canvas + three.js sont chargés uniquement côté client.
- * `suspense: true` permet d’utiliser <Suspense>.
- */
 const ThreeHero = dynamic(() => import('@/components/ThreeHero'), {
   ssr: false,
-  suspense: true,
+  loading: () => null,
 })
 
 export default function Hero() {
@@ -43,12 +37,9 @@ export default function Hero() {
         cloud robustes et des apps React performantes.
       </motion.p>
 
-      {/* Canvas : même hauteur qu’après hydratation → pas de layout-shift */}
+      {/* Réserve toujours la même hauteur → zéro layout-shift */}
       <div className="w-full max-w-md h-96 mt-10">
-        {/* On n’affiche plus rien pendant le chargement du bundle */}
-        <Suspense fallback={null}>
-          <ThreeHero />
-        </Suspense>
+        <ThreeHero />
       </div>
 
       <motion.div
