@@ -40,7 +40,7 @@ export default function Projects() {
             <Card className="overflow-hidden">
               <Image
                 src={project.image}
-                alt=""
+                alt={project.title}
                 width={800}
                 height={450}
                 className="transition-transform group-hover:scale-105"
