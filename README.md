@@ -17,6 +17,12 @@ bun run dev
 - shadcn/ui (Radix + Tailwind)
 - Framer Motion
 - Lucide React
+- three / @react-three/fiber / @react-three/drei
+
+## 3D Hero
+
+Le composant **Hero** intègre un cube en rotation rendu avec Three.js. Il est
+chargé dynamiquement pour éviter les problèmes de SSR de Next.js.
 
 ## Déployer sur Vercel
 
