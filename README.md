@@ -23,8 +23,3 @@ pnpm dev
 
 Connecte ton repo GitHub → Import Project → voilà.
 
-## Docker
-
-Une image de développement peut être créée avec `docker-compose build`. Le fichier
-`.dockerignore` exclut les dossiers inutiles (node_modules, logs, etc.) afin de
-réduire le contexte envoyé au daemon Docker et d'accélérer la phase de build.
