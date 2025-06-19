@@ -3,13 +3,23 @@
 ## Démarrage rapide
 
 ```bash
-pnpm create next-app@latest mon-portfolio
+bun create next-app mon-portfolio
 # ou yarn create next-app, npm create next-app
 # Copie ensuite les fichiers de ce repo ou clone-le
-pnpm i
-pnpm dlx shadcn@latest init
-pnpm dev
+bun install
+bunx shadcn@latest init
+bun run dev
 ```
+
+## Vérifier le code
+
+```bash
+bun run lint
+bun run test
+```
+
+`bun run lint` exécute d'abord [Oxlint](https://oxc.rs) puis ESLint via Next.js grâce au plugin
+[`eslint-plugin-oxlint`](https://github.com/oxc-project/eslint-plugin-oxlint).
 
 ## Principales dépendances
 

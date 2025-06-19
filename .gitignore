@@ -15,3 +15,6 @@ node_modules/
 .pnpm/
 .next/
 
+bun.lock
+.bun/
+.eslintcache
