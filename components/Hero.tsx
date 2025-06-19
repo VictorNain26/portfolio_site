@@ -1,16 +1,31 @@
 'use client'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import { ArrowRight } from 'lucide-react'
 
 const ThreeHero = dynamic(() => import('@/components/ThreeHero'), {
   ssr: false,
-  // Reserve space while loading to avoid layout shift
-  loading: () => <div className="w-full h-96" />,
+  loading: () => null,
 })
 
 export default function Hero() {
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    import('./ThreeHero').then(() => setLoaded(true))
+  }, [])
+
+  if (!loaded) {
+    return (
+      <section id="accueil" className="h-screen flex items-center justify-center">
+        <Spinner className="size-10" />
+      </section>
+    )
+  }
+
   return (
     <section
       id="accueil"
