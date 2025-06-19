@@ -1,5 +1,5 @@
 import './globals.css'
-import { Inter, Poppins } from 'next/font/google'
+import { Inter, Poppins, Outfit } from 'next/font/google'
 import { ReactNode } from 'react'
 import Script from 'next/script'
 
@@ -16,6 +16,12 @@ const poppins = Poppins({
   display: 'swap',
 })
 
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
+  display: 'swap',
+})
+
 export const metadata = {
   title: 'Victor Lenain | Développeur Full-Stack JavaScripts',
   description: 'Je construis des apps modernes.',
@@ -24,7 +30,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
-    <html lang="fr" className={`${inter.variable} ${poppins.variable}`}>
+    <html lang="fr" className={`${inter.variable} ${poppins.variable} ${outfit.variable}`}>
       <head>
         <Script
           id="ld-person"
