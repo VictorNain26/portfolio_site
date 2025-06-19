@@ -3,12 +3,11 @@
 ## Démarrage rapide
 
 ```bash
-pnpm create next-app@latest mon-portfolio
-# ou yarn create next-app, npm create next-app
+bun create next-app mon-portfolio
 # Copie ensuite les fichiers de ce repo ou clone-le
-pnpm i
-pnpm dlx shadcn@latest init
-pnpm dev
+bun install
+bunx shadcn init
+bun run dev
 ```
 
 ## Principales dépendances
