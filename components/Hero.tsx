@@ -24,7 +24,7 @@ export default function Hero() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.7 }}
-        className="mt-6 max-w-2xl text-lg text-gray-400"
+        className="mt-6 max-w-2xl text-lg text-muted-foreground"
       >
         J’aide les entreprises à livrer plus vite grâce à des architectures
         cloud robustes et des apps React performantes.

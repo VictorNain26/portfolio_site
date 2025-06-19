@@ -1,7 +1,6 @@
 import './globals.css'
 import { Inter, Poppins } from 'next/font/google'
 import { ReactNode } from 'react'
-import Navbar from '@/components/Navbar'
 
 
 const inter = Inter({
@@ -26,8 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="fr" className={`${inter.variable} ${poppins.variable}`}>
-      <body className="bg-gray-900 text-gray-100 font-sans antialiased">
-        <Navbar />
+      <body className="bg-background text-foreground font-sans antialiased">
         {children}
       </body>
     </html>
