@@ -6,6 +6,8 @@ import { ArrowRight } from 'lucide-react'
 
 const ThreeHero = dynamic(() => import('@/components/ThreeHero'), {
   ssr: false,
+  // Reserve space while loading to avoid layout shift
+  loading: () => <div className="w-full h-96" />,
 })
 
 export default function Hero() {
