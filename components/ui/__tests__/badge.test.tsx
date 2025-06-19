@@ -11,6 +11,6 @@ describe('Badge', () => {
   it('applies secondary variant', () => {
     render(<Badge variant="secondary">test</Badge>)
     const badge = screen.getByText('test')
-    expect(badge).toHaveClass('bg-gray-800')
+    expect(badge).toHaveClass('bg-secondary')
   })
 })
