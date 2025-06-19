@@ -28,7 +28,13 @@ function Box() {
 
 export default function ThreeHero() {
   return (
-    <Canvas className="w-full h-96" camera={{ position: [2, 2, 2] }}>
+    <Canvas
+      className="w-full h-96 block opacity-0"
+      camera={{ position: [2, 2, 2] }}
+      onCreated={(state) => {
+        state.gl.domElement.style.opacity = '1'
+      }}
+    >
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} />
       <Box />
