@@ -1,7 +1,6 @@
 import './globals.css'
 import { Inter, Poppins } from 'next/font/google'
 import { ReactNode } from 'react'
-import IdleThreeHeroLoader from '@/components/IdleThreeHeroLoader'
 
 
 const inter = Inter({
@@ -27,7 +26,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={`${inter.variable} ${poppins.variable}`}>
       <body className="bg-background text-foreground font-sans antialiased">
-        <IdleThreeHeroLoader />
         {children}
       </body>
     </html>

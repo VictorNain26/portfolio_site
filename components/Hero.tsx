@@ -4,17 +4,10 @@ import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 
-function ThreeSkeleton() {
-  return (
-    <div className="w-full h-96 relative">
-      <div className="absolute inset-0 bg-background/70 backdrop-blur-sm animate-pulse rounded-xl" />
-    </div>
-  )
-}
-
 const ThreeHero = dynamic(() => import('@/components/ThreeHero'), {
   ssr: false,
-  loading: () => <ThreeSkeleton />,
+  // Reserve space while loading to avoid layout shift
+  loading: () => <div className="w-full h-96" />,
 })
 
 export default function Hero() {
