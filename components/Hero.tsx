@@ -14,31 +14,29 @@ export default function Hero() {
   return (
     <section
       id="accueil"
-      className="h-screen flex flex-col items-center justify-center text-center px-6"
+      className="relative h-screen w-full flex flex-col items-center justify-center text-center px-6 md:px-10 overflow-hidden"
     >
+      <div
+        className="absolute inset-0 -z-10 bg-fixed bg-center bg-cover"
+        style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
+      />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/70 to-background/90" />
+
       <motion.h1
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="text-4xl md:text-6xl font-display font-extrabold leading-tight"
+        className="font-display font-extrabold leading-tight drop-shadow-lg text-4xl sm:text-5xl lg:text-6xl"
       >
-        Salut, moi c&#39;est <span className="text-primary">Victor Lenain</span>
-        <br />
-        Développeur Web &amp; Ingénieur DevOps
+        <span className="block bg-gradient-to-r from-primary via-fuchsia-500 to-secondary bg-clip-text text-transparent animate-[gradient_8s_ease_infinite]">
+          Victor Lenain
+        </span>
+        <span className="block mt-1 sm:mt-2 text-primary">
+          Développeur Full-Stack JavaScript
+        </span>
       </motion.h1>
 
-      <motion.p
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.7 }}
-        className="mt-6 max-w-2xl text-lg text-muted-foreground"
-      >
-        J’aide les entreprises à livrer plus vite grâce à des architectures
-        cloud robustes et des apps React performantes.
-      </motion.p>
-
-      {/* Réserve toujours la même hauteur → zéro layout-shift */}
-      <div className="w-full max-w-md h-96 mt-10">
+      <div className="w-full max-w-lg h-72 sm:h-80 md:h-96 mt-8 sm:mt-10">
         <ThreeHero />
       </div>
 
@@ -46,15 +44,15 @@ export default function Hero() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.7 }}
-        className="mt-10 flex gap-4"
+        className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none sm:justify-center"
       >
-        <Button asChild size="lg">
+        <Button asChild size="lg" className="flex-1 sm:flex-none">
           <a href="#projets">
-            Voir mes projets <ArrowRight className="ml-2 h-4 w-4" />
+            Projets <ArrowRight className="ml-2 h-4 w-4" />
           </a>
         </Button>
-        <Button variant="outline" asChild size="lg">
-          <a href="#contact">Me contacter</a>
+        <Button variant="outline" asChild size="lg" className="flex-1 sm:flex-none">
+          <a href="#contact">Contact</a>
         </Button>
       </motion.div>
     </section>
