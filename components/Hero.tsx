@@ -35,9 +35,14 @@ export default function Hero() {
         cloud robustes et des apps React performantes.
       </motion.p>
 
-      <div className="w-full max-w-md mt-10">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25, duration: 0.7 }}
+        className="w-full max-w-md mt-10"
+      >
         <ThreeHero />
-      </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}
