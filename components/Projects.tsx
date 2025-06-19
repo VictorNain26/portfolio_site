@@ -8,14 +8,14 @@ const projects = [
     title: 'Plateforme e-commerce headless',
     description:
       'Stack Next.js + GraphQL + Stripe, déploiement sur Vercel avec tests e2e.',
-    image: '/images/ecommerce.png',
+    image: '/images/hero-bg.jpg',
     href: 'https://example.com',
   },
   {
     title: 'Infrastructure Kubernetes multi-cloud',
     description:
       'IaC avec Terraform, GitOps ArgoCD, monitoring Prometheus + Grafana.',
-    image: '/images/k8s.png',
+    image: '/images/hero-bg.jpg',
     href: '#',
   },
 ]

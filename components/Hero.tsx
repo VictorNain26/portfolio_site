@@ -12,91 +12,96 @@ const ThreeHero = dynamic(() => import('@/components/ThreeHero'), {
 
 export default function Hero() {
   return (
-    <>
-      {/* -------- Hero visuel -------- */}
-      <section
-        id="accueil"
-        className="relative h-screen w-full overflow-hidden px-6 md:px-12"
-      >
-        {/* image de fond */}
-        <div
-          role="img"
-          aria-label="Fond futuriste représentant une grille 3D néon"
-          className="absolute inset-0 -z-20 bg-fixed bg-center bg-cover bg-[url('/images/hero-bg.jpg')]"
-        />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/40 to-black/70" />
+    <section
+      id="accueil"
+      /* `min-height: 100svh` prend en compte la barre d’URL mobile */
+      style={{ minHeight: '100svh' }}
+      className="relative isolate flex flex-col items-center justify-between overflow-hidden pt-[calc(4rem+env(safe-area-inset-top))] md:pt-0"
+    >
+      {/* ---------- arrière-plan ---------- */}
+      <div
+        role="img"
+        aria-label="Fond futuriste représentant une grille 3D néon"
+        className="absolute inset-0 -z-20 bg-[url('/images/hero-bg.jpg')] bg-cover bg-fixed bg-center"
+      />
+      {/* dégradé : plus opaque sur mobile pour la lisibilité */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/60 via-black/40 to-black/80 md:bg-gradient-to-r md:from-black/70 md:via-black/50 md:to-transparent" />
 
-        {/* grille */}
-        <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col md:grid md:grid-cols-2 md:items-center">
-          {/* texte + CTA */}
-          <div className="flex flex-col items-center md:items-start justify-center gap-8">
-            <motion.header
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-center md:text-left"
-            >
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-md">
-                Victor&nbsp;Lenain
-              </h1>
-              <p className="mt-2 text-lg sm:text-xl text-white/90">
-                Développeur&nbsp;Full-Stack&nbsp;JavaScript basé à&nbsp;Marseille
-              </p>
-            </motion.header>
-
-            {/* CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none sm:justify-start"
-            >
-              {/* Projets */}
-              <Button
-                asChild
-                size="lg"
-                className="flex-1 sm:flex-none bg-primary text-white shadow-md shadow-primary/40 hover:bg-primary/90 focus-visible:ring-4 focus-visible:ring-primary/40"
-              >
-                <a href="#projets" aria-label="Voir mes projets">
-                  Projets
-                  <ArrowRight aria-hidden="true" className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-
-              {/* Contact */}
-              <Button
-                asChild
-                size="lg"
-                variant="secondary"
-                className="flex-1 sm:flex-none shadow-md shadow-secondary/40 hover:bg-secondary/90 focus-visible:ring-4 focus-visible:ring-secondary/40"
-              >
-                <a href="#contact" aria-label="Accéder au formulaire de contact">
-                  Contact
-                </a>
-              </Button>
-            </motion.div>
-          </div>
-
-          {/* 3D */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="h-72 sm:h-80 md:h-[32rem] mt-10 md:mt-0"
+      {/* ---------- contenu ---------- */}
+      <div className="container mx-auto grid max-w-7xl flex-1 items-center gap-10 px-6 md:grid-cols-2 lg:gap-16">
+        {/* --- bloc texte & CTA --- */}
+        <div className="flex flex-col items-center gap-8 md:items-start">
+          <motion.header
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-center md:text-left"
           >
-            <ThreeHero />
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight tracking-tight text-white">
+              Victor&nbsp;Lenain
+            </h1>
+            <p className="mt-3 max-w-xs text-base sm:text-lg md:text-xl text-white/90 md:max-w-none">
+              Développeur&nbsp;Full-Stack&nbsp;JavaScript&nbsp;– Marseille
+            </p>
+          </motion.header>
+
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15, duration: 0.7 }}
+            className="flex w-full max-w-xs flex-col gap-4 sm:max-w-none sm:flex-row md:gap-6"
+          >
+            {/* bouton Projets */}
+            <Button
+              asChild
+              size="lg"
+              className="group relative flex-1 overflow-hidden bg-primary text-white shadow-lg shadow-primary/40 transition-all duration-300 sm:flex-none"
+            >
+              <a href="#projets" aria-label="Voir mes projets">
+                Projets
+                <ArrowRight
+                  aria-hidden="true"
+                  className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </a>
+            </Button>
+
+            {/* bouton Contact */}
+            <Button
+              asChild
+              size="lg"
+              variant="secondary"
+              className="group relative flex-1 overflow-hidden shadow-lg shadow-secondary/40 transition-all duration-300 sm:flex-none"
+            >
+              <a href="#contact" aria-label="Accéder au formulaire de contact">
+                Contact
+              </a>
+            </Button>
           </motion.div>
         </div>
 
-        {/* indicateur scroll */}
-        <a
-          href="#a-propos"
-          aria-label="Faire défiler vers la section À propos"
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 animate-bounce"
+        {/* --- visuel 3D --- */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.25, duration: 0.7 }}
+          className="aspect-[4/3] w-full sm:aspect-square md:h-[30rem]"
         >
-          <ChevronDown className="h-7 w-7" aria-hidden="true" />
-        </a>
-      </section>
-    </>
+          <ThreeHero />
+        </motion.div>
+      </div>
+
+      {/* ---------- chevron scroll ---------- */}
+      <a
+        href="#a-propos"
+        aria-label="Faire défiler vers la section À propos"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 transition-opacity hover:opacity-100"
+      >
+        <ChevronDown className="h-7 w-7 animate-bounce" aria-hidden="true" />
+      </a>
+    </section>
   )
 }
