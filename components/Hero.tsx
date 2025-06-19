@@ -16,23 +16,18 @@ export default function Hero() {
       id="accueil"
       className="relative h-screen w-full flex flex-col items-center justify-center text-center px-6 md:px-10 overflow-hidden"
     >
-      <div
-        className="absolute inset-0 -z-10 bg-fixed bg-center bg-cover"
-        style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
-      />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/70 to-background/90" />
+      <div className="absolute inset-0 -z-20 bg-fixed bg-center bg-cover bg-[url('/images/hero-bg.jpg')]" />
 
       <motion.h1
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="font-display font-extrabold leading-tight drop-shadow-lg text-4xl sm:text-5xl lg:text-6xl"
+        className="font-display font-extrabold leading-tight text-white drop-shadow-[0_3px_6px_rgba(0,0,0,0.6)] text-4xl sm:text-5xl lg:text-6xl"
       >
-        <span className="block bg-gradient-to-r from-primary via-fuchsia-500 to-secondary bg-clip-text text-transparent animate-[gradient_8s_ease_infinite]">
-          Victor Lenain
-        </span>
-        <span className="block mt-1 sm:mt-2 text-primary">
-          Développeur Full-Stack JavaScript
+        Victor&nbsp;Lenain
+        <br />
+        <span className="text-white/90 text-2xl sm:text-3xl lg:text-4xl">
+          Développeur&nbsp;Full-Stack&nbsp;JavaScript
         </span>
       </motion.h1>
 
@@ -51,7 +46,13 @@ export default function Hero() {
             Projets <ArrowRight className="ml-2 h-4 w-4" />
           </a>
         </Button>
-        <Button variant="outline" asChild size="lg" className="flex-1 sm:flex-none">
+
+        <Button
+          variant="secondary"
+          asChild
+          size="lg"
+          className="flex-1 sm:flex-none"
+        >
           <a href="#contact">Contact</a>
         </Button>
       </motion.div>
