@@ -1,7 +1,12 @@
 'use client'
 import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
+
+const ThreeHero = dynamic(() => import('@/components/ThreeHero'), {
+  ssr: false,
+})
 
 export default function Hero() {
   return (
@@ -29,6 +34,10 @@ export default function Hero() {
         J’aide les entreprises à livrer plus vite grâce à des architectures
         cloud robustes et des apps React performantes.
       </motion.p>
+
+      <div className="w-full max-w-md mt-10">
+        <ThreeHero />
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}
