@@ -23,7 +23,7 @@ export default function Services() {
             className="border border-border rounded-2xl p-6 hover:border-primary transition"
           >
             <h3 className="font-semibold">{s.title}</h3>
-            <p className="text-muted-foreground mt-2">{s.desc}</p>
+            <p className="text-gray-200 mt-2">{s.desc}</p>
           </div>
         ))}
       </div>
