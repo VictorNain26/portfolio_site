@@ -5,7 +5,7 @@ export function Spinner({ className, ...props }: React.ComponentProps<'svg'>) {
   return (
     <svg
       data-slot="spinner"
-      className={cn("animate-spin text-primary", className)}
+      className={cn("animate-spin text-indigo-500", className)}
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden="true"

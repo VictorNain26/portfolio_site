@@ -39,13 +39,13 @@ export default function HeaderBar() {
           className="
             fixed inset-x-0 top-0 z-50 h-16
             backdrop-blur-lg
-            bg-header/80 text-header-foreground
+            bg-gray-900/80 text-white
             shadow-[0_2px_32px_0_rgba(0,0,0,0.20)]
           "
         >
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 select-none">
-              <div className="rounded-full bg-header-foreground/10 p-1.5 sm:p-2">
+              <div className="rounded-full bg-white/10 p-1.5 sm:p-2">
                 <Image
                   src="/logo.png"
                   alt="Logo Victor Lenain"
@@ -70,9 +70,9 @@ export default function HeaderBar() {
                   rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
                   className="
                     flex items-center justify-center rounded-full p-2 sm:p-2.5
-                    bg-header/10 text-header-foreground shadow transition
-                    hover:bg-primary hover:text-primary-foreground
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/80
+                    bg-gray-900/10 text-white shadow transition
+                    hover:bg-indigo-500 hover:text-white
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/80
                   "
                 >
                   <Icon className="h-5 w-5 sm:h-[22px] sm:w-[22px]" aria-hidden="true" />
