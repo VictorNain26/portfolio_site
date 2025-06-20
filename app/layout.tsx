@@ -1,27 +1,16 @@
 import './globals.css'
-import { Inter, Poppins, Outfit, Sora } from 'next/font/google'
+import { Inter, Sora } from 'next/font/google'
 import { ReactNode } from 'react'
 import Script from 'next/script'
 
+// Police texte : Inter
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
 })
 
-const poppins = Poppins({
-  weight: ['700', '800'],
-  subsets: ['latin'],
-  variable: '--font-poppins',
-  display: 'swap',
-})
-
-const outfit = Outfit({
-  subsets: ['latin'],
-  variable: '--font-outfit',
-  display: 'swap',
-})
-
+// Police titres : Sora
 const sora = Sora({
   subsets: ['latin'],
   variable: '--font-sora',
@@ -29,14 +18,13 @@ const sora = Sora({
 })
 
 export const metadata = {
-  title: 'Victor Lenain | Développeur Full-Stack JavaScripts',
+  title: 'Victor Lenain | Développeur Full-Stack JavaScript',
   description: 'Je construis des apps modernes.',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-
   return (
-    <html lang="fr" className={`${inter.variable} ${poppins.variable} ${outfit.variable} ${sora.variable}`}>
+    <html lang="fr" className={`${inter.variable} ${sora.variable}`}>
       <head>
         <Script
           id="ld-person"
@@ -48,10 +36,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               '@type': 'Person',
               name: 'Victor Lenain',
               jobTitle: 'Développeur Full-Stack JavaScript',
-              url: 'https://victorlenain.dev',   // ← remplace par ton domaine (à modifier)
+              url: 'https://victorlenain.dev',
               sameAs: [
                 'https://www.linkedin.com/in/victor-lenain-1907b7282/',
-                // 'https://github.com/ton-github' (à ajouter)
+                // 'https://github.com/victornain26'
               ],
             }),
           }}

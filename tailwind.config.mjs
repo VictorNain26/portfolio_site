@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ['./app/**/*.{ts,tsx,mdx}', './components/**/*.{ts,tsx,mdx}'],
   theme: {
     extend: {
@@ -9,7 +9,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'sans-serif'],
-        display: ['var(--font-poppins)', 'sans-serif'],
+        display: ['var(--font-sora)', 'sans-serif'],
       },
 
       keyframes: {
