@@ -22,7 +22,7 @@ export default function Skills() {
       <div className="grid gap-6 md:grid-cols-3">
         {skills.map(({ category, items }) => (
           <div key={category}>
-            <h3 className="font-semibold text-primary mb-2">{category}</h3>
+            <h3 className="font-semibold text-indigo-400 mb-2">{category}</h3>
             <ul className="flex flex-wrap gap-2">
               {items.map((skill) => (
                 <li key={skill}>

@@ -49,7 +49,7 @@ export default function Hero() {
           <h1
             className="
               mb-3 font-extrabold tracking-tight
-              bg-gradient-to-br from-primary via-fuchsia-500 to-indigo-400
+              bg-gradient-to-br from-indigo-500 via-fuchsia-500 to-indigo-400
               text-transparent bg-clip-text
             "
             style={{
@@ -108,9 +108,9 @@ export default function Hero() {
                 border border-white/10 bg-white/10
                 p-2.5 sm:p-3 shadow-sm
                 transition
-                hover:bg-primary hover:text-white hover:border-primary
-                hover:shadow-xl
-                focus-visible:ring-2 focus-visible:ring-primary/60
+                  hover:bg-indigo-500 hover:text-white hover:border-indigo-500
+                  hover:shadow-xl
+                  focus-visible:ring-2 focus-visible:ring-indigo-500/60
                 text-white
                 backdrop-blur-sm
                 duration-200

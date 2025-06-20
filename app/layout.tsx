@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body
         className="
           relative                        /* nécessaire pour le z-index */
-          font-sans antialiased text-foreground
+          font-sans antialiased text-gray-200
           bg-[#0e082e]
           bg-[url('/images/hero-bg.jpg')] bg-no-repeat bg-cover bg-center bg-fixed
         "

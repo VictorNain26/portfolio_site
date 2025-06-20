@@ -20,10 +20,10 @@ export default function Services() {
         {services.map((s) => (
           <div
             key={s.title}
-            className="border border-border rounded-2xl p-6 hover:border-primary transition"
+            className="border border-gray-600 rounded-2xl p-6 hover:border-indigo-500 transition"
           >
             <h3 className="font-semibold">{s.title}</h3>
-            <p className="text-muted-foreground mt-2">{s.desc}</p>
+            <p className="text-gray-200 mt-2">{s.desc}</p>
           </div>
         ))}
       </div>

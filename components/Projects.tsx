@@ -49,7 +49,7 @@ export default function Projects() {
                 <h3 className="text-xl font-semibold mb-2">
                   {project.title}
                 </h3>
-                <p className="text-muted-foreground">{project.description}</p>
+                <p className="text-gray-200">{project.description}</p>
               </CardContent>
             </Card>
           </motion.a>
