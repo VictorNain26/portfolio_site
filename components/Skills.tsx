@@ -5,15 +5,16 @@ import clsx from 'clsx'
 import Section from '@/components/Section'
 import { Badge } from '@/components/ui/badge'
 import { GripVertical } from 'lucide-react'
-import { motion } from 'framer-motion'
 import {
   DndContext,
   PointerSensor,
   useSensor,
   useSensors,
   closestCenter,
+  DragOverlay,
   type UniqueIdentifier,
   type DragEndEvent,
+  type DragStartEvent,
 } from '@dnd-kit/core'
 import {
   SortableContext,
@@ -23,9 +24,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-/* -------------------------------------------------------------------------- */
-/* Données initiales                                                          */
-/* -------------------------------------------------------------------------- */
+/* ─── Data ─────────────────────────────────────────────────────────────── */
 type Cat = { category: string; items: string[] }
 
 const initialSkills: Cat[] = [
@@ -34,14 +33,12 @@ const initialSkills: Cat[] = [
   { category: 'DevOps',   items: ['Docker', 'Kubernetes', 'Terraform', 'GitHub Actions'] },
 ]
 
-/* Helpers — IDs uniques sûrs pour TypeScript --------------------------------*/
+/* IDs helpers ------------------------------------------------------------ */
 const makeId     = (cat: string, skill: string) => `${cat}|${skill}`
 const parseCat   = (id: UniqueIdentifier) => String(id).split('|')[0]
 const parseSkill = (id: UniqueIdentifier) => String(id).split('|')[1]
 
-/* -------------------------------------------------------------------------- */
-/* Badge sortable avec animations                                             */
-/* -------------------------------------------------------------------------- */
+/* ─── Sortable badge (position animée) ─────────────────────────────────── */
 function SortableBadge({ id, label }: { id: string; label: string }) {
   const {
     setNodeRef,
@@ -50,23 +47,24 @@ function SortableBadge({ id, label }: { id: string; label: string }) {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id })
+  } = useSortable({
+    id,
+    animateLayoutChanges: () => true,   // <— anime le replacemenent
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.4 : 1,      // on garde une trace mais plus légère
+  }
 
   return (
-    <motion.div
+    <div
       ref={setNodeRef}
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition,
-      }}
-      initial={{ opacity: 0, y: 8, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.92 }}
-      whileDrag={{ scale: 1.12, rotate: 2 }}
+      style={style}
       className={clsx(
         'cursor-grab active:cursor-grabbing select-none',
-        isDragging && 'ring-2 ring-indigo-400 ring-offset-2 ring-offset-black/40',
+        'transition-opacity',
       )}
       {...attributes}
       {...listeners}
@@ -76,37 +74,53 @@ function SortableBadge({ id, label }: { id: string; label: string }) {
           flex items-center gap-1.5
           bg-indigo-700/30 text-indigo-200
           px-4 py-2 text-sm shadow-md backdrop-blur
+          hover:bg-indigo-700/50 transition-colors
         "
       >
         <GripVertical className="h-4 w-4 opacity-60 shrink-0" />
         {label}
       </Badge>
-    </motion.div>
+    </div>
   )
 }
 
-/* -------------------------------------------------------------------------- */
-/* Composant principal                                                        */
-/* -------------------------------------------------------------------------- */
+/* ─── Overlay durant le drag — effet de zoom/ombre ─────────────────────── */
+function DraggedBadge({ label }: { label: string }) {
+  return (
+    <div className="scale-105 shadow-xl">
+      <Badge
+        className="
+          flex items-center gap-1.5
+          bg-indigo-600 text-white
+          px-4 py-2 text-sm
+        "
+      >
+        <GripVertical className="h-4 w-4 opacity-60 shrink-0" />
+        {label}
+      </Badge>
+    </div>
+  )
+}
+
+/* ─── Component principal ──────────────────────────────────────────────── */
 export default function Skills() {
   const [skills, setSkills] = useState<Cat[]>(initialSkills)
   const [filter, setFilter] = useState<string | null>(null)
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
 
-  /* Un seul capteur pour tout le DnD */
   const sensors = useSensors(useSensor(PointerSensor))
 
-  /* Handler global : réordonne uniquement dans la même catégorie */
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event
+  const handleDragStart = (e: DragStartEvent) => setActiveId(e.active.id)
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    setActiveId(null)
     if (!over || active.id === over.id) return
-
-    const activeCat = parseCat(active.id)
-    const overCat   = parseCat(over.id)
-    if (activeCat !== overCat) return                // bloque inter-colonne
+    const src = parseCat(active.id)
+    const dst = parseCat(over.id)
+    if (src !== dst) return
 
     setSkills(prev =>
       prev.map(cat =>
-        cat.category === activeCat
+        cat.category === src
           ? {
               ...cat,
               items: arrayMove(
@@ -121,8 +135,7 @@ export default function Skills() {
   }
 
   return (
-    <Section id="competences" className="max-w-6xl mx-auto px-4 pb-28 scroll-mt-28">
-      {/* Titre */}
+    <Section id="competences" className="max-w-6xl mx-auto px-4 pb-28">
       <h2 className="mb-8 text-3xl font-display font-bold text-indigo-400">
         Compétences
       </h2>
@@ -137,7 +150,7 @@ export default function Skills() {
               className={clsx(
                 'px-3 py-1.5 rounded-full text-sm transition-colors',
                 filter === value
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-indigo-600 text-white shadow'
                   : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/60',
               )}
             >
@@ -147,10 +160,10 @@ export default function Skills() {
         )}
       </div>
 
-      {/* Grid + DndContext global */}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -177,6 +190,13 @@ export default function Skills() {
               </div>
             ))}
         </div>
+
+        {/* Overlay : badge suit le curseur, sans décaler la grille */}
+        <DragOverlay dropAnimation={{ duration: 150 }}>
+          {activeId ? (
+            <DraggedBadge label={parseSkill(activeId)} />
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </Section>
   )
