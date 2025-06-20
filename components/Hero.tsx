@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ChevronDown, GithubIcon, Linkedin } from 'lucide-react'
+import { ChevronDown, GithubIcon, Linkedin, Mail, Phone } from 'lucide-react'
 
 const PromptModelHero = dynamic(() => import('@/components/PromptModelHero'), {
   ssr: false,
@@ -14,7 +14,9 @@ export default function Hero() {
 
   const socials = [
     { href: 'https://github.com/victornain26', icon: GithubIcon, label: 'GitHub' },
-    { href: 'https://www.linkedin.com/in/victor-lenain-1907b7282/', icon: Linkedin,  label: 'LinkedIn' },
+    { href: 'https://www.linkedin.com/in/victor-lenain-1907b7282/', icon: Linkedin, label: 'LinkedIn' },
+    { href: 'tel:+33600000000', icon: Phone, label: 'Téléphone' },
+    { href: 'mailto:victor.lenain26@gmail.com', icon: Mail, label: 'Mail' },
   ]
 
   return (

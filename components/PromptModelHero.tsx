@@ -83,7 +83,7 @@ export default function PromptModelHero() {
   return (
     <div className="flex flex-col items-center gap-4">
       {/* --- Champ prompt + bouton ----------------------------------- */}
-      <form
+      {/* <form
         onSubmit={(e) => {
           e.preventDefault()
           const fd = new FormData(e.currentTarget)
@@ -103,7 +103,7 @@ export default function PromptModelHero() {
         >
           {loading ? '…' : 'Go'}
         </button>
-      </form>
+      </form> */}
 
       {/* --- Canvas R3F --------------------------------------------- */}
       <div className="aspect-square w-full max-w-[340px] sm:max-w-md md:max-w-xl">
