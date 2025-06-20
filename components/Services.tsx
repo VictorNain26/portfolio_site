@@ -10,7 +10,7 @@ export default function Services() {
     },
     {
       title: 'Backend & Support DevOps',
-      desc: "APIs Node.js, bases SQL/NoSQL, conteneurisation Docker et automatisation CI : je gère l'infra et l'admin sys sans en faire ma spécialité.",
+      desc: "APIs Node.js, bases SQL/NoSQL, conteneurisation Docker et automatisation CI : je gère l'infra et l'admin sys",
     },
     {
       title: 'Intégration de fonctionnalités IA',

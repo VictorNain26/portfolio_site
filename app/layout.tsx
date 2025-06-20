@@ -2,6 +2,7 @@ import './globals.css'
 import { Inter, Sora } from 'next/font/google'
 import { ReactNode } from 'react'
 import Script from 'next/script'
+import ScrollView from '@/components/ScrollView'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 const sora  = Sora ({ subsets: ['latin'], variable: '--font-sora',  display: 'swap' })
@@ -52,7 +53,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           "
         />
 
-        {children}
+        <ScrollView>{children}</ScrollView>
       </body>
     </html>
   )
