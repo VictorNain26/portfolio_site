@@ -27,7 +27,7 @@ export default function About() {
         {[
           ['2,5 ans', 'XP&nbsp;pro&nbsp;Dev&nbsp;& DevOps'],
           ['30+', 'Projets&nbsp;perso / OSS'],
-          ['<h', 'Pour adopter<br />un nouvel outil'],
+          ['<24h', 'Pour adopter<br />un nouvel outil'],
           ['100%', 'Curiosité&nbsp;& énergie'],
         ].map(([val, label]) => (
           <li
