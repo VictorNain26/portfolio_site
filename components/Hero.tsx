@@ -104,14 +104,13 @@ export default function Hero() {
               aria-label={label}
               className="
                 group flex flex-col items-center rounded-full
-                border border-black/10 bg-black/5    /* même fond et bord que le header */
+                border border-black/10 bg-black/5
                 p-2.5 sm:p-3 shadow-sm
                 transition-colors duration-200
                 hover:bg-black/20 hover:border-black/20
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60
                 text-white
-                dark:bg-white/10 dark:border-white/20
-                dark:hover:bg-white/30 dark:hover:border-white/30
+                dark:bg-white/10 dark:border-white/20 dark:hover:bg-white/30 dark:hover:border-white/30
               "
             >
               <Icon className="h-5 w-5" aria-hidden="true" />

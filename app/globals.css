@@ -1,4 +1,4 @@
-/* ────────────────────────────────────────────────────────────────
+/* ───────────────────────────────────────────────────────────────
    Tailwind
    ─────────────────────────────────────────────────────────────── */
 @import "tailwindcss";
@@ -7,18 +7,19 @@
    Règles de base
    ─────────────────────────────────────────────────────────────── */
 html { scroll-behavior: smooth; }
+section { scroll-margin-top: 6rem; }     /* ancrage sous le Header */
 
 /* ───────────────────────────────────────────────────────────────
-   Design tokens  —  Palette Light (par défaut)
+   Design tokens  —  Palette Light (shadcn/ui a besoin de ces vars)
    ─────────────────────────────────────────────────────────────── */
 :root {
   --radius: 0.625rem;
 
-  /* Fond global (couleur de repli sous l’image fixe) */
+  /* Fond global (couleur de repli) */
   --background: #0E082E;
   --foreground: #FFFFFF;
 
-  /* Header plus clair pour contraster */
+  /* Header */
   --header-bg: hsl(255 65% 44%);
   --header-fg: #FFFFFF;
 
@@ -28,7 +29,7 @@ html { scroll-behavior: smooth; }
   --popover:            #1A1A2E;
   --popover-foreground: #FFFFFF;
 
-  --primary:            hsl(255 65% 44%);
+  --primary:            hsl(255 70% 55%);
   --primary-foreground: #FFFFFF;
 
   --secondary:          hsl(255 25% 75%);
@@ -48,7 +49,7 @@ html { scroll-behavior: smooth; }
 }
 
 /* ───────────────────────────────────────────────────────────────
-   Palette Dark
+   Palette Dark (variables toujours requises)
    ─────────────────────────────────────────────────────────────── */
 .dark {
   --background: #0E082E;
@@ -62,7 +63,7 @@ html { scroll-behavior: smooth; }
   --popover:            #202040;
   --popover-foreground: #FFFFFF;
 
-  --primary:            hsl(255 65% 50%);
+  --primary:            hsl(255 70% 60%);
   --primary-foreground: #FFFFFF;
 
   --secondary:          hsl(255 25% 35%);
@@ -79,4 +80,12 @@ html { scroll-behavior: smooth; }
   --border:             hsl(255 10% 30%);
   --input:              hsl(255 10% 25%);
   --ring:               hsl(255 60% 55%);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Animations globales
+   ─────────────────────────────────────────────────────────────── */
+@keyframes pulse{
+ 0%,100%{transform:scale(1);opacity:0;}
+ 50%    {transform:scale(1.3);opacity:.4;}
 }
