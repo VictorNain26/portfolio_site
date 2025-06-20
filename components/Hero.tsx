@@ -76,7 +76,7 @@ export default function Hero() {
           </h1>
           <p className="mt-2 max-w-xs text-base sm:max-w-md sm:text-lg md:text-xl text-white/80 font-sans"
              style={{ letterSpacing: '-0.01em', lineHeight: 1.32 }}>
-            Développeur Full-Stack JavaScript — Marseille
+            Développeur Full-Stack JavaScript
           </p>
         </motion.header>
 
@@ -95,6 +95,7 @@ export default function Hero() {
 
         {/* 3 ▸ Réseaux sociaux ------------------------------------- */}
         <motion.div
+          id="hero-socials"
           initial={prefersReduceMotion ? false : { opacity: 0, y: 32 }}
           whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
