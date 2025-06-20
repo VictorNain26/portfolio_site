@@ -25,14 +25,6 @@ export default function Hero() {
         overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] sm:pt-0
       "
     >
-      {/* ── Overlay pour lisibilité ─────────────────────────────── */}
-      <div
-        className="
-          absolute inset-0 -z-10
-          bg-gradient-to-b from-black/70 via-black/50 to-black/80
-          sm:bg-gradient-to-t lg:bg-gradient-to-r
-        "
-      />
 
       {/* ── Wrapper ──────────────────────────────────────────────── */}
       <div

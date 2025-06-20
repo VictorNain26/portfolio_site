@@ -35,18 +35,23 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
 
-      {/* ------------------------------------------------------------------
-           • bg-[#0e082e]           = couleur de fond de secours
-           • bg-[url('/images/hero-bg.jpg')]  = image choisie
-           • bg-fixed bg-cover bg-center     = effet parallax
-         ------------------------------------------------------------------ */}
       <body
         className="
+          relative                        /* nécessaire pour le z-index */
           font-sans antialiased text-foreground
           bg-[#0e082e]
           bg-[url('/images/hero-bg.jpg')] bg-no-repeat bg-cover bg-center bg-fixed
         "
       >
+        <div
+          className="
+            pointer-events-none
+            fixed inset-0 -z-10
+            bg-gradient-to-b from-black/70 via-black/50 to-black/80
+            sm:bg-gradient-to-t lg:bg-gradient-to-r
+          "
+        />
+
         {children}
       </body>
     </html>
