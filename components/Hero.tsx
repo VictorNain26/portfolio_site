@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ChevronDown, GithubIcon, Linkedin } from 'lucide-react'
 
-const ThreeHero = dynamic(() => import('@/components/ThreeHero'), {
+const PromptModelHero = dynamic(() => import('@/components/PromptModelHero'), {
   ssr: false,
   loading: () => null,
 })
@@ -81,7 +81,7 @@ export default function Hero() {
             lg:order-none lg:row-start-1 lg:col-start-2 lg:max-w-none lg:h-[32rem]
           "
         >
-          <ThreeHero />
+          <PromptModelHero />
         </motion.div>
 
         {/* 3 ▸ Réseaux sociaux ------------------------------------------- */}
