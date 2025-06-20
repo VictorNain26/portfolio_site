@@ -8,13 +8,14 @@ import { GripVertical } from 'lucide-react'
 import {
   DndContext,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
   closestCenter,
   DragOverlay,
   type UniqueIdentifier,
-  type DragEndEvent,
   type DragStartEvent,
+  type DragEndEvent,
 } from '@dnd-kit/core'
 import {
   SortableContext,
@@ -24,7 +25,9 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-/* ─── Data ─────────────────────────────────────────────────────────────── */
+/* -------------------------------------------------------------------------- */
+/* Données                                                                    */
+/* -------------------------------------------------------------------------- */
 type Cat = { category: string; items: string[] }
 
 const initialSkills: Cat[] = [
@@ -33,12 +36,13 @@ const initialSkills: Cat[] = [
   { category: 'DevOps',   items: ['Docker', 'Kubernetes', 'Terraform', 'GitHub Actions'] },
 ]
 
-/* IDs helpers ------------------------------------------------------------ */
 const makeId     = (cat: string, skill: string) => `${cat}|${skill}`
 const parseCat   = (id: UniqueIdentifier) => String(id).split('|')[0]
 const parseSkill = (id: UniqueIdentifier) => String(id).split('|')[1]
 
-/* ─── Sortable badge (position animée) ─────────────────────────────────── */
+/* -------------------------------------------------------------------------- */
+/* Badge sortable                                                             */
+/* -------------------------------------------------------------------------- */
 function SortableBadge({ id, label }: { id: string; label: string }) {
   const {
     setNodeRef,
@@ -49,32 +53,30 @@ function SortableBadge({ id, label }: { id: string; label: string }) {
     isDragging,
   } = useSortable({
     id,
-    animateLayoutChanges: () => true,   // <— anime le replacemenent
+    animateLayoutChanges: () => true,
   })
 
-  const style = {
+  const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.4 : 1,      // on garde une trace mais plus légère
+    transition: isDragging ? 'none' : transition,
+    opacity: isDragging ? 0 : 1,
+    pointerEvents: isDragging ? 'none' : undefined,
   }
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={clsx(
-        'cursor-grab active:cursor-grabbing select-none',
-        'transition-opacity',
-      )}
+      className="cursor-grab active:cursor-grabbing select-none"
       {...attributes}
       {...listeners}
     >
       <Badge
         className="
           flex items-center gap-1.5
-          bg-indigo-700/30 text-indigo-200
-          px-4 py-2 text-sm shadow-md backdrop-blur
-          hover:bg-indigo-700/50 transition-colors
+          bg-indigo-700/30 text-indigo-200 backdrop-blur
+          px-4 py-2 text-sm shadow-md
+          transition-colors hover:bg-indigo-700/50
         "
       >
         <GripVertical className="h-4 w-4 opacity-60 shrink-0" />
@@ -84,17 +86,11 @@ function SortableBadge({ id, label }: { id: string; label: string }) {
   )
 }
 
-/* ─── Overlay durant le drag — effet de zoom/ombre ─────────────────────── */
+/* Overlay qui suit le doigt / curseur */
 function DraggedBadge({ label }: { label: string }) {
   return (
-    <div className="scale-105 shadow-xl">
-      <Badge
-        className="
-          flex items-center gap-1.5
-          bg-indigo-600 text-white
-          px-4 py-2 text-sm
-        "
-      >
+    <div className="scale-[1.12] rotate-3 shadow-2xl">
+      <Badge className="flex items-center gap-1.5 bg-indigo-600 text-white px-4 py-2 text-sm">
         <GripVertical className="h-4 w-4 opacity-60 shrink-0" />
         {label}
       </Badge>
@@ -102,17 +98,24 @@ function DraggedBadge({ label }: { label: string }) {
   )
 }
 
-/* ─── Component principal ──────────────────────────────────────────────── */
+/* -------------------------------------------------------------------------- */
+/* Composant principal                                                        */
+/* -------------------------------------------------------------------------- */
 export default function Skills() {
-  const [skills, setSkills] = useState<Cat[]>(initialSkills)
-  const [filter, setFilter] = useState<string | null>(null)
-  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
+  const [skills, setSkills]   = useState<Cat[]>(initialSkills)
+  const [filter, setFilter]   = useState<string | null>(null)
+  const [activeId, setActive] = useState<UniqueIdentifier | null>(null)
 
-  const sensors = useSensors(useSensor(PointerSensor))
+  /* Sensors : pointer (desktop) + touch (mobile) */
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(TouchSensor,   { activationConstraint: { delay: 150, tolerance: 8 } }),
+  )
 
-  const handleDragStart = (e: DragStartEvent) => setActiveId(e.active.id)
-  const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    setActiveId(null)
+  const handleDragStart = (e: DragStartEvent) => setActive(e.active.id)
+
+  const handleDragEnd   = ({ active, over }: DragEndEvent) => {
+    setActive(null)
     if (!over || active.id === over.id) return
     const src = parseCat(active.id)
     const dst = parseCat(over.id)
@@ -135,13 +138,13 @@ export default function Skills() {
   }
 
   return (
-    <Section id="competences" className="max-w-6xl mx-auto px-4 pb-28">
-      <h2 className="mb-8 text-3xl font-display font-bold text-indigo-400">
+    <Section id="competences" className="max-w-6xl mx-auto px-4 pb-20">
+      <h2 className="mb-6 text-3xl font-display font-bold text-indigo-400">
         Compétences
       </h2>
 
       {/* Filtres */}
-      <div className="mb-8 flex flex-wrap gap-3">
+      <div className="mb-6 flex flex-wrap gap-3">
         {[{ label: 'Tous', value: null }, ...skills.map(c => ({ label: c.category, value: c.category }))].map(
           ({ label, value }) => (
             <button
@@ -160,18 +163,19 @@ export default function Skills() {
         )}
       </div>
 
+      {/* Grid + DnD */}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {skills
             .filter(c => !filter || c.category === filter)
             .map(({ category, items }) => (
               <div key={category}>
-                <h3 className="mb-4 font-semibold text-indigo-300">{category}</h3>
+                <h3 className="mb-3 font-semibold text-indigo-300">{category}</h3>
 
                 <SortableContext
                   items={items.map(skill => makeId(category, skill))}
@@ -179,11 +183,7 @@ export default function Skills() {
                 >
                   <div className="flex flex-wrap gap-2">
                     {items.map(skill => (
-                      <SortableBadge
-                        key={skill}
-                        id={makeId(category, skill)}
-                        label={skill}
-                      />
+                      <SortableBadge key={skill} id={makeId(category, skill)} label={skill} />
                     ))}
                   </div>
                 </SortableContext>
@@ -191,11 +191,8 @@ export default function Skills() {
             ))}
         </div>
 
-        {/* Overlay : badge suit le curseur, sans décaler la grille */}
-        <DragOverlay dropAnimation={{ duration: 150 }}>
-          {activeId ? (
-            <DraggedBadge label={parseSkill(activeId)} />
-          ) : null}
+        <DragOverlay dropAnimation={{ duration: 160 }}>
+          {activeId && <DraggedBadge label={parseSkill(activeId)} />}
         </DragOverlay>
       </DndContext>
     </Section>
