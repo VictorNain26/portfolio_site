@@ -29,14 +29,24 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               name: 'Victor Lenain',
               jobTitle: 'Développeur Full-Stack JavaScript',
               url: 'https://victorlenain.dev',
-              sameAs: [
-                'https://www.linkedin.com/in/victor-lenain-1907b7282/',
-              ],
+              sameAs: ['https://www.linkedin.com/in/victor-lenain-1907b7282/'],
             }),
           }}
         />
       </head>
-      <body className="bg-background text-foreground font-sans antialiased">
+
+      {/* ------------------------------------------------------------------
+           • bg-[#0e082e]           = couleur de fond de secours
+           • bg-[url('/images/hero-bg.jpg')]  = image choisie
+           • bg-fixed bg-cover bg-center     = effet parallax
+         ------------------------------------------------------------------ */}
+      <body
+        className="
+          font-sans antialiased text-foreground
+          bg-[#0e082e]
+          bg-[url('/images/hero-bg.jpg')] bg-no-repeat bg-cover bg-center bg-fixed
+        "
+      >
         {children}
       </body>
     </html>

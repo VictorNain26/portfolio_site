@@ -1,39 +1,40 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import { GithubIcon, Linkedin, Mail, Phone } from 'lucide-react'
 
 const socials = [
   { href: 'https://github.com/victornain26', icon: GithubIcon, label: 'GitHub' },
-  { href: 'tel:+33600000000', icon: Phone, label: 'Téléphone' },
+  { href: 'tel:+33600000000',                icon: Phone,       label: 'Téléphone' },
   { href: 'https://www.linkedin.com/in/victor-lenain-1907b7282/', icon: Linkedin, label: 'LinkedIn' },
-  { href: 'mailto:victor.lenain26@gmail.com', icon: Mail, label: 'Mail' },
+  { href: 'mailto:victor.lenain26@gmail.com', icon: Mail,       label: 'Mail' },
 ]
 
 export default function HeaderBar() {
   const [show, setShow] = useState(false)
 
-  // On observe le Hero entier (section #accueil)
   useEffect(() => {
     const target = document.getElementById('accueil')
     if (!target) return
-    const io = new IntersectionObserver(
-      ([entry]) => setShow(entry.intersectionRatio === 0),
-      { threshold: 0.01 }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setShow(!entry.isIntersecting), // header uniquement quand Hero n’est plus visible
+      { threshold: 0, rootMargin: '0px' },
     )
-    io.observe(target)
-    return () => io.disconnect()
+
+    observer.observe(target)
+    return () => observer.disconnect()
   }, [])
 
   return (
-    <AnimatePresence>
+    <AnimatePresence initial={false}>
       {show && (
         <motion.header
           initial={{ y: -32, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -32, opacity: 0 }}
+          animate={{ y: 0,  opacity: 1 }}
+          exit={{    y: -32, opacity: 0 }}
           transition={{ duration: 0.35, ease: 'easeOut' }}
           className="
             fixed inset-x-0 top-0 z-50 h-16
@@ -43,7 +44,6 @@ export default function HeaderBar() {
           "
         >
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            {/* Logo + nom */}
             <div className="flex items-center gap-3 select-none">
               <div className="rounded-full bg-header-foreground/10 p-1.5 sm:p-2">
                 <Image
@@ -55,12 +55,11 @@ export default function HeaderBar() {
                   className="h-12 w-12 sm:h-14 sm:w-14"
                 />
               </div>
-              <span className="hidden md:inline font-display text-2xl font-extrabold tracking-tight text-header-foreground">
+              <span className="hidden md:inline font-display text-2xl font-extrabold tracking-tight">
                 Victor&nbsp;Lenain
               </span>
             </div>
 
-            {/* Réseaux sociaux */}
             <nav className="flex items-center gap-2 sm:gap-3">
               {socials.map(({ href, label, icon: Icon }) => (
                 <a
