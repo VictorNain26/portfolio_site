@@ -9,7 +9,8 @@ export default {
         /** fond principal (hero + pages) */
         background: 'hsl(var(--c-bg) / <alpha-value>)',
         /** fond du header : même teinte, +clair */
-        header:     'hsl(var(--c-header) / <alpha-value>)',
+        header:              'hsl(var(--header-bg) / <alpha-value>)',
+        'header-foreground': 'hsl(var(--header-fg) / <alpha-value>)',
 
         /** design-tokens shadcn/ui (nécessaires aux composants) */
         border:              'hsl(var(--c-border) / <alpha-value>)',

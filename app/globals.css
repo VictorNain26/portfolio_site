@@ -1,19 +1,5 @@
 @import "tailwindcss";
 
-/* ─── Couleurs racine ───────────────────────────────────────────── */
-:root {
-  /* Hero / fond de page */
-  --background: 255 65% 15%;
-  /* Header (plus clair) */
-  --header-bg : 255 65% 28%;
-}
-
-/* mode sombre si tu gardes un toggle : adapte simplement la lightness */
-.dark {
-  --background: 255 65% 10%;
-  --header-bg : 255 65% 24%;
-}
-
 /* ─── Règles globales ───────────────────────────────────────────── */
 html { scroll-behavior: smooth; }
 
@@ -95,6 +81,8 @@ html { scroll-behavior: smooth; }
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --header-bg: 255 65% 28%;         /* Bleu clair (par défaut) */
+  --header-fg: 0 0% 100%;           /* Texte clair (blanc)    */
 }
 
 .dark {
@@ -129,4 +117,6 @@ html { scroll-behavior: smooth; }
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --header-bg: 255 65% 18%;         /* Bleu + sombre          */
+  --header-fg: 0 0% 100%;           /* Texte clair (blanc)    */
 }
