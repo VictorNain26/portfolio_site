@@ -3,19 +3,8 @@ import { Inter, Sora } from 'next/font/google'
 import { ReactNode } from 'react'
 import Script from 'next/script'
 
-// Police texte : Inter
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
-
-// Police titres : Sora
-const sora = Sora({
-  subsets: ['latin'],
-  variable: '--font-sora',
-  display: 'swap',
-})
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
+const sora  = Sora ({ subsets: ['latin'], variable: '--font-sora',  display: 'swap' })
 
 export const metadata = {
   title: 'Victor Lenain | Développeur Full-Stack JavaScript',
@@ -26,6 +15,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={`${inter.variable} ${sora.variable}`}>
       <head>
+        <meta name="Victor-Lenain" content="victorlenain" />
+
+        {/* ---- JSON-LD ---- */}
         <Script
           id="ld-person"
           type="application/ld+json"
@@ -39,13 +31,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               url: 'https://victorlenain.dev',
               sameAs: [
                 'https://www.linkedin.com/in/victor-lenain-1907b7282/',
-                // 'https://github.com/victornain26'
               ],
             }),
           }}
         />
       </head>
-
       <body className="bg-background text-foreground font-sans antialiased">
         {children}
       </body>

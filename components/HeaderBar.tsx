@@ -1,13 +1,13 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import {
   GithubIcon,
   Linkedin,
   Mail,
   Phone,
 } from 'lucide-react'
-import Logo from '@/components/Logo'
 
 const socials = [
   {
@@ -61,7 +61,7 @@ export default function HeaderBar() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -32, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className={`
+          className="
             fixed top-0 left-0 w-full z-50
             px-2 sm:px-6 h-14
             flex items-center justify-between
@@ -69,14 +69,25 @@ export default function HeaderBar() {
             backdrop-blur-xl
             border-b border-white/10
             shadow-[0_2px_32px_0_rgba(20,20,40,0.12)]
-          `}
+          "
         >
-          <div className="flex items-center gap-2">
-            <Logo className="h-7 w-auto sm:h-8" />
-            <span className="hidden md:inline font-display font-extrabold text-xl sm:text-2xl tracking-tight text-white select-none">
+          {/* -------- Logo + nom -------- */}
+          <div className="flex items-center gap-2 select-none">
+            <Image
+              src="/logo.png"
+              alt="Logo Victor Lenain"
+              width={48}
+              height={48}
+              priority
+              className="h-12 w-12 sm:h-14 sm:w-14"
+            />
+
+            <span className="hidden md:inline font-display font-extrabold text-xl sm:text-2xl tracking-tight text-white">
               Victor&nbsp;Lenain
             </span>
           </div>
+
+          {/* -------- Social links -------- */}
           <nav className="flex items-center gap-1.5 sm:gap-3">
             {socials.map(({ href, label, icon: Icon }) => (
               <a
@@ -97,7 +108,10 @@ export default function HeaderBar() {
                   shadow
                 "
               >
-                <Icon className="h-[20px] w-[20px] sm:h-[22px] sm:w-[22px] transition-all duration-200" aria-hidden="true" />
+                <Icon
+                  className="h-[20px] w-[20px] sm:h-[22px] sm:w-[22px] transition-all duration-200"
+                  aria-hidden="true"
+                />
               </a>
             ))}
           </nav>
