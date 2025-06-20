@@ -10,7 +10,7 @@ const socials = [
   { href: 'https://github.com/victornain26', icon: GithubIcon, label: 'GitHub' },
   { href: 'https://www.linkedin.com/in/victor-lenain-1907b7282/', icon: Linkedin, label: 'LinkedIn' },
   { href: 'tel:+33600000000',                icon: Phone,       label: 'Téléphone' },
-  { href: 'mailto:victor.lenain26@gmail.com', icon: Mail,       label: 'Mail' },
+  { href: 'mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission', icon: Mail,       label: 'Mail' },
 ]
 
 export default function HeaderBar() {
