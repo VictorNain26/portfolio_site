@@ -63,10 +63,7 @@ export default function Hero() {
           >
             Victor&nbsp;Lenain
           </h1>
-          <p
-            className="mt-2 max-w-xs text-base sm:max-w-md sm:text-lg md:text-xl text-white/80 font-sans"
-            style={{ letterSpacing: '-0.01em', lineHeight: 1.32 }}
-          >
+          <p className="mt-2 max-w-xs sm:max-w-md md:text-xl text-gray-300">
             Développeur Full-Stack JavaScript
           </p>
         </motion.header>
@@ -106,20 +103,18 @@ export default function Hero() {
               rel="noopener noreferrer"
               aria-label={label}
               className="
-                group flex flex-col items-center gap-1 rounded-full
-                border border-white/10 bg-white/10
+                group flex flex-col items-center rounded-full
+                border border-black/10 bg-black/5    /* même fond et bord que le header */
                 p-2.5 sm:p-3 shadow-sm
-                transition
-                hover:bg-primary hover:text-white hover:border-primary
-                hover:shadow-xl
-                focus-visible:ring-2 focus-visible:ring-primary/60
+                transition-colors duration-200
+                hover:bg-black/20 hover:border-black/20
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60
                 text-white
-                backdrop-blur-sm
-                duration-200
+                dark:bg-white/10 dark:border-white/20
+                dark:hover:bg-white/30 dark:hover:border-white/30
               "
-              style={{ minWidth: 40, minHeight: 40 }}
             >
-              <Icon className="h-5 w-5 sm:h-5 sm:w-5 transition-all duration-200" aria-hidden="true" />
+              <Icon className="h-5 w-5" aria-hidden="true" />
               <span className="sr-only">{label}</span>
             </a>
           ))}
