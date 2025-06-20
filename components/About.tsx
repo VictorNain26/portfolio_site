@@ -25,7 +25,7 @@ export default function About() {
       {/* Stat bricks */}
       <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          ['2,5 ans', 'XP&nbsp;pro&nbsp;Dev&nbsp;& DevOps'],
+          ['3 ans', 'XP&nbsp;pro&nbsp;Dev&nbsp;& DevOps'],
           ['30+', 'Projets&nbsp;perso / OSS'],
           ['<24h', 'Pour adopter<br />un nouvel outil'],
           ['100%', 'Curiosité&nbsp;& énergie'],
