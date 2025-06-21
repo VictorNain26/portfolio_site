@@ -51,7 +51,10 @@ export default function Hero() {
           <h1
             className="
               mb-3 font-extrabold tracking-tight
-              bg-gradient-to-br from-primary via-fuchsia-500 to-indigo-400
+              bg-gradient-to-br
+                from-[#6bb4d8]   /* bleu clair  –  +25 % de luminosité */
+                via-[#4288b7]    /* bleu logo   –  couleur pivot */
+                to-[#2d5e81]     /* bleu foncé  –  -25 % de luminosité */
               text-transparent bg-clip-text
             "
             style={{
@@ -128,6 +131,12 @@ export default function Hero() {
           absolute left-1/2 bottom-[calc(1.5rem+env(safe-area-inset-bottom))]
           -translate-x-1/2 text-white/80 transition-opacity hover:opacity-100
         "
+        onClick={(e) => {
+          e.preventDefault();
+          document
+            .getElementById('a-propos')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }}
       >
         <ChevronDown className="h-7 w-7 animate-bounce" aria-hidden="true" />
       </a>

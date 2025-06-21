@@ -50,10 +50,10 @@ export default function HeaderBar() {
             <Image
               src="/logo.png"
               alt="Logo"
-              width={48}
-              height={48}
+              width={38}
+              height={38}
               priority
-              className="h-12 w-12 sm:h-12 sm:w-12 select-none"
+              className="h-12 w-12 sm:h-7 sm:w-7 select-none"
             />
 
             {/* Pastilles sociales — hover plus foncé (classes valides) */}
