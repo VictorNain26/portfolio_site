@@ -1,4 +1,3 @@
-// components/HeaderBar.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -53,7 +52,7 @@ export default function HeaderBar() {
               width={38}
               height={38}
               priority
-              className="h-12 w-12 sm:h-7 sm:w-7 select-none"
+              className="h-6 w-6 sm:h-7 sm:w-7 select-none"
             />
 
             {/* Pastilles sociales — hover plus foncé (classes valides) */}
