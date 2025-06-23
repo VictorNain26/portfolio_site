@@ -20,7 +20,7 @@ const projects = [
 
 export default function Projects() {
   return (
-    <Section id="projets" className="max-w-6xl mx-auto pb-28 scroll-mt-28">
+    <Section id="projets" className="max-w-6xl mx-auto px-4 pb-28 scroll-mt-28">
       <h2 className="mb-10 text-3xl font-display font-bold text-indigo-400">Projets</h2>
 
       <div className="overflow-x-auto pb-4 -mx-4 md:mx-0 md:overflow-visible">
