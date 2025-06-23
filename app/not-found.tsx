@@ -1,43 +1,43 @@
 // app/not-found.tsx
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center bg-hero-gradient px-6">
+    <main className="grid min-h-screen place-content-center justify-items-center gap-8 px-4 text-center">
+      {/* Titre – gradient identique au Hero */}
+      <h1
+        className="
+          font-display font-extrabold tracking-tight
+          text-transparent bg-clip-text
+          bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81]
+          text-5xl sm:text-6xl lg:text-7xl leading-snug
+        "
+      >
+        404&nbsp;·&nbsp;Page introuvable
+      </h1>
 
-      <div className="relative z-10 w-full max-w-5xl text-center">
-        <h1
-          className="text-5xl font-extrabold tracking-tight drop-shadow-lg sm:text-6xl lg:text-7xl"
-          style={{ color: "var(--hero-title-color)" }}
-        >
-          404 – Page introuvable
-        </h1>
+      <p className="max-w-xl text-base sm:text-lg leading-relaxed text-gray-300">
+        Oups&nbsp;! Cette page n’existe pas ou a été déplacée.
+        Utilisez le bouton ci-dessous pour revenir à l’accueil.
+      </p>
 
-        {/* PARAGRAPHE : blanc très léger + ombre pour lisibilité */}
-        <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-white/90 drop-shadow-sm sm:text-xl">
-          Désolé&nbsp;! Cette page n’existe pas (ou plus).
-          Cliquez ci-dessous pour revenir à l’accueil.
-        </p>
-
-        {/* BOUTON : fond et bordure = couleur hero ; texte blanc */}
-        <Button
-          asChild
-          size="lg"
-          className="mt-8 font-semibold shadow-md hover:opacity-90"
-          style={{
-            backgroundColor: "var(--hero-title-color)",
-            borderColor: "var(--hero-title-color)",
-            color: "#ffffff",
-          }}
-        >
-          <Link href="/" prefetch>
-            <ArrowLeft className="mr-2 h-5 w-5" />
-            Retour à l’accueil
-          </Link>
-        </Button>
-      </div>
+      {/* Bouton : même gradient que le titre, pas de déplacement au hover */}
+      <Button
+        asChild
+        size="lg"
+        className="
+          justify-self-center
+          bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81]
+          hover:brightness-110
+          text-white
+          rounded-md px-8 py-3 font-semibold shadow-lg
+          ring-1 ring-inset ring-white/10
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-300
+        "
+      >
+        <Link href="/">Retour à l’accueil</Link>
+      </Button>
     </main>
   );
 }
