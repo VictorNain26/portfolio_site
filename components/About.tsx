@@ -2,10 +2,7 @@ import Section from '@/components/Section'
 
 export default function About() {
   return (
-    <Section
-      id="a-propos"
-      className="max-w-4xl mx-auto px-4 pb-28 scroll-mt-28"
-    >
+    <Section id="a-propos" className="max-w-4xl mx-auto pb-28 scroll-mt-28">
       <h2 className="mb-4 text-3xl font-display font-bold text-indigo-400">
         À&nbsp;propos
       </h2>

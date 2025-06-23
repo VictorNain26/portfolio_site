@@ -19,7 +19,7 @@ export default function Services() {
   ]
 
   return (
-    <Section id="services" className="max-w-5xl mx-auto px-4 pb-28 scroll-mt-28">
+    <Section id="services" className="max-w-5xl mx-auto pb-28 scroll-mt-28">
       <h2 className="mb-10 text-3xl font-display font-bold text-indigo-400">
         Services
       </h2>
