@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { motion, useReducedMotion } from 'framer-motion'
+import { SocialIconButton } from "@/components/ui/social-icon-button";
 import { ChevronDown, GithubIcon, Linkedin, Mail, Phone } from 'lucide-react'
 
 const PromptModelHero = dynamic(() => import('@/components/PromptModelHero'), { ssr: false })
@@ -78,23 +79,37 @@ export default function Hero() {
         className="absolute bottom-[calc(4.5rem+env(safe-area-inset-bottom))] w-full"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-20 flex justify-center gap-4 sm:gap-6">
-          {socials.map(({ href, label, icon: Icon }) => (
-            <a
-              key={href}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={label}
-              className="
-                group rounded-full border border-black/10 bg-black/5 p-2.5 sm:p-3 shadow-sm
-                transition-colors duration-200 hover:bg-black/20 hover:border-black/20
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60
-                text-white dark:bg-white/10 dark:border-white/20 dark:hover:bg-white/30 dark:hover:border-white/30
-              "
-            >
-              <Icon className="h-5 w-5" aria-hidden />
-            </a>
-          ))}
+          <SocialIconButton
+              href="https://github.com/victornain26"
+            aria-label="GitHub"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GithubIcon />
+          </SocialIconButton>
+
+          <SocialIconButton
+            href="https://www.linkedin.com/in/victor-lenain-1907b7282/"
+            aria-label="LinkedIn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Linkedin />
+          </SocialIconButton>
+
+          <SocialIconButton
+            href="tel:+33600000000"
+            aria-label="Téléphone"
+          >
+            <Phone />
+          </SocialIconButton>
+
+          <SocialIconButton
+            href="mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission"
+            aria-label="Mail"
+          >
+            <Mail />
+          </SocialIconButton>
         </div>
       </motion.nav>
 

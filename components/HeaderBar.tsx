@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import { GithubIcon, Linkedin, Mail, Phone } from 'lucide-react'
+import { SocialIconButton } from '@/components/ui/social-icon-button'
 
 const socials = [
   { href: 'https://github.com/victornain26', icon: GithubIcon, label: 'GitHub' },
@@ -55,29 +56,18 @@ export default function HeaderBar() {
               className="h-6 w-6 sm:h-7 sm:w-7 select-none"
             />
 
-            {/* Pastilles sociales — hover plus foncé (classes valides) */}
             <nav className="flex items-center gap-1.5 sm:gap-2">
               {socials.map(({ href, label, icon: Icon }) => (
-                <a
+                <SocialIconButton
                   key={label}
                   href={href}
                   aria-label={label}
                   target={href.startsWith('http') ? '_blank' : undefined}
                   rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className="
-                    group flex flex-col items-center rounded-full
-                    border border-black/10 bg-black/5
-                    p-1.5 sm:p-2 shadow-sm
-                    transition-colors duration-200
-                    hover:bg-black/20 hover:border-black/20
-                    dark:bg-white/10 dark:border-white/20
-                    dark:hover:bg-white/30 dark:hover:border-white/30
-                    text-[#0e082e] dark:text-white
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60
-                  "
+                  size="sm"
                 >
-                  <Icon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
-                </a>
+                  <Icon />
+                </SocialIconButton>
               ))}
             </nav>
           </div>

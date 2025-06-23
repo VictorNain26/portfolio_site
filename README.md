@@ -1,30 +1,30 @@
-# Portfolio Dev Web & DevOps
+# Victor Lenain – Portfolio Dev Web & DevOps
 
-## Démarrage rapide
+> **Elevator-pitch :** je conçois des applications web modernes (Next 15 / R3F) et j’automatise leur déploiement cloud.
+> Démo 👉 <https://victorlenain.fr>
+
+![screencast](docs/assets/screen.gif)
+
+|  |  |
+|--|--|
+| **Stack principale** | Next.js 15 (App Router), Tailwind CSS 4, shadcn/ui, Framer Motion, React-three-fiber, Hugging Face Inference. |
+| **Fonctionnalités clés** | 3 D Hero (génération Shap-E), scroll animé Radix/UI, formulaire de contact mailto. |
+
+## 🚀 Démarrage rapide
 
 ```bash
-bun create next-app mon-portfolio
-# Copie ensuite les fichiers de ce repo ou clone-le
-bun install
+# 1. Cloner
+git clone https://github.com/<you>/victornain26-portfolio_site.git
+cd victornain26-portfolio_site
+
+# 2. Installer
+bun install    # bun.lockb doit être commit-safe
+
+# 3. Init UI
 bunx shadcn init
+
+# 4. Variables d’env.
+cp .env.example .env.local   # puis renseigner HF_TOKEN
+
+# 5. Dev
 bun run dev
-```
-
-## Principales dépendances
-
-- Next.js 15 (App Router)
-- Tailwind CSS 4
-- shadcn/ui (Radix + Tailwind)
-- Framer Motion
-- Lucide React
-- three / @react-three/fiber / @react-three/drei
-
-## 3D Hero
-
-Le composant **Hero** intègre un cube en rotation rendu avec Three.js. Il est
-chargé dynamiquement pour éviter les problèmes de SSR de Next.js.
-
-## Déployer sur Vercel
-
-Connecte ton repo GitHub → Import Project → voilà.
-

@@ -16,10 +16,6 @@ export default {
         background:           'hsl(var(--background) / <alpha-value>)',
         foreground:           'hsl(var(--foreground) / <alpha-value>)',
 
-        /* header */
-        header:               'hsl(var(--header-bg) / <alpha-value>)',
-        'header-foreground':  'hsl(var(--header-fg) / <alpha-value>)',
-
         /* composants */
         card:                 'hsl(var(--card) / <alpha-value>)',
         'card-foreground':    'hsl(var(--card-foreground) / <alpha-value>)',
