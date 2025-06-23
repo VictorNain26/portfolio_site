@@ -23,7 +23,7 @@ export default function Skills() {
     )
 
   return (
-    <Section id="competences" className="max-w-6xl mx-auto pb-20">
+    <Section id="competences" className="max-w-6xl mx-auto px-4 pb-20">
       {/* ── Titre ─────────────────────────────────────────────────────── */}
       <h2 className="mb-6 text-3xl font-display font-bold text-indigo-400">
         Compétences
