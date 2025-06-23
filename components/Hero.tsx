@@ -24,8 +24,9 @@ export default function Hero() {
       {/* ── Contenu principal ─────────────────────────────────────── */}
       <div
         className="
-          mx-auto max-w-7xl flex flex-col items-start gap-14 sm:items-center sm:gap-10
-          px-4 sm:px-8 lg:px-20
+          mx-auto max-w-7xl
+          flex flex-col items-start gap-14 sm:items-center sm:gap-10
+          px-4 sm:px-8 lg:px-20            /* UNE seule marge horizontale */
           lg:min-h-[70vh] lg:grid lg:grid-cols-2 lg:place-items-center lg:gap-16
         "
       >
@@ -56,7 +57,8 @@ export default function Hero() {
             </p>
           </div>
 
-          <p className="max-w-[28ch] sm:max-w-md text-sm sm:text-base text-gray-300">
+          {/* caché en mobile, visible ≥ sm */}
+          <p className="hidden sm:block max-w-[28ch] sm:max-w-md text-sm sm:text-base text-gray-300">
             Apps web performantes, expériences&nbsp;3D et intégrations&nbsp;IA pour votre croissance.
           </p>
         </motion.header>
