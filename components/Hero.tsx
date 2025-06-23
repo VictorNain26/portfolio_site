@@ -26,7 +26,7 @@ export default function Hero() {
         className="
           mx-auto max-w-7xl
           flex flex-col items-start gap-14 sm:items-center sm:gap-10
-          px-4 sm:px-8 lg:px-20            /* UNE seule marge horizontale */
+          px-0 sm:px-8 lg:px-20
           lg:min-h-[70vh] lg:grid lg:grid-cols-2 lg:place-items-center lg:gap-16
         "
       >
@@ -39,13 +39,7 @@ export default function Hero() {
           className="order-1 flex flex-col items-start text-left sm:items-center sm:text-center lg:order-none lg:items-start lg:text-left"
         >
           <h1
-            className="mb-2 font-extrabold tracking-tight bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] text-transparent bg-clip-text"
-            style={{
-              fontFamily: 'var(--font-sora), var(--font-poppins), sans-serif',
-              fontSize: 'clamp(2.6rem, 7.5vw, 5.3rem)',
-              letterSpacing: '-0.035em',
-              lineHeight: 1.05,
-            }}
+            className="mb-2 font-display font-extrabold tracking-[-0.035em] bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] text-transparent bg-clip-text text-[clamp(2.6rem,7.5vw,5.3rem)] leading-[1.05]"
           >
             Victor&nbsp;Lenain
           </h1>

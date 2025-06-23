@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'sans-serif'],
+        display: ['var(--font-sora)', 'sans-serif'],
+      },
       /* ─── Couleurs pilotées par les variables CSS ─── */
       colors: {
         /* bases */
