@@ -21,62 +21,67 @@ export default function Hero() {
       id="accueil"
       className="relative isolate flex min-h-[100svh] flex-col items-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] sm:pt-0"
     >
+      {/* ── Contenu principal ─────────────────────────────────────── */}
       <div
         className="
-          container mx-auto flex flex-col items-center gap-14 sm:gap-10 px-4
-          sm:max-w-2xl md:max-w-3xl
-          lg:grid lg:max-w-7xl lg:min-h-[70vh] lg:grid-cols-2 lg:place-items-center lg:gap-16
+          mx-auto max-w-7xl flex flex-col items-start gap-14 sm:items-center sm:gap-10
+          px-4 sm:px-8 lg:px-20
+          lg:min-h-[70vh] lg:grid lg:grid-cols-2 lg:place-items-center lg:gap-16
         "
       >
-        {/* ── Titre & tagline ───────────────────────────────────────── */}
+        {/* Titre + tagline */}
         <motion.header
           initial={prefersReduceMotion ? false : { opacity: 0, y: 32 }}
           whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="order-1 flex flex-col items-center text-center lg:order-none lg:items-start lg:text-left"
+          className="order-1 flex flex-col items-start text-left sm:items-center sm:text-center lg:order-none lg:items-start lg:text-left"
         >
           <h1
-            className="mb-3 font-extrabold tracking-tight bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] text-transparent bg-clip-text"
+            className="mb-2 font-extrabold tracking-tight bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] text-transparent bg-clip-text"
             style={{
               fontFamily: 'var(--font-sora), var(--font-poppins), sans-serif',
-              fontSize: 'clamp(2.8rem, 7vw, 5.3rem)',
+              fontSize: 'clamp(2.6rem, 7.5vw, 5.3rem)',
               letterSpacing: '-0.035em',
-              lineHeight: 1.08,
+              lineHeight: 1.05,
             }}
           >
             Victor&nbsp;Lenain
           </h1>
 
-          <p className="text-indigo-200 text-base sm:text-lg font-medium">
-            Développeur&nbsp;Full-Stack
-          </p>
+          <div className="mb-3 flex items-center gap-3 sm:justify-center">
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#6bb4d8] via-[#4288b7] to-[#2d5e81]" />
+            <p className="text-indigo-200 text-sm sm:text-base font-medium uppercase tracking-wide">
+              Développeur&nbsp;Full-Stack
+            </p>
+          </div>
 
-          {/* ⬇︎ ajout mini-pitch marketing */}
-          <p className="mt-4 max-w-[28ch] sm:max-w-md text-sm sm:text-base text-gray-300">
+          <p className="max-w-[28ch] sm:max-w-md text-sm sm:text-base text-gray-300">
             Apps web performantes, expériences&nbsp;3D et intégrations&nbsp;IA pour votre croissance.
           </p>
         </motion.header>
 
-        {/* ── Visuel 3D ─────────────────────────────────────────────── */}
+        {/* Visuel 3D */}
         <motion.div
           initial={prefersReduceMotion ? false : { opacity: 0, scale: 0.93 }}
           whileInView={prefersReduceMotion ? {} : { opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15, duration: 0.7 }}
-          className="order-2 aspect-square w-full max-w-[340px] sm:max-w-md md:max-w-xl lg:order-none lg:max-w-none lg:h-[32rem]"
+          className="order-2 aspect-square w-full max-w-[340px] sm:max-w-md md:max-w-xl lg:order-none lg:max-w-none lg:h-[32rem] touch-pan-y"
         >
           <PromptModelHero />
         </motion.div>
+      </div>
 
-        {/* ── Réseaux sociaux ───────────────────────────────────────── */}
-        <motion.div
-          initial={prefersReduceMotion ? false : { opacity: 0, y: 32 }}
-          whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.25, duration: 0.7 }}
-          className="order-3 w-full flex flex-wrap justify-center gap-4 sm:gap-6 mt-1 lg:col-span-2"
-        >
+      {/* ── Réseaux sociaux ───────────────────────────────────────── */}
+      <motion.nav
+        initial={prefersReduceMotion ? false : { opacity: 0, y: 24 }}
+        whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="absolute bottom-[calc(4.5rem+env(safe-area-inset-bottom))] w-full"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-20 flex justify-center gap-4 sm:gap-6">
           {socials.map(({ href, label, icon: Icon }) => (
             <a
               key={href}
@@ -91,13 +96,13 @@ export default function Hero() {
                 text-white dark:bg-white/10 dark:border-white/20 dark:hover:bg-white/30 dark:hover:border-white/30
               "
             >
-              <Icon className="h-5 w-5" aria-hidden="true" />
+              <Icon className="h-5 w-5" aria-hidden />
             </a>
           ))}
-        </motion.div>
-      </div>
+        </div>
+      </motion.nav>
 
-      {/* Flèche vers la section suivante */}
+      {/* ── Flèche vers la section suivante ───────────────────────── */}
       <a
         href="#a-propos"
         aria-label="Faire défiler vers la section À propos"
