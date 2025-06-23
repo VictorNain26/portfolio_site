@@ -6,17 +6,19 @@ import { ReactNode } from 'react'
 
 type Props = HTMLMotionProps<'section'> & { children: ReactNode }
 
-/* marges X uniformes (aucune classe custom) */
 export default function Section({ children, className, ...rest }: Props) {
-  const prefersReducedMotion = useReducedMotion()
+  const reduced = useReducedMotion()
 
   return (
     <motion.section
-      initial={prefersReducedMotion ? undefined : { opacity: 0, y: 40 }}
-      whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+      initial={reduced ? undefined : { opacity: 0, y: 40 }}
+      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={cn('px-0 sm:px-8 lg:px-20', className)}
+      transition={{ duration: .6, ease: 'easeOut' }}
+      className={cn(
+        'mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-20',
+        className,
+      )}
       {...rest}
     >
       {children}

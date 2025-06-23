@@ -20,13 +20,13 @@ const projects = [
 
 export default function Projects() {
   return (
-    <Section id="projets" className="max-w-6xl mx-auto px-4 pb-28 scroll-mt-28">
+    <Section id="projets" className="pb-28 scroll-mt-28">
       <h2 className="mb-10 text-3xl font-display font-bold text-indigo-400">Projets</h2>
 
-      <div className="overflow-x-auto pb-4 -mx-4 md:mx-0 md:overflow-visible">
+      <div className="overflow-x-auto pb-4 md:overflow-visible">
         <ul className="flex gap-6 snap-x snap-mandatory md:grid md:grid-cols-2">
           {projects.map((p, i) => (
-            <li key={p.title} className="snap-start shrink-0 w-[80%] md:w-auto">
+            <li key={p.title} className="w-[80%] shrink-0 snap-start md:w-auto">
               <motion.a
                 href={p.href}
                 target="_blank"
@@ -50,7 +50,9 @@ export default function Projects() {
                   </div>
 
                   <div className="p-6">
-                    <h3 className="mb-2 text-xl font-semibold text-indigo-300">{p.title}</h3>
+                    <h3 className="mb-2 text-xl font-semibold text-indigo-300">
+                      {p.title}
+                    </h3>
                     <p className="text-gray-300">{p.description}</p>
                   </div>
                 </div>
