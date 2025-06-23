@@ -16,7 +16,7 @@ export default function Section({ children, className, ...rest }: Props) {
       whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={cn('px-0 sm:px-8 lg:px-20', className)}
+      className={cn('px-4 sm:px-8 lg:px-20', className)}
       {...rest}
     >
       {children}
