@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "400px",
+      },
       fontFamily: {
         sans:    ['var(--font-inter)', 'sans-serif'],
         display: ['var(--font-sora)',  'sans-serif'],

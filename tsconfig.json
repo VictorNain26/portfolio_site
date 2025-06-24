@@ -20,9 +20,8 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"],
+      "content-collections": ["./.content-collections/generated"]
     },
     "types": ["node", "vitest/globals", "next"],
     "plugins": [

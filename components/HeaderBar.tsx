@@ -1,15 +1,12 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
-import Image from "next/image"
-import {
-  GithubIcon,
-  Linkedin,
-  Mail,
-  Phone,
-} from "lucide-react"
-import { SocialIconButton } from "@/components/ui/social-icon-button"
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { GithubIcon, Linkedin, Mail, Phone } from "lucide-react";
+import { SocialIconButton } from "@/components/ui/social-icon-button";
 
 const socials = [
   { href: "https://github.com/victornain26", icon: GithubIcon, label: "GitHub" },
@@ -24,18 +21,34 @@ const socials = [
     icon: Mail,
     label: "Mail",
   },
-]
+];
 
 export default function HeaderBar() {
-  const [show, setShow] = useState(false)
+  const pathname = usePathname();
+  const onBlog = pathname?.startsWith("/blog");
+
+  /* apparition / disparition */
+  const [show, setShow] = useState(false);
+  const ioRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    const hero = document.getElementById("accueil")
-    if (!hero) return
-    const io = new IntersectionObserver(([e]) => setShow(!e.isIntersecting))
-    io.observe(hero)
-    return () => io.disconnect()
-  }, [])
+    ioRef.current?.disconnect();
+
+    const hero = document.getElementById("accueil");
+    if (!hero || onBlog) {
+      setShow(true);
+      return;
+    }
+    const io = new IntersectionObserver(([e]) => setShow(!e.isIntersecting));
+    io.observe(hero);
+    ioRef.current = io;
+    return () => io.disconnect();
+  }, [pathname, onBlog]);
+
+  /* lien contextuel */
+  const navLink = onBlog
+    ? { href: "/", label: "Accueil" }
+    : { href: "/blog", label: "Blog" };
 
   return (
     <AnimatePresence initial={false}>
@@ -47,17 +60,14 @@ export default function HeaderBar() {
           transition={{ duration: 0.35, ease: "easeOut" }}
           className="
             fixed inset-x-0 top-0 z-50
-            bg-gradient-to-b from-white/80 via-white/70 to-white/60
-            dark:from-white/10 dark:via-white/5 dark:to-white/0
-            backdrop-blur-md ring-1 ring-black/10 dark:ring-white/15
-            shadow-sm
+            bg-transparent backdrop-blur-md        /* ⇦ plus de fond coloré */
+            ring-1 ring-white/10                    /* fine bordure */
             px-4 sm:px-8 lg:px-20 xl:px-28 2xl:px-36
-            py-1.5 md:py-2 lg:py-3
-            text-[#0e082e] dark:text-white
+            py-1 md:py-1.5 lg:py-3
+            text-white
           "
         >
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-            {/* Logo réduit */}
+          <div className="mx-auto flex max-w-7xl items-center gap-6">
             <Image
               src="/logo.png"
               alt="Logo"
@@ -67,28 +77,42 @@ export default function HeaderBar() {
               className="select-none"
             />
 
-            {/* Pastilles sociales */}
-            <nav className="flex items-center gap-1.5 sm:gap-2">
+            {onBlog && (
+              <span className="font-display text-lg font-semibold text-indigo-400">
+                Blog
+              </span>
+            )}
+
+            <nav className="ms-auto flex items-center gap-1.5 sm:gap-2">
               {socials.map(({ href, label, icon: Icon }) => (
                 <SocialIconButton
                   key={label}
                   href={href}
                   aria-label={label}
                   target={href.startsWith("http") ? "_blank" : undefined}
-                  rel={
-                    href.startsWith("http")
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
+                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
                   size="sm"
                 >
                   <Icon />
                 </SocialIconButton>
               ))}
             </nav>
+
+            <Link
+              href={navLink.href}
+              className="
+                whitespace-nowrap
+                rounded-full bg-gradient-to-br from-indigo-500 via-purple-600 to-violet-600
+                px-5 py-2 text-sm font-semibold text-white shadow-lg
+                transition-transform duration-150 hover:-translate-y-0.5 hover:brightness-110
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300
+              "
+            >
+              {navLink.label}
+            </Link>
           </div>
         </motion.header>
       )}
     </AnimatePresence>
-  )
+  );
 }

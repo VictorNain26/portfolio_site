@@ -1,15 +1,16 @@
-import Hero     from '@/components/Hero'
-import About    from '@/components/About'
-import Skills   from '@/components/Skills'
-import Projects from '@/components/Projects'
-import Services from '@/components/Services'
-import Contact  from '@/components/Contact'
-import HeaderBar from '@/components/HeaderBar'
+import Hero     from "@/components/Hero";
+import About    from "@/components/About";
+import Skills   from "@/components/Skills";
+import Projects from "@/components/Projects";
+import Services from "@/components/Services";
+import Contact  from "@/components/Contact";
+import BlogFloatingButton from "@/components/BlogFloatingButton";
 
 export default function Home() {
   return (
     <>
-      <HeaderBar />
+      <BlogFloatingButton />
+
       <main className="space-y-16 sm:space-y-24 lg:space-y-32">
         <Hero />
         <About />
@@ -19,5 +20,5 @@ export default function Home() {
         <Contact />
       </main>
     </>
-  )
+  );
 }

@@ -47,3 +47,18 @@ section { scroll-margin-top: 6rem; }
     @apply bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] text-transparent bg-clip-text;
   }
 }
+
+/* ---------- Article typography overrides ---------- */
+.prose :where(code):not(:where(.prose code)):not([class*="language-"]) {
+  @apply rounded bg-indigo-600/20 px-1.5 py-0.5 text-indigo-100 text-sm;
+}
+
+.prose pre {
+  @apply rounded-xl bg-[#1e1e2f] p-4 text-sm;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

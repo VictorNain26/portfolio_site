@@ -32,6 +32,9 @@
     "three": "^0.177.0"
   },
   "devDependencies": {
+    "@content-collections/core": "^0.9.1",
+    "@content-collections/mdx": "^0.2.2",
+    "@content-collections/next": "^0.2.6",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/jszip": "^3.4.1",
@@ -43,7 +46,8 @@
     "jsdom": "^26.1.0",
     "typescript": "5.5.2",
     "vite": "^6.3.5",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "zod": "^3.25.67"
   },
   "packageManager": "bun@1.2.14"
 }

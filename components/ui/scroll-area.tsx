@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
+import { cn } from "@/lib/utils";
 
 export function ScrollArea({
   className,
@@ -18,13 +18,13 @@ export function ScrollArea({
         {children}
       </ScrollAreaPrimitive.Viewport>
 
-      {/* vertical rail */}
+      {/* ─────────────────── Vertical rail ─────────────────── */}
       <ScrollAreaPrimitive.Scrollbar
         orientation="vertical"
         className="
           absolute right-0 top-0 h-full flex select-none touch-none p-px
-          w-0 hover:w-2.5 data-[state=visible]:w-2.5       /* ↔ élargissement */
-          transition-all
+          w-2.5                    /* largeur fixe = visible en permanence */
+          transition-opacity
         "
       >
         <ScrollAreaPrimitive.Thumb
@@ -36,13 +36,13 @@ export function ScrollArea({
         />
       </ScrollAreaPrimitive.Scrollbar>
 
-      {/* horizontal rail (facultatif) */}
+      {/* ───────────────── Horizontal rail (facultatif) ─────────────── */}
       <ScrollAreaPrimitive.Scrollbar
         orientation="horizontal"
         className="
           absolute bottom-0 left-0 w-full flex-col select-none touch-none p-px
-          h-0 hover:h-2.5 data-[state=visible]:h-2.5
-          transition-all
+          h-2.5                   /* hauteur fixe */
+          transition-opacity
         "
       >
         <ScrollAreaPrimitive.Thumb
@@ -56,5 +56,5 @@ export function ScrollArea({
 
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
-  )
+  );
 }
