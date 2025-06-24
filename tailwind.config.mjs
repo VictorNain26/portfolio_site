@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+import typography from '@tailwindcss/typography';
+import animate    from 'tailwindcss-animate';
+
 export default {
   content: [
     './app/**/*.{ts,tsx,mdx}',
@@ -7,10 +10,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)', 'sans-serif'],
-        display: ['var(--font-sora)', 'sans-serif'],
+        sans:    ['var(--font-inter)', 'sans-serif'],
+        display: ['var(--font-sora)',  'sans-serif'],
       },
-      /* ─── Couleurs pilotées par les variables CSS ─── */
       colors: {
         /* bases */
         background:           'hsl(var(--background) / <alpha-value>)',
@@ -43,8 +45,5 @@ export default {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('tailwindcss-animate'),
-  ],
-}
+  plugins: [typography, animate],
+};
