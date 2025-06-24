@@ -62,3 +62,8 @@ section { scroll-margin-top: 6rem; }
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* Évite les barres de défilement horizontales imprévues */
+body {
+  overflow-x: clip;  /* mieux que hidden : pas scrollable, mais garde la perf */
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Share2 } from "lucide-react";
+import { useCallback } from "react";
 
 export default function ShareButton({
   title,
@@ -11,29 +12,37 @@ export default function ShareButton({
   summary: string;
   slug: string;
 }) {
-  const share = () => {
-    const url = `${location.origin}/blog/${slug}`;
+  const share = useCallback(async () => {
+    const url = `${window.location.origin}/blog/${slug}`;
 
     if (navigator.share) {
-      navigator.share({ title, text: summary, url });
-    } else {
-      navigator.clipboard.writeText(url);
-      alert("Lien copié !");
+      try {
+        await navigator.share({ title, text: summary, url });
+        return;
+      } catch {
+      }
     }
-  };
+
+    try {
+      await navigator.clipboard.writeText(url);
+      alert("Lien copié !");
+    } catch {
+      alert("Impossible de partager ce lien.");
+    }
+  }, [title, summary, slug]);
 
   return (
     <button
+      aria-label="Partager l’article"
       onClick={share}
       className="
-        inline-flex items-center gap-2 rounded-full
-        bg-indigo-600 px-5 py-2 text-sm font-medium text-white
-        shadow-lg transition hover:bg-indigo-500
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300
+        inline-flex h-9 w-9 items-center justify-center rounded-full
+        bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-600
+        shadow-lg transition-transform hover:-translate-y-0.5 hover:brightness-110
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300
       "
     >
-      <Share2 className="h-4 w-4" />
-      Partager
+      <Share2 className="h-4 w-4 text-white" />
     </button>
   );
 }

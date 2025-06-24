@@ -1,11 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GithubIcon, Linkedin, Mail, Phone } from "lucide-react";
+import {
+  GithubIcon,
+  Linkedin,
+  Mail,
+  MessageCircle,
+  Home,
+  Newspaper,
+} from "lucide-react";
 import { SocialIconButton } from "@/components/ui/social-icon-button";
 
 const socials = [
@@ -15,7 +22,11 @@ const socials = [
     icon: Linkedin,
     label: "LinkedIn",
   },
-  { href: "tel:+33600000000", icon: Phone, label: "Téléphone" },
+  {
+    href: "https://wa.me/33600000000",
+    icon: MessageCircle,
+    label: "WhatsApp",
+  },
   {
     href: "mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission",
     icon: Mail,
@@ -25,30 +36,29 @@ const socials = [
 
 export default function HeaderBar() {
   const pathname = usePathname();
-  const onBlog = pathname?.startsWith("/blog");
+  const onBlog   = pathname?.startsWith("/blog");
 
-  /* apparition / disparition */
-  const [show, setShow] = useState(false);
-  const ioRef = useRef<IntersectionObserver | null>(null);
+  /* Affichage : fixe sur /blog, sinon après scroll */
+  const [show, setShow] = useState(onBlog);
 
   useEffect(() => {
-    ioRef.current?.disconnect();
-
-    const hero = document.getElementById("accueil");
-    if (!hero || onBlog) {
+    if (onBlog) {
       setShow(true);
       return;
     }
-    const io = new IntersectionObserver(([e]) => setShow(!e.isIntersecting));
+    const hero = document.getElementById("accueil");
+    if (!hero) return;
+    const io = new IntersectionObserver(
+      ([e]) => setShow(!e.isIntersecting),
+      { threshold: 0 }
+    );
     io.observe(hero);
-    ioRef.current = io;
     return () => io.disconnect();
-  }, [pathname, onBlog]);
+  }, [onBlog]);
 
-  /* lien contextuel */
   const navLink = onBlog
-    ? { href: "/", label: "Accueil" }
-    : { href: "/blog", label: "Blog" };
+    ? { href: "/", icon: Home, label: "Accueil" }
+    : { href: "/blog", icon: Newspaper, label: "Blog" };
 
   return (
     <AnimatePresence initial={false}>
@@ -60,14 +70,14 @@ export default function HeaderBar() {
           transition={{ duration: 0.35, ease: "easeOut" }}
           className="
             fixed inset-x-0 top-0 z-50
-            bg-transparent backdrop-blur-md        /* ⇦ plus de fond coloré */
-            ring-1 ring-white/10                    /* fine bordure */
+            bg-transparent backdrop-blur-md ring-1 ring-white/10
             px-4 sm:px-8 lg:px-20 xl:px-28 2xl:px-36
-            py-1 md:py-1.5 lg:py-3
+            py-1 sm:py-1.5 lg:py-2
             text-white
           "
         >
-          <div className="mx-auto flex max-w-7xl items-center gap-6">
+          <div className="mx-auto flex max-w-7xl items-center gap-4">
+            {/* Logo ---------------------------------------------------------------- */}
             <Image
               src="/logo.png"
               alt="Logo"
@@ -77,12 +87,7 @@ export default function HeaderBar() {
               className="select-none"
             />
 
-            {onBlog && (
-              <span className="font-display text-lg font-semibold text-indigo-400">
-                Blog
-              </span>
-            )}
-
+            {/* Réseaux sociaux ------------------------------------------------------ */}
             <nav className="ms-auto flex items-center gap-1.5 sm:gap-2">
               {socials.map(({ href, label, icon: Icon }) => (
                 <SocialIconButton
@@ -98,17 +103,20 @@ export default function HeaderBar() {
               ))}
             </nav>
 
+            {/* Bouton Accueil / Blog : icône seule */}
             <Link
               href={navLink.href}
+              aria-label={navLink.label}
               className="
-                whitespace-nowrap
-                rounded-full bg-gradient-to-br from-indigo-500 via-purple-600 to-violet-600
-                px-5 py-2 text-sm font-semibold text-white shadow-lg
-                transition-transform duration-150 hover:-translate-y-0.5 hover:brightness-110
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300
+                inline-flex items-center justify-center
+                rounded-full
+                bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-600
+                p-2 shadow-lg
+                transition-transform hover:-translate-y-0.5 hover:brightness-110
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300
               "
             >
-              {navLink.label}
+              <navLink.icon className="h-4 w-4 text-white" />
             </Link>
           </div>
         </motion.header>

@@ -11,6 +11,7 @@ export function ScrollArea({
 }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
   return (
     <ScrollAreaPrimitive.Root
+      id="scroll-viewport"
       className={cn("relative overflow-hidden", className)}
       {...props}
     >
@@ -18,13 +19,15 @@ export function ScrollArea({
         {children}
       </ScrollAreaPrimitive.Viewport>
 
-      {/* ─────────────────── Vertical rail ─────────────────── */}
+      {/* ------------- vertical rail ------------- */}
       <ScrollAreaPrimitive.Scrollbar
         orientation="vertical"
         className="
-          absolute right-0 top-0 h-full flex select-none touch-none p-px
-          w-2.5                    /* largeur fixe = visible en permanence */
-          transition-opacity
+          absolute right-0 top-0 flex h-full select-none touch-none p-px
+          w-2.5 -translate-x-2.5 opacity-0                       /* invisible par défaut */
+          hover:translate-x-0 hover:opacity-100
+          data-[state=visible]:translate-x-0 data-[state=visible]:opacity-100
+          transition-all
         "
       >
         <ScrollAreaPrimitive.Thumb
@@ -36,13 +39,15 @@ export function ScrollArea({
         />
       </ScrollAreaPrimitive.Scrollbar>
 
-      {/* ───────────────── Horizontal rail (facultatif) ─────────────── */}
+      {/* ------------- horizontal rail (facultatif) ------------- */}
       <ScrollAreaPrimitive.Scrollbar
         orientation="horizontal"
         className="
-          absolute bottom-0 left-0 w-full flex-col select-none touch-none p-px
-          h-2.5                   /* hauteur fixe */
-          transition-opacity
+          absolute bottom-0 left-0 flex w-full select-none touch-none p-px
+          h-2.5 translate-y-2.5 opacity-0
+          hover:translate-y-0 hover:opacity-100
+          data-[state=visible]:translate-y-0 data-[state=visible]:opacity-100
+          transition-all
         "
       >
         <ScrollAreaPrimitive.Thumb
