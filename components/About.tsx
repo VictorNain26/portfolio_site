@@ -19,9 +19,9 @@ export default function About() {
 
       <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          ['3 ans',      'XP&nbsp;pro&nbsp;Dev&nbsp;& DevOps'],
-          ['30+',        'Projets&nbsp;perso / OSS'],
-          ['&lt;24 h',   'Pour adopter<br />un outil'],
+          ['3 ans',      'XP&nbsp;&nbsp;Dev&nbsp;& DevOps'],
+          ['Une infinité',        'de Projets&nbsp;perso'],
+          ['<24h',   'Pour adopter<br />un outil'],
           ['100 %',      'Curiosité&nbsp;& énergie'],
         ].map(([val, label]) => (
           <li key={label} className="rounded-2xl bg-gray-900/60 p-4 text-center">

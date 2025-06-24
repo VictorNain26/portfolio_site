@@ -66,7 +66,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           "
         />
 
-        {/* Vue scrollable Radix */}
         <ScrollView>{children}</ScrollView>
 
         {/* Bouton « Remonter » – rendu uniquement côté client */}

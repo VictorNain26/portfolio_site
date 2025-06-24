@@ -1,32 +1,34 @@
-'use client'
+"use client"
 
-import dynamic from 'next/dynamic'
-import { motion, useReducedMotion } from 'framer-motion'
-import { SocialIconButton } from "@/components/ui/social-icon-button";
-import { ChevronDown, GithubIcon, Linkedin, Mail, Phone } from 'lucide-react'
+import dynamic from "next/dynamic"
+import { motion, useReducedMotion } from "framer-motion"
+import {
+  ChevronDown,
+  GithubIcon,
+  Linkedin,
+  Mail,
+  Phone,
+} from "lucide-react"
+import { SocialIconButton } from "@/components/ui/social-icon-button"
 
-const PromptModelHero = dynamic(() => import('@/components/PromptModelHero'), { ssr: false })
+const PromptModelHero = dynamic(
+  () => import("@/components/PromptModelHero"),
+  { ssr: false },
+)
 
 export default function Hero() {
   const prefersReduceMotion = useReducedMotion()
 
-  const socials = [
-    { href: 'https://github.com/victornain26', icon: GithubIcon, label: 'GitHub' },
-    { href: 'https://www.linkedin.com/in/victor-lenain-1907b7282/', icon: Linkedin, label: 'LinkedIn' },
-    { href: 'tel:+33600000000', icon: Phone, label: 'Téléphone' },
-    { href: 'mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission', icon: Mail, label: 'Mail' },
-  ]
-
   return (
     <section
       id="accueil"
-      className="relative isolate flex min-h-[100svh] flex-col items-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] sm:pt-0"
+      className="relative flex min-h-[100svh] flex-col items-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] sm:pt-0"
     >
       {/* ── Contenu principal ─────────────────────────────────────── */}
       <div
         className="
           mx-auto max-w-7xl
-          flex flex-col items-start gap-14 sm:items-center sm:gap-10
+          flex flex-col gap-14 sm:items-center sm:gap-10
           px-0 sm:px-8 lg:px-20
           lg:min-h-[70vh] lg:grid lg:grid-cols-2 lg:place-items-center lg:gap-16
         "
@@ -37,10 +39,14 @@ export default function Hero() {
           whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="order-1 flex flex-col items-start text-left sm:items-center sm:text-center lg:order-none lg:items-start lg:text-left"
+          className="order-1 flex flex-col sm:items-center lg:order-none lg:items-start"
         >
           <h1
-            className="mb-2 font-display font-extrabold tracking-[-0.035em] bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] text-transparent bg-clip-text text-[clamp(2.6rem,7.5vw,5.3rem)] leading-[1.05]"
+            className="
+              gradient-brand-text
+              mb-2 font-display font-extrabold tracking-[-0.035em]
+              text-[clamp(2.6rem,7.5vw,5.3rem)] leading-[1.05]
+            "
           >
             Victor&nbsp;Lenain
           </h1>
@@ -52,9 +58,9 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* caché en mobile, visible ≥ sm */}
           <p className="hidden sm:block max-w-[28ch] sm:max-w-md text-sm sm:text-base text-gray-300">
-            Apps web performantes, expériences&nbsp;3D et intégrations&nbsp;IA pour votre croissance.
+            Apps web performantes, expériences&nbsp;3D et intégrations&nbsp;IA
+            pour votre croissance.
           </p>
         </motion.header>
 
@@ -64,7 +70,7 @@ export default function Hero() {
           whileInView={prefersReduceMotion ? {} : { opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15, duration: 0.7 }}
-          className="order-2 aspect-square w-full max-w-[340px] sm:max-w-md md:max-w-xl lg:order-none lg:max-w-none lg:h-[32rem] touch-pan-y"
+          className="order-2 aspect-square max-w-[340px] sm:max-w-md md:max-w-xl lg:order-none lg:max-w-none lg:h-[32rem] touch-pan-y"
         >
           <PromptModelHero />
         </motion.div>
@@ -80,7 +86,7 @@ export default function Hero() {
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-20 flex justify-center gap-4 sm:gap-6">
           <SocialIconButton
-              href="https://github.com/victornain26"
+            href="https://github.com/victornain26"
             aria-label="GitHub"
             target="_blank"
             rel="noopener noreferrer"
@@ -97,10 +103,7 @@ export default function Hero() {
             <Linkedin />
           </SocialIconButton>
 
-          <SocialIconButton
-            href="tel:+33600000000"
-            aria-label="Téléphone"
-          >
+          <SocialIconButton href="tel:+33600000000" aria-label="Téléphone">
             <Phone />
           </SocialIconButton>
 
@@ -120,7 +123,9 @@ export default function Hero() {
         className="absolute left-1/2 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] -translate-x-1/2 text-white/80 transition-opacity hover:opacity-100"
         onClick={(e) => {
           e.preventDefault()
-          document.getElementById('a-propos')?.scrollIntoView({ behavior: 'smooth' })
+          document
+            .getElementById("a-propos")
+            ?.scrollIntoView({ behavior: "smooth" })
         }}
       >
         <ChevronDown className="h-7 w-7 animate-bounce" aria-hidden />

@@ -1,23 +1,36 @@
-'use client'
+"use client"
 
-import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import Image from 'next/image'
-import { GithubIcon, Linkedin, Mail, Phone } from 'lucide-react'
-import { SocialIconButton } from '@/components/ui/social-icon-button'
+import { useEffect, useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+import Image from "next/image"
+import {
+  GithubIcon,
+  Linkedin,
+  Mail,
+  Phone,
+} from "lucide-react"
+import { SocialIconButton } from "@/components/ui/social-icon-button"
 
 const socials = [
-  { href: 'https://github.com/victornain26', icon: GithubIcon, label: 'GitHub' },
-  { href: 'https://www.linkedin.com/in/victor-lenain-1907b7282/', icon: Linkedin, label: 'LinkedIn' },
-  { href: 'tel:+33600000000',                icon: Phone,       label: 'Téléphone' },
-  { href: 'mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission', icon: Mail,       label: 'Mail' },
+  { href: "https://github.com/victornain26", icon: GithubIcon, label: "GitHub" },
+  {
+    href: "https://www.linkedin.com/in/victor-lenain-1907b7282/",
+    icon: Linkedin,
+    label: "LinkedIn",
+  },
+  { href: "tel:+33600000000", icon: Phone, label: "Téléphone" },
+  {
+    href: "mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission",
+    icon: Mail,
+    label: "Mail",
+  },
 ]
 
 export default function HeaderBar() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    const hero = document.getElementById('accueil')
+    const hero = document.getElementById("accueil")
     if (!hero) return
     const io = new IntersectionObserver(([e]) => setShow(!e.isIntersecting))
     io.observe(hero)
@@ -31,21 +44,19 @@ export default function HeaderBar() {
           initial={{ y: -32, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -32, opacity: 0 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
           className="
             fixed inset-x-0 top-0 z-50
             bg-gradient-to-b from-white/80 via-white/70 to-white/60
             dark:from-white/10 dark:via-white/5 dark:to-white/0
             backdrop-blur-md ring-1 ring-black/10 dark:ring-white/15
             shadow-sm
-            /* padding horizontal plus large sur desktop */
             px-4 sm:px-8 lg:px-20 xl:px-28 2xl:px-36
             py-1.5 md:py-2 lg:py-3
             text-[#0e082e] dark:text-white
           "
         >
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-
             {/* Logo réduit */}
             <Image
               src="/logo.png"
@@ -53,17 +64,22 @@ export default function HeaderBar() {
               width={38}
               height={38}
               priority
-              className="h-6 w-6 sm:h-7 sm:w-7 select-none"
+              className="select-none"
             />
 
+            {/* Pastilles sociales */}
             <nav className="flex items-center gap-1.5 sm:gap-2">
               {socials.map(({ href, label, icon: Icon }) => (
                 <SocialIconButton
                   key={label}
                   href={href}
                   aria-label={label}
-                  target={href.startsWith('http') ? '_blank' : undefined}
-                  rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel={
+                    href.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
                   size="sm"
                 >
                   <Icon />

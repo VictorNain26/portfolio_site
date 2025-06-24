@@ -1,11 +1,12 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-
 import { cn } from "@/lib/utils"
 
+/** Bouton circulaire pour icônes sociales (GitHub, LinkedIn, etc.) */
 const iconButtonVariants = cva(
-  "group rounded-full border border-black/10 bg-black/5 shadow-sm \\n   transition-colors duration-200 hover:bg-black/20 hover:border-black/20 \
+  "group rounded-full border border-black/10 bg-black/5 shadow-sm \
+   transition-colors duration-200 hover:bg-black/20 hover:border-black/20 \
    dark:bg-white/10 dark:border-white/20 dark:hover:bg-white/30 dark:hover:border-white/30 \
    text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 \
    [&_svg]:pointer-events-none",
@@ -22,11 +23,14 @@ const iconButtonVariants = cva(
 )
 
 type Props = React.ComponentPropsWithoutRef<"a"> &
-  VariantProps<typeof iconButtonVariants> & {
-    asChild?: boolean
-  }
+  VariantProps<typeof iconButtonVariants> & { asChild?: boolean }
 
-export function SocialIconButton({ asChild, size, className, ...props }: Props) {
+export function SocialIconButton({
+  asChild,
+  size,
+  className,
+  ...props
+}: Props) {
   const Comp = asChild ? Slot : "a"
   return (
     <Comp
