@@ -4,16 +4,16 @@ html { scroll-behavior: smooth; }
 section { scroll-margin-top: 6rem; }
 
 :root {
-  --background: #0E082E;
-  --foreground: #FFFFFF;
+  --background: 245 70% 10%;
+  --foreground: 0 0% 100%;
 
   --card:               #1A1A2E;
   --card-foreground:    #FFFFFF;
   --popover:            #1A1A2E;
   --popover-foreground: #FFFFFF;
 
-  --primary:            hsl(255 70% 55%);
-  --primary-foreground: #FFFFFF;
+  --primary: 255 70% 55%;
+  --primary-foreground: 0 0% 100%;
 
   --secondary:          hsl(255 25% 75%);
   --secondary-foreground: #1A1A2E;

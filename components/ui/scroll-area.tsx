@@ -1,9 +1,8 @@
-// components/ui/scroll-area.tsx (complètement réécrit)
 "use client"
 
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
-import { cn } from "@/lib/utils"
 import * as React from "react"
+import { ScrollArea as ScrollAreaPrimitive } from "radix-ui"
+import { cn } from "@/lib/utils"
 
 export function ScrollArea({
   className,
@@ -19,39 +18,39 @@ export function ScrollArea({
         {children}
       </ScrollAreaPrimitive.Viewport>
 
-      {/* ─────────── Vertical rail ─────────── */}
+      {/* vertical rail */}
       <ScrollAreaPrimitive.Scrollbar
         orientation="vertical"
-        className={cn(
-          // rail
-          "flex touch-none select-none transition-all p-px",
-          // rail masquée par défaut
-          "w-0 data-[state=visible]:w-2.5 hover:w-2.5",
-          // position
-          "absolute right-0 top-0 h-full",
-        )}
+        className="
+          absolute right-0 top-0 h-full flex select-none touch-none p-px
+          w-0 hover:w-2.5 data-[state=visible]:w-2.5       /* ↔ élargissement */
+          transition-all
+        "
       >
-        {/* thumb */}
         <ScrollAreaPrimitive.Thumb
-          className="relative flex-1 rounded-full
-                     bg-gradient-to-b from-indigo-500 to-violet-400
-                     hover:from-indigo-400 hover:to-violet-300"
+          className="
+            relative flex-1 rounded-full
+            bg-gradient-to-b from-indigo-500 to-violet-400
+            hover:from-indigo-400 hover:to-violet-300
+          "
         />
       </ScrollAreaPrimitive.Scrollbar>
 
-      {/* ─────────── Horizontal rail (optionnel) ─────────── */}
+      {/* horizontal rail (facultatif) */}
       <ScrollAreaPrimitive.Scrollbar
         orientation="horizontal"
-        className={cn(
-          "flex touch-none select-none transition-all p-px",
-          "h-0 data-[state=visible]:h-2.5 hover:h-2.5",
-          "absolute bottom-0 left-0 w-full flex-col",
-        )}
+        className="
+          absolute bottom-0 left-0 w-full flex-col select-none touch-none p-px
+          h-0 hover:h-2.5 data-[state=visible]:h-2.5
+          transition-all
+        "
       >
         <ScrollAreaPrimitive.Thumb
-          className="relative flex-1 rounded-full
-                     bg-gradient-to-r from-indigo-500 to-violet-400
-                     hover:from-indigo-400 hover:to-violet-300"
+          className="
+            relative flex-1 rounded-full
+            bg-gradient-to-r from-indigo-500 to-violet-400
+            hover:from-indigo-400 hover:to-violet-300
+          "
         />
       </ScrollAreaPrimitive.Scrollbar>
 
