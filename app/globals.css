@@ -1,67 +1,45 @@
+/* ---------- app/globals.css ---------- */
 @import "tailwindcss";
 
 html { scroll-behavior: smooth; }
 section { scroll-margin-top: 6rem; }
 
+/*
+   Variables exprimées en triplets HSL.
+   Le suffixe “/<alpha-value>” de Tailwind 4 fonctionnera partout.
+*/
 :root {
-  --background: 245 70% 10%;
+  --background: 245 70% 11%;
   --foreground: 0 0% 100%;
 
-  --card:               #1A1A2E;
-  --card-foreground:    #FFFFFF;
-  --popover:            #1A1A2E;
-  --popover-foreground: #FFFFFF;
+  --card:               240 28% 14%;
+  --card-foreground:    0 0% 100%;
+  --popover:            240 28% 14%;
+  --popover-foreground: 0 0% 100%;
 
-  --primary: 255 70% 55%;
+  --primary:            255 70% 55%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary:          hsl(255 25% 75%);
-  --secondary-foreground: #1A1A2E;
+  --secondary:          255 25% 75%;
+  --secondary-foreground: 240 28% 14%;
 
-  --muted:              hsl(255 15% 25%);
-  --muted-foreground:   hsl(255 10% 70%);
+  --muted:              255 15% 25%;
+  --muted-foreground:   255 10% 70%;
 
-  --accent:             hsl(255 45% 55%);
-  --accent-foreground:  #FFFFFF;
+  --accent:             255 45% 55%;
+  --accent-foreground:  0 0% 100%;
 
-  --destructive:        hsl(0 70% 50%);
+  --destructive:        0 70% 50%;
 
-  --border:             hsl(255 10% 40%);
-  --input:              hsl(255 10% 30%);
-  --ring:               hsl(255 60% 50%);
+  --border:             255 10% 40%;
+  --input:              255 10% 30%;
+  --ring:               255 60% 50%;
 }
 
-.dark {
-  --background: #0E082E;
-  --foreground: #FFFFFF;
-
-  --card:               #202040;
-  --card-foreground:    #FFFFFF;
-  --popover:            #202040;
-  --popover-foreground: #FFFFFF;
-
-  --primary:            hsl(255 70% 60%);
-  --primary-foreground: #FFFFFF;
-
-  --secondary:          hsl(255 25% 35%);
-  --secondary-foreground: #FFFFFF;
-
-  --muted:              hsl(255 15% 20%);
-  --muted-foreground:   hsl(255 10% 70%);
-
-  --accent:             hsl(255 40% 60%);
-  --accent-foreground:  #FFFFFF;
-
-  --destructive:        hsl(0 70% 60%);
-
-  --border:             hsl(255 10% 30%);
-  --input:              hsl(255 10% 25%);
-  --ring:               hsl(255 60% 55%);
-}
-
+/* Animation utilitaire existante */
 @keyframes pulse{
- 0%,100%{transform:scale(1);opacity:0;}
- 50%    {transform:scale(1.3);opacity:.4;}
+  0%,100%{transform:scale(1);opacity:0;}
+  50%    {transform:scale(1.3);opacity:.4;}
 }
 
 @layer utilities {
@@ -69,4 +47,3 @@ section { scroll-margin-top: 6rem; }
     @apply bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] text-transparent bg-clip-text;
   }
 }
-
