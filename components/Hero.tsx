@@ -11,10 +11,7 @@ import {
 } from "lucide-react"
 import { SocialIconButton } from "@/components/ui/social-icon-button"
 
-const PromptModelHero = dynamic(
-  () => import("@/components/PromptModelHero"),
-  { ssr: false },
-)
+const ModelHero = dynamic(() => import('@/components/ModelHero'), { ssr: false });
 
 export default function Hero() {
   const prefersReduceMotion = useReducedMotion()
@@ -72,7 +69,7 @@ export default function Hero() {
           transition={{ delay: 0.15, duration: 0.7 }}
           className="order-2 aspect-square max-w-[340px] sm:max-w-md md:max-w-xl lg:order-none lg:max-w-none lg:h-[32rem] touch-pan-y"
         >
-          <PromptModelHero />
+          <ModelHero />
         </motion.div>
       </div>
 
