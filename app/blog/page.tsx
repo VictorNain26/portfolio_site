@@ -1,15 +1,15 @@
-import { allPosts } from "content-collections";
-import Link from "next/link";
-import Image from "next/image";
-import TagChip from "@/components/TagChip";
+import { allPosts } from 'content-collections';
+import Link from 'next/link';
+import Image from 'next/image';
+import TagChip from '@/components/TagChip';
 
-export const metadata = { title: "Blog – Victor Lenain" };
+export const metadata = { title: 'Blog – Victor Lenain' };
 
 export default function BlogIndex() {
   return (
-    <main className="pt-24 scroll-mt-28 mx-auto max-w-5xl px-4">
+    <main className="mx-auto max-w-5xl scroll-mt-28 px-4 pt-24">
       <header className="mb-10 text-center">
-        <h1 className="gradient-brand-text font-display text-4xl sm:text-6xl font-extrabold leading-tight">
+        <h1 className="font-display text-4xl font-extrabold leading-tight gradient-brand-text sm:text-6xl">
           Le&nbsp;blog
         </h1>
         <p className="mt-2 text-indigo-200">
@@ -18,7 +18,7 @@ export default function BlogIndex() {
       </header>
 
       <ul className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
-        {allPosts.map((post) => (
+        {allPosts.map(post => (
           <li key={post.slug}>
             <Link
               href={`/blog/${post.slug}`}
@@ -42,7 +42,7 @@ export default function BlogIndex() {
 
                 {post.tags.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {post.tags.slice(0, 3).map((t) => (
+                    {post.tags.slice(0, 3).map(t => (
                       <TagChip key={t} tag={t} />
                     ))}
                   </div>

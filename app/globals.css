@@ -1,69 +1,227 @@
-/* ---------- app/globals.css ---------- */
 @import "tailwindcss";
 
-html { scroll-behavior: smooth; }
-section { scroll-margin-top: 6rem; }
-
-/*
-   Variables exprimées en triplets HSL.
-   Le suffixe “/<alpha-value>” de Tailwind 4 fonctionnera partout.
-*/
-:root {
-  --background: 245 70% 11%;
-  --foreground: 0 0% 100%;
-
-  --card:               240 28% 14%;
-  --card-foreground:    0 0% 100%;
-  --popover:            240 28% 14%;
-  --popover-foreground: 0 0% 100%;
-
-  --primary:            255 70% 55%;
-  --primary-foreground: 0 0% 100%;
-
-  --secondary:          255 25% 75%;
-  --secondary-foreground: 240 28% 14%;
-
-  --muted:              255 15% 25%;
-  --muted-foreground:   255 10% 70%;
-
-  --accent:             255 45% 55%;
-  --accent-foreground:  0 0% 100%;
-
-  --destructive:        0 70% 50%;
-
-  --border:             255 10% 40%;
-  --input:              255 10% 30%;
-  --ring:               255 60% 50%;
+@theme {
+  --color-background: 220 26% 5%;
+  --color-foreground: 210 20% 98%;
+  --color-card: 220 26% 5%;
+  --color-card-foreground: 210 20% 98%;
+  --color-popover: 220 26% 5%;
+  --color-popover-foreground: 210 20% 98%;
+  --color-primary: 210 20% 98%;
+  --color-primary-foreground: 220 26% 5%;
+  --color-secondary: 215 25% 12%;
+  --color-secondary-foreground: 210 20% 98%;
+  --color-muted: 215 25% 12%;
+  --color-muted-foreground: 217 10% 65%;
+  --color-accent: 215 25% 12%;
+  --color-accent-foreground: 210 20% 98%;
+  --color-destructive: 0 62% 30%;
+  --color-destructive-foreground: 210 20% 98%;
+  --color-border: 215 25% 12%;
+  --color-input: 215 25% 12%;
+  --color-ring: 216 12% 84%;
+  --radius: 0.5rem;
+  --font-family-sans: var(--font-inter), system-ui, sans-serif;
+  --font-family-display: var(--font-sora), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-sora), system-ui, sans-serif;
 }
 
-/* Animation utilitaire existante */
-@keyframes pulse{
-  0%,100%{transform:scale(1);opacity:0;}
-  50%    {transform:scale(1.3);opacity:.4;}
+@layer base {
+  :root {
+    --background: var(--color-background);
+    --foreground: var(--color-foreground);
+    --card: var(--color-card);
+    --card-foreground: var(--color-card-foreground);
+    --popover: var(--color-popover);
+    --popover-foreground: var(--color-popover-foreground);
+    --primary: var(--color-primary);
+    --primary-foreground: var(--color-primary-foreground);
+    --secondary: var(--color-secondary);
+    --secondary-foreground: var(--color-secondary-foreground);
+    --muted: var(--color-muted);
+    --muted-foreground: var(--color-muted-foreground);
+    --accent: var(--color-accent);
+    --accent-foreground: var(--color-accent-foreground);
+    --destructive: var(--color-destructive);
+    --destructive-foreground: var(--color-destructive-foreground);
+    --border: var(--color-border);
+    --input: var(--color-input);
+    --ring: var(--color-ring);
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--color-border));
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* Section spacing */
+  section {
+    scroll-margin-top: 6rem;
+  }
+
+  /* Image optimization */
+  img {
+    @apply h-auto max-w-full;
+  }
+
+  /* Focus styles */
+  *:focus {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Selection styles */
+  ::selection {
+    background-color: hsl(var(--primary) / 0.2);
+    color: hsl(var(--primary-foreground));
+  }
+
+  /* Prevent horizontal overflow */
+  body {
+    overflow-x: clip;
+  }
+
+  /* Safe area insets for mobile */
+  @media (max-width: 640px) {
+    body {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    :root {
+      --background: 0 0% 0%;
+      --foreground: 0 0% 100%;
+      --border: 0 0% 100%;
+    }
+  }
 }
 
 @layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
   .gradient-brand-text {
-    @apply bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] text-transparent bg-clip-text;
+    background-image: linear-gradient(135deg, #6bb4d8 0%, #4288b7 50%, #2d5e81 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
   }
 }
 
-/* ---------- Article typography overrides ---------- */
-.prose :where(code):not(:where(.prose code)):not([class*="language-"]) {
-  @apply rounded bg-indigo-600/20 px-1.5 py-0.5 text-indigo-100 text-sm;
+/* Animation keyframes */
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.4;
+  }
+}
+
+/* Prose styles for blog content */
+.prose {
+  @apply text-foreground;
+}
+
+.prose :where(code):not(:where([class~='not-prose'] *)) {
+  @apply rounded bg-muted px-1.5 py-0.5 font-mono text-sm;
 }
 
 .prose pre {
-  @apply rounded-xl bg-[#1e1e2f] p-4 text-sm;
+  @apply rounded-xl bg-muted p-4 text-sm;
 }
 
-@media (max-width: 640px) {
-  body {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
+.prose pre code {
+  @apply bg-transparent p-0;
 }
 
-/* Évite les barres de défilement horizontales imprévues */
-body {
-  overflow-x: clip;  /* mieux que hidden : pas scrollable, mais garde la perf */
+.prose blockquote {
+  @apply border-l-4 pl-4 italic;
+  border-left-color: hsl(var(--color-border));
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply font-display font-semibold text-foreground;
+}
+
+.prose a {
+  @apply text-primary underline underline-offset-4 hover:no-underline;
+}
+
+.prose table {
+  @apply border-collapse border;
+  border-color: hsl(var(--color-border));
+}
+
+.prose th,
+.prose td {
+  @apply border px-4 py-2;
+  border-color: hsl(var(--color-border));
+}
+
+.prose th {
+  @apply bg-muted font-semibold;
 }

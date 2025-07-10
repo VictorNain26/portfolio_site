@@ -1,17 +1,17 @@
-import { useMDXComponent } from "@content-collections/mdx/react";
-import type { MDXComponents } from "mdx/types";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
-import * as React from "react";
-import { Badge } from "@/components/ui/badge";
-import NextLink from "next/link";
+import { useMDXComponent } from '@content-collections/mdx/react';
+import type { MDXComponents } from 'mdx/types';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import * as React from 'react';
+import { Badge } from '@/components/ui/badge';
+import NextLink from 'next/link';
 
 const components: MDXComponents = {
   /* -------- images fluides -------- */
-  img: (rawProps) => {
+  img: rawProps => {
     const {
       src,
-      alt = "",
+      alt = '',
       width,
       height,
       className,
@@ -31,7 +31,7 @@ const components: MDXComponents = {
         alt={alt}
         width={w}
         height={h}
-        className={cn("rounded-xl my-6", className)}
+        className={cn('my-6 rounded-xl', className)}
         {...rest}
       />
     );
@@ -40,15 +40,15 @@ const components: MDXComponents = {
   /* -------- titres ancrables -------- */
   h2: ({ children }) => (
     <h2
-      id={String(children).toLowerCase().replace(/\s+/g, "-")}
-      className="mt-14 scroll-mt-28 text-2xl font-display font-bold text-indigo-300"
+      id={String(children).toLowerCase().replace(/\s+/g, '-')}
+      className="mt-14 scroll-mt-28 font-display text-2xl font-bold text-indigo-300"
     >
       {children}
     </h2>
   ),
   h3: ({ children }) => (
     <h3
-      id={String(children).toLowerCase().replace(/\s+/g, "-")}
+      id={String(children).toLowerCase().replace(/\s+/g, '-')}
       className="mt-10 scroll-mt-28 text-xl font-semibold text-indigo-200"
     >
       {children}

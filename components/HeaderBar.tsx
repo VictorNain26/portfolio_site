@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   GithubIcon,
   Linkedin,
@@ -12,31 +12,35 @@ import {
   MessageCircle,
   Home,
   Newspaper,
-} from "lucide-react";
-import { SocialIconButton } from "@/components/ui/social-icon-button";
+} from 'lucide-react';
+import { SocialIconButton } from '@/components/ui/social-icon-button';
 
 const socials = [
-  { href: "https://github.com/victornain26", icon: GithubIcon, label: "GitHub" },
   {
-    href: "https://www.linkedin.com/in/victor-lenain-1907b7282/",
+    href: 'https://github.com/victornain26',
+    icon: GithubIcon,
+    label: 'GitHub',
+  },
+  {
+    href: 'https://www.linkedin.com/in/victor-lenain-1907b7282/',
     icon: Linkedin,
-    label: "LinkedIn",
+    label: 'LinkedIn',
   },
   {
-    href: "https://wa.me/33600000000",
+    href: 'https://wa.me/33600000000',
     icon: MessageCircle,
-    label: "WhatsApp",
+    label: 'WhatsApp',
   },
   {
-    href: "mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission",
+    href: 'mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission',
     icon: Mail,
-    label: "Mail",
+    label: 'Mail',
   },
 ];
 
 export default function HeaderBar() {
   const pathname = usePathname();
-  const onBlog   = pathname?.startsWith("/blog");
+  const onBlog = pathname?.startsWith('/blog');
 
   /* Affichage : fixe sur /blog, sinon après scroll */
   const [show, setShow] = useState(onBlog);
@@ -46,19 +50,20 @@ export default function HeaderBar() {
       setShow(true);
       return;
     }
-    const hero = document.getElementById("accueil");
-    if (!hero) return;
-    const io = new IntersectionObserver(
-      ([e]) => setShow(!e.isIntersecting),
-      { threshold: 0 }
-    );
+    const hero = document.getElementById('accueil');
+    if (!hero) {
+      return;
+    }
+    const io = new IntersectionObserver(([e]) => setShow(!e?.isIntersecting), {
+      threshold: 0,
+    });
     io.observe(hero);
     return () => io.disconnect();
   }, [onBlog]);
 
   const navLink = onBlog
-    ? { href: "/", icon: Home, label: "Accueil" }
-    : { href: "/blog", icon: Newspaper, label: "Blog" };
+    ? { href: '/', icon: Home, label: 'Accueil' }
+    : { href: '/blog', icon: Newspaper, label: 'Blog' };
 
   return (
     <AnimatePresence initial={false}>
@@ -67,14 +72,8 @@ export default function HeaderBar() {
           initial={{ y: -32, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -32, opacity: 0 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="
-            fixed inset-x-0 top-0 z-50
-            bg-transparent backdrop-blur-md ring-1 ring-white/10
-            px-4 sm:px-8 lg:px-20 xl:px-28 2xl:px-36
-            py-1 sm:py-1.5 lg:py-2
-            text-white
-          "
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+          className="fixed inset-x-0 top-0 z-50 bg-transparent px-4 py-1 text-white ring-1 ring-white/10 backdrop-blur-md sm:px-8 sm:py-1.5 lg:px-20 lg:py-2 xl:px-28 2xl:px-36"
         >
           <div className="mx-auto flex max-w-7xl items-center gap-4">
             {/* Logo ---------------------------------------------------------------- */}
@@ -94,8 +93,10 @@ export default function HeaderBar() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  target={href.startsWith("http") ? "_blank" : undefined}
-                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel={
+                    href.startsWith('http') ? 'noopener noreferrer' : undefined
+                  }
                   size="sm"
                 >
                   <Icon />
@@ -107,14 +108,7 @@ export default function HeaderBar() {
             <Link
               href={navLink.href}
               aria-label={navLink.label}
-              className="
-                inline-flex items-center justify-center
-                rounded-full
-                bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-600
-                p-2 shadow-lg
-                transition-transform hover:-translate-y-0.5 hover:brightness-110
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300
-              "
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-600 p-2 shadow-lg transition-transform hover:-translate-y-0.5 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
             >
               <navLink.icon className="h-4 w-4 text-white" />
             </Link>

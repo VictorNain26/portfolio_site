@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+dist/
+build/
+
+# Content Collections
+.content-collections/
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+# Git
+.git/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env*
+
+# Cache
+.cache/
+.parcel-cache/
+.turbo/
+
+# Generated files
+*.generated.*
+*.d.ts
+
+# Documentation
+CHANGELOG.md
+LICENSE.md
+
+# Config files that shouldn't be formatted
+*.min.js
+*.min.css
+*.bundle.js
+*.bundle.css
