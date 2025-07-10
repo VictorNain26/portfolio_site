@@ -357,8 +357,8 @@ export default function ModelHero() {
           <Environment preset="studio" />
           <AnimatePresence mode="wait">
             <TechModel
-              key={TECH_MODELS[currentModelIndex].name}
-              model={TECH_MODELS[currentModelIndex]}
+              key={currentModel.name}
+              model={currentModel}
               isVisible={!isLoading}
             />
           </AnimatePresence>

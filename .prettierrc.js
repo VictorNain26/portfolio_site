@@ -1,5 +1,5 @@
 /** @type {import('prettier').Config} */
-export default {
+const prettierConfig = {
   // Core formatting
   semi: true,
   singleQuote: true,
@@ -61,3 +61,5 @@ export default {
     },
   ],
 };
+
+export default prettierConfig;

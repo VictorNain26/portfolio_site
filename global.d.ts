@@ -4,7 +4,7 @@ declare module '*.css' {
 }
 
 declare namespace THREE {
-  interface Object3D {
+  type Object3D = {
     // Add basic THREE.js types
     position: {
       x: number;
@@ -25,7 +25,7 @@ declare namespace THREE {
 }
 
 declare module 'content-collections' {
-  export interface Post {
+  export type Post = {
     title: string;
     summary: string;
     coverImage: string;
