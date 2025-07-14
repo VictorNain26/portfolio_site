@@ -1,7 +1,7 @@
 # CLAUDE.md
-coucou
+l'appli m'appartient coucou
 MNonmoi coucou
-This file provides guidance to Claude Code (claude.ai/code) when working with
+Cette appli m'appartient This file provides guidance to Claude Code (claude.ai/code) when working with
 code in this repository.
 
 ## Essential Commands
