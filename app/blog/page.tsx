@@ -1,12 +1,98 @@
 import { allPosts } from 'content-collections';
 import Link from 'next/link';
 import Image from 'next/image';
+import Script from 'next/script';
 
-export const metadata = { title: 'Blog – Victor Lenain' };
+export const metadata = {
+  title: 'Blog Technique',
+  description: 'Articles techniques sur Next.js 15, React 19, DevOps et intelligence artificielle appliquée au développement web. Guides pratiques et retours d\'expérience par Victor Lenain.',
+  keywords: [
+    'blog technique',
+    'Next.js 15',
+    'React 19',
+    'DevOps',
+    'Intelligence artificielle',
+    'Développement web',
+    'Tutoriels JavaScript',
+    'TypeScript',
+    'Articles techniques',
+    'Guides pratiques'
+  ],
+  openGraph: {
+    title: 'Blog Technique | Victor Lenain',
+    description: 'Articles techniques sur Next.js 15, React 19, DevOps et IA. Guides pratiques et retours d\'expérience.',
+    type: 'website',
+    url: 'https://victorlenain.fr/blog',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Blog Technique Victor Lenain',
+      }
+    ],
+  },
+  twitter: {
+    title: 'Blog Technique | Victor Lenain',
+    description: 'Articles techniques sur Next.js 15, React 19, DevOps et IA.',
+    images: ['/logo.png'],
+  },
+  alternates: {
+    canonical: 'https://victorlenain.fr/blog',
+  },
+};
 
 export default function BlogIndex() {
+  const blogStructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Blog Technique Victor Lenain',
+    description: 'Articles techniques sur Next.js 15, React 19, DevOps et intelligence artificielle',
+    url: 'https://victorlenain.fr/blog',
+    inLanguage: 'fr-FR',
+    author: {
+      '@type': 'Person',
+      name: 'Victor Lenain',
+      url: 'https://victorlenain.fr'
+    },
+    publisher: {
+      '@type': 'Person',
+      name: 'Victor Lenain'
+    },
+    blogPost: allPosts.map(post => ({
+      '@type': 'BlogPosting',
+      headline: post.title,
+      description: post.summary,
+      url: `https://victorlenain.fr/blog/${post.slug}`,
+      datePublished: post.publishedAt,
+      dateModified: post.publishedAt,
+      author: {
+        '@type': 'Person',
+        name: 'Victor Lenain'
+      },
+      publisher: {
+        '@type': 'Person',
+        name: 'Victor Lenain'
+      },
+      image: `https://victorlenain.fr${post.coverImage}`,
+      keywords: post.tags,
+      articleSection: 'Technologie',
+      inLanguage: 'fr-FR'
+    }))
+  };
+
   return (
-    <main className="mx-auto max-w-5xl scroll-mt-28 px-4 pt-24">
+    <>
+      <Script
+        id="blog-structured-data"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(blogStructuredData),
+        }}
+      />
+      
+      <main className="mx-auto max-w-5xl scroll-mt-28 px-4 pt-24">
       <header className="mb-10 text-center">
         <h1 className="font-display text-4xl font-extrabold leading-tight gradient-brand-text sm:text-6xl">
           Le&nbsp;blog
@@ -53,6 +139,7 @@ export default function BlogIndex() {
           </li>
         ))}
       </ul>
-    </main>
+      </main>
+    </>
   );
 }
