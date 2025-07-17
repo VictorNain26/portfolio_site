@@ -8,20 +8,21 @@ export default function About() {
       </h2>
 
       <p className="max-w-xl leading-relaxed text-gray-300">
-        Développeur&nbsp;full-stack&nbsp;JavaScript formé chez&nbsp;
+        Développeur&nbsp;full-stack&nbsp;JavaScript diplômé du&nbsp;
         <span className="font-semibold text-indigo-400">
-          Le&nbsp;Wagon
+          Wagon
         </span>{' '}
-        puis&nbsp;
+        et d&apos;&nbsp;
         <span className="font-semibold text-indigo-400">OpenClassrooms</span>,
-        j’ai acquis&nbsp;
+        avec&nbsp;
         <span className="font-semibold text-indigo-400">
-          2 ans ½ d’expérience
+          3 années d&apos;expérience
         </span>{' '}
-        en entreprise. Aujourd’hui, je poursuis mon apprentissage en autodidacte
-        – nouvelles libs, DevOps ou IA – et j’expérimente via de nombreux
+        en développement web. Spécialisé dans les technologies modernes
+        et la création de solutions innovantes, je développe continuellement
+        mes compétences à travers des&nbsp;
         <span className="font-semibold text-indigo-400">
-          &nbsp;projets open-source
+          projets open-source
         </span>
         .
       </p>
@@ -29,10 +30,10 @@ export default function About() {
       <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {(
           [
-            ['3 ans', 'XP&nbsp;&nbsp;Dev&nbsp;& DevOps'],
-            ['Une infinité', 'de Projets&nbsp;perso'],
-            ['<24h', 'Pour adopter<br />un outil'],
-            ['100 %', 'Curiosité&nbsp;& énergie'],
+            ['3 ans', 'd&apos;Expérience&nbsp;professionnelle'],
+            ['20+', 'Projets&nbsp;réalisés'],
+            ['48h', 'Adaptation&nbsp;rapide<br />aux nouvelles&nbsp;technologies'],
+            ['100 %', 'Engagement&nbsp;& rigueur'],
           ] as const
         ).map(([val, label]) => (
           <li

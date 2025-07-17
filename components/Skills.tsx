@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Reorder } from 'framer-motion';
 import Section from '@/components/Section';
 import { Badge } from '@/components/ui/badge';
@@ -25,11 +25,14 @@ const initial: Cat[] = [
 export default function Skills() {
   const [skills, setSkills] = useState<Cat[]>(initial);
   const [filter, setFilter] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState<string | null>(null);
 
-  const onReorder = (cat: string) => (items: string[]) =>
+  const onReorder = useCallback((cat: string) => (items: string[]) => {
     setSkills(prev =>
       prev.map(c => (c.category === cat ? { ...c, items } : c))
     );
+    setIsDragging(null);
+  }, []);
 
   return (
     <Section id="competences" className="pb-20">
@@ -69,17 +72,40 @@ export default function Skills() {
                 values={items}
                 onReorder={onReorder(category)}
                 className="flex flex-wrap gap-2"
-                layoutScroll
+                layoutScroll={false}
               >
                 {items.map(skill => (
                   <Reorder.Item
                     key={skill}
                     value={skill}
                     drag
-                    whileDrag={{ scale: 1.1, zIndex: 10 }}
+                    whileDrag={{ 
+                      scale: 1.08, 
+                      zIndex: 1000,
+                      rotate: 3,
+                      boxShadow: "0 15px 35px rgba(99, 102, 241, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3)"
+                    }}
+                    whileHover={{ scale: isDragging === skill ? 1.08 : 1.02 }}
+                    onDragStart={() => setIsDragging(skill)}
+                    onDragEnd={() => setIsDragging(null)}
+                    dragElastic={0.1}
+                    dragTransition={{ 
+                      bounceStiffness: 400, 
+                      bounceDamping: 40
+                    }}
+                    dragMomentum={false}
+                    initial={{ rotate: 0, scale: 1 }}
+                    animate={{ 
+                      rotate: isDragging === skill ? 0 : 0, 
+                      scale: isDragging === skill ? 1 : 1,
+                      transition: { duration: 0.2, ease: "easeOut" }
+                    }}
                     className="cursor-grab select-none active:cursor-grabbing"
+                    style={{
+                      touchAction: 'none'
+                    }}
                   >
-                    <Badge className="bg-indigo-700/30 px-4 py-2 text-sm text-indigo-200 shadow-md backdrop-blur transition-colors hover:bg-indigo-700/50">
+                    <Badge className="bg-indigo-700/30 px-4 py-2 text-sm text-indigo-200 shadow-md backdrop-blur hover:bg-indigo-700/50 hover:shadow-lg hover:shadow-indigo-500/20 transition-colors duration-200">
                       {skill}
                     </Badge>
                   </Reorder.Item>

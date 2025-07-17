@@ -53,20 +53,26 @@ export default function ArticleLayout({
 
         {/* Titre + résumé */}
         <div className="absolute inset-x-4 bottom-6 mx-auto max-w-4xl text-center drop-shadow-[0_3px_8px_rgba(0,0,0,0.55)]">
-          <h1 className="font-display text-3xl font-extrabold leading-tight gradient-brand-text sm:text-5xl">
+          <h1 className="font-display text-3xl font-extrabold leading-tight text-white sm:text-5xl">
             {post.title}
           </h1>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-indigo-200 sm:text-base">
+          <p className="mx-auto mt-3 max-w-xl text-sm text-gray-200 sm:text-base leading-relaxed">
             {post.summary}
           </p>
         </div>
       </header>
 
       {/* ---------- MÉTADONNÉES + SHARE ---------- */}
-      <div className="mx-auto mt-8 flex w-full max-w-3xl flex-wrap items-center justify-between gap-4 px-4 text-sm text-gray-300">
-        <span className="whitespace-nowrap">
-          {date} · {post.readingTime} min
-        </span>
+      <div className="mx-auto mt-8 flex w-full max-w-3xl flex-wrap items-center justify-between gap-4 px-4 text-sm">
+        <div className="flex items-center gap-4 text-gray-400">
+          <time dateTime={post.publishedAt} className="whitespace-nowrap">
+            {date}
+          </time>
+          <span className="text-gray-500">·</span>
+          <span className="whitespace-nowrap">
+            {post.readingTime} min de lecture
+          </span>
+        </div>
 
         <ShareButton
           title={post.title}
@@ -76,33 +82,39 @@ export default function ArticleLayout({
       </div>
 
       {/* ---------- CONTENU ---------- */}
-      <section className="prose-sm prose-invert mx-auto mt-10 max-w-3xl px-4 text-gray-200 sm:prose lg:prose-lg prose-headings:mb-4 prose-headings:font-display prose-h2:text-indigo-300 prose-h3:text-indigo-200 prose-a:text-emerald-400 hover:prose-a:underline prose-strong:text-white prose-ul:pl-5 prose-li:marker:text-emerald-400 prose-hr:border-none">
+      <section className="prose-sm prose-invert mx-auto mt-12 max-w-3xl px-4 text-gray-200 sm:prose lg:prose-lg prose-headings:mb-6 prose-headings:font-display prose-h2:text-white prose-h3:text-gray-100 prose-a:text-indigo-300 prose-a:font-bold prose-a:underline prose-a:decoration-indigo-400 prose-a:decoration-2 prose-a:underline-offset-4 prose-a:transition-all hover:prose-a:text-indigo-200 hover:prose-a:decoration-indigo-300 hover:prose-a:scale-105 prose-strong:text-white prose-ul:pl-5 prose-li:marker:text-indigo-400 prose-hr:border-gray-700 prose-blockquote:border-l-indigo-500 prose-blockquote:text-gray-300 prose-code:text-indigo-300 prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded">
         {children}
       </section>
 
       {/* ---------- NAVIGATION ---------- */}
       {(prev || next) && (
-        <nav className="mx-auto mt-16 flex max-w-3xl flex-col gap-4 px-4 text-sm text-gray-300">
+        <nav className="mx-auto mt-20 flex max-w-3xl flex-col gap-4 px-4">
           {prev && (
             <Link
               href={`/blog/${prev.slug}`}
-              className="group flex items-center gap-3 rounded-lg border border-white/10 p-4 hover:bg-white/5"
+              className="group flex items-center gap-3 rounded-xl border border-gray-700/50 bg-gray-900/60 p-5 transition-all hover:bg-gray-800/60 hover:border-gray-600/50"
             >
-              <span className="text-xl">←</span>
-              <span className="text-indigo-300 group-hover:underline">
-                {prev.title}
-              </span>
+              <span className="text-lg text-indigo-400">←</span>
+              <div>
+                <p className="text-xs text-gray-500 uppercase tracking-wide">Article précédent</p>
+                <p className="text-sm text-white group-hover:text-indigo-300 transition-colors">
+                  {prev.title}
+                </p>
+              </div>
             </Link>
           )}
           {next && (
             <Link
               href={`/blog/${next.slug}`}
-              className="group flex items-center gap-3 self-end rounded-lg border border-white/10 p-4 hover:bg-white/5"
+              className="group flex items-center gap-3 self-end rounded-xl border border-gray-700/50 bg-gray-900/60 p-5 transition-all hover:bg-gray-800/60 hover:border-gray-600/50"
             >
-              <span className="text-indigo-300 group-hover:underline">
-                {next.title}
-              </span>
-              <span className="text-xl">→</span>
+              <div className="text-right">
+                <p className="text-xs text-gray-500 uppercase tracking-wide">Article suivant</p>
+                <p className="text-sm text-white group-hover:text-indigo-300 transition-colors">
+                  {next.title}
+                </p>
+              </div>
+              <span className="text-lg text-indigo-400">→</span>
             </Link>
           )}
         </nav>

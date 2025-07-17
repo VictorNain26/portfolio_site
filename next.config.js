@@ -13,17 +13,6 @@ const nextConfig = {
     ppr: true,
     // React compiler for better optimization
     reactCompiler: true,
-    // Turbo mode
-    turbo: {
-      useSwcCss: true,
-      // Webpack optimizations moved to Turbopack
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
     // Optimized package imports
     optimizePackageImports: [
       'lucide-react',

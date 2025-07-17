@@ -45,7 +45,7 @@ export default async function PostPage({
   const readingTime = Math.ceil(post.content.split(/\s+/).length / 200);
   const article = { ...post, readingTime };
 
-  const code = post.mdx.code;
+  const code = (post.mdx as unknown) as string;
   if (!code) {
     notFound();
   }

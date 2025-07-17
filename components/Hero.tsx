@@ -2,7 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronDown, GithubIcon, Linkedin, Mail, Phone } from 'lucide-react';
+import { ChevronDown, GithubIcon, Linkedin, Mail } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { SocialIconButton } from '@/components/ui/social-icon-button';
 
 const ModelHero = dynamic(() => import('@/components/ModelHero'), {
@@ -39,8 +40,8 @@ export default function Hero() {
           </div>
 
           <p className="hidden max-w-[28ch] text-sm text-gray-300 sm:block sm:max-w-md sm:text-base">
-            Apps web performantes, expériences&nbsp;3D et intégrations&nbsp;IA
-            pour votre croissance.
+            Conception et développement d&apos;applications web modernes,
+            d&apos;expériences&nbsp;3D et de solutions&nbsp;IA.
           </p>
         </motion.header>
 
@@ -83,8 +84,13 @@ export default function Hero() {
             <Linkedin />
           </SocialIconButton>
 
-          <SocialIconButton href="tel:+33600000000" aria-label="Téléphone">
-            <Phone />
+          <SocialIconButton 
+            href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous" 
+            aria-label="WhatsApp"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaWhatsapp />
           </SocialIconButton>
 
           <SocialIconButton

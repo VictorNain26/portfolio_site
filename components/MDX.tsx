@@ -26,22 +26,91 @@ const components: MDXComponents = {
     const h = height ? Number(height) : 450;
 
     return (
-      <Image
-        src={src}
-        alt={alt}
-        width={w}
-        height={h}
-        className={cn('my-6 rounded-xl', className)}
-        {...rest}
-      />
+      <figure className="my-8">
+        <Image
+          src={src}
+          alt={alt}
+          width={w}
+          height={h}
+          className={cn('rounded-lg border border-gray-700/50', className)}
+          {...rest}
+        />
+        {alt && (
+          <figcaption className="mt-3 text-center text-sm text-gray-400 italic">
+            {alt}
+          </figcaption>
+        )}
+      </figure>
     );
   },
+  
+  /* -------- tableaux -------- */
+  table: ({ children }) => (
+    <div className="my-8 overflow-x-auto">
+      <table className="min-w-full border border-gray-700/50 rounded-lg overflow-hidden">
+        {children}
+      </table>
+    </div>
+  ),
+  thead: ({ children }) => (
+    <thead className="bg-gray-800/60">
+      {children}
+    </thead>
+  ),
+  th: ({ children }) => (
+    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-200 border-b border-gray-700/50">
+      {children}
+    </th>
+  ),
+  td: ({ children }) => (
+    <td className="px-6 py-4 text-sm text-gray-300 border-b border-gray-700/30">
+      {children}
+    </td>
+  ),
+  
+  /* -------- citations -------- */
+  blockquote: ({ children }) => (
+    <blockquote className="my-8 border-l-4 border-indigo-500/60 pl-6 py-4">
+      <div className="text-gray-300 italic">
+        {children}
+      </div>
+    </blockquote>
+  ),
+  
+  /* -------- listes -------- */
+  ul: ({ children }) => (
+    <ul className="my-6 space-y-2 pl-6">
+      {children}
+    </ul>
+  ),
+  ol: ({ children }) => (
+    <ol className="my-6 space-y-2 pl-6">
+      {children}
+    </ol>
+  ),
+  li: ({ children }) => (
+    <li className="text-gray-300 marker:text-indigo-400">
+      {children}
+    </li>
+  ),
+  
+  /* -------- séparateurs -------- */
+  hr: () => (
+    <hr className="my-12 border-0 h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent" />
+  ),
+  
+  /* -------- paragraphes -------- */
+  p: ({ children }) => (
+    <p className="my-4 text-gray-300 leading-relaxed">
+      {children}
+    </p>
+  ),
 
   /* -------- titres ancrables -------- */
   h2: ({ children }) => (
     <h2
       id={String(children).toLowerCase().replace(/\s+/g, '-')}
-      className="mt-14 scroll-mt-28 font-display text-2xl font-bold text-indigo-300"
+      className="mt-16 mb-6 scroll-mt-28 font-display text-2xl font-bold text-white"
     >
       {children}
     </h2>
@@ -49,13 +118,45 @@ const components: MDXComponents = {
   h3: ({ children }) => (
     <h3
       id={String(children).toLowerCase().replace(/\s+/g, '-')}
-      className="mt-10 scroll-mt-28 text-xl font-semibold text-indigo-200"
+      className="mt-12 mb-4 scroll-mt-28 text-xl font-semibold text-gray-100"
     >
       {children}
     </h3>
   ),
   Link: NextLink,
   Badge,
+  
+  /* -------- liens personnalisés -------- */
+  a: ({ href, children }) => (
+    <NextLink 
+      href={href || '#'}
+      className="text-indigo-300 underline decoration-indigo-400/60 decoration-1 underline-offset-4 transition-colors hover:text-indigo-200 hover:decoration-indigo-300"
+    >
+      {children}
+    </NextLink>
+  ),
+  
+  /* -------- code blocks -------- */
+  pre: ({ children }) => (
+    <pre className="my-8 overflow-x-auto rounded-lg bg-gray-900/60 border border-gray-700/50 p-6">
+      {children}
+    </pre>
+  ),
+  code: ({ children, className }) => {
+    const isInline = !className;
+    if (isInline) {
+      return (
+        <code className="px-1.5 py-0.5 text-sm bg-gray-800/60 text-indigo-300 rounded">
+          {children}
+        </code>
+      );
+    }
+    return (
+      <code className={className}>
+        {children}
+      </code>
+    );
+  },
 };
 
 export default function MDX({ code }: { code: string }) {

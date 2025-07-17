@@ -6,15 +6,15 @@ export default function Services() {
   const services = [
     {
       title: 'Développement front-end',
-      desc: 'UIs réactives, accessibles et performantes.',
+      desc: 'Interfaces utilisateur modernes, réactives et accessibles pour une expérience optimale.',
     },
     {
       title: 'Backend & DevOps',
-      desc: 'APIs Node.js, bases SQL/NoSQL, Docker, CI/CD.',
+      desc: 'APIs robustes, architectures scalables et déploiements automatisés.',
     },
     {
-      title: 'Fonctionnalités IA',
-      desc: 'Chatbots, recherche sémantique, génération de contenu.',
+      title: 'Intelligence artificielle',
+      desc: 'Intégration de solutions IA pour automatiser et enrichir vos applications.',
     },
   ];
 

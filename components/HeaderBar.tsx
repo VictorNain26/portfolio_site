@@ -9,10 +9,10 @@ import {
   GithubIcon,
   Linkedin,
   Mail,
-  MessageCircle,
   Home,
   Newspaper,
 } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { SocialIconButton } from '@/components/ui/social-icon-button';
 
 const socials = [
@@ -27,8 +27,8 @@ const socials = [
     label: 'LinkedIn',
   },
   {
-    href: 'https://wa.me/33600000000',
-    icon: MessageCircle,
+    href: 'https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous',
+    icon: FaWhatsapp,
     label: 'WhatsApp',
   },
   {
@@ -77,14 +77,27 @@ export default function HeaderBar() {
         >
           <div className="mx-auto flex max-w-7xl items-center gap-4">
             {/* Logo ---------------------------------------------------------------- */}
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={38}
-              height={38}
-              priority
-              className="select-none"
-            />
+            {onBlog ? (
+              <Link href="/" aria-label="Retour à l'accueil">
+                <Image
+                  src="/logo.png"
+                  alt="Logo"
+                  width={38}
+                  height={38}
+                  priority
+                  className="select-none transition-opacity hover:opacity-80"
+                />
+              </Link>
+            ) : (
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={38}
+                height={38}
+                priority
+                className="select-none"
+              />
+            )}
 
             {/* Réseaux sociaux ------------------------------------------------------ */}
             <nav className="ms-auto flex items-center gap-1.5 sm:gap-2">
