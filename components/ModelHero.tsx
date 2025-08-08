@@ -15,7 +15,7 @@ import {
 } from '@react-three/drei';
 import { AnimatePresence } from 'framer-motion';
 import { useSpring, animated } from '@react-spring/three';
-import * as THREE from 'three';
+import type { Group, Mesh } from 'three';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 
 /* ──────────────────────────────────────────────────────────────── */
@@ -28,6 +28,7 @@ const BRAND = {
   tailwindPrimary: '#06B6D4',
   tailwindSecondary: '#38BDF8',
   node: '#339933',
+  openai: '#10A37F',
 };
 
 // Configuration des modèles 3D simples et reconnaissables
@@ -51,9 +52,9 @@ const TECH_MODELS = [
     scale: 1.0,
   },
   {
-    name: 'Tailwind CSS',
-    type: 'tailwind' as const,
-    color: BRAND.tailwindPrimary,
+    name: 'OpenAI',
+    type: 'openai' as const,
+    color: BRAND.openai,
     scale: 1.0,
   },
   {
@@ -69,7 +70,7 @@ const TECH_MODELS = [
 
 // React - Atome avec noyau, orbites elliptiques et léger glow (proportions proches du logo)
 function ReactLogo({ isVisible }: { isVisible: boolean }) {
-  const groupRef = useRef<THREE.Group>(null);
+  const groupRef = useRef<Group>(null);
   
   useFrame((state) => {
     if (groupRef.current && isVisible) {
@@ -116,7 +117,7 @@ function ReactLogo({ isVisible }: { isVisible: boolean }) {
 
 // Next.js - Disque noir glossy avec trait diagonal minimaliste (épaisseur ajustée)
 function NextJSLogo({ isVisible }: { isVisible: boolean }) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<Mesh>(null);
   
   useFrame((state) => {
     if (meshRef.current && isVisible) {
@@ -152,7 +153,7 @@ function NextJSLogo({ isVisible }: { isVisible: boolean }) {
 
 // TypeScript - Plaque bleue arrondie avec lettrage "TS" extrudé (rayon et contraste ajustés)
 function TypeScriptLogo({ isVisible }: { isVisible: boolean }) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<Mesh>(null);
   
   useFrame((state) => {
     if (meshRef.current && isVisible) {
@@ -199,46 +200,37 @@ function TypeScriptLogo({ isVisible }: { isVisible: boolean }) {
   );
 }
 
-// Tailwind - Courbes tubulaires légères façon "vague" (couleurs officielles)
-function TailwindLogo({ isVisible }: { isVisible: boolean }) {
-  const groupRef = useRef<THREE.Group>(null);
-  
+// OpenAI - Rosace de 6 anneaux entrelacés façon noeud (approximation fidèle)
+function OpenAILogo({ isVisible }: { isVisible: boolean }) {
+  const groupRef = useRef<Group>(null);
+
   useFrame((state) => {
     if (groupRef.current && isVisible) {
-      groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.36) * 0.18;
+      groupRef.current.rotation.z = state.clock.elapsedTime * 0.2;
     }
   });
 
-  // animation d'entrée
   const springs = useSpring({ scale: isVisible ? 1 : 0 });
 
-  // courbes paramétriques
-  const createWave = useMemo(() => {
-    return (scale = 1) => {
-      const points: Array<[number, number, number]> = [
-        [-1.5, 0.2, 0],
-        [-0.5, 0.6, 0],
-        [0.5, -0.1, 0],
-        [1.5, 0.3, 0],
-      ];
-      return new THREE.CatmullRomCurve3(
-        points.map(p => new THREE.Vector3(p[0] * scale, p[1] * scale, p[2]))
-      );
-    };
-  }, []);
-
-  // déjà défini plus haut
+  const petals = useMemo(() => Array.from({ length: 6 }), []);
 
   return (
     <animated.group ref={groupRef} scale={springs.scale}>
       <Center>
-        <mesh>
-          <tubeGeometry args={[createWave(1), 80, 0.12, 16, false]} />
-          <meshStandardMaterial color={BRAND.tailwindPrimary} metalness={0.2} roughness={0.35} />
-        </mesh>
-        <mesh position={[0.15, -0.15, -0.02]}>
-          <tubeGeometry args={[createWave(0.75), 80, 0.09, 16, false]} />
-          <meshStandardMaterial color={BRAND.tailwindSecondary} metalness={0.2} roughness={0.35} />
+        {petals.map((_, i) => {
+          const angle = (i * Math.PI) / 3; // 0, 60, 120, ...
+          return (
+            <group key={i} rotation={[Math.PI / 2.4, 0, angle]}>
+              <mesh>
+                <torusGeometry args={[1.1, 0.18, 24, 96, (4 * Math.PI) / 3]} />
+                <meshStandardMaterial color={BRAND.openai} metalness={0.5} roughness={0.3} />
+              </mesh>
+            </group>
+          );
+        })}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.35, 0.35, 0.12, 48]} />
+          <meshStandardMaterial color={BRAND.openai} metalness={0.4} roughness={0.4} />
         </mesh>
       </Center>
     </animated.group>
@@ -247,7 +239,7 @@ function TailwindLogo({ isVisible }: { isVisible: boolean }) {
 
 // Node.js - Hexagone glossy + lettrage "JS" (teinte et vitesse ajustées)
 function NodeJSLogo({ isVisible }: { isVisible: boolean }) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<Mesh>(null);
   
   useFrame((state) => {
     if (meshRef.current && isVisible) {
@@ -308,8 +300,8 @@ function TechModel({ model, isVisible }: ModelProps) {
         return <NextJSLogo isVisible={isVisible} />;
       case 'typescript':
         return <TypeScriptLogo isVisible={isVisible} />;
-      case 'tailwind':
-        return <TailwindLogo isVisible={isVisible} />;
+      case 'openai':
+        return <OpenAILogo isVisible={isVisible} />;
       case 'nodejs':
         return <NodeJSLogo isVisible={isVisible} />;
       default:
@@ -394,10 +386,10 @@ export default function ModelHero() {
           visible={currentModel.type === 'react'}
         />
         <pointLight 
-          color={0x06b6d4} 
-          intensity={0.5} 
+          color={0x10a37f} 
+          intensity={0.55} 
           position={[0, 0, 3]}
-          visible={currentModel.type === 'tailwind'}
+          visible={currentModel.type === 'openai'}
         />
         <pointLight 
           color={0x68a063} 
