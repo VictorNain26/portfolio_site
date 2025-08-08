@@ -1,7 +1,7 @@
 /* components/ModelHero.tsx */
 'use client';
 
-import { Suspense, useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import {
   OrbitControls,
@@ -20,36 +20,46 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing';
 
 /* ──────────────────────────────────────────────────────────────── */
 /* 1 · Configuration des technologies avec logos 3D créés sur mesure */
+// Couleurs officielles (fidèles aux chartes)
+const BRAND = {
+  react: '#61DAFB',
+  next: '#0a0a0a',
+  typescript: '#3178C6',
+  tailwindPrimary: '#06B6D4',
+  tailwindSecondary: '#38BDF8',
+  node: '#339933',
+};
+
 // Configuration des modèles 3D simples et reconnaissables
 const TECH_MODELS = [
   {
     name: 'React',
     type: 'react' as const,
-    color: '#61DAFB',
+    color: BRAND.react,
     scale: 1.0,
   },
   {
     name: 'Next.js',
     type: 'nextjs' as const,
-    color: '#000000', 
+    color: BRAND.next, 
     scale: 1.0,
   },
   {
     name: 'TypeScript',
     type: 'typescript' as const,
-    color: '#3178C6',
+    color: BRAND.typescript,
     scale: 1.0,
   },
   {
     name: 'Tailwind CSS',
     type: 'tailwind' as const,
-    color: '#06B6D4',
+    color: BRAND.tailwindPrimary,
     scale: 1.0,
   },
   {
     name: 'Node.js',
     type: 'nodejs' as const,
-    color: '#339933',
+    color: BRAND.node,
     scale: 1.0,
   },
 ];
@@ -57,13 +67,13 @@ const TECH_MODELS = [
 /* ──────────────────────────────────────────────────────────────── */
 /* 2 · Modèles 3D simples et reconnaissables                       */
 
-// React - Atome avec noyau, orbites elliptiques et léger glow
+// React - Atome avec noyau, orbites elliptiques et léger glow (proportions proches du logo)
 function ReactLogo({ isVisible }: { isVisible: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   
   useFrame((state) => {
     if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.3;
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.22;
     }
   });
 
@@ -76,25 +86,25 @@ function ReactLogo({ isVisible }: { isVisible: boolean }) {
       <Center>
         {/* Noyau central */}
         <mesh>
-          <sphereGeometry args={[0.3, 32, 32]} />
+          <sphereGeometry args={[0.28, 32, 32]} />
           <meshStandardMaterial 
-            color="#61DAFB" 
-            emissive="#61DAFB" 
-            emissiveIntensity={0.2}
+            color={BRAND.react} 
+            emissive={BRAND.react} 
+            emissiveIntensity={0.15}
           />
         </mesh>
         
         {/* 3 orbites elliptiques */}
         {[0, 60, 120].map((rotation, i) => (
           <group key={i} rotation={[Math.PI / 6, 0, (rotation * Math.PI) / 180]}>
-            <mesh scale={[1.25, 0.85, 1]}>
-              <torusGeometry args={[1.5, 0.03, 12, 64]} />
+            <mesh scale={[1.35, 0.9, 1]}>
+              <torusGeometry args={[1.5, 0.025, 16, 96]} />
               <meshStandardMaterial 
-                color="#61DAFB" 
-                transparent 
-                opacity={0.75}
-                metalness={0.1}
-                roughness={0.2}
+                color={BRAND.react}
+                transparent
+                opacity={0.85}
+                metalness={0.08}
+                roughness={0.18}
               />
             </mesh>
           </group>
@@ -104,13 +114,13 @@ function ReactLogo({ isVisible }: { isVisible: boolean }) {
   );
 }
 
-// Next.js - Disque noir glossy avec trait diagonal minimaliste
+// Next.js - Disque noir glossy avec trait diagonal minimaliste (épaisseur ajustée)
 function NextJSLogo({ isVisible }: { isVisible: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   
   useFrame((state) => {
     if (meshRef.current && isVisible) {
-      meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.5) * 0.08;
+      meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.45) * 0.06;
     }
   });
 
@@ -123,16 +133,16 @@ function NextJSLogo({ isVisible }: { isVisible: boolean }) {
       <Center>
         {/* Disque */}
         <mesh ref={meshRef} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[1.5, 1.5, 0.18, 64]} />
+          <cylinderGeometry args={[1.5, 1.5, 0.16, 64]} />
           <meshStandardMaterial 
-            color="#0a0a0a" 
+            color={BRAND.next}
             metalness={0.9}
-            roughness={0.15}
+            roughness={0.16}
           />
         </mesh>
         {/* Trait diagonal */}
-        <mesh rotation={[0, 0, -0.55]} position={[0, 0, 0.15]}>
-          <boxGeometry args={[2.2, 0.08, 0.12]} />
+        <mesh rotation={[0, 0, -0.55]} position={[0, 0, 0.12]}>
+          <boxGeometry args={[2.2, 0.06, 0.1]} />
           <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.4} />
         </mesh>
       </Center>
@@ -140,14 +150,14 @@ function NextJSLogo({ isVisible }: { isVisible: boolean }) {
   );
 }
 
-// TypeScript - Plaque bleue arrondie avec lettrage "TS" extrudé
+// TypeScript - Plaque bleue arrondie avec lettrage "TS" extrudé (rayon et contraste ajustés)
 function TypeScriptLogo({ isVisible }: { isVisible: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   
   useFrame((state) => {
     if (meshRef.current && isVisible) {
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.2;
+      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.28) * 0.1;
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.18;
     }
   });
 
@@ -159,24 +169,24 @@ function TypeScriptLogo({ isVisible }: { isVisible: boolean }) {
     <animated.group scale={springs.scale}>
       <Center>
         <group ref={meshRef}>
-          <RoundedBox args={[2.6, 2.6, 0.4]} radius={0.25} smoothness={6}>
-            <meshStandardMaterial color="#3178C6" metalness={0.5} roughness={0.3} />
+          <RoundedBox args={[2.6, 2.6, 0.35]} radius={0.22} smoothness={6}>
+            <meshStandardMaterial color={BRAND.typescript} metalness={0.45} roughness={0.32} />
           </RoundedBox>
           {/* Ombre/relief simulé */}
           <Text
             position={[0.02, -0.02, 0.22]}
             fontSize={0.9}
-            letterSpacing={-0.04}
+            letterSpacing={-0.03}
             anchorX="center"
             anchorY="middle"
           >
             TS
-            <meshStandardMaterial color="#1f3f83" metalness={0.2} roughness={0.6} />
+            <meshStandardMaterial color="#1f3f83" metalness={0.2} roughness={0.65} />
           </Text>
           <Text
             position={[0, 0, 0.24]}
             fontSize={0.9}
-            letterSpacing={-0.04}
+            letterSpacing={-0.03}
             anchorX="center"
             anchorY="middle"
           >
@@ -189,13 +199,13 @@ function TypeScriptLogo({ isVisible }: { isVisible: boolean }) {
   );
 }
 
-// Tailwind - Courbes tubulaires légères façon "vague"
+// Tailwind - Courbes tubulaires légères façon "vague" (couleurs officielles)
 function TailwindLogo({ isVisible }: { isVisible: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   
   useFrame((state) => {
     if (groupRef.current && isVisible) {
-      groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.4) * 0.2;
+      groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.36) * 0.18;
     }
   });
 
@@ -203,17 +213,19 @@ function TailwindLogo({ isVisible }: { isVisible: boolean }) {
   const springs = useSpring({ scale: isVisible ? 1 : 0 });
 
   // courbes paramétriques
-  const createWave = (scale = 1) => {
-    const points: Array<[number, number, number]> = [
-      [-1.5, 0.2, 0],
-      [-0.5, 0.6, 0],
-      [0.5, -0.1, 0],
-      [1.5, 0.3, 0],
-    ];
-    return new THREE.CatmullRomCurve3(
-      points.map(p => new THREE.Vector3(p[0] * scale, p[1] * scale, p[2]))
-    );
-  };
+  const createWave = useMemo(() => {
+    return (scale = 1) => {
+      const points: Array<[number, number, number]> = [
+        [-1.5, 0.2, 0],
+        [-0.5, 0.6, 0],
+        [0.5, -0.1, 0],
+        [1.5, 0.3, 0],
+      ];
+      return new THREE.CatmullRomCurve3(
+        points.map(p => new THREE.Vector3(p[0] * scale, p[1] * scale, p[2]))
+      );
+    };
+  }, []);
 
   // déjà défini plus haut
 
@@ -222,24 +234,24 @@ function TailwindLogo({ isVisible }: { isVisible: boolean }) {
       <Center>
         <mesh>
           <tubeGeometry args={[createWave(1), 80, 0.12, 16, false]} />
-          <meshStandardMaterial color="#06B6D4" metalness={0.2} roughness={0.35} />
+          <meshStandardMaterial color={BRAND.tailwindPrimary} metalness={0.2} roughness={0.35} />
         </mesh>
         <mesh position={[0.15, -0.15, -0.02]}>
           <tubeGeometry args={[createWave(0.75), 80, 0.09, 16, false]} />
-          <meshStandardMaterial color="#0891B2" metalness={0.2} roughness={0.35} />
+          <meshStandardMaterial color={BRAND.tailwindSecondary} metalness={0.2} roughness={0.35} />
         </mesh>
       </Center>
     </animated.group>
   );
 }
 
-// Node.js - Hexagone glossy + lettrage "JS"
+// Node.js - Hexagone glossy + lettrage "JS" (teinte et vitesse ajustées)
 function NodeJSLogo({ isVisible }: { isVisible: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   
   useFrame((state) => {
     if (meshRef.current && isVisible) {
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.4;
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.28;
     }
   });
 
@@ -253,7 +265,7 @@ function NodeJSLogo({ isVisible }: { isVisible: boolean }) {
         <group ref={meshRef} rotation={[0, Math.PI / 6, 0]}>
           <mesh>
             <cylinderGeometry args={[1.6, 1.6, 0.35, 6]} />
-            <meshStandardMaterial color="#339933" metalness={0.75} roughness={0.25} />
+            <meshStandardMaterial color={BRAND.node} metalness={0.75} roughness={0.25} />
           </mesh>
           {/* Ombre/relief simulé */}
           <Text
@@ -272,7 +284,7 @@ function NodeJSLogo({ isVisible }: { isVisible: boolean }) {
             anchorY="middle"
           >
             JS
-            <meshStandardMaterial color="#0a0a0a" metalness={0.2} roughness={0.5} />
+            <meshStandardMaterial color="#303030" metalness={0.2} roughness={0.5} />
           </Text>
         </group>
       </Center>
@@ -306,7 +318,7 @@ function TechModel({ model, isVisible }: ModelProps) {
   };
 
   return (
-    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.3}>
+    <Float speed={1.2} rotationIntensity={0.18} floatIntensity={0.25}>
       {renderLogo()}
     </Float>
   );
@@ -359,16 +371,17 @@ export default function ModelHero() {
         className="!bg-transparent"
         camera={{ position: [0, 0, 5], fov: 45 }}
         dpr={[1, 2]}
+        shadows
         gl={{ alpha: true, antialias: true }}
       >
         {/* ÉCLAIRAGE selon les spécifications recommandées */}
         {/* Lumière ambiante douce */}
-        <ambientLight color={0xffffff} intensity={0.6} />
+        <ambientLight color={0xffffff} intensity={0.5} />
         
         {/* Lumière directionnelle principale */}
         <directionalLight 
           color={0xffffff}
-          intensity={1}
+          intensity={0.9}
           position={[5, 5, 5]}
           castShadow={true}
         />
@@ -396,9 +409,9 @@ export default function ModelHero() {
         {/* Ombres de contact au sol */}
         <ContactShadows
           position={[0, -1.4, 0]}
-          opacity={0.3}
+          opacity={0.25}
           scale={10}
-          blur={2.5}
+          blur={3}
           far={3}
         />
 
@@ -415,7 +428,7 @@ export default function ModelHero() {
         >
           <Environment preset="studio" />
           <EffectComposer>
-            <Bloom intensity={0.35} luminanceThreshold={0.7} luminanceSmoothing={0.05} />
+            <Bloom intensity={0.25} luminanceThreshold={0.7} luminanceSmoothing={0.06} />
           </EffectComposer>
           <AnimatePresence mode="wait">
             <TechModel
@@ -432,7 +445,9 @@ export default function ModelHero() {
           enablePan={false}
           enableRotate={true}
           autoRotate={true}
-          autoRotateSpeed={1}
+          autoRotateSpeed={0.6}
+          enableDamping={true}
+          dampingFactor={0.08}
           minPolarAngle={Math.PI / 2}
           maxPolarAngle={Math.PI / 2}
         />
