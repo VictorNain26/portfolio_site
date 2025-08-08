@@ -20,6 +20,14 @@ const initial: Cat[] = [
     category: 'DevOps',
     items: ['Docker', 'Kubernetes', 'Terraform', 'GitHub Actions'],
   },
+  {
+    // Nouvelle catégorie pour mettre en avant les compétences en IA et LLM.
+    // Ces technologies permettent de créer des assistants virtuels, de la
+    // génération de contenu et des intégrations conversationnelles dans vos
+    // applications web. Ajoutez ici les outils et frameworks que vous maîtrisez.
+    category: 'IA & LLM',
+    items: ['OpenAI', 'LangChain', 'Hugging Face', 'Vector Databases'],
+  },
 ];
 
 export default function Skills() {

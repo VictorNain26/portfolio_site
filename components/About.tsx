@@ -8,7 +8,7 @@ export default function About() {
       </h2>
 
       <p className="max-w-xl leading-relaxed text-gray-300">
-        Développeur&nbsp;full-stack&nbsp;JavaScript diplômé du&nbsp;
+        Développeur&nbsp;full‑stack&nbsp;JavaScript diplômé du&nbsp;
         <span className="font-semibold text-indigo-400">
           Wagon
         </span>{' '}
@@ -16,13 +16,14 @@ export default function About() {
         <span className="font-semibold text-indigo-400">OpenClassrooms</span>,
         avec&nbsp;
         <span className="font-semibold text-indigo-400">
-          3 années d&apos;expérience
+          3&nbsp;années d&apos;expérience
         </span>{' '}
-        en développement web. Spécialisé dans les technologies modernes
-        et la création de solutions innovantes, je développe continuellement
-        mes compétences à travers des&nbsp;
+        en développement web. Spécialisé dans les technologies modernes et l’intégration de
+        l’<span className="font-semibold text-indigo-400">IA et des modèles de langage (LLM)</span>, je conçois des
+        interfaces dynamiques, des expériences&nbsp;3D et des solutions conversationnelles.
+        Je développe continuellement mes compétences à travers des&nbsp;
         <span className="font-semibold text-indigo-400">
-          projets open-source
+          projets open‑source
         </span>
         .
       </p>

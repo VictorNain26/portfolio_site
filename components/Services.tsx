@@ -13,8 +13,12 @@ export default function Services() {
       desc: 'APIs robustes, architectures scalables et déploiements automatisés.',
     },
     {
-      title: 'Intelligence artificielle',
-      desc: 'Intégration de solutions IA pour automatiser et enrichir vos applications.',
+        // L’IA évolue rapidement et inclut désormais les grands modèles de langage.
+        // Ce service met l’accent sur l’intégration d’IA et de LLM (Large Language Models)
+        // pour automatiser, personnaliser et enrichir vos applications web avec des
+        // fonctionnalités conversationnelles, de génération et d’analyse de données.
+        title: 'IA & LLM',
+        desc: 'Intégration de solutions d’IA et de modèles de langage (LLM) pour automatiser, personnaliser et enrichir vos applications.',
     },
   ];
 
