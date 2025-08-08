@@ -9,10 +9,14 @@ import {
   Float,
   Html,
   Center,
+  Text,
+  RoundedBox,
+  ContactShadows,
 } from '@react-three/drei';
 import { AnimatePresence } from 'framer-motion';
 import { useSpring, animated } from '@react-spring/three';
-import type * as THREE from 'three';
+import * as THREE from 'three';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 
 /* ──────────────────────────────────────────────────────────────── */
 /* 1 · Configuration des technologies avec logos 3D créés sur mesure */
@@ -53,7 +57,7 @@ const TECH_MODELS = [
 /* ──────────────────────────────────────────────────────────────── */
 /* 2 · Modèles 3D simples et reconnaissables                       */
 
-// React - Atome simple avec noyau et orbites
+// React - Atome avec noyau, orbites elliptiques et léger glow
 function ReactLogo({ isVisible }: { isVisible: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   
@@ -80,15 +84,17 @@ function ReactLogo({ isVisible }: { isVisible: boolean }) {
           />
         </mesh>
         
-        {/* 3 orbites simples */}
+        {/* 3 orbites elliptiques */}
         {[0, 60, 120].map((rotation, i) => (
           <group key={i} rotation={[Math.PI / 6, 0, (rotation * Math.PI) / 180]}>
-            <mesh>
-              <torusGeometry args={[1.5, 0.02, 6, 32]} />
+            <mesh scale={[1.25, 0.85, 1]}>
+              <torusGeometry args={[1.5, 0.03, 12, 64]} />
               <meshStandardMaterial 
                 color="#61DAFB" 
                 transparent 
-                opacity={0.6}
+                opacity={0.75}
+                metalness={0.1}
+                roughness={0.2}
               />
             </mesh>
           </group>
@@ -98,13 +104,13 @@ function ReactLogo({ isVisible }: { isVisible: boolean }) {
   );
 }
 
-// Next.js - Triangle/flèche moderne
+// Next.js - Disque noir glossy avec trait diagonal minimaliste
 function NextJSLogo({ isVisible }: { isVisible: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   
   useFrame((state) => {
     if (meshRef.current && isVisible) {
-      meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+      meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.5) * 0.08;
     }
   });
 
@@ -115,20 +121,26 @@ function NextJSLogo({ isVisible }: { isVisible: boolean }) {
   return (
     <animated.group scale={springs.scale}>
       <Center>
-        <mesh ref={meshRef}>
-          <coneGeometry args={[1, 2, 3]} />
+        {/* Disque */}
+        <mesh ref={meshRef} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[1.5, 1.5, 0.18, 64]} />
           <meshStandardMaterial 
-            color="#000000" 
-            metalness={0.8}
-            roughness={0.2}
+            color="#0a0a0a" 
+            metalness={0.9}
+            roughness={0.15}
           />
+        </mesh>
+        {/* Trait diagonal */}
+        <mesh rotation={[0, 0, -0.55]} position={[0, 0, 0.15]}>
+          <boxGeometry args={[2.2, 0.08, 0.12]} />
+          <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.4} />
         </mesh>
       </Center>
     </animated.group>
   );
 }
 
-// TypeScript - Cube bleu simple
+// TypeScript - Plaque bleue arrondie avec lettrage "TS" extrudé
 function TypeScriptLogo({ isVisible }: { isVisible: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   
@@ -146,20 +158,38 @@ function TypeScriptLogo({ isVisible }: { isVisible: boolean }) {
   return (
     <animated.group scale={springs.scale}>
       <Center>
-        <mesh ref={meshRef}>
-          <boxGeometry args={[2, 2, 2]} />
-          <meshStandardMaterial 
-            color="#3178C6" 
-            metalness={0.6}
-            roughness={0.3}
-          />
-        </mesh>
+        <group ref={meshRef}>
+          <RoundedBox args={[2.6, 2.6, 0.4]} radius={0.25} smoothness={6}>
+            <meshStandardMaterial color="#3178C6" metalness={0.5} roughness={0.3} />
+          </RoundedBox>
+          {/* Ombre/relief simulé */}
+          <Text
+            position={[0.02, -0.02, 0.22]}
+            fontSize={0.9}
+            letterSpacing={-0.04}
+            anchorX="center"
+            anchorY="middle"
+          >
+            TS
+            <meshStandardMaterial color="#1f3f83" metalness={0.2} roughness={0.6} />
+          </Text>
+          <Text
+            position={[0, 0, 0.24]}
+            fontSize={0.9}
+            letterSpacing={-0.04}
+            anchorX="center"
+            anchorY="middle"
+          >
+            TS
+            <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.4} />
+          </Text>
+        </group>
       </Center>
     </animated.group>
   );
 }
 
-// Tailwind - Vagues simples entrelacées
+// Tailwind - Courbes tubulaires légères façon "vague"
 function TailwindLogo({ isVisible }: { isVisible: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   
@@ -169,38 +199,41 @@ function TailwindLogo({ isVisible }: { isVisible: boolean }) {
     }
   });
 
-  const springs = useSpring({
-    scale: isVisible ? 1 : 0,
-  });
+  // animation d'entrée
+  const springs = useSpring({ scale: isVisible ? 1 : 0 });
+
+  // courbes paramétriques
+  const createWave = (scale = 1) => {
+    const points: Array<[number, number, number]> = [
+      [-1.5, 0.2, 0],
+      [-0.5, 0.6, 0],
+      [0.5, -0.1, 0],
+      [1.5, 0.3, 0],
+    ];
+    return new THREE.CatmullRomCurve3(
+      points.map(p => new THREE.Vector3(p[0] * scale, p[1] * scale, p[2]))
+    );
+  };
+
+  // déjà défini plus haut
 
   return (
     <animated.group ref={groupRef} scale={springs.scale}>
       <Center>
-        {/* Vague principale */}
-        <mesh rotation={[0, 0, 0]}>
-          <torusGeometry args={[1.5, 0.2, 8, 32]} />
-          <meshStandardMaterial 
-            color="#06B6D4" 
-            transparent 
-            opacity={0.8}
-          />
+        <mesh>
+          <tubeGeometry args={[createWave(1), 80, 0.12, 16, false]} />
+          <meshStandardMaterial color="#06B6D4" metalness={0.2} roughness={0.35} />
         </mesh>
-        
-        {/* Vague secondaire */}
-        <mesh rotation={[0, 0, Math.PI / 3]}>
-          <torusGeometry args={[1.2, 0.15, 8, 32]} />
-          <meshStandardMaterial 
-            color="#0891B2" 
-            transparent 
-            opacity={0.7}
-          />
+        <mesh position={[0.15, -0.15, -0.02]}>
+          <tubeGeometry args={[createWave(0.75), 80, 0.09, 16, false]} />
+          <meshStandardMaterial color="#0891B2" metalness={0.2} roughness={0.35} />
         </mesh>
       </Center>
     </animated.group>
   );
 }
 
-// Node.js - Hexagone simple
+// Node.js - Hexagone glossy + lettrage "JS"
 function NodeJSLogo({ isVisible }: { isVisible: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   
@@ -217,14 +250,31 @@ function NodeJSLogo({ isVisible }: { isVisible: boolean }) {
   return (
     <animated.group scale={springs.scale}>
       <Center>
-        <mesh ref={meshRef} rotation={[0, Math.PI / 6, 0]}>
-          <cylinderGeometry args={[1.5, 1.5, 0.3, 6]} />
-          <meshStandardMaterial 
-            color="#339933" 
-            metalness={0.7}
-            roughness={0.3}
-          />
-        </mesh>
+        <group ref={meshRef} rotation={[0, Math.PI / 6, 0]}>
+          <mesh>
+            <cylinderGeometry args={[1.6, 1.6, 0.35, 6]} />
+            <meshStandardMaterial color="#339933" metalness={0.75} roughness={0.25} />
+          </mesh>
+          {/* Ombre/relief simulé */}
+          <Text
+            position={[0.02, -0.02, 0.19]}
+            fontSize={0.7}
+            anchorX="center"
+            anchorY="middle"
+          >
+            JS
+            <meshStandardMaterial color="#205c20" metalness={0.2} roughness={0.6} />
+          </Text>
+          <Text
+            position={[0, 0, 0.21]}
+            fontSize={0.7}
+            anchorX="center"
+            anchorY="middle"
+          >
+            JS
+            <meshStandardMaterial color="#0a0a0a" metalness={0.2} roughness={0.5} />
+          </Text>
+        </group>
       </Center>
     </animated.group>
   );
@@ -343,6 +393,15 @@ export default function ModelHero() {
           visible={currentModel.type === 'nodejs'}
         />
 
+        {/* Ombres de contact au sol */}
+        <ContactShadows
+          position={[0, -1.4, 0]}
+          opacity={0.3}
+          scale={10}
+          blur={2.5}
+          far={3}
+        />
+
         {/* CONTENU */}
         <Suspense
           fallback={
@@ -355,6 +414,9 @@ export default function ModelHero() {
           }
         >
           <Environment preset="studio" />
+          <EffectComposer>
+            <Bloom intensity={0.35} luminanceThreshold={0.7} luminanceSmoothing={0.05} />
+          </EffectComposer>
           <AnimatePresence mode="wait">
             <TechModel
               key={currentModel.name}

@@ -29,3 +29,14 @@ cp .env.example .env.local   # puis renseigner HF_TOKEN
 # 5. Dev
 bun run dev
 ```
+
+## 🎨 Modèles 3D (Hero)
+
+- Fichier: `components/ModelHero.tsx`
+- Techs cyclées: React, Next.js, TypeScript, Tailwind, Node.js
+- Chaque logo est un modèle procédural (R3F + drei) avec matériaux PBR, ombres de contact et bloom léger.
+
+Ajouter une technologie:
+- Ajouter une entrée dans `TECH_MODELS` avec `name`, `type`, `color`.
+- Implémenter un composant `XxxLogo` dédié et l’enregistrer dans `TechModel` (switch `model.type`).
+- Ajuster l’éclairage si besoin via les `pointLight` conditionnels.
