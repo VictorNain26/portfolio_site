@@ -9,6 +9,9 @@ import { SocialIconButton } from '@/components/ui/social-icon-button';
 const ModelHero = dynamic(() => import('@/components/ModelHero'), {
   ssr: false,
 });
+const TechLogos3D = dynamic(() => import('@/components/TechLogos3D'), {
+  ssr: false,
+});
 
 export default function Hero() {
   const prefersReduceMotion = useReducedMotion();
@@ -38,6 +41,8 @@ export default function Hero() {
               Développeur&nbsp;Full-Stack
             </p>
           </div>
+
+          <TechLogos3D />
 
           <p className="hidden max-w-[28ch] text-sm text-gray-300 sm:block sm:max-w-md sm:text-base">
             Conception et développement d&apos;applications web modernes,
