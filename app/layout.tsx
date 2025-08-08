@@ -67,7 +67,7 @@ export const metadata = {
     description: 'Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Création d\'applications web modernes et performantes.',
     images: [
       {
-        url: '/logo.png',
+        url: '/og-image-dark.svg',
         width: 1200,
         height: 630,
         alt: 'Victor Lenain - Développeur Full-Stack JavaScript',
@@ -79,7 +79,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Victor Lenain | Développeur Full-Stack JavaScript',
     description: 'Spécialisé en Next.js 15, React 19 et DevOps. Créateur d\'applications web modernes.',
-    images: ['/logo.png'],
+    images: ['/og-image-dark.svg'],
     creator: '@victor_lenain',
     site: '@victor_lenain',
   },
@@ -139,7 +139,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               jobTitle: 'Développeur Full-Stack JavaScript & Expert Next.js',
               description: 'Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Expert en création d\'applications web modernes et performantes.',
               url: 'https://victorlenain.fr',
-              image: 'https://victorlenain.fr/logo.png',
+              image: 'https://victorlenain.fr/og-image-dark.svg',
               sameAs: [
                 'https://www.linkedin.com/in/victor-lenain-1907b7282/',
                 'https://github.com/victorlenain',
@@ -200,6 +200,42 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 '@type': 'SearchAction',
                 target: 'https://victorlenain.fr/blog?q={search_term_string}',
                 'query-input': 'required name=search_term_string'
+              },
+              mainEntity: {
+                '@type': 'SiteNavigationElement',
+                name: 'Navigation principale',
+                hasPart: [
+                  {
+                    '@type': 'SiteNavigationElement',
+                    name: 'Accueil',
+                    description: 'Portfolio et présentation de Victor Lenain',
+                    url: 'https://victorlenain.fr'
+                  },
+                  {
+                    '@type': 'SiteNavigationElement',
+                    name: 'À propos',
+                    description: 'Expérience et compétences techniques',
+                    url: 'https://victorlenain.fr#a-propos'
+                  },
+                  {
+                    '@type': 'SiteNavigationElement',
+                    name: 'Projets',
+                    description: 'Portfolio des réalisations et projets',
+                    url: 'https://victorlenain.fr#projets'
+                  },
+                  {
+                    '@type': 'SiteNavigationElement',
+                    name: 'Blog',
+                    description: 'Articles techniques et tutoriels',
+                    url: 'https://victorlenain.fr/blog'
+                  },
+                  {
+                    '@type': 'SiteNavigationElement',
+                    name: 'Contact',
+                    description: 'Formulaire de contact et informations',
+                    url: 'https://victorlenain.fr#contact'
+                  }
+                ]
               }
             }),
           }}
@@ -216,7 +252,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               name: 'Victor Lenain - Services de Développement Web',
               description: 'Services professionnels de développement web Full-Stack avec Next.js, React et TypeScript.',
               url: 'https://victorlenain.fr',
-              image: 'https://victorlenain.fr/logo.png',
+              image: 'https://victorlenain.fr/og-image-dark.svg',
               provider: {
                 '@type': 'Person',
                 name: 'Victor Lenain'

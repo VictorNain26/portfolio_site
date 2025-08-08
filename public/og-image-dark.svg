@@ -1,0 +1,88 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fond noir élégant avec gradient subtil -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="1"/>
+      <stop offset="30%" stop-color="#0f172a" stop-opacity="1"/>
+      <stop offset="70%" stop-color="#1e293b" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <!-- Effet de lueur -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Motif de points subtiles -->
+  <g opacity="0.03">
+    <defs>
+      <pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse">
+        <circle cx="15" cy="15" r="1" fill="#fff"/>
+      </pattern>
+    </defs>
+    <rect width="1200" height="630" fill="url(#dots)"/>
+  </g>
+  
+  <!-- Éléments décoratifs -->
+  <circle cx="950" cy="120" r="100" fill="url(#textGradient)" opacity="0.08"/>
+  <circle cx="250" cy="450" r="60" fill="url(#textGradient)" opacity="0.12"/>
+  
+  <!-- Contenu principal -->
+  <g transform="translate(80, 0)">
+    <!-- Nom principal -->
+    <text x="0" y="180" font-family="Arial, sans-serif" font-size="68" font-weight="bold" fill="url(#textGradient)" filter="url(#glow)">
+      Victor Lenain
+    </text>
+    
+    <!-- Sous-titre -->
+    <text x="0" y="240" font-family="Arial, sans-serif" font-size="28" fill="#94a3b8" opacity="0.9">
+      Développeur Full-Stack JavaScript
+    </text>
+    
+    <!-- Technologies -->
+    <text x="0" y="300" font-family="Arial, sans-serif" font-size="22" fill="#6366f1">
+      Next.js 15 • React 19 • TypeScript • DevOps
+    </text>
+    
+    <!-- Description -->
+    <text x="0" y="360" font-family="Arial, sans-serif" font-size="18" fill="#cbd5e1">
+      Conception et développement d'applications web modernes,
+    </text>
+    <text x="0" y="390" font-family="Arial, sans-serif" font-size="18" fill="#cbd5e1">
+      d'expériences 3D et de solutions IA.
+    </text>
+    
+    <!-- URL -->
+    <text x="0" y="460" font-family="Arial, sans-serif" font-size="26" fill="#6366f1" font-weight="600">
+      victorlenain.fr
+    </text>
+    
+    <!-- Navigation disponible -->
+    <g transform="translate(0, 520)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="14" fill="#64748b">
+        🏠 Accueil  •  👤 À propos  •  💼 Projets  •  📝 Blog  •  📧 Contact
+      </text>
+    </g>
+  </g>
+  
+  <!-- Logo/Badge à droite -->
+  <g transform="translate(850, 180)">
+    <rect x="0" y="0" width="280" height="280" rx="25" fill="none" stroke="url(#textGradient)" stroke-width="2" opacity="0.3"/>
+    <rect x="10" y="10" width="260" height="260" rx="20" fill="url(#textGradient)" opacity="0.1"/>
+    <text x="140" y="160" font-family="Arial, sans-serif" font-size="110" text-anchor="middle" fill="url(#textGradient)" font-weight="bold">
+      VL
+    </text>
+  </g>
+</svg>

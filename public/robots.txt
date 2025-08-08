@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Pages importantes à indexer en priorité
+Allow: /blog
+Allow: /blog/*
+
+# Sitemap
+Sitemap: https://victorlenain.fr/sitemap.xml
+
+# Optimisations pour les moteurs de recherche
+Crawl-delay: 1
+
+# Répertoires publics autorisés
+Allow: /images/
+Allow: /icons/
+Allow: *.css
+Allow: *.js
+Allow: *.svg
+Allow: *.png
+Allow: *.jpg
+Allow: *.jpeg
