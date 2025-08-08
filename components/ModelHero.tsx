@@ -52,18 +52,6 @@ const TECH_MODELS = [
     color: '#339933',
     scale: 1.0,
   },
-
-    // Ajout d'une entrée IA/LLM pour mettre en avant les compétences en intelligence
-    // artificielle et modèles de langage. Cette entrée s'affichera dans le carrousel
-    // 3D du Hero et permettra de présenter un logo personnalisé représentant un
-    // réseau neuronal. La couleur violette (#8A2BE2) est choisie pour évoquer
-    // l'innovation et les technologies avancées.
-    {
-      name: 'IA & LLM',
-      type: 'ai' as const,
-      color: '#8A2BE2',
-      scale: 1.0,
-    },
 ];
 
 /* ──────────────────────────────────────────────────────────────── */
@@ -292,62 +280,10 @@ function NodeJSLogo({ isVisible }: { isVisible: boolean }) {
   );
 }
 
-/*
- * IA/LLM - Logo personnalisé symbolisant les réseaux neuronaux.
- * Ce composant affiche une sphère centrale entourée de plusieurs petites
- * sphères en orbite, pour évoquer un réseau de neurones et la coopération
- * entre différentes unités (similaire à un modèle de langage). Les couleurs
- * violettes renforcent l’idée d’innovation et de technologie de pointe.
- */
-function AiLogo({ isVisible }: { isVisible: boolean }) {
-  const groupRef = useRef<THREE.Group>(null);
-
-  // Rotation lente autour de l’axe Y lorsque le logo est visible
-  useFrame((state) => {
-    if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.2;
-    }
-  });
-
-  // Animation d’apparition / disparition
-  const springs = useSpring({
-    scale: isVisible ? 1 : 0,
-  });
-
-  // Génère un tableau d’angles uniformément répartis pour positionner les nœuds
-  const orbitAngles = Array.from({ length: 6 }).map((_, i) => (i / 6) * Math.PI * 2);
-
-  return (
-    <animated.group ref={groupRef} scale={springs.scale}>
-      <Center>
-        {/* Sphère centrale */}
-        <mesh>
-          <sphereGeometry args={[0.4, 32, 32]} />
-          <meshStandardMaterial color="#8A2BE2" emissive="#8A2BE2" emissiveIntensity={0.3} />
-        </mesh>
-        {/* Sphères en orbite pour représenter les neurones */}
-        {orbitAngles.map((angle, i) => (
-          <mesh
-            key={i}
-            position={[Math.cos(angle) * 1.2, Math.sin(angle) * 1.2, 0]}
-          >
-            <sphereGeometry args={[0.15, 16, 16]} />
-            <meshStandardMaterial color="#A987FF" emissive="#A987FF" emissiveIntensity={0.2} />
-          </mesh>
-        ))}
-      </Center>
-    </animated.group>
-  );
-}
-
 /* ──────────────────────────────────────────────────────────────── */
 /* 3 · Composant principal de modèle                                */
-// Utiliser le type de tous les éléments de TECH_MODELS (et pas seulement
-// celui du premier élément) afin de prendre en charge correctement l’entrée
-// IA/LLM ajoutée ci-dessus. Le type `(typeof TECH_MODELS)[number]` crée
-// une union de tous les objets du tableau.
 type ModelProps = {
-  model: (typeof TECH_MODELS)[number];
+  model: typeof TECH_MODELS[0];
   isVisible: boolean;
 };
 
@@ -364,8 +300,6 @@ function TechModel({ model, isVisible }: ModelProps) {
         return <TailwindLogo isVisible={isVisible} />;
       case 'nodejs':
         return <NodeJSLogo isVisible={isVisible} />;
-          case 'ai':
-            return <AiLogo isVisible={isVisible} />;
       default:
         return null;
     }
@@ -458,14 +392,6 @@ export default function ModelHero() {
           position={[0, 0, 3]}
           visible={currentModel.type === 'nodejs'}
         />
-
-            {/* Lumière violette pour le logo IA/LLM */}
-            <pointLight
-              color={0x8A2BE2}
-              intensity={0.5}
-              position={[0, 0, 3]}
-              visible={currentModel.type === 'ai'}
-            />
 
         {/* Ombres de contact au sol */}
         <ContactShadows
