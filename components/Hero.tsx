@@ -16,7 +16,7 @@ export default function Hero() {
   return (
     <section
       id="accueil"
-      className="relative flex min-h-[100svh] flex-col items-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] sm:pt-0"
+      className="relative flex min-h-[100svh] flex-col items-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] sm:pt-0 transition-colors duration-300"
     >
       {/* ── Contenu principal ─────────────────────────────────────── */}
       <div className="mx-auto flex max-w-7xl flex-col gap-14 px-0 sm:items-center sm:gap-10 sm:px-8 lg:grid lg:min-h-[70vh] lg:grid-cols-2 lg:place-items-center lg:gap-16 lg:px-20">
@@ -33,13 +33,13 @@ export default function Hero() {
           </h1>
 
           <div className="mb-3 flex items-center gap-3 sm:justify-center">
-            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#6bb4d8] via-[#4288b7] to-[#2d5e81]" />
-            <p className="text-sm font-medium uppercase tracking-wide text-indigo-200 sm:text-base">
+            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-soft-blue-300 via-soft-blue-200 to-soft-gray-200" />
+            <p className="text-sm font-medium uppercase tracking-wide text-soft-blue-200 sm:text-base transition-colors duration-300">
               Développeur&nbsp;Full-Stack
             </p>
           </div>
 
-          <p className="hidden max-w-[28ch] text-sm text-gray-300 sm:block sm:max-w-md sm:text-base">
+          <p className="hidden max-w-[28ch] text-sm text-soft-gray-300 sm:block sm:max-w-md sm:text-base transition-colors duration-300">
             Conception et développement d&apos;applications web modernes,
             d&apos;expériences&nbsp;3D et de solutions&nbsp;IA.
           </p>
@@ -106,7 +106,7 @@ export default function Hero() {
       <a
         href="#a-propos"
         aria-label="Faire défiler vers la section À propos"
-        className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 text-white/80 transition-opacity hover:opacity-100"
+        className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 text-soft-gray-200/80 transition-opacity transition-colors duration-300 hover:opacity-100"
         onClick={e => {
           e.preventDefault();
           document
