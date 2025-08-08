@@ -30,7 +30,8 @@ export const metadata = {
     default: 'Victor Lenain | Développeur Full-Stack JavaScript & Expert Next.js',
     template: '%s | Victor Lenain'
   },
-  description: 'Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Création d\'applications web modernes et performantes avec intelligence artificielle intégrée.',
+  description:
+    "Développeur Full-Stack JavaScript curieux et réfléchi, spécialisé en Next.js 15, React 19 et DevOps. Création d'applications web modernes et performantes avec intégration d'intelligence artificielle.",
   keywords: [
     'développeur full-stack',
     'JavaScript',
@@ -38,7 +39,10 @@ export const metadata = {
     'React 19',
     'TypeScript',
     'DevOps',
-    'Intelligence artificielle',
+    'Intégration IA',
+    'curieux',
+    'calme',
+    'raisonné',
     'Développement web',
     'Applications modernes',
     'Portfolio',
@@ -64,7 +68,8 @@ export const metadata = {
     url: 'https://victorlenain.fr',
     siteName: 'Victor Lenain - Portfolio',
     title: 'Victor Lenain | Développeur Full-Stack JavaScript & Expert Next.js',
-    description: 'Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Création d\'applications web modernes et performantes.',
+    description:
+      "Développeur Full-Stack JavaScript curieux et réfléchi, expert en Next.js 15 et React 19, créant des applications web modernes avec intégration d'intelligence artificielle.",
     images: [
       {
         url: '/logo.png',
@@ -78,7 +83,8 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Victor Lenain | Développeur Full-Stack JavaScript',
-    description: 'Spécialisé en Next.js 15, React 19 et DevOps. Créateur d\'applications web modernes.',
+    description:
+      "Spécialisé en Next.js 15, React 19 et DevOps. Développeur curieux et calme, tourné vers l'intégration d'intelligence artificielle.",
     images: ['/logo.png'],
     creator: '@victor_lenain',
     site: '@victor_lenain',

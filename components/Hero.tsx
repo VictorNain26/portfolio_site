@@ -32,18 +32,19 @@ export default function Hero() {
             Victor&nbsp;Lenain
           </h1>
 
-          <div className="mb-3 flex items-center gap-3 sm:justify-center">
-            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#6bb4d8] via-[#4288b7] to-[#2d5e81]" />
-            <p className="text-sm font-medium uppercase tracking-wide text-indigo-200 sm:text-base">
-              Développeur&nbsp;Full-Stack
-            </p>
-          </div>
+            <div className="mb-3 flex items-center gap-3 sm:justify-center">
+              <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#6bb4d8] via-[#4288b7] to-[#2d5e81]" />
+              <p className="text-sm font-medium uppercase tracking-wide text-indigo-200 sm:text-base">
+                Développeur&nbsp;Full-Stack curieux&nbsp;&amp;&nbsp;raisonné
+              </p>
+            </div>
 
-          <p className="hidden max-w-[28ch] text-sm text-gray-300 sm:block sm:max-w-md sm:text-base">
-            Conception et développement d&apos;applications web modernes,
-            d&apos;expériences&nbsp;3D et de solutions&nbsp;IA.
-          </p>
-        </motion.header>
+            <p className="hidden max-w-[28ch] text-sm text-gray-300 sm:block sm:max-w-md sm:text-base">
+              Curieux de tout mais d&apos;une nature calme, je conçois des
+              applications web modernes, des expériences&nbsp;3D et des
+              solutions&nbsp;d&apos;intelligence artificielle.
+            </p>
+          </motion.header>
 
         {/* Visuel 3D */}
         <motion.div

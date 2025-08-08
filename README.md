@@ -1,7 +1,9 @@
 # Victor Lenain – Portfolio Dev Web & DevOps
 
-> **Elevator-pitch :** je conçois des applications web modernes (Next 15 / R3F)
-> et j’automatise leur déploiement cloud. Démo 👉 <https://victorlenain.fr>
+> **Elevator-pitch :** développeur web full‑stack curieux, calme et raisonné,
+> je conçois des applications web modernes (Next 15 / R3F) intégrant des
+> solutions d'intelligence artificielle et j’automatise leur déploiement
+> cloud. Démo 👉 <https://victorlenain.fr>
 
 ![screencast](docs/assets/screen.gif)
 

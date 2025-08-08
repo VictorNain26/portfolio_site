@@ -7,25 +7,23 @@ export default function About() {
         À&nbsp;propos
       </h2>
 
-      <p className="max-w-xl leading-relaxed text-gray-300">
-        Développeur&nbsp;full-stack&nbsp;JavaScript diplômé du&nbsp;
-        <span className="font-semibold text-indigo-400">
-          Wagon
-        </span>{' '}
-        et d&apos;&nbsp;
-        <span className="font-semibold text-indigo-400">OpenClassrooms</span>,
-        avec&nbsp;
-        <span className="font-semibold text-indigo-400">
-          3 années d&apos;expérience
-        </span>{' '}
-        en développement web. Spécialisé dans les technologies modernes
-        et la création de solutions innovantes, je développe continuellement
-        mes compétences à travers des&nbsp;
-        <span className="font-semibold text-indigo-400">
-          projets open-source
-        </span>
-        .
-      </p>
+        <p className="max-w-xl leading-relaxed text-gray-300">
+          Développeur&nbsp;full-stack&nbsp;JavaScript curieux et discret,
+          diplômé du&nbsp;
+          <span className="font-semibold text-indigo-400">Wagon</span> et
+          d&apos;&nbsp;
+          <span className="font-semibold text-indigo-400">OpenClassrooms</span>,
+          avec&nbsp;
+          <span className="font-semibold text-indigo-400">
+            3 années d&apos;expérience
+          </span>{' '}
+          en développement web. Calme et raisonné, je me spécialise dans les
+          technologies modernes et l&apos;intégration de solutions
+          d&apos;intelligence artificielle, tout en développant continuellement mes
+          compétences à travers des&nbsp;
+          <span className="font-semibold text-indigo-400">projets open-source</span>
+          .
+        </p>
 
       <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {(
