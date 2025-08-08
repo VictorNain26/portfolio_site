@@ -31,3 +31,9 @@ cp .env.example .env.local   # puis renseigner HF_TOKEN
 # 5. Dev
 bun run dev
 ```
+
+## CI/CD
+
+- `master` : branche de production protégée, déployée automatiquement sur l'environnement live. Toutes les modifications doivent passer par des Pull Requests.
+- `staging` : branche de préproduction. Chaque `push` déclenche les tests, le lint et un déploiement vers l'environnement de préproduction via GitHub Actions.
+- branches de fonctionnalité : fusionner dans `staging` pour vérification avant la mise en production.
