@@ -2,26 +2,26 @@ import Section from '@/components/Section';
 
 export default function About() {
   return (
-    <Section id="a-propos" className="scroll-mt-28 pb-28">
-      <h2 className="mb-4 font-display text-3xl font-bold text-indigo-400">
+    <Section id="a-propos" className="scroll-mt-28 pb-28 transition-colors duration-300">
+      <h2 className="mb-4 font-display text-3xl font-bold text-soft-blue-300 transition-colors duration-300">
         À&nbsp;propos
       </h2>
 
-      <p className="max-w-xl leading-relaxed text-gray-300">
+      <p className="max-w-xl leading-relaxed text-soft-gray-300 transition-colors duration-300">
         Développeur&nbsp;full-stack&nbsp;JavaScript diplômé du&nbsp;
-        <span className="font-semibold text-indigo-400">
+        <span className="font-semibold text-soft-blue-300 transition-colors duration-300">
           Wagon
         </span>{' '}
         et d&apos;&nbsp;
-        <span className="font-semibold text-indigo-400">OpenClassrooms</span>,
+        <span className="font-semibold text-soft-blue-300 transition-colors duration-300">OpenClassrooms</span>,
         avec&nbsp;
-        <span className="font-semibold text-indigo-400">
+        <span className="font-semibold text-soft-blue-300 transition-colors duration-300">
           3 années d&apos;expérience
         </span>{' '}
         en développement web. Spécialisé dans les technologies modernes
         et la création de solutions innovantes, je développe continuellement
         mes compétences à travers des&nbsp;
-        <span className="font-semibold text-indigo-400">
+        <span className="font-semibold text-soft-blue-300 transition-colors duration-300">
           projets open-source
         </span>
         .
@@ -38,13 +38,13 @@ export default function About() {
         ).map(([val, label]) => (
           <li
             key={label}
-            className="rounded-2xl bg-gray-900/60 p-4 text-center"
+            className="rounded-2xl bg-soft-blue-100/50 p-4 text-center transition-colors duration-300"
           >
-            <span className="block text-2xl font-bold text-indigo-400">
+            <span className="block text-2xl font-bold text-soft-blue-300 transition-colors duration-300">
               {val}
             </span>
             <span
-              className="text-sm text-gray-400"
+              className="text-sm text-soft-gray-300 transition-colors duration-300"
               dangerouslySetInnerHTML={{ __html: label ?? '' }}
             />
           </li>

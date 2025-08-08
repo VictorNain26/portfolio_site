@@ -44,6 +44,16 @@ export default {
         border: 'hsl(var(--color-border) / <alpha-value>)',
         input: 'hsl(var(--color-input) / <alpha-value>)',
         ring: 'hsl(var(--color-ring) / <alpha-value>)',
+        'soft-blue': {
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+        },
+        'soft-gray': {
+          100: '#f5f5f5',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
