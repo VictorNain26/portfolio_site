@@ -4,7 +4,7 @@
 import { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
-import { animated, useTransition } from '@react-spring/three';
+import { animated, useTransition, type SpringValue } from '@react-spring/three';
 import { ReactLogo3D, NextJSLogo3D, TypeScriptLogo3D, NodeJSLogo3D, AILogo3D } from './three/Logos';
 
 const TECH_MODELS = [
@@ -18,7 +18,7 @@ const TECH_MODELS = [
 type ModelProps = {
   model: typeof TECH_MODELS[number];
   isVisible: boolean;
-  opacity: number;
+  opacity: number | SpringValue<number>;
 };
 
 function TechModel({ model, isVisible, opacity }: ModelProps) {
@@ -71,7 +71,7 @@ export default function ModelHero() {
 
   // Simple fade transition
   const transitions = useTransition(currentModel, {
-    keys: (m) => m.type,
+    keys: (m) => m?.type || '',
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
@@ -83,8 +83,8 @@ export default function ModelHero() {
     <div
       ref={containerRef}
       className="relative w-full h-full overflow-hidden"
-      aria-label={`3D model: ${currentModel.name}`}
-      onMouseEnter={() => setHoveredModel(currentModel.type)}
+      aria-label={`3D model: ${currentModel?.name || 'Loading'}`}
+      onMouseEnter={() => setHoveredModel(currentModel?.type || null)}
       onMouseLeave={() => setHoveredModel(null)}
     >
       {/* Hover label */}
@@ -117,11 +117,13 @@ export default function ModelHero() {
           ))}
           
           {/* Current visible model */}
-          {transitions((styles, item) => (
-            <animated.group key={item.type}>
-              <TechModel model={item} isVisible={true} opacity={styles.opacity} />
-            </animated.group>
-          ))}
+          {transitions((styles, item) => 
+            item ? (
+              <animated.group key={item.type}>
+                <TechModel model={item} isVisible={true} opacity={styles.opacity} />
+              </animated.group>
+            ) : null
+          )}
         </Suspense>
       </Canvas>
     </div>

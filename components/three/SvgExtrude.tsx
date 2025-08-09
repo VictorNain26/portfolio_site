@@ -11,7 +11,7 @@ import { animated as a, type SpringValue } from '@react-spring/three';
 export type SvgExtrudeProps = {
   src: string;
   color: string;
-  opacity?: number | SpringValue<number>;
+  opacity?: number | SpringValue<number> | undefined;
 };
 
 export function SvgExtrude({ src, color, opacity = 1 }: SvgExtrudeProps) {
