@@ -1,5 +1,4 @@
 import Hero from '@/components/Hero';
-import TechLogos from '@/components/TechLogos';
 import About from '@/components/About';
 import Skills from '@/components/Skills';
 import Projects from '@/components/Projects';
@@ -14,7 +13,6 @@ export default function Home() {
 
       <main className="space-y-16 sm:space-y-24 lg:space-y-32">
         <Hero />
-        <TechLogos />
         <About />
         <Skills />
         <Projects />

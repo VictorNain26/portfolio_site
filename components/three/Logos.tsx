@@ -2,159 +2,58 @@
 'use client';
 
 import { useRef } from 'react';
-import { useFrame, type Vector3 } from '@react-three/fiber';
-import { Center } from '@react-three/drei';
-import { animated, useSpring, type SpringValue } from '@react-spring/three';
-import { type Group, type Mesh } from 'three';
+import { useFrame } from '@react-three/fiber';
+import { type SpringValue } from '@react-spring/three';
+import { type Group } from 'three';
 import { SvgExtrude } from './SvgExtrude';
 
-export type LogoProps = { isVisible: boolean; opacity?: number | SpringValue<number> };
+export type LogoProps = { 
+  isVisible: boolean; 
+  opacity?: number | SpringValue<number> 
+};
 
-export function ReactLogo3D({ isVisible, opacity }: LogoProps) {
+const LOGO_CONFIGS = {
+  react: { src: '/logos/react.svg', color: '#61DAFB' },
+  nextjs: { src: '/logos/nextjs.svg', color: '#000000' },
+  typescript: { src: '/logos/typescript.svg', color: '#3178C6' },
+  nodejs: { src: '/logos/nodejs.svg', color: '#3C873A' },
+  openai: { src: '/logos/openai.svg', color: '#10A37F' },
+} as const;
+
+function Logo3D({ type, isVisible, opacity }: { type: keyof typeof LOGO_CONFIGS } & LogoProps) {
   const groupRef = useRef<Group>(null);
 
   useFrame((state) => {
     if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.35;
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.4;
     }
   });
 
-  const springs = useSpring<{ scale: number; rotation: Vector3 }>({ scale: isVisible ? 1 : 0, rotation: (isVisible ? [0.2, 0, 0] : [0, 0, 0]) as unknown as Vector3 });
+  const config = LOGO_CONFIGS[type];
+  
   return (
-    <animated.group ref={groupRef} scale={springs.scale} rotation={springs.rotation as unknown as [number, number, number]}>
-      <Center>
-        <SvgExtrude
-          src="/logos/react.svg"
-          depth={0.36}
-          bevelEnabled
-          bevelThickness={0.06}
-          bevelSize={0.028}
-          bevelSegments={3}
-          scale={0.035}
-          flipY
-          material={{ color: '#61DAFB', metalness: 0.4, roughness: 0.28 }}
-          opacity={opacity}
-        />
-      </Center>
-    </animated.group>
+    <group ref={groupRef}>
+      <SvgExtrude src={config.src} color={config.color} opacity={opacity} />
+    </group>
   );
 }
 
-// (ElectronOrbit removed to better match the official React logo)
-
-export function NextJSLogo3D({ isVisible, opacity }: LogoProps) {
-  const groupRef = useRef<Group>(null);
-  useFrame((state) => {
-    if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.35) * 0.1;
-    }
-  });
-  const springs = useSpring<{ scale: number; rotation: Vector3 }>({ scale: isVisible ? 1 : 0, rotation: (isVisible ? [0.15, 0, 0] : [0, 0, 0]) as unknown as Vector3 });
-  return (
-    <animated.group ref={groupRef} scale={springs.scale} rotation={springs.rotation as unknown as [number, number, number]}>
-      <Center>
-        <SvgExtrude
-          src="/logos/nextjs.svg"
-          depth={0.3}
-          bevelEnabled={false}
-          scale={0.045}
-          flipY
-          material={{ color: '#ffffff', metalness: 0.4, roughness: 0.25 }}
-          opacity={opacity}
-        />
-      </Center>
-    </animated.group>
-  );
+export function ReactLogo3D(props: LogoProps) {
+  return <Logo3D type="react" {...props} />;
 }
 
-export function TypeScriptLogo3D({ isVisible, opacity }: LogoProps) {
-  const meshRef = useRef<Mesh>(null);
-  useFrame((state) => {
-    if (meshRef.current && isVisible) {
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.2;
-    }
-  });
-  const springs = useSpring<{ scale: number; rotation: Vector3 }>({ scale: isVisible ? 1 : 0, rotation: (isVisible ? [0.2, 0, 0] : [0, 0, 0]) as unknown as Vector3 });
-  return (
-    <animated.group scale={springs.scale} rotation={springs.rotation as unknown as [number, number, number]}>
-      <Center>
-        <group ref={meshRef}>
-          <SvgExtrude
-            src="/logos/typescript.svg"
-            depth={0.34}
-            bevelEnabled
-            bevelThickness={0.055}
-            bevelSize={0.026}
-            bevelSegments={3}
-            scale={0.043}
-            flipY
-            material={{ color: '#3178C6', metalness: 0.4, roughness: 0.28 }}
-            opacity={opacity}
-          />
-        </group>
-      </Center>
-    </animated.group>
-  );
+export function NextJSLogo3D(props: LogoProps) {
+  return <Logo3D type="nextjs" {...props} />;
 }
 
-export function NodeJSLogo3D({ isVisible, opacity }: LogoProps) {
-  const meshRef = useRef<Mesh>(null);
-  useFrame((state) => {
-    if (meshRef.current && isVisible) {
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.4;
-    }
-  });
-  const springs = useSpring<{ scale: number; rotation: Vector3 }>({ scale: isVisible ? 1 : 0, rotation: (isVisible ? [0.18, 0, 0] : [0, 0, 0]) as unknown as Vector3 });
-  return (
-    <animated.group scale={springs.scale} rotation={springs.rotation as unknown as [number, number, number]}>
-      <Center>
-        <group ref={meshRef}>
-          <SvgExtrude
-            src="/logos/nodejs.svg"
-            depth={0.34}
-            bevelEnabled
-            bevelThickness={0.055}
-            bevelSize={0.026}
-            bevelSegments={3}
-            scale={0.043}
-            flipY
-            material={{ color: '#3C873A', metalness: 0.45, roughness: 0.3 }}
-            opacity={opacity}
-          />
-        </group>
-      </Center>
-    </animated.group>
-  );
+export function TypeScriptLogo3D(props: LogoProps) {
+  return <Logo3D type="typescript" {...props} />;
 }
 
-export function AILogo3D({ isVisible, opacity }: LogoProps) {
-  const groupRef = useRef<Group>(null);
-  useFrame((state) => {
-    if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.25;
-    }
-  });
-  const springs = useSpring<{ scale: number; rotation: Vector3 }>({ scale: isVisible ? 1 : 0, rotation: (isVisible ? [0.16, 0, 0] : [0, 0, 0]) as unknown as Vector3 });
-
-  return (
-    <animated.group ref={groupRef} scale={springs.scale} rotation={springs.rotation as unknown as [number, number, number]}>
-      <Center>
-        <SvgExtrude
-          src="/logos/openai.svg"
-          depth={0.32}
-          bevelEnabled
-          bevelThickness={0.05}
-          bevelSize={0.024}
-          bevelSegments={3}
-          scale={0.043}
-          flipY
-          material={{ color: '#10A37F', metalness: 0.45, roughness: 0.28 }}
-          opacity={opacity}
-        />
-      </Center>
-    </animated.group>
-  );
+export function NodeJSLogo3D(props: LogoProps) {
+  return <Logo3D type="nodejs" {...props} />;
 }
 
-// (Link helper removed with the AI network logo replacement by official SVG)
+export function AILogo3D(props: LogoProps) {
+  return <Logo3D type="openai" {...props} />;
+}
