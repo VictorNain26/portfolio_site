@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Node.js 3D-inspired logo">
+  <!-- Outer hex -->
+  <polygon points="128,16 223,72 223,184 128,240 33,184 33,72" fill="#3C873A"/>
+  <!-- Inner inset hex -->
+  <polygon points="128,50 198,90 198,166 128,206 58,166 58,90" fill="#2b5d29"/>
+  <!-- JS letters with subtle shadow -->
+  <g transform="translate(128,128)" text-anchor="middle" font-size="86" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji','Segoe UI Emoji'" font-weight="700">
+    <text x="2" y="34" fill="#1d3e20" opacity="0.55">JS</text>
+    <text x="0" y="32" fill="#ffffff">JS</text>
+  </g>
+</svg>
+

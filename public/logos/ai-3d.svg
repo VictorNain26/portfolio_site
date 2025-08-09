@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="AI network 3D-inspired logo">
+  <g transform="translate(128,128)">
+    <!-- Links -->
+    <g stroke="#B28CFF" stroke-width="4" stroke-linecap="round" opacity="0.9" fill="none">
+      <!-- Coordinates derived from the 3D layout, scaled -->
+      <!-- Helper: scale=60 -->
+      <!-- [0,2] [0,3] [1,2] [1,3] [2,4] [3,5] [4,5] [0,4] [1,5] -->
+      <line x1="72" y1="0" x2="0" y2="-60"/>
+      <line x1="72" y1="0" x2="0" y2="60"/>
+      <line x1="-72" y1="0" x2="0" y2="-60"/>
+      <line x1="-72" y1="0" x2="0" y2="60"/>
+      <line x1="0" y1="-60" x2="54" y2="-48"/>
+      <line x1="0" y1="60" x2="-54" y2="48"/>
+      <line x1="54" y1="-48" x2="-54" y2="48"/>
+      <line x1="72" y1="0" x2="54" y2="-48"/>
+      <line x1="-72" y1="0" x2="-54" y2="48"/>
+    </g>
+    <!-- Nodes -->
+    <g fill="#8A2BE2">
+      <circle cx="72" cy="0" r="10"/>
+      <circle cx="-72" cy="0" r="10"/>
+      <circle cx="0" cy="-60" r="10"/>
+      <circle cx="0" cy="60" r="10"/>
+      <circle cx="54" cy="-48" r="10"/>
+      <circle cx="-54" cy="48" r="10"/>
+    </g>
+  </g>
+</svg>
+
