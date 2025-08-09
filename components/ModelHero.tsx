@@ -1,22 +1,12 @@
 /* components/ModelHero.tsx */
 'use client';
 
-import { Suspense, useState, useEffect, useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import {
-  OrbitControls,
-  Environment,
-  Float,
-  Html,
-  Center,
-  Text,
-  RoundedBox,
-  ContactShadows,
-} from '@react-three/drei';
+import { Suspense, useState, useEffect } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Environment, Float, Html, ContactShadows } from '@react-three/drei';
 import { AnimatePresence } from 'framer-motion';
-import { useSpring, animated } from '@react-spring/three';
-import type { Group, Mesh } from 'three';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
+import { ReactLogo3D, NextJSLogo3D, TypeScriptLogo3D, NodeJSLogo3D, AILogo3D } from './three/Logos';
 
 /* ──────────────────────────────────────────────────────────────── */
 /* 1 · Configuration des technologies avec logos 3D créés sur mesure */
@@ -68,145 +58,16 @@ const TECH_MODELS = [
 ];
 
 /* ──────────────────────────────────────────────────────────────── */
-/* 2 · Modèles 3D simples et reconnaissables                       */
+/* 2 · Modèles 3D importés (refacto)                               */
 
 // React - Atome avec noyau, orbites elliptiques et léger glow
-function ReactLogo({ isVisible }: { isVisible: boolean }) {
-  const groupRef = useRef<Group>(null);
-  
-  useFrame((state) => {
-    if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-    }
-  });
-
-  const springs = useSpring({
-    scale: isVisible ? 1 : 0,
-  });
-
-  return (
-    <animated.group ref={groupRef} scale={springs.scale}>
-      <Center>
-        {/* Noyau central */}
-        <mesh>
-          <sphereGeometry args={[0.3, 32, 32]} />
-          <meshStandardMaterial 
-            color="#61DAFB" 
-            emissive="#61DAFB" 
-            emissiveIntensity={0.2}
-          />
-        </mesh>
-        
-        {/* 3 orbites elliptiques */}
-            {[0, 60, 120].map((rotation, i) => (
-              <group key={i} rotation={[Math.PI / 6, 0, (rotation * Math.PI) / 180]}>
-                {/* Boucles affinées : rayon réduit et tube plus fin pour un look plus proche du logo React officiel */}
-                <mesh scale={[1.0, 0.55, 1.0]}>
-                  <torusGeometry args={[1.25, 0.05, 16, 64]} />
-                  <meshStandardMaterial
-                    color="#61DAFB"
-                    transparent
-                    opacity={0.8}
-                    metalness={0.2}
-                    roughness={0.1}
-                  />
-                </mesh>
-              </group>
-            ))}
-      </Center>
-    </animated.group>
-  );
-}
+// Old inline logo components removed in refactor (see components/three/Logos.tsx)
 
 // Next.js - Disque noir glossy avec trait diagonal minimaliste
-function NextJSLogo({ isVisible }: { isVisible: boolean }) {
-  const groupRef = useRef<Group>(null);
-
-  // an animation that gently oscillates the N around the Y axis
-  useFrame((state) => {
-    if (groupRef.current && isVisible) {
-      // slight rocking effect for visual interest
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
-    }
-  });
-
-  const springs = useSpring({
-    scale: isVisible ? 1 : 0,
-  });
-
-  return (
-    <animated.group ref={groupRef} scale={springs.scale}>
-      <Center>
-        {/* 'N' logo for Next.js: two vertical bars and a diagonal connector */}
-        {/* Left vertical bar */}
-        <mesh position={[-0.6, 0, 0]}>
-          <boxGeometry args={[0.15, 1.6, 0.15]} />
-          <meshStandardMaterial color="#0a0a0a" metalness={0.8} roughness={0.3} />
-        </mesh>
-        {/* Right vertical bar */}
-        <mesh position={[0.6, 0, 0]}>
-          <boxGeometry args={[0.15, 1.6, 0.15]} />
-          <meshStandardMaterial color="#0a0a0a" metalness={0.8} roughness={0.3} />
-        </mesh>
-        {/* Diagonal bar connecting the two vertical bars */}
-        <mesh rotation={[0, 0, -0.52]} position={[0, 0, 0]}>
-          {/* Length chosen to bridge the gap between the vertical bars */}
-          <boxGeometry args={[2.0, 0.15, 0.15]} />
-          <meshStandardMaterial color="#ffffff" metalness={0.6} roughness={0.4} />
-        </mesh>
-      </Center>
-    </animated.group>
-  );
-}
+// (refacto)
 
 // TypeScript - Plaque bleue arrondie avec lettrage "TS" extrudé
-function TypeScriptLogo({ isVisible }: { isVisible: boolean }) {
-  const meshRef = useRef<Mesh>(null);
-  
-  useFrame((state) => {
-    if (meshRef.current && isVisible) {
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.2;
-    }
-  });
-
-  const springs = useSpring({
-    scale: isVisible ? 1 : 0,
-  });
-
-  return (
-    <animated.group scale={springs.scale}>
-      <Center>
-        <group ref={meshRef}>
-          <RoundedBox args={[2.6, 2.6, 0.4]} radius={0.25} smoothness={6}>
-            <meshStandardMaterial color="#3178C6" metalness={0.5} roughness={0.3} />
-          </RoundedBox>
-          {/* Ombre/relief simulé */}
-          <Text
-            position={[0.02, -0.02, 0.22]}
-            fontSize={0.9}
-            letterSpacing={-0.04}
-            anchorX="center"
-            anchorY="middle"
-          >
-            TS
-            <meshStandardMaterial color="#1f3f83" metalness={0.2} roughness={0.6} />
-          </Text>
-          <Text
-            position={[0, 0, 0.24]}
-            fontSize={0.9}
-            letterSpacing={-0.04}
-            anchorX="center"
-            anchorY="middle"
-          >
-            TS
-            <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.4} />
-          </Text>
-        </group>
-      </Center>
-    </animated.group>
-  );
-}
+// (refacto)
 
 /*
  * La fonction TailwindLogo a été retirée car le logo Tailwind a été remplacé
@@ -215,87 +76,9 @@ function TypeScriptLogo({ isVisible }: { isVisible: boolean }) {
  */
 
 // Node.js - Hexagone glossy + lettrage "JS"
-function NodeJSLogo({ isVisible }: { isVisible: boolean }) {
-  const meshRef = useRef<Mesh>(null);
-  
-  useFrame((state) => {
-    if (meshRef.current && isVisible) {
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.4;
-    }
-  });
+// (refacto)
 
-  const springs = useSpring({
-    scale: isVisible ? 1 : 0,
-  });
-
-  return (
-    <animated.group scale={springs.scale}>
-      <Center>
-        <group ref={meshRef} rotation={[0, Math.PI / 6, 0]}>
-        <mesh>
-            <cylinderGeometry args={[1.6, 1.6, 0.35, 6]} />
-            {/* Utilisez la couleur officielle Node.js (#3C873A) pour la base */}
-            <meshStandardMaterial color="#3C873A" metalness={0.75} roughness={0.25} />
-          </mesh>
-          {/* Ombre/relief simulé pour les lettres "JS" */}
-          <Text
-            position={[0.02, -0.02, 0.19]}
-            fontSize={0.7}
-            anchorX="center"
-            anchorY="middle"
-          >
-            JS
-            {/* Ombre foncée pour simuler un léger relief */}
-            <meshStandardMaterial color="#28562c" metalness={0.2} roughness={0.6} />
-          </Text>
-          <Text
-            position={[0, 0, 0.21]}
-            fontSize={0.7}
-            anchorX="center"
-            anchorY="middle"
-          >
-            JS
-            {/* Couleur claire pour le premier plan des lettres */}
-            <meshStandardMaterial color="#ffffff" metalness={0.2} roughness={0.5} />
-          </Text>
-        </group>
-      </Center>
-    </animated.group>
-  );
-}
-
-// OpenAI - Rosace à 6 anneaux rappelant le logo OpenAI
-function OpenAILogo({ isVisible }: { isVisible: boolean }) {
-  const groupRef = useRef<THREE.Group>(null);
-
-  // Rotation lente pour donner un effet vivant à la rosace
-  useFrame((state) => {
-    if (groupRef.current && isVisible) {
-      groupRef.current.rotation.z = state.clock.elapsedTime * 0.2;
-    }
-  });
-
-  const springs = useSpring({ scale: isVisible ? 1 : 0 });
-
-  // Génère un tableau de six éléments pour créer les anneaux
-  const petals = useMemo(() => Array.from({ length: 6 }), []);
-
-  return (
-    <animated.group ref={groupRef} scale={springs.scale}>
-      <Center>
-        {petals.map((_, i) => {
-          const angle = (i * Math.PI) / 3; // 60° d'intervalle
-          return (
-            <mesh key={i} rotation={[Math.PI / 2, 0, angle]}>
-              <torusGeometry args={[1.0, 0.12, 16, 100]} />
-              <meshStandardMaterial color="#10A37F" metalness={0.3} roughness={0.5} />
-            </mesh>
-          );
-        })}
-      </Center>
-    </animated.group>
-  );
-}
+// (refacto) OpenAI inline logo removed; see components/three/Logos.tsx
 
 /*
  * IA/LLM - Logo personnalisé symbolisant les réseaux neuronaux.
@@ -304,46 +87,7 @@ function OpenAILogo({ isVisible }: { isVisible: boolean }) {
  * entre différentes unités (similaire à un modèle de langage). Les couleurs
  * violettes renforcent l’idée d’innovation et de technologie de pointe.
  */
-function AiLogo({ isVisible }: { isVisible: boolean }) {
-  const groupRef = useRef<THREE.Group>(null);
-
-  // Rotation lente autour de l’axe Y lorsque le logo est visible
-  useFrame((state) => {
-    if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.2;
-    }
-  });
-
-  // Animation d’apparition / disparition
-  const springs = useSpring({
-    scale: isVisible ? 1 : 0,
-  });
-
-  // Génère un tableau d’angles uniformément répartis pour positionner les nœuds
-  const orbitAngles = Array.from({ length: 6 }).map((_, i) => (i / 6) * Math.PI * 2);
-
-  return (
-    <animated.group ref={groupRef} scale={springs.scale}>
-      <Center>
-        {/* Sphère centrale */}
-        <mesh>
-          <sphereGeometry args={[0.4, 32, 32]} />
-          <meshStandardMaterial color="#8A2BE2" emissive="#8A2BE2" emissiveIntensity={0.3} />
-        </mesh>
-        {/* Sphères en orbite pour représenter les neurones */}
-        {orbitAngles.map((angle, i) => (
-          <mesh
-            key={i}
-            position={[Math.cos(angle) * 1.2, Math.sin(angle) * 1.2, 0]}
-          >
-            <sphereGeometry args={[0.15, 16, 16]} />
-            <meshStandardMaterial color="#A987FF" emissive="#A987FF" emissiveIntensity={0.2} />
-          </mesh>
-        ))}
-      </Center>
-    </animated.group>
-  );
-}
+// (refacto) AI inline logo removed; see components/three/Logos.tsx
 
 /* ──────────────────────────────────────────────────────────────── */
 /* 3 · Composant principal de modèle                                */
@@ -360,17 +104,16 @@ function TechModel({ model, isVisible }: ModelProps) {
   const renderLogo = () => {
     switch (model.type) {
       case 'react':
-        return <ReactLogo isVisible={isVisible} />;
+        return <ReactLogo3D isVisible={isVisible} />;
       case 'nextjs':
-        return <NextJSLogo isVisible={isVisible} />;
+        return <NextJSLogo3D isVisible={isVisible} />;
       case 'typescript':
-        return <TypeScriptLogo isVisible={isVisible} />;
-      case 'openai':
-        return <OpenAILogo isVisible={isVisible} />;
+        return <TypeScriptLogo3D isVisible={isVisible} />;
       case 'nodejs':
-        return <NodeJSLogo isVisible={isVisible} />;
-          case 'ai':
-            return <AiLogo isVisible={isVisible} />;
+        return <NodeJSLogo3D isVisible={isVisible} />;
+      case 'openai':
+      case 'ai':
+        return <AILogo3D isVisible={isVisible} />;
       default:
         return null;
     }
