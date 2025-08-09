@@ -1,11 +1,11 @@
 /* components/ModelHero.tsx */
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, Float, Html, ContactShadows } from '@react-three/drei';
-import { AnimatePresence } from 'framer-motion';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
+import { animated, useTransition } from '@react-spring/three';
+import { EffectComposer, Bloom, DepthOfField, Vignette, Noise } from '@react-three/postprocessing';
 import { ReactLogo3D, NextJSLogo3D, TypeScriptLogo3D, NodeJSLogo3D, AILogo3D } from './three/Logos';
 
 /* ──────────────────────────────────────────────────────────────── */
@@ -132,14 +132,30 @@ export default function ModelHero() {
   const [isLoading, setIsLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Rotation automatique des modèles
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentModelIndex((prev) => (prev + 1) % TECH_MODELS.length);
-    }, 4000); // Change toutes les 4 secondes
-
-    return () => clearInterval(interval);
+  // Contrôles manuels
+  const goNext = useCallback(() => {
+    setCurrentModelIndex((prev) => (prev + 1) % TECH_MODELS.length);
   }, []);
+  const goPrev = useCallback(() => {
+    setCurrentModelIndex((prev) => (prev - 1 + TECH_MODELS.length) % TECH_MODELS.length);
+  }, []);
+
+  // Rotation automatique des modèles (pause au survol)
+  useEffect(() => {
+    if (isHovered) return; // pause
+    const interval = setInterval(goNext, 4500);
+    return () => clearInterval(interval);
+  }, [isHovered, goNext]);
+
+  // Navigation clavier
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') goNext();
+      if (e.key === 'ArrowLeft') goPrev();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [goNext, goPrev]);
 
   // Gestion du chargement
   useEffect(() => {
@@ -151,6 +167,16 @@ export default function ModelHero() {
   }, []);
 
   const currentModel = TECH_MODELS[currentModelIndex]!;
+
+  // Transitions entre modèles 3D (entrées/sorties fluides)
+  const transitions = useTransition(currentModel, {
+    keys: (m) => m.type,
+    from: { s: 0.85, px: 0, py: -0.08, pz: -0.15, rx: 0, ry: -0.2, rz: 0 },
+    enter: { s: 1, px: 0, py: 0, pz: 0, rx: 0, ry: 0, rz: 0 },
+    leave: { s: 0.85, px: 0, py: 0.08, pz: 0.15, rx: 0, ry: 0.2, rz: 0 },
+    config: { mass: 0.9, tension: 260, friction: 24 },
+    exitBeforeEnter: true,
+  });
 
   return (
     <div 
@@ -239,15 +265,23 @@ export default function ModelHero() {
         >
           <Environment preset="studio" />
           <EffectComposer>
-            <Bloom intensity={0.35} luminanceThreshold={0.7} luminanceSmoothing={0.05} />
+            <Bloom intensity={0.3} luminanceThreshold={0.7} luminanceSmoothing={0.06} />
+            <DepthOfField focusDistance={0.02} focalLength={0.02} bokehScale={2.0} height={480} />
+            <Vignette eskil={false} offset={0.12} darkness={0.5} />
+            <Noise opacity={0.03} />
           </EffectComposer>
-          <AnimatePresence mode="wait">
-            <TechModel
-              key={currentModel.name}
-              model={currentModel}
-              isVisible={!isLoading}
-            />
-          </AnimatePresence>
+
+          {transitions((styles, item) => (
+            <Float key={item.type} speed={1.2} rotationIntensity={0.15} floatIntensity={0.25}>
+              <animated.group
+                scale={styles.s as any}
+                position={[styles.px as any, styles.py as any, styles.pz as any] as any}
+                rotation={[styles.rx as any, styles.ry as any, styles.rz as any] as any}
+              >
+                <TechModel model={item} isVisible={!isLoading} />
+              </animated.group>
+            </Float>
+          ))}
         </Suspense>
 
         {/* CONTRÔLES LIMITÉS - HORIZONTAL SEULEMENT */}
@@ -261,6 +295,35 @@ export default function ModelHero() {
           maxPolarAngle={Math.PI / 2}
         />
       </Canvas>
+      {/* Contrôles carrousel */}
+      <div className="pointer-events-auto absolute inset-x-0 bottom-4 flex items-center justify-center gap-3">
+        <button
+          aria-label="Précédent"
+          onClick={goPrev}
+          className="h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center backdrop-blur-sm transition"
+        >
+          ‹
+        </button>
+        <div className="flex items-center gap-2">
+          {TECH_MODELS.map((m, i) => (
+            <button
+              key={m.type}
+              aria-label={`Aller à ${m.name}`}
+              onClick={() => setCurrentModelIndex(i)}
+              className={`h-2.5 w-2.5 rounded-full transition border ${
+                i === currentModelIndex ? 'bg-white border-white/80' : 'bg-white/30 border-white/30'
+              }`}
+            />
+          ))}
+        </div>
+        <button
+          aria-label="Suivant"
+          onClick={goNext}
+          className="h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center backdrop-blur-sm transition"
+        >
+          ›
+        </button>
+      </div>
     </div>
   );
 }
