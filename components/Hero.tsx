@@ -41,7 +41,7 @@ export default function Hero() {
 
           <p className="hidden max-w-[28ch] text-sm text-gray-300 sm:block sm:max-w-md sm:text-base">
             Conception et développement d&apos;applications web modernes,
-            d&apos;expériences&nbsp;3D et de solutions&nbsp;IA.
+            d&apos;expériences&nbsp;3D et d&apos;intégrations&nbsp;IA/LLM.
           </p>
         </motion.header>
 

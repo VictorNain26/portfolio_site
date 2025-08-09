@@ -41,7 +41,7 @@ export default defineConfig({
 
     // File patterns
     include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
-    exclude: ['node_modules/', '.next/', 'dist/', 'build/', 'e2e/'],
+    exclude: ['node_modules/', '.next/', 'dist/', 'build/', 'e2e/', '.tmp/'],
 
     // Timeout
     testTimeout: 10000,
