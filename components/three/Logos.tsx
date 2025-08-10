@@ -7,9 +7,9 @@ import { type SpringValue } from '@react-spring/three';
 import { type Group } from 'three';
 import { SvgExtrude } from './SvgExtrude';
 
-export type LogoProps = { 
-  isVisible: boolean; 
-  opacity?: number | SpringValue<number> 
+export type LogoProps = {
+  isVisible: boolean;
+  opacity?: number | SpringValue<number>;
 };
 
 const LOGO_CONFIGS = {
@@ -23,14 +23,14 @@ const LOGO_CONFIGS = {
 function Logo3D({ type, isVisible, opacity }: { type: keyof typeof LOGO_CONFIGS } & LogoProps) {
   const groupRef = useRef<Group>(null);
 
-  useFrame((state) => {
+  useFrame(state => {
     if (groupRef.current && isVisible) {
       groupRef.current.rotation.y = state.clock.elapsedTime * 0.4;
     }
   });
 
   const config = LOGO_CONFIGS[type];
-  
+
   return (
     <group ref={groupRef}>
       <SvgExtrude src={config.src} color={config.color} opacity={opacity} />

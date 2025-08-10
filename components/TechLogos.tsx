@@ -42,7 +42,7 @@ function TiltLogo({ tech }: { tech: Tech }) {
   const wrapperCls = useMemo(
     () =>
       'group relative h-24 w-24 shrink-0 rounded-2xl border border-white/10 bg-gray-900/60 p-3 shadow-lg backdrop-blur-sm will-change-transform',
-    []
+    [],
   );
 
   return (
@@ -73,12 +73,12 @@ export default function TechLogos() {
     <Section id="stack" className="pb-4">
       <div className="mb-5 flex items-center gap-3 sm:justify-center">
         <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#6bb4d8] via-[#4288b7] to-[#2d5e81]" />
-        <h2 className="text-sm font-medium uppercase tracking-wide text-indigo-200 sm:text-base">
+        <h2 className="text-sm font-medium tracking-wide text-indigo-200 uppercase sm:text-base">
           Technologies principales
         </h2>
       </div>
 
-      <div className="flex items-center gap-3 overflow-x-auto px-1 py-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:justify-center">
+      <div className="flex items-center gap-3 overflow-x-auto px-1 py-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:justify-center [&::-webkit-scrollbar]:hidden">
         {TECHS.map(tech => (
           <TiltLogo key={tech.name} tech={tech} />
         ))}
@@ -86,4 +86,3 @@ export default function TechLogos() {
     </Section>
   );
 }
-

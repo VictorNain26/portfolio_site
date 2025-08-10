@@ -4,7 +4,7 @@ const prettierConfig = {
   semi: true,
   singleQuote: true,
   quoteProps: 'as-needed',
-  trailingComma: 'es5',
+  trailingComma: 'all',
   bracketSpacing: true,
   bracketSameLine: false,
   arrowParens: 'avoid',
@@ -14,7 +14,7 @@ const prettierConfig = {
   useTabs: false,
 
   // Line length
-  printWidth: 80,
+  printWidth: 100,
 
   // JSX
   jsxSingleQuote: false,

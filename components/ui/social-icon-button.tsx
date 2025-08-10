@@ -19,18 +19,13 @@ const iconButtonVariants = cva(
       },
     },
     defaultVariants: { size: 'md' },
-  }
+  },
 );
 
 type Props = React.ComponentPropsWithoutRef<'a'> &
   VariantProps<typeof iconButtonVariants> & { asChild?: boolean };
 
-export function SocialIconButton({
-  asChild,
-  size,
-  className,
-  ...props
-}: Props) {
+export function SocialIconButton({ asChild, size, className, ...props }: Props) {
   const Comp = asChild ? Slot : 'a';
   return (
     <Comp

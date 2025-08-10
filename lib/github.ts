@@ -43,11 +43,11 @@ export async function getGitHubProjects(): Promise<Project[]> {
       `${GITHUB_API_URL}/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`,
       {
         headers: {
-          'Accept': 'application/vnd.github.v3+json',
+          Accept: 'application/vnd.github.v3+json',
           'User-Agent': 'Portfolio-Website',
         },
-        next: { revalidate: 3600 } // Cache pour 1 heure
-      }
+        next: { revalidate: 3600 }, // Cache pour 1 heure
+      },
     );
 
     if (!reposResponse.ok) {
@@ -55,18 +55,18 @@ export async function getGitHubProjects(): Promise<Project[]> {
     }
 
     const repos: GitHubRepo[] = await reposResponse.json();
-    
+
     // Filtrer les repos avec le topic "demo"
-    const demoRepos = repos.filter(repo => 
-      repo.topics.includes('demo') && !repo.name.includes('.')
+    const demoRepos = repos.filter(
+      repo => repo.topics.includes('demo') && !repo.name.includes('.'),
     );
 
     // Transformer en format Project
     const projects: Project[] = await Promise.all(
-      demoRepos.map(async (repo) => {
+      demoRepos.map(async repo => {
         // Récupérer les langages pour ce repo
         const technologies = await getRepoLanguages(repo.languages_url);
-        
+
         return {
           id: repo.id,
           name: repo.name,
@@ -78,11 +78,11 @@ export async function getGitHubProjects(): Promise<Project[]> {
           updatedAt: repo.updated_at,
           createdAt: repo.created_at,
         };
-      })
+      }),
     );
 
-    return projects.sort((a, b) => 
-      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    return projects.sort(
+      (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     );
   } catch {
     // Silent error handling for production
@@ -97,10 +97,10 @@ async function getRepoLanguages(languagesUrl: string): Promise<string[]> {
   try {
     const response = await fetch(languagesUrl, {
       headers: {
-        'Accept': 'application/vnd.github.v3+json',
+        Accept: 'application/vnd.github.v3+json',
         'User-Agent': 'Portfolio-Website',
       },
-      next: { revalidate: 3600 }
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
@@ -108,10 +108,10 @@ async function getRepoLanguages(languagesUrl: string): Promise<string[]> {
     }
 
     const languages: GitHubLanguages = await response.json();
-    
+
     // Retourner les langages triés par usage (descending)
     return Object.entries(languages)
-      .sort(([,a], [,b]) => b - a)
+      .sort(([, a], [, b]) => b - a)
       .slice(0, 5) // Garder seulement les 5 principaux
       .map(([lang]) => lang);
   } catch {

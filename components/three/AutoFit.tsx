@@ -53,8 +53,11 @@ export function AutoFit({ children, fit = 0.65, minScale = 0.1, maxScale = 2 }: 
     }
   }, [size.width, size.height, targetMax, minScale, maxScale]);
 
-  return <group ref={groupRef} scale={scale}>{children}</group>;
+  return (
+    <group ref={groupRef} scale={scale}>
+      {children}
+    </group>
+  );
 }
 
 export default AutoFit;
-

@@ -5,13 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  GithubIcon,
-  Linkedin,
-  Mail,
-  Home,
-  Newspaper,
-} from 'lucide-react';
+import { GithubIcon, Linkedin, Mail, Home, Newspaper } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { SocialIconButton } from '@/components/ui/social-icon-button';
 
@@ -85,7 +79,7 @@ export default function HeaderBar() {
                   width={38}
                   height={38}
                   priority
-                  className="select-none transition-opacity hover:opacity-80"
+                  className="transition-opacity select-none hover:opacity-80"
                 />
               </Link>
             ) : (
@@ -107,9 +101,7 @@ export default function HeaderBar() {
                   href={href}
                   aria-label={label}
                   target={href.startsWith('http') ? '_blank' : undefined}
-                  rel={
-                    href.startsWith('http') ? 'noopener noreferrer' : undefined
-                  }
+                  rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
                   size="sm"
                 >
                   <Icon />
@@ -121,7 +113,7 @@ export default function HeaderBar() {
             <Link
               href={navLink.href}
               aria-label={navLink.label}
-              className="inline-flex items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-600 p-2 shadow-lg transition-transform hover:-translate-y-0.5 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-600 p-2 shadow-lg transition-transform hover:-translate-y-0.5 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:outline-none"
             >
               <navLink.icon className="h-4 w-4 text-white" />
             </Link>

@@ -28,9 +28,10 @@ export const metadata = {
   metadataBase: new URL('https://victorlenain.fr'),
   title: {
     default: 'Victor Lenain | Développeur Full-Stack JavaScript & Expert Next.js',
-    template: '%s | Victor Lenain'
+    template: '%s | Victor Lenain',
   },
-  description: 'Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Création d\'applications web modernes et performantes avec intelligence artificielle intégrée.',
+  description:
+    "Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Création d'applications web modernes et performantes avec intelligence artificielle intégrée.",
   keywords: [
     'développeur full-stack',
     'JavaScript',
@@ -42,7 +43,7 @@ export const metadata = {
     'Développement web',
     'Applications modernes',
     'Portfolio',
-    'Victor Lenain'
+    'Victor Lenain',
   ],
   authors: [{ name: 'Victor Lenain', url: 'https://victorlenain.fr' }],
   creator: 'Victor Lenain',
@@ -64,7 +65,8 @@ export const metadata = {
     url: 'https://victorlenain.fr',
     siteName: 'Victor Lenain - Portfolio',
     title: 'Victor Lenain | Développeur Full-Stack JavaScript & Expert Next.js',
-    description: 'Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Création d\'applications web modernes et performantes.',
+    description:
+      "Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Création d'applications web modernes et performantes.",
     images: [
       {
         url: '/og-image-dark.svg',
@@ -72,13 +74,14 @@ export const metadata = {
         height: 630,
         alt: 'Victor Lenain - Développeur Full-Stack JavaScript',
         type: 'image/png',
-      }
+      },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Victor Lenain | Développeur Full-Stack JavaScript',
-    description: 'Spécialisé en Next.js 15, React 19 et DevOps. Créateur d\'applications web modernes.',
+    description:
+      "Spécialisé en Next.js 15, React 19 et DevOps. Créateur d'applications web modernes.",
     images: ['/og-image-dark.svg'],
     creator: '@victor_lenain',
     site: '@victor_lenain',
@@ -86,7 +89,7 @@ export const metadata = {
   alternates: {
     canonical: 'https://victorlenain.fr',
     languages: {
-      'fr': 'https://victorlenain.fr',
+      fr: 'https://victorlenain.fr',
       'x-default': 'https://victorlenain.fr',
     },
   },
@@ -102,7 +105,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="fr" className={`${inter.variable} ${sora.variable}`}>
       <head>
         <meta name="Victor-Lenain" content="victorlenain" />
-        
+
         {/* ---- Favicons et icônes ---- */}
         <link rel="icon" href="/favicon.ico" sizes="48x48" />
         <link rel="icon" href="/icon0.svg" type="image/svg+xml" />
@@ -110,16 +113,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#6366f1" />
         <meta name="msapplication-TileColor" content="#6366f1" />
-        
+
         {/* ---- SEO et performance ---- */}
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="color-scheme" content="dark" />
-        
+
         {/* ---- Verification et ownership ---- */}
         <meta name="google-site-verification" content="votre-code-verification-google" />
         <meta name="msvalidate.01" content="votre-code-verification-bing" />
-        
+
         {/* ---- Préchargement de ressources critiques ---- */}
         <link rel="preload" href="/images/hero-bg.jpg" as="image" type="image/jpeg" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
@@ -137,13 +140,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               name: 'Victor Lenain',
               alternateName: 'Victor Lenain Dev',
               jobTitle: 'Développeur Full-Stack JavaScript & Expert Next.js',
-              description: 'Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Expert en création d\'applications web modernes et performantes.',
+              description:
+                "Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Expert en création d'applications web modernes et performantes.",
               url: 'https://victorlenain.fr',
               image: 'https://victorlenain.fr/og-image-dark.svg',
               sameAs: [
                 'https://www.linkedin.com/in/victor-lenain-1907b7282/',
                 'https://github.com/victorlenain',
-                'https://twitter.com/victor_lenain'
+                'https://twitter.com/victor_lenain',
               ],
               knowsAbout: [
                 'JavaScript',
@@ -154,27 +158,27 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 'DevOps',
                 'Intelligence Artificielle',
                 'Développement Web',
-                'Applications Web'
+                'Applications Web',
               ],
               worksFor: {
                 '@type': 'Organization',
                 name: 'Freelance',
-                url: 'https://victorlenain.fr'
+                url: 'https://victorlenain.fr',
               },
               address: {
                 '@type': 'PostalAddress',
                 addressCountry: 'FR',
-                addressLocality: 'France'
+                addressLocality: 'France',
               },
               offers: {
                 '@type': 'Offer',
                 description: 'Services de développement web Full-Stack',
-                category: 'Développement Web'
-              }
+                category: 'Développement Web',
+              },
             }),
           }}
         />
-        
+
         <Script
           id="ld-website"
           type="application/ld+json"
@@ -186,20 +190,21 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               name: 'Victor Lenain - Portfolio',
               alternateName: 'Portfolio Victor Lenain',
               url: 'https://victorlenain.fr',
-              description: 'Portfolio professionnel de Victor Lenain, développeur Full-Stack JavaScript spécialisé en Next.js et React.',
+              description:
+                'Portfolio professionnel de Victor Lenain, développeur Full-Stack JavaScript spécialisé en Next.js et React.',
               inLanguage: 'fr-FR',
               author: {
                 '@type': 'Person',
-                name: 'Victor Lenain'
+                name: 'Victor Lenain',
               },
               publisher: {
                 '@type': 'Person',
-                name: 'Victor Lenain'
+                name: 'Victor Lenain',
               },
               potentialAction: {
                 '@type': 'SearchAction',
                 target: 'https://victorlenain.fr/blog?q={search_term_string}',
-                'query-input': 'required name=search_term_string'
+                'query-input': 'required name=search_term_string',
               },
               mainEntity: {
                 '@type': 'SiteNavigationElement',
@@ -209,34 +214,34 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                     '@type': 'SiteNavigationElement',
                     name: 'Accueil',
                     description: 'Portfolio et présentation de Victor Lenain',
-                    url: 'https://victorlenain.fr'
+                    url: 'https://victorlenain.fr',
                   },
                   {
                     '@type': 'SiteNavigationElement',
                     name: 'À propos',
                     description: 'Expérience et compétences techniques',
-                    url: 'https://victorlenain.fr#a-propos'
+                    url: 'https://victorlenain.fr#a-propos',
                   },
                   {
                     '@type': 'SiteNavigationElement',
                     name: 'Projets',
                     description: 'Portfolio des réalisations et projets',
-                    url: 'https://victorlenain.fr#projets'
+                    url: 'https://victorlenain.fr#projets',
                   },
                   {
                     '@type': 'SiteNavigationElement',
                     name: 'Blog',
                     description: 'Articles techniques et tutoriels',
-                    url: 'https://victorlenain.fr/blog'
+                    url: 'https://victorlenain.fr/blog',
                   },
                   {
                     '@type': 'SiteNavigationElement',
                     name: 'Contact',
                     description: 'Formulaire de contact et informations',
-                    url: 'https://victorlenain.fr#contact'
-                  }
-                ]
-              }
+                    url: 'https://victorlenain.fr#contact',
+                  },
+                ],
+              },
             }),
           }}
         />
@@ -250,22 +255,23 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               '@context': 'https://schema.org',
               '@type': 'ProfessionalService',
               name: 'Victor Lenain - Services de Développement Web',
-              description: 'Services professionnels de développement web Full-Stack avec Next.js, React et TypeScript.',
+              description:
+                'Services professionnels de développement web Full-Stack avec Next.js, React et TypeScript.',
               url: 'https://victorlenain.fr',
               image: 'https://victorlenain.fr/og-image-dark.svg',
               provider: {
                 '@type': 'Person',
-                name: 'Victor Lenain'
+                name: 'Victor Lenain',
               },
               areaServed: {
                 '@type': 'Country',
-                name: 'France'
+                name: 'France',
               },
               serviceType: [
                 'Développement Web',
                 'Applications Next.js',
                 'Conseil Technique',
-                'Formation JavaScript'
+                'Formation JavaScript',
               ],
               hasOfferCatalog: {
                 '@type': 'OfferCatalog',
@@ -275,34 +281,34 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                     '@type': 'Offer',
                     itemOffered: {
                       '@type': 'Service',
-                      name: 'Développement d\'applications web',
-                      description: 'Création d\'applications web modernes avec Next.js et React'
-                    }
+                      name: "Développement d'applications web",
+                      description: "Création d'applications web modernes avec Next.js et React",
+                    },
                   },
                   {
                     '@type': 'Offer',
                     itemOffered: {
                       '@type': 'Service',
                       name: 'Conseil technique',
-                      description: 'Conseil en architecture et choix technologiques'
-                    }
+                      description: 'Conseil en architecture et choix technologiques',
+                    },
                   },
                   {
                     '@type': 'Offer',
                     itemOffered: {
                       '@type': 'Service',
                       name: 'Formation',
-                      description: 'Formation aux technologies modernes JavaScript'
-                    }
-                  }
-                ]
-              }
+                      description: 'Formation aux technologies modernes JavaScript',
+                    },
+                  },
+                ],
+              },
             }),
           }}
         />
       </head>
 
-      <body className="relative bg-[#0e082e] bg-[url('/images/hero-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans text-foreground antialiased">
+      <body className="text-foreground relative bg-[#0e082e] bg-[url('/images/hero-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased">
         {/* Dégradé d’assombrissement du fond */}
         <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/25 to-black/60 sm:bg-gradient-to-t lg:bg-gradient-to-r" />
 

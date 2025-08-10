@@ -9,11 +9,7 @@ export async function generateStaticParams() {
 }
 
 /* ---------------- SEO / OG ------------------------ */
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = allPosts.find(p => p.slug === slug);
   if (!post) {
@@ -27,11 +23,7 @@ export async function generateMetadata({
 }
 
 /* ---------------- Page article -------------------- */
-export default async function PostPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = allPosts.find(p => p.slug === slug);
   if (!post) {
@@ -45,7 +37,7 @@ export default async function PostPage({
   const readingTime = Math.ceil(post.content.split(/\s+/).length / 200);
   const article = { ...post, readingTime };
 
-  const code = (post.mdx as unknown) as string;
+  const code = post.mdx as unknown as string;
   if (!code) {
     notFound();
   }

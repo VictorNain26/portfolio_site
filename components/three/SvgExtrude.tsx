@@ -1,5 +1,5 @@
 /* components/three/SvgExtrude.tsx */
-"use client";
+'use client';
 
 import { useMemo, useLayoutEffect, useRef } from 'react';
 import { useLoader } from '@react-three/fiber';
@@ -28,36 +28,33 @@ export function SvgExtrude({ src, color, opacity = 1 }: SvgExtrudeProps) {
       curveSegments: 12,
     };
 
-    return data.paths.map((path, pathIndex) => {
-      const shapes = SVGLoader.createShapes(path);
-      return shapes.map((shape, shapeIndex) => {
-        const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-        
-        return (
-          <mesh 
-            key={`${pathIndex}-${shapeIndex}`} 
-            geometry={geometry}
-            castShadow
-            receiveShadow
-          >
-            <a.meshStandardMaterial
-              color={color}
-              transparent
-              opacity={opacity}
-              roughness={0.1}
-              metalness={0.0}
-            />
-          </mesh>
-        );
-      });
-    }).flat();
+    return data.paths
+      .map((path, pathIndex) => {
+        const shapes = SVGLoader.createShapes(path);
+        return shapes.map((shape, shapeIndex) => {
+          const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+
+          return (
+            <mesh key={`${pathIndex}-${shapeIndex}`} geometry={geometry} castShadow receiveShadow>
+              <a.meshStandardMaterial
+                color={color}
+                transparent
+                opacity={opacity}
+                roughness={0.1}
+                metalness={0.0}
+              />
+            </mesh>
+          );
+        });
+      })
+      .flat();
   }, [data.paths, color, opacity]);
 
   useLayoutEffect(() => {
     if (!groupRef.current) {
       return;
     }
-    
+
     // Center the geometry
     const box = new THREE.Box3().setFromObject(groupRef.current);
     const center = box.getCenter(new THREE.Vector3());

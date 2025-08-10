@@ -16,19 +16,25 @@ const TECH_MODELS = [
 ];
 
 type ModelProps = {
-  model: typeof TECH_MODELS[number];
+  model: (typeof TECH_MODELS)[number];
   isVisible: boolean;
   opacity: number | SpringValue<number>;
 };
 
 function TechModel({ model, isVisible, opacity }: ModelProps) {
   switch (model.type) {
-    case 'react': return <ReactLogo3D isVisible={isVisible} opacity={opacity} />;
-    case 'nextjs': return <NextJSLogo3D isVisible={isVisible} opacity={opacity} />;
-    case 'typescript': return <TypeScriptLogo3D isVisible={isVisible} opacity={opacity} />;
-    case 'nodejs': return <NodeJSLogo3D isVisible={isVisible} opacity={opacity} />;
-    case 'openai': return <AILogo3D isVisible={isVisible} opacity={opacity} />;
-    default: return null;
+    case 'react':
+      return <ReactLogo3D isVisible={isVisible} opacity={opacity} />;
+    case 'nextjs':
+      return <NextJSLogo3D isVisible={isVisible} opacity={opacity} />;
+    case 'typescript':
+      return <TypeScriptLogo3D isVisible={isVisible} opacity={opacity} />;
+    case 'nodejs':
+      return <NodeJSLogo3D isVisible={isVisible} opacity={opacity} />;
+    case 'openai':
+      return <AILogo3D isVisible={isVisible} opacity={opacity} />;
+    default:
+      return null;
   }
 }
 
@@ -54,20 +60,18 @@ export default function ModelHero() {
     if (prefersReducedMotion || !isInView || !isPageVisible) {
       return;
     }
-    
+
     const interval = setInterval(() => {
-      setCurrentModelIndex((prev) => {
+      setCurrentModelIndex(prev => {
         const nextIndex = (prev + 1) % TECH_MODELS.length;
         return nextIndex;
       });
     }, 8000);
-    
+
     return () => {
       clearInterval(interval);
     };
   }, [prefersReducedMotion, isInView, isPageVisible]);
-
-
 
   // Page Visibility API to handle tab changes
   useEffect(() => {
@@ -93,7 +97,7 @@ export default function ModelHero() {
           setIsInView(entry.isIntersecting);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     observer.observe(container);
@@ -113,7 +117,7 @@ export default function ModelHero() {
 
   // Simple fade transition
   const transitions = useTransition(currentModel, {
-    keys: (m) => m?.type || 'default',
+    keys: m => m?.type || 'default',
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
@@ -124,18 +128,16 @@ export default function ModelHero() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full overflow-hidden"
+      className="relative h-full w-full overflow-hidden"
       aria-label={`3D model: ${currentModel?.name || 'Loading'}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Hover label - shows current model name */}
       {isHovered && (
-        <div className="absolute top-4 left-4 z-10 pointer-events-none">
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2 border border-white/20 animate-in fade-in duration-200">
-            <h3 className="text-sm font-medium text-white">
-              {currentModel?.name}
-            </h3>
+        <div className="pointer-events-none absolute top-4 left-4 z-10">
+          <div className="animate-in fade-in rounded-lg border border-white/20 bg-black/50 px-3 py-2 backdrop-blur-sm duration-200">
+            <h3 className="text-sm font-medium text-white">{currentModel?.name}</h3>
           </div>
         </div>
       )}
@@ -152,12 +154,13 @@ export default function ModelHero() {
           <Environment preset="city" />
 
           {/* Preload all models invisibly */}
-          {isPageVisible && TECH_MODELS.map((model) => (
-            <group key={`preload-${model.type}`} visible={false}>
-              <TechModel model={model} isVisible={isInView && isPageVisible} opacity={0} />
-            </group>
-          ))}
-          
+          {isPageVisible &&
+            TECH_MODELS.map(model => (
+              <group key={`preload-${model.type}`} visible={false}>
+                <TechModel model={model} isVisible={isInView && isPageVisible} opacity={0} />
+              </group>
+            ))}
+
           {/* Current visible model */}
           {transitions((styles, item) => {
             if (!item) {
@@ -165,7 +168,11 @@ export default function ModelHero() {
             }
             return (
               <animated.group key={item.type}>
-                <TechModel model={item} isVisible={isInView && isPageVisible} opacity={styles.opacity} />
+                <TechModel
+                  model={item}
+                  isVisible={isInView && isPageVisible}
+                  opacity={styles.opacity}
+                />
               </animated.group>
             );
           })}

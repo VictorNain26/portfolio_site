@@ -28,20 +28,20 @@ export default function Hero() {
           transition={{ duration: 0.7 }}
           className="order-1 flex flex-col sm:items-center lg:order-none lg:items-start"
         >
-          <h1 className="mb-2 font-display text-[clamp(2.6rem,7.5vw,5.3rem)] font-extrabold leading-[1.05] tracking-[-0.035em] gradient-brand-text">
+          <h1 className="font-display gradient-brand-text mb-2 text-[clamp(2.6rem,7.5vw,5.3rem)] leading-[1.05] font-extrabold tracking-[-0.035em]">
             Victor&nbsp;Lenain
           </h1>
 
           <div className="mb-3 flex items-center gap-3 sm:justify-center">
             <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#6bb4d8] via-[#4288b7] to-[#2d5e81]" />
-            <p className="text-sm font-medium uppercase tracking-wide text-indigo-200 sm:text-base">
+            <p className="text-sm font-medium tracking-wide text-indigo-200 uppercase sm:text-base">
               Développeur&nbsp;Full-Stack
             </p>
           </div>
 
           <p className="hidden max-w-[28ch] text-sm text-gray-300 sm:block sm:max-w-md sm:text-base">
-            Conception et développement d&apos;applications web modernes,
-            d&apos;expériences&nbsp;3D et d&apos;intégrations&nbsp;IA/LLM.
+            Conception et développement d&apos;applications web modernes, d&apos;expériences&nbsp;3D
+            et d&apos;intégrations&nbsp;IA/LLM.
           </p>
         </motion.header>
 
@@ -51,7 +51,7 @@ export default function Hero() {
           whileInView={prefersReduceMotion ? {} : { opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15, duration: 0.7 }}
-          className="order-2 w-full h-[400px] lg:order-none lg:h-[500px] touch-pan-y"
+          className="order-2 h-[400px] w-full touch-pan-y lg:order-none lg:h-[500px]"
         >
           <ModelHero />
         </motion.div>
@@ -84,8 +84,8 @@ export default function Hero() {
             <Linkedin />
           </SocialIconButton>
 
-          <SocialIconButton 
-            href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous" 
+          <SocialIconButton
+            href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous"
             aria-label="WhatsApp"
             target="_blank"
             rel="noopener noreferrer"
@@ -109,9 +109,7 @@ export default function Hero() {
         className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 text-white/80 transition-opacity hover:opacity-100"
         onClick={e => {
           e.preventDefault();
-          document
-            .getElementById('a-propos')
-            ?.scrollIntoView({ behavior: 'smooth' });
+          document.getElementById('a-propos')?.scrollIntoView({ behavior: 'smooth' });
         }}
       >
         <ChevronDown className="h-7 w-7 animate-bounce" aria-hidden />

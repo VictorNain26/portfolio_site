@@ -109,7 +109,6 @@ const nextConfig = {
   // Generate ETags
   generateEtags: true,
 
-
   // Output configuration
   output: 'standalone',
 

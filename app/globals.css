@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-background: 220 26% 5%;
@@ -182,11 +182,11 @@
 }
 
 .prose :where(code):not(:where([class~='not-prose'] *)) {
-  @apply rounded bg-muted px-1.5 py-0.5 font-mono text-sm;
+  @apply bg-muted rounded px-1.5 py-0.5 font-mono text-sm;
 }
 
 .prose pre {
-  @apply rounded-xl bg-muted p-4 text-sm;
+  @apply bg-muted rounded-xl p-4 text-sm;
 }
 
 .prose pre code {
@@ -204,7 +204,7 @@
 .prose h4,
 .prose h5,
 .prose h6 {
-  @apply font-display font-semibold text-foreground;
+  @apply font-display text-foreground font-semibold;
 }
 
 .prose a {

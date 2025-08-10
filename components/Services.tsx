@@ -13,20 +13,18 @@ export default function Services() {
       desc: 'APIs robustes, architectures scalables et déploiements automatisés.',
     },
     {
-        // L’IA évolue rapidement et inclut désormais les grands modèles de langage.
-        // Ce service met l’accent sur l’intégration d’IA et de LLM (Large Language Models)
-        // pour automatiser, personnaliser et enrichir vos applications web avec des
-        // fonctionnalités conversationnelles, de génération et d’analyse de données.
-        title: 'IA & LLM',
-        desc: 'Intégration de solutions d’IA et de modèles de langage (LLM) pour automatiser, personnaliser et enrichir vos applications.',
+      // L’IA évolue rapidement et inclut désormais les grands modèles de langage.
+      // Ce service met l’accent sur l’intégration d’IA et de LLM (Large Language Models)
+      // pour automatiser, personnaliser et enrichir vos applications web avec des
+      // fonctionnalités conversationnelles, de génération et d’analyse de données.
+      title: 'IA & LLM',
+      desc: 'Intégration de solutions d’IA et de modèles de langage (LLM) pour automatiser, personnaliser et enrichir vos applications.',
     },
   ];
 
   return (
     <Section id="services" className="scroll-mt-28 pb-28">
-      <h2 className="mb-10 font-display text-3xl font-bold text-indigo-400">
-        Services
-      </h2>
+      <h2 className="font-display mb-10 text-3xl font-bold text-indigo-400">Services</h2>
 
       <div className="grid gap-6 md:grid-cols-3">
         {services.map(s => (

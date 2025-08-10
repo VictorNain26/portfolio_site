@@ -30,33 +30,27 @@ export default function ArticleLayout({
   });
 
   return (
-    <article className="scroll-mt-28 pb-24 pt-[calc(3.75rem+env(safe-area-inset-top))]">
+    <article className="scroll-mt-28 pt-[calc(3.75rem+env(safe-area-inset-top))] pb-24">
       {/* ---------- BOUTON RETOUR FIXE ---------- */}
       <Link
         href="/blog"
         aria-label="Retour aux articles"
-        className="fixed left-4 top-[calc(4rem+env(safe-area-inset-top))] z-50 inline-flex items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-600 p-2 shadow transition-transform hover:-translate-y-0.5 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 sm:left-6"
+        className="fixed top-[calc(4rem+env(safe-area-inset-top))] left-4 z-50 inline-flex items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-600 p-2 shadow transition-transform hover:-translate-y-0.5 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:outline-none sm:left-6"
       >
         <ArrowLeft className="h-4 w-4 text-white" />
       </Link>
 
       {/* ---------- HERO ---------- */}
       <header className="relative h-56 w-full overflow-hidden sm:h-[40vh]">
-        <Image
-          src={post.coverImage}
-          alt=""
-          fill
-          priority
-          className="object-cover object-center"
-        />
+        <Image src={post.coverImage} alt="" fill priority className="object-cover object-center" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-transparent" />
 
         {/* Titre + résumé */}
         <div className="absolute inset-x-4 bottom-6 mx-auto max-w-4xl text-center drop-shadow-[0_3px_8px_rgba(0,0,0,0.55)]">
-          <h1 className="font-display text-3xl font-extrabold leading-tight text-white sm:text-5xl">
+          <h1 className="font-display text-3xl leading-tight font-extrabold text-white sm:text-5xl">
             {post.title}
           </h1>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-gray-200 sm:text-base leading-relaxed">
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-gray-200 sm:text-base">
             {post.summary}
           </p>
         </div>
@@ -69,20 +63,14 @@ export default function ArticleLayout({
             {date}
           </time>
           <span className="text-gray-500">·</span>
-          <span className="whitespace-nowrap">
-            {post.readingTime} min de lecture
-          </span>
+          <span className="whitespace-nowrap">{post.readingTime} min de lecture</span>
         </div>
 
-        <ShareButton
-          title={post.title}
-          summary={post.summary}
-          slug={post.slug}
-        />
+        <ShareButton title={post.title} summary={post.summary} slug={post.slug} />
       </div>
 
       {/* ---------- CONTENU ---------- */}
-      <section className="prose-sm prose-invert mx-auto mt-12 max-w-3xl px-4 text-gray-200 sm:prose lg:prose-lg prose-headings:mb-6 prose-headings:font-display prose-h2:text-white prose-h3:text-gray-100 prose-a:text-indigo-300 prose-a:font-bold prose-a:underline prose-a:decoration-indigo-400 prose-a:decoration-2 prose-a:underline-offset-4 prose-a:transition-all hover:prose-a:text-indigo-200 hover:prose-a:decoration-indigo-300 hover:prose-a:scale-105 prose-strong:text-white prose-ul:pl-5 prose-li:marker:text-indigo-400 prose-hr:border-gray-700 prose-blockquote:border-l-indigo-500 prose-blockquote:text-gray-300 prose-code:text-indigo-300 prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded">
+      <section className="prose-sm prose-invert sm:prose lg:prose-lg prose-headings:mb-6 prose-headings:font-display prose-h2:text-white prose-h3:text-gray-100 prose-a:text-indigo-300 prose-a:font-bold prose-a:underline prose-a:decoration-indigo-400 prose-a:decoration-2 prose-a:underline-offset-4 prose-a:transition-all hover:prose-a:text-indigo-200 hover:prose-a:decoration-indigo-300 hover:prose-a:scale-105 prose-strong:text-white prose-ul:pl-5 prose-li:marker:text-indigo-400 prose-hr:border-gray-700 prose-blockquote:border-l-indigo-500 prose-blockquote:text-gray-300 prose-code:text-indigo-300 prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded mx-auto mt-12 max-w-3xl px-4 text-gray-200">
         {children}
       </section>
 
@@ -92,12 +80,12 @@ export default function ArticleLayout({
           {prev && (
             <Link
               href={`/blog/${prev.slug}`}
-              className="group flex items-center gap-3 rounded-xl border border-gray-700/50 bg-gray-900/60 p-5 transition-all hover:bg-gray-800/60 hover:border-gray-600/50"
+              className="group flex items-center gap-3 rounded-xl border border-gray-700/50 bg-gray-900/60 p-5 transition-all hover:border-gray-600/50 hover:bg-gray-800/60"
             >
               <span className="text-lg text-indigo-400">←</span>
               <div>
-                <p className="text-xs text-gray-500 uppercase tracking-wide">Article précédent</p>
-                <p className="text-sm text-white group-hover:text-indigo-300 transition-colors">
+                <p className="text-xs tracking-wide text-gray-500 uppercase">Article précédent</p>
+                <p className="text-sm text-white transition-colors group-hover:text-indigo-300">
                   {prev.title}
                 </p>
               </div>
@@ -106,11 +94,11 @@ export default function ArticleLayout({
           {next && (
             <Link
               href={`/blog/${next.slug}`}
-              className="group flex items-center gap-3 self-end rounded-xl border border-gray-700/50 bg-gray-900/60 p-5 transition-all hover:bg-gray-800/60 hover:border-gray-600/50"
+              className="group flex items-center gap-3 self-end rounded-xl border border-gray-700/50 bg-gray-900/60 p-5 transition-all hover:border-gray-600/50 hover:bg-gray-800/60"
             >
               <div className="text-right">
-                <p className="text-xs text-gray-500 uppercase tracking-wide">Article suivant</p>
-                <p className="text-sm text-white group-hover:text-indigo-300 transition-colors">
+                <p className="text-xs tracking-wide text-gray-500 uppercase">Article suivant</p>
+                <p className="text-sm text-white transition-colors group-hover:text-indigo-300">
                   {next.title}
                 </p>
               </div>

@@ -37,7 +37,7 @@ export default function ScrollView({
       {/* Rail vertical */}
       <ScrollAreaPrimitive.Scrollbar
         orientation="vertical"
-        className="absolute right-0 top-0 h-full w-2.5 p-px"
+        className="absolute top-0 right-0 h-full w-2.5 p-px"
       >
         <ScrollAreaPrimitive.Thumb className="flex-1 rounded-full bg-gradient-to-b from-indigo-500 to-violet-400" />
       </ScrollAreaPrimitive.Scrollbar>
