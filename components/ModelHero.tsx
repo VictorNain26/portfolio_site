@@ -34,9 +34,11 @@ function TechModel({ model, isVisible, opacity }: ModelProps) {
 
 export default function ModelHero() {
   const [currentModelIndex, setCurrentModelIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [hoveredModel, setHoveredModel] = useState<string | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isInView, setIsInView] = useState(true);
+  const [isPageVisible, setIsPageVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Check for reduced motion preference
@@ -50,32 +52,78 @@ export default function ModelHero() {
 
   // Auto-rotate models
   useEffect(() => {
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || !isInView || !isPageVisible) {
+      console.log('[ModelHero] Auto-rotation paused:', { prefersReducedMotion, isInView, isPageVisible });
       return;
     }
     
+    console.log('[ModelHero] Starting auto-rotation');
     const interval = setInterval(() => {
-      setCurrentModelIndex((prev) => (prev + 1) % TECH_MODELS.length);
+      setCurrentModelIndex((prev) => {
+        const nextIndex = (prev + 1) % TECH_MODELS.length;
+        console.log('[ModelHero] Rotating from model', prev, 'to', nextIndex);
+        return nextIndex;
+      });
     }, 8000);
     
-    return () => clearInterval(interval);
-  }, [prefersReducedMotion]);
+    return () => {
+      console.log('[ModelHero] Stopping auto-rotation');
+      clearInterval(interval);
+    };
+  }, [prefersReducedMotion, isInView, isPageVisible]);
 
-  // Initial loading
+
+
+  // Page Visibility API to handle tab changes
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 500);
-    return () => clearTimeout(timer);
+    const handleVisibilityChange = () => {
+      const visible = !document.hidden;
+      console.log('[ModelHero] Page visibility changed:', visible);
+      setIsPageVisible(visible);
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
-  const currentModel = TECH_MODELS[currentModelIndex];
+  // Intersection Observer to pause when not in view
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry) {
+          console.log('[ModelHero] Intersection changed:', entry.isIntersecting);
+          setIsInView(entry.isIntersecting);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  // Ensure we always have a valid model
+  const safeIndex = Math.max(0, Math.min(currentModelIndex, TECH_MODELS.length - 1));
+  const currentModel = TECH_MODELS[safeIndex];
+
+  // Recovery mechanism - reset if model becomes invalid
+  useEffect(() => {
+    if (!currentModel || !TECH_MODELS[safeIndex]) {
+      console.warn('[ModelHero] Invalid state detected, resetting to first model');
+      setCurrentModelIndex(0);
+    }
+  }, [currentModel, safeIndex]);
 
   // Simple fade transition
   const transitions = useTransition(currentModel, {
-    keys: (m) => m?.type || '',
+    keys: (m) => m?.type || 'default',
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
-    config: { mass: 1, tension: 180, friction: 30 },
+    config: { mass: 1, tension: 280, friction: 40 },
     exitBeforeEnter: true,
   });
 
@@ -84,15 +132,15 @@ export default function ModelHero() {
       ref={containerRef}
       className="relative w-full h-full overflow-hidden"
       aria-label={`3D model: ${currentModel?.name || 'Loading'}`}
-      onMouseEnter={() => setHoveredModel(currentModel?.type || null)}
-      onMouseLeave={() => setHoveredModel(null)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Hover label */}
-      {hoveredModel && (
+      {/* Hover label - shows current model name */}
+      {isHovered && (
         <div className="absolute top-4 left-4 z-10 pointer-events-none">
           <div className="bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2 border border-white/20 animate-in fade-in duration-200">
             <h3 className="text-sm font-medium text-white">
-              {TECH_MODELS.find(m => m.type === hoveredModel)?.name}
+              {currentModel?.name}
             </h3>
           </div>
         </div>
@@ -110,20 +158,25 @@ export default function ModelHero() {
           <Environment preset="city" />
 
           {/* Preload all models invisibly */}
-          {!isLoading && TECH_MODELS.map((model) => (
+          {isPageVisible && TECH_MODELS.map((model) => (
             <group key={`preload-${model.type}`} visible={false}>
-              <TechModel model={model} isVisible={true} opacity={0} />
+              <TechModel model={model} isVisible={isInView && isPageVisible} opacity={0} />
             </group>
           ))}
           
           {/* Current visible model */}
-          {transitions((styles, item) => 
-            item ? (
+          {transitions((styles, item) => {
+            if (!item) {
+              console.warn('[ModelHero] No item in transition');
+              return null;
+            }
+            console.log('[ModelHero] Rendering transition for:', item.type, 'opacity:', styles.opacity);
+            return (
               <animated.group key={item.type}>
-                <TechModel model={item} isVisible={true} opacity={styles.opacity} />
+                <TechModel model={item} isVisible={isInView && isPageVisible} opacity={styles.opacity} />
               </animated.group>
-            ) : null
-          )}
+            );
+          })}
         </Suspense>
       </Canvas>
     </div>
