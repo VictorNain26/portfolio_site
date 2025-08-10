@@ -23,16 +23,16 @@ export default function Services() {
   ];
 
   return (
-    <Section id="services" className="scroll-mt-28 pb-28">
+    <Section className="scroll-mt-28 pb-28" id="services">
       <h2 className="font-display mb-10 text-3xl font-bold text-indigo-400">Services</h2>
 
       <div className="grid gap-6 md:grid-cols-3">
         {services.map(s => (
           <motion.div
             key={s.title}
-            whileHover={{ rotateX: -4, rotateY: 6, y: -4 }}
-            transition={{ type: 'spring', stiffness: 150, damping: 15 }}
             className="rounded-3xl border border-gray-700/50 bg-gray-900/60 p-6 shadow-lg"
+            transition={{ type: 'spring', stiffness: 150, damping: 15 }}
+            whileHover={{ rotateX: -4, rotateY: 6, y: -4 }}
           >
             <h3 className="font-semibold text-indigo-300">{s.title}</h3>
             <p className="mt-2 text-gray-300">{s.desc}</p>

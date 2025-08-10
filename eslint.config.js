@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import { FlatCompat } from '@eslint/eslintrc';
+import nextPlugin from '@next/eslint-plugin-next';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -30,6 +31,11 @@ export default tseslint.config(
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   ...compat.extends('next/core-web-vitals'),
+  {
+    plugins: {
+      '@next/next': nextPlugin,
+    },
+  },
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -205,7 +211,7 @@ export default tseslint.config(
       ],
       'react/jsx-fragments': ['error', 'syntax'],
       'react/jsx-no-useless-fragment': 'error',
-      'react/jsx-pascal-case': 'error',
+      'react/jsx-pascal-case': ['error', { allowAllCaps: true, ignore: ['MDX'] }],
       'react/jsx-sort-props': [
         'warn',
         {

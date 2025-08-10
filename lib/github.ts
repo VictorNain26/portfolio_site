@@ -14,9 +14,7 @@ export type GitHubRepo = {
   languages_url: string;
 };
 
-export type GitHubLanguages = {
-  [key: string]: number;
-};
+export type GitHubLanguages = Record<string, number>;
 
 export type Project = {
   id: number;
@@ -30,7 +28,8 @@ export type Project = {
   createdAt: string;
 };
 
-const GITHUB_USERNAME = 'victornain26'; // Remplacez par votre username GitHub
+// Remplacez par votre username GitHub
+const GITHUB_USERNAME = 'victornain26';
 const GITHUB_API_URL = 'https://api.github.com';
 
 /**
@@ -46,14 +45,16 @@ export async function getGitHubProjects(): Promise<Project[]> {
           Accept: 'application/vnd.github.v3+json',
           'User-Agent': 'Portfolio-Website',
         },
-        next: { revalidate: 3600 }, // Cache pour 1 heure
+        // Cache pour 1 heure
+        next: { revalidate: 3600 },
       },
     );
 
     if (!reposResponse.ok) {
-      throw new Error(`GitHub API error: ${reposResponse.status}`);
+      throw new Error(`GitHub API error: ${reposResponse.status.toString()}`);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const repos: GitHubRepo[] = await reposResponse.json();
 
     // Filtrer les repos avec le topic "demo"
@@ -70,8 +71,8 @@ export async function getGitHubProjects(): Promise<Project[]> {
         return {
           id: repo.id,
           name: repo.name,
-          description: repo.description || 'Aucune description disponible',
-          demoUrl: repo.homepage || null,
+          description: repo.description ?? 'Aucune description disponible',
+          demoUrl: repo.homepage ?? null,
           repoUrl: repo.html_url,
           technologies,
           stars: repo.stargazers_count,
@@ -94,6 +95,7 @@ export async function getGitHubProjects(): Promise<Project[]> {
  * Récupère les langages utilisés dans un repository
  */
 async function getRepoLanguages(languagesUrl: string): Promise<string[]> {
+  const MAX_LANGUAGES = 5;
   try {
     const response = await fetch(languagesUrl, {
       headers: {
@@ -107,13 +109,17 @@ async function getRepoLanguages(languagesUrl: string): Promise<string[]> {
       return [];
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const languages: GitHubLanguages = await response.json();
 
     // Retourner les langages triés par usage (descending)
-    return Object.entries(languages)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 5) // Garder seulement les 5 principaux
-      .map(([lang]) => lang);
+    return (
+      Object.entries(languages)
+        .sort(([, a], [, b]) => b - a)
+        // Garder seulement les 5 principaux
+        .slice(0, MAX_LANGUAGES)
+        .map(([lang]) => lang)
+    );
   } catch {
     // Silent error handling for production
     return [];
@@ -154,5 +160,5 @@ export function getTechnologyColor(tech: string): string {
     Kubernetes: '#326CE5',
   };
 
-  return colors[tech] || '#6B7280';
+  return colors[tech] ?? '#6B7280';
 }

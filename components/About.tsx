@@ -2,7 +2,7 @@ import Section from '@/components/Section';
 
 export default function About() {
   return (
-    <Section id="a-propos" className="scroll-mt-28 pb-28">
+    <Section className="scroll-mt-28 pb-28" id="a-propos">
       <h2 className="font-display mb-4 text-3xl font-bold text-indigo-400">À&nbsp;propos</h2>
 
       <p className="max-w-xl leading-relaxed text-gray-300">
@@ -28,10 +28,7 @@ export default function About() {
         ).map(([val, label]) => (
           <li key={label} className="rounded-2xl bg-gray-900/60 p-4 text-center">
             <span className="block text-2xl font-bold text-indigo-400">{val}</span>
-            <span
-              className="text-sm text-gray-400"
-              dangerouslySetInnerHTML={{ __html: label ?? '' }}
-            />
+            <span className="text-sm text-gray-400" dangerouslySetInnerHTML={{ __html: label }} />
           </li>
         ))}
       </ul>

@@ -102,37 +102,37 @@ export const metadata = {
 /* -------------------------------------------------------------------------- */
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${sora.variable}`}>
+    <html className={`${inter.variable} ${sora.variable}`} lang="fr">
       <head>
-        <meta name="Victor-Lenain" content="victorlenain" />
+        <meta content="victorlenain" name="Victor-Lenain" />
 
         {/* ---- Favicons et icônes ---- */}
-        <link rel="icon" href="/favicon.ico" sizes="48x48" />
-        <link rel="icon" href="/icon0.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#6366f1" />
-        <meta name="msapplication-TileColor" content="#6366f1" />
+        <link href="/favicon.ico" rel="icon" sizes="48x48" />
+        <link href="/icon0.svg" rel="icon" type="image/svg+xml" />
+        <link href="/apple-icon.png" rel="apple-touch-icon" />
+        <link href="/manifest.json" rel="manifest" />
+        <meta content="#6366f1" name="theme-color" />
+        <meta content="#6366f1" name="msapplication-TileColor" />
 
         {/* ---- SEO et performance ---- */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="color-scheme" content="dark" />
+        <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
+        <meta content="telephone=no" name="format-detection" />
+        <meta content="dark" name="color-scheme" />
 
         {/* ---- Verification et ownership ---- */}
-        <meta name="google-site-verification" content="votre-code-verification-google" />
-        <meta name="msvalidate.01" content="votre-code-verification-bing" />
+        <meta content="votre-code-verification-google" name="google-site-verification" />
+        <meta content="votre-code-verification-bing" name="msvalidate.01" />
 
         {/* ---- Préchargement de ressources critiques ---- */}
-        <link rel="preload" href="/images/hero-bg.jpg" as="image" type="image/jpeg" />
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link as="image" href="/images/hero-bg.jpg" rel="preload" type="image/jpeg" />
+        <link href="//fonts.googleapis.com" rel="dns-prefetch" />
+        <link crossOrigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect" />
 
         {/* ---- JSON-LD Structured Data ---- */}
         <Script
           id="ld-person"
-          type="application/ld+json"
           strategy="afterInteractive"
+          type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
@@ -181,8 +181,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
         <Script
           id="ld-website"
-          type="application/ld+json"
           strategy="afterInteractive"
+          type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
@@ -248,8 +248,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
         <Script
           id="ld-professional-service"
-          type="application/ld+json"
           strategy="afterInteractive"
+          type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',

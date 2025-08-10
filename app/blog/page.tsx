@@ -88,8 +88,8 @@ export default function BlogIndex() {
     <>
       <Script
         id="blog-structured-data"
-        type="application/ld+json"
         strategy="afterInteractive"
+        type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(blogStructuredData),
         }}
@@ -109,15 +109,15 @@ export default function BlogIndex() {
           {allPosts.map(post => (
             <li key={post.slug}>
               <Link
-                href={`/blog/${post.slug}`}
                 className="group block overflow-hidden rounded-2xl border border-gray-700/50 bg-gray-900/60 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-indigo-500/10"
+                href={`/blog/${post.slug}`}
               >
                 <div className="relative h-48">
                   <Image
-                    src={post.coverImage}
-                    alt=""
                     fill
+                    alt=""
                     className="object-cover transition-transform duration-300 group-hover:scale-[1.05]"
+                    src={post.coverImage}
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
                 </div>

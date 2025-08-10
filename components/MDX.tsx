@@ -6,6 +6,9 @@ import * as React from 'react';
 import { Badge } from '@/components/ui/badge';
 import NextLink from 'next/link';
 
+const DEFAULT_IMAGE_WIDTH = 800;
+const DEFAULT_IMAGE_HEIGHT = 450;
+
 const components: MDXComponents = {
   /* -------- images fluides -------- */
   img: rawProps => {
@@ -18,24 +21,24 @@ const components: MDXComponents = {
       ...rest
     } = rawProps as React.ImgHTMLAttributes<HTMLImageElement> & {
       src: string;
-      width?: string | number;
-      height?: string | number;
+      width?: number | string;
+      height?: number | string;
     };
 
-    const w = width ? Number(width) : 800;
-    const h = height ? Number(height) : 450;
+    const w = typeof width === 'number' || typeof width === 'string' ? Number(width) : DEFAULT_IMAGE_WIDTH;
+    const h = typeof height === 'number' || typeof height === 'string' ? Number(height) : DEFAULT_IMAGE_HEIGHT;
 
     return (
       <figure className="my-8">
         <Image
-          src={src}
           alt={alt}
-          width={w}
-          height={h}
           className={cn('rounded-lg border border-gray-700/50', className)}
+          height={h}
+          src={src}
+          width={w}
           {...rest}
         />
-        {alt && (
+        {alt !== '' && (
           <figcaption className="mt-3 text-center text-sm text-gray-400 italic">{alt}</figcaption>
         )}
       </figure>
@@ -83,16 +86,16 @@ const components: MDXComponents = {
   /* -------- titres ancrables -------- */
   h2: ({ children }) => (
     <h2
-      id={String(children).toLowerCase().replace(/\s+/g, '-')}
       className="font-display mt-16 mb-6 scroll-mt-28 text-2xl font-bold text-white"
+      id={String(children).toLowerCase().replace(/\s+/g, '-')}
     >
       {children}
     </h2>
   ),
   h3: ({ children }) => (
     <h3
-      id={String(children).toLowerCase().replace(/\s+/g, '-')}
       className="mt-12 mb-4 scroll-mt-28 text-xl font-semibold text-gray-100"
+      id={String(children).toLowerCase().replace(/\s+/g, '-')}
     >
       {children}
     </h3>
@@ -101,10 +104,10 @@ const components: MDXComponents = {
   Badge,
 
   /* -------- liens personnalisés -------- */
-  a: ({ href, children }) => (
+  a: ({ href, children }: { href?: string; children: React.ReactNode }) => (
     <NextLink
-      href={href || '#'}
       className="text-indigo-300 underline decoration-indigo-400/60 decoration-1 underline-offset-4 transition-colors hover:text-indigo-200 hover:decoration-indigo-300"
+      href={href ?? '#'}
     >
       {children}
     </NextLink>
@@ -116,8 +119,8 @@ const components: MDXComponents = {
       {children}
     </pre>
   ),
-  code: ({ children, className }) => {
-    const isInline = !className;
+  code: ({ children, className }: { children: React.ReactNode; className?: string }) => {
+    const isInline = className === undefined;
     if (isInline) {
       return (
         <code className="rounded bg-gray-800/60 px-1.5 py-0.5 text-sm text-indigo-300">

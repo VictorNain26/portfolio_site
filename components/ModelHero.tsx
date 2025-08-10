@@ -15,10 +15,20 @@ const TECH_MODELS = [
   { name: 'OpenAI', type: 'openai' as const },
 ];
 
+const CAMERA_Z_POSITION = 5;
+const CAMERA_FOV = 50;
+const DPR_MIN = 1;
+const DPR_MAX = 1.5;
+const AMBIENT_LIGHT_INTENSITY = 0.6;
+const DIRECTIONAL_LIGHT_INTENSITY = 1;
+const DIRECTIONAL_LIGHT_X = 10;
+const DIRECTIONAL_LIGHT_Y = 10;
+const DIRECTIONAL_LIGHT_Z = 5;
+
 type ModelProps = {
   model: (typeof TECH_MODELS)[number];
   isVisible: boolean;
-  opacity: number | SpringValue<number>;
+  opacity: SpringValue<number> | number;
 };
 
 function TechModel({ model, isVisible, opacity }: ModelProps) {
@@ -50,9 +60,13 @@ export default function ModelHero() {
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReducedMotion(media.matches);
-    const handler = () => setPrefersReducedMotion(media.matches);
+    const handler = () => {
+      setPrefersReducedMotion(media.matches);
+    };
     media.addEventListener('change', handler);
-    return () => media.removeEventListener('change', handler);
+    return () => {
+      media.removeEventListener('change', handler);
+    };
   }, []);
 
   // Auto-rotate models
@@ -61,12 +75,13 @@ export default function ModelHero() {
       return;
     }
 
+    const ROTATION_INTERVAL = 8000;
     const interval = setInterval(() => {
       setCurrentModelIndex(prev => {
         const nextIndex = (prev + 1) % TECH_MODELS.length;
         return nextIndex;
       });
-    }, 8000);
+    }, ROTATION_INTERVAL);
 
     return () => {
       clearInterval(interval);
@@ -81,7 +96,9 @@ export default function ModelHero() {
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   // Intersection Observer to pause when not in view
@@ -101,7 +118,9 @@ export default function ModelHero() {
     );
 
     observer.observe(container);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   // Ensure we always have a valid model
@@ -117,7 +136,7 @@ export default function ModelHero() {
 
   // Simple fade transition
   const transitions = useTransition(currentModel, {
-    keys: m => m?.type || 'default',
+    keys: m => m?.type ?? 'default',
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
@@ -128,10 +147,14 @@ export default function ModelHero() {
   return (
     <div
       ref={containerRef}
+      aria-label={`3D model: ${currentModel?.name ?? 'Loading'}`}
       className="relative h-full w-full overflow-hidden"
-      aria-label={`3D model: ${currentModel?.name || 'Loading'}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => {
+        setIsHovered(true);
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+      }}
     >
       {/* Hover label - shows current model name */}
       {isHovered && (
@@ -143,21 +166,21 @@ export default function ModelHero() {
       )}
 
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 50 }}
-        dpr={[1, 1.5]}
+        camera={{ position: [0, 0, CAMERA_Z_POSITION], fov: CAMERA_FOV }}
+        dpr={[DPR_MIN, DPR_MAX]}
         gl={{ alpha: true, antialias: true }}
       >
         <Suspense fallback={null}>
           {/* Simple lighting setup */}
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[10, 10, 5]} intensity={1} />
+          <ambientLight intensity={AMBIENT_LIGHT_INTENSITY} />
+          <directionalLight intensity={DIRECTIONAL_LIGHT_INTENSITY} position={[DIRECTIONAL_LIGHT_X, DIRECTIONAL_LIGHT_Y, DIRECTIONAL_LIGHT_Z]} />
           <Environment preset="city" />
 
           {/* Preload all models invisibly */}
-          {isPageVisible &&
-            TECH_MODELS.map(model => (
+          {isPageVisible
+            && TECH_MODELS.map(model => (
               <group key={`preload-${model.type}`} visible={false}>
-                <TechModel model={model} isVisible={isInView && isPageVisible} opacity={0} />
+                <TechModel isVisible={isInView && isPageVisible} model={model} opacity={0} />
               </group>
             ))}
 
@@ -169,8 +192,8 @@ export default function ModelHero() {
             return (
               <animated.group key={item.type}>
                 <TechModel
-                  model={item}
                   isVisible={isInView && isPageVisible}
+                  model={item}
                   opacity={styles.opacity}
                 />
               </animated.group>

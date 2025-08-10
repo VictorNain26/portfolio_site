@@ -2,8 +2,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ExternalLink, Github, Star, Calendar } from 'lucide-react';
+import { ExternalLink, Star, Calendar } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 import { type Project, getTechnologyColor } from '@/lib/github';
+
+const ANIMATION_DELAY_MULTIPLIER = 0.1;
+const MAX_VISIBLE_TECHNOLOGIES = 4;
+const MAX_TECH_REMAINING = 4;
 
 type ProjectCardProps = {
   project: Project;
@@ -20,11 +25,11 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.6 }}
       className="group relative"
+      initial={{ opacity: 0, y: 20 }}
+      transition={{ delay: index * ANIMATION_DELAY_MULTIPLIER, duration: 0.6 }}
+      viewport={{ once: true }}
+      whileInView={{ opacity: 1, y: 0 }}
     >
       <div className="relative flex h-96 flex-col overflow-hidden rounded-xl border border-gray-700/50 bg-gray-800/60 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-gray-600/70 hover:bg-gray-800/80 hover:shadow-xl hover:shadow-indigo-500/10">
         {/* Header avec gradient */}
@@ -67,7 +72,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
                 Langages
               </h4>
               <div className="flex flex-wrap gap-2">
-                {project.technologies.slice(0, 4).map(tech => (
+                {project.technologies.slice(0, MAX_VISIBLE_TECHNOLOGIES).map(tech => (
                   <span
                     key={tech}
                     className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium text-white"
@@ -84,9 +89,9 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
                     {tech}
                   </span>
                 ))}
-                {project.technologies.length > 4 && (
+                {project.technologies.length > MAX_VISIBLE_TECHNOLOGIES && (
                   <span className="inline-flex items-center rounded-full bg-gray-700/50 px-2.5 py-1 text-xs font-medium text-gray-400">
-                    +{project.technologies.length - 4}
+                    +{project.technologies.length - MAX_TECH_REMAINING}
                   </span>
                 )}
               </div>
@@ -95,12 +100,12 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            {project.demoUrl && (
+            {project.demoUrl !== null && project.demoUrl !== '' && (
               <a
-                href={project.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+                href={project.demoUrl}
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 <ExternalLink className="h-4 w-4" />
                 Voir la démo
@@ -108,12 +113,12 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
             )}
 
             <a
-              href={project.repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border border-gray-600 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+              href={project.repoUrl}
+              rel="noopener noreferrer"
+              target="_blank"
             >
-              <Github className="h-4 w-4" />
+              <FaGithub className="h-4 w-4" />
               Code source
             </a>
           </div>

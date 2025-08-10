@@ -5,6 +5,9 @@ import { Reorder } from 'framer-motion';
 import Section from '@/components/Section';
 import { Badge } from '@/components/ui/badge';
 
+const HOVER_SCALE_DRAGGING = 1.08;
+const HOVER_SCALE_NORMAL = 1.02;
+
 type Cat = { category: string; items: string[] };
 
 const initial: Cat[] = [
@@ -44,7 +47,7 @@ export default function Skills() {
   );
 
   return (
-    <Section id="competences" className="pb-20">
+    <Section className="pb-20" id="competences">
       <h2 className="font-display mb-6 text-3xl font-bold text-indigo-400">Compétences</h2>
 
       {/* filtres */}
@@ -55,12 +58,14 @@ export default function Skills() {
         ].map(({ label, value }) => (
           <button
             key={label}
-            onClick={() => setFilter(value)}
             className={`rounded-full px-3 py-1.5 text-sm transition-colors ${
               filter === value
                 ? 'bg-indigo-600 text-white shadow'
                 : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/60'
             }`}
+            onClick={() => {
+              setFilter(value);
+            }}
           >
             {label}
           </button>
@@ -70,22 +75,39 @@ export default function Skills() {
       {/* grille ré-ordonnable */}
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {skills
-          .filter(c => !filter || c.category === filter)
+          .filter(c => filter === null || c.category === filter)
           .map(({ category, items }) => (
             <div key={category}>
               <h3 className="mb-3 font-semibold text-indigo-300">{category}</h3>
 
               <Reorder.Group
-                values={items}
-                onReorder={onReorder(category)}
                 className="flex flex-wrap gap-2"
                 layoutScroll={false}
+                values={items}
+                onReorder={onReorder(category)}
               >
                 {items.map(skill => (
                   <Reorder.Item
                     key={skill}
-                    value={skill}
                     drag
+                    className="cursor-grab select-none active:cursor-grabbing"
+                    dragElastic={0.1}
+                    dragMomentum={false}
+                    initial={{ rotate: 0, scale: 1 }}
+                    value={skill}
+                    whileHover={{ scale: isDragging === skill ? HOVER_SCALE_DRAGGING : HOVER_SCALE_NORMAL }}
+                    animate={{
+                      rotate: isDragging === skill ? 0 : 0,
+                      scale: isDragging === skill ? 1 : 1,
+                      transition: { duration: 0.2, ease: 'easeOut' },
+                    }}
+                    dragTransition={{
+                      bounceStiffness: 400,
+                      bounceDamping: 40,
+                    }}
+                    style={{
+                      touchAction: 'none',
+                    }}
                     whileDrag={{
                       scale: 1.08,
                       zIndex: 1000,
@@ -93,24 +115,11 @@ export default function Skills() {
                       boxShadow:
                         '0 15px 35px rgba(99, 102, 241, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3)',
                     }}
-                    whileHover={{ scale: isDragging === skill ? 1.08 : 1.02 }}
-                    onDragStart={() => setIsDragging(skill)}
-                    onDragEnd={() => setIsDragging(null)}
-                    dragElastic={0.1}
-                    dragTransition={{
-                      bounceStiffness: 400,
-                      bounceDamping: 40,
+                    onDragEnd={() => {
+                      setIsDragging(null);
                     }}
-                    dragMomentum={false}
-                    initial={{ rotate: 0, scale: 1 }}
-                    animate={{
-                      rotate: isDragging === skill ? 0 : 0,
-                      scale: isDragging === skill ? 1 : 1,
-                      transition: { duration: 0.2, ease: 'easeOut' },
-                    }}
-                    className="cursor-grab select-none active:cursor-grabbing"
-                    style={{
-                      touchAction: 'none',
+                    onDragStart={() => {
+                      setIsDragging(skill);
                     }}
                   >
                     <Badge className="bg-indigo-700/30 px-4 py-2 text-sm text-indigo-200 shadow-md backdrop-blur transition-colors duration-200 hover:bg-indigo-700/50 hover:shadow-lg hover:shadow-indigo-500/20">

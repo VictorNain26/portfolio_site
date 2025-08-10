@@ -11,7 +11,7 @@ import { animated as a, type SpringValue } from '@react-spring/three';
 export type SvgExtrudeProps = {
   src: string;
   color: string;
-  opacity?: number | SpringValue<number> | undefined;
+  opacity?: SpringValue<number> | number | undefined;
 };
 
 export function SvgExtrude({ src, color, opacity = 1 }: SvgExtrudeProps) {
@@ -35,13 +35,18 @@ export function SvgExtrude({ src, color, opacity = 1 }: SvgExtrudeProps) {
           const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
 
           return (
-            <mesh key={`${pathIndex}-${shapeIndex}`} geometry={geometry} castShadow receiveShadow>
+            <mesh
+              key={`${pathIndex.toString()}-${shapeIndex.toString()}`}
+              castShadow
+              receiveShadow
+              geometry={geometry}
+            >
               <a.meshStandardMaterial
-                color={color}
                 transparent
+                color={color}
+                metalness={0.0}
                 opacity={opacity}
                 roughness={0.1}
-                metalness={0.0}
               />
             </mesh>
           );

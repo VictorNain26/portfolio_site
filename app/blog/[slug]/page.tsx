@@ -4,7 +4,7 @@ import MDX from '@/components/MDX';
 import ArticleLayout from '@/components/ArticleLayout';
 
 /* ---------------- Params statiques ---------------- */
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return allPosts.map(p => ({ slug: p.slug }));
 }
 
@@ -34,16 +34,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const prev = allPosts[idx - 1] ?? null;
   const next = allPosts[idx + 1] ?? null;
 
-  const readingTime = Math.ceil(post.content.split(/\s+/).length / 200);
+  const WORDS_PER_MINUTE = 200;
+  const readingTime = Math.ceil(post.content.split(/\s+/).length / WORDS_PER_MINUTE);
   const article = { ...post, readingTime };
 
   const code = post.mdx as unknown as string;
-  if (!code) {
+  if (code.length === 0) {
     notFound();
   }
 
   return (
-    <ArticleLayout post={article} prev={prev} next={next}>
+    <ArticleLayout next={next} post={article} prev={prev}>
       <MDX code={code} />
     </ArticleLayout>
   );

@@ -13,7 +13,8 @@ export default function RoomEnv() {
     const pmrem = new PMREMGenerator(gl);
     pmrem.compileEquirectangularShader();
     const envScene = new RoomEnvironment();
-    const envRT = pmrem.fromScene(envScene, 0.04);
+    const ENVIRONMENT_ROUGHNESS = 0.04;
+    const envRT = pmrem.fromScene(envScene, ENVIRONMENT_ROUGHNESS);
     const prevEnv = scene.environment;
     scene.environment = envRT.texture;
 

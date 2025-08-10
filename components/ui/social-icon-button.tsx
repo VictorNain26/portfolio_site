@@ -29,8 +29,8 @@ export function SocialIconButton({ asChild, size, className, ...props }: Props) 
   const Comp = asChild ? Slot : 'a';
   return (
     <Comp
-      data-slot="social-icon-button"
       className={cn(iconButtonVariants({ size }), className)}
+      data-slot="social-icon-button"
       {...props}
     />
   );

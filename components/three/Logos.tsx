@@ -9,7 +9,7 @@ import { SvgExtrude } from './SvgExtrude';
 
 export type LogoProps = {
   isVisible: boolean;
-  opacity?: number | SpringValue<number>;
+  opacity?: SpringValue<number> | number;
 };
 
 const LOGO_CONFIGS = {
@@ -20,12 +20,14 @@ const LOGO_CONFIGS = {
   openai: { src: '/logos/openai.svg', color: '#10A37F' },
 } as const;
 
-function Logo3D({ type, isVisible, opacity }: { type: keyof typeof LOGO_CONFIGS } & LogoProps) {
+function Logo3D({ type, isVisible, opacity }: LogoProps & { type: keyof typeof LOGO_CONFIGS }) {
   const groupRef = useRef<Group>(null);
+
+  const ROTATION_SPEED = 0.4;
 
   useFrame(state => {
     if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.4;
+      groupRef.current.rotation.y = state.clock.elapsedTime * ROTATION_SPEED;
     }
   });
 
@@ -33,7 +35,7 @@ function Logo3D({ type, isVisible, opacity }: { type: keyof typeof LOGO_CONFIGS 
 
   return (
     <group ref={groupRef}>
-      <SvgExtrude src={config.src} color={config.color} opacity={opacity} />
+      <SvgExtrude color={config.color} opacity={opacity} src={config.src} />
     </group>
   );
 }

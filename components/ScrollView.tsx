@@ -22,30 +22,30 @@ export default function ScrollView({
 
   return (
     <ScrollAreaPrimitive.Root
-      type="always"
       className={cn('relative h-[100dvh] w-full overflow-hidden', className)}
+      type="always"
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
         ref={viewportRef}
-        id="scroll-viewport"
         className="h-full w-full rounded-[inherit]"
+        id="scroll-viewport"
       >
         {children}
       </ScrollAreaPrimitive.Viewport>
 
       {/* Rail vertical */}
       <ScrollAreaPrimitive.Scrollbar
-        orientation="vertical"
         className="absolute top-0 right-0 h-full w-2.5 p-px"
+        orientation="vertical"
       >
         <ScrollAreaPrimitive.Thumb className="flex-1 rounded-full bg-gradient-to-b from-indigo-500 to-violet-400" />
       </ScrollAreaPrimitive.Scrollbar>
 
       {/* Rail horizontal (facultatif) */}
       <ScrollAreaPrimitive.Scrollbar
-        orientation="horizontal"
         className="absolute bottom-0 left-0 h-2.5 w-full p-px"
+        orientation="horizontal"
       >
         <ScrollAreaPrimitive.Thumb className="flex-1 rounded-full bg-gradient-to-r from-indigo-500 to-violet-400" />
       </ScrollAreaPrimitive.Scrollbar>

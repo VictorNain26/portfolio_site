@@ -46,7 +46,8 @@ export function AutoFit({ children, fit = 0.65, minScale = 0.1, maxScale = 2 }: 
     if (maxDim > 0) {
       const s = THREE.MathUtils.clamp(targetMax / maxDim, minScale, maxScale);
       // Only update if significant change to prevent constant rescaling
-      if (Math.abs(s - lastMeasurement.current) > 0.05) {
+      const RESCALE_THRESHOLD = 0.05;
+      if (Math.abs(s - lastMeasurement.current) > RESCALE_THRESHOLD) {
         lastMeasurement.current = s;
         setScale(s);
       }

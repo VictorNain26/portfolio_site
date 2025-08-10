@@ -29,15 +29,19 @@ function TiltLogo({ tech }: { tech: Tech }) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const px = (x / rect.width) * 2 - 1; // -1..1
-    const py = (y / rect.height) * 2 - 1; // -1..1
+    // -1..1
+    const px = (x / rect.width) * 2 - 1;
+    // -1..1
+    const py = (y / rect.height) * 2 - 1;
     const maxTilt = 10;
     const rx = (-py * maxTilt).toFixed(2);
     const ry = (px * maxTilt).toFixed(2);
     setTransform(`rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`);
   };
 
-  const reset = () => setTransform('rotateX(0deg) rotateY(0deg) translateZ(0px)');
+  const reset = () => {
+    setTransform('rotateX(0deg) rotateY(0deg) translateZ(0px)');
+  };
 
   const wrapperCls = useMemo(
     () =>
@@ -47,22 +51,22 @@ function TiltLogo({ tech }: { tech: Tech }) {
 
   return (
     <div
-      className={wrapperCls}
-      onMouseMove={onMove}
-      onMouseLeave={reset}
-      style={{ perspective: '800px' }}
       aria-label={tech.name}
+      className={wrapperCls}
+      style={{ perspective: '800px' }}
+      onMouseLeave={reset}
+      onMouseMove={onMove}
     >
       <div
-        className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/6 to-transparent opacity-0 transition-opacity group-hover:opacity-100"
         aria-hidden
+        className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/6 to-transparent opacity-0 transition-opacity group-hover:opacity-100"
       />
       <motion.div
         className="flex h-full w-full items-center justify-center rounded-xl bg-black/20"
         style={{ transform }}
         transition={{ type: 'spring', stiffness: 180, damping: 18, mass: 0.8 }}
       >
-        <Image src={tech.src} alt={tech.name} width={64} height={64} priority />
+        <Image priority alt={tech.name} height={64} src={tech.src} width={64} />
       </motion.div>
     </div>
   );
@@ -70,7 +74,7 @@ function TiltLogo({ tech }: { tech: Tech }) {
 
 export default function TechLogos() {
   return (
-    <Section id="stack" className="pb-4">
+    <Section className="pb-4" id="stack">
       <div className="mb-5 flex items-center gap-3 sm:justify-center">
         <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#6bb4d8] via-[#4288b7] to-[#2d5e81]" />
         <h2 className="text-sm font-medium tracking-wide text-indigo-200 uppercase sm:text-base">

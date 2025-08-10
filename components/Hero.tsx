@@ -2,11 +2,11 @@
 
 import dynamic from 'next/dynamic';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronDown, GithubIcon, Linkedin, Mail } from 'lucide-react';
-import { FaWhatsapp } from 'react-icons/fa';
+import { ChevronDown, Mail } from 'lucide-react';
+import { FaWhatsapp, FaGithub, FaLinkedin } from 'react-icons/fa';
 import { SocialIconButton } from '@/components/ui/social-icon-button';
 
-const ModelHero = dynamic(() => import('@/components/ModelHero'), {
+const ModelHero = dynamic(async () => import('@/components/ModelHero'), {
   ssr: false,
 });
 
@@ -15,18 +15,18 @@ export default function Hero() {
 
   return (
     <section
-      id="accueil"
       className="relative flex min-h-[100svh] flex-col items-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] sm:pt-0"
+      id="accueil"
     >
       {/* ── Contenu principal ─────────────────────────────────────── */}
       <div className="mx-auto flex max-w-7xl flex-col gap-14 px-0 sm:items-center sm:gap-10 sm:px-8 lg:grid lg:min-h-[70vh] lg:grid-cols-2 lg:place-items-center lg:gap-16 lg:px-20">
         {/* Titre + tagline */}
         <motion.header
-          initial={prefersReduceMotion ? false : { opacity: 0, y: 32 }}
-          whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
           className="order-1 flex flex-col sm:items-center lg:order-none lg:items-start"
+          initial={prefersReduceMotion ? false : { opacity: 0, y: 32 }}
+          transition={{ duration: 0.7 }}
+          viewport={{ once: true }}
+          whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
         >
           <h1 className="font-display gradient-brand-text mb-2 text-[clamp(2.6rem,7.5vw,5.3rem)] leading-[1.05] font-extrabold tracking-[-0.035em]">
             Victor&nbsp;Lenain
@@ -47,11 +47,11 @@ export default function Hero() {
 
         {/* Visuel 3D */}
         <motion.div
-          initial={prefersReduceMotion ? false : { opacity: 0, scale: 0.93 }}
-          whileInView={prefersReduceMotion ? {} : { opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.15, duration: 0.7 }}
           className="order-2 h-[400px] w-full touch-pan-y lg:order-none lg:h-[500px]"
+          initial={prefersReduceMotion ? false : { opacity: 0, scale: 0.93 }}
+          transition={{ delay: 0.15, duration: 0.7 }}
+          viewport={{ once: true }}
+          whileInView={prefersReduceMotion ? {} : { opacity: 1, scale: 1 }}
         >
           <ModelHero />
         </motion.div>
@@ -59,43 +59,43 @@ export default function Hero() {
 
       {/* ── Réseaux sociaux ───────────────────────────────────────── */}
       <motion.nav
-        initial={prefersReduceMotion ? false : { opacity: 0, y: 24 }}
-        whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
         className="absolute bottom-[calc(4.5rem+env(safe-area-inset-bottom))] w-full"
+        initial={prefersReduceMotion ? false : { opacity: 0, y: 24 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
       >
         <div className="mx-auto flex max-w-7xl justify-center gap-4 px-4 sm:gap-6 sm:px-8 lg:px-20">
           <SocialIconButton
-            href="https://github.com/victornain26"
             aria-label="GitHub"
-            target="_blank"
+            href="https://github.com/victornain26"
             rel="noopener noreferrer"
+            target="_blank"
           >
-            <GithubIcon />
+            <FaGithub />
           </SocialIconButton>
 
           <SocialIconButton
-            href="https://www.linkedin.com/in/victor-lenain-1907b7282/"
             aria-label="LinkedIn"
-            target="_blank"
+            href="https://www.linkedin.com/in/victor-lenain-1907b7282/"
             rel="noopener noreferrer"
+            target="_blank"
           >
-            <Linkedin />
+            <FaLinkedin />
           </SocialIconButton>
 
           <SocialIconButton
-            href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous"
             aria-label="WhatsApp"
-            target="_blank"
+            href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous"
             rel="noopener noreferrer"
+            target="_blank"
           >
             <FaWhatsapp />
           </SocialIconButton>
 
           <SocialIconButton
-            href="mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission"
             aria-label="Mail"
+            href="mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission"
           >
             <Mail />
           </SocialIconButton>
@@ -104,15 +104,15 @@ export default function Hero() {
 
       {/* ── Flèche vers la section suivante ───────────────────────── */}
       <a
-        href="#a-propos"
         aria-label="Faire défiler vers la section À propos"
         className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 text-white/80 transition-opacity hover:opacity-100"
+        href="#a-propos"
         onClick={e => {
           e.preventDefault();
           document.getElementById('a-propos')?.scrollIntoView({ behavior: 'smooth' });
         }}
       >
-        <ChevronDown className="h-7 w-7 animate-bounce" aria-hidden />
+        <ChevronDown aria-hidden className="h-7 w-7 animate-bounce" />
       </a>
     </section>
   );

@@ -20,16 +20,28 @@ export default function BackToTop() {
 
     const canScroll = () => viewport.scrollHeight > viewport.clientHeight;
 
-    let cleanup = () => {};
+    let cleanup = () => {
+      // Cleanup function for event listeners
+    };
 
     if (hero && pathname === '/') {
-      const io = new IntersectionObserver(([e]) => setVisible(canScroll() && !e?.isIntersecting), {
-        root: viewport,
-      });
+      const io = new IntersectionObserver(
+        ([e]) => {
+          setVisible(canScroll() && !e?.isIntersecting);
+        },
+        {
+          root: viewport,
+        },
+      );
       io.observe(hero);
-      cleanup = () => io.disconnect();
+      cleanup = () => {
+        io.disconnect();
+      };
     } else {
-      const onScroll = () => setVisible(canScroll() && viewport.scrollTop > 120);
+      const SCROLL_THRESHOLD = 120;
+      const onScroll = () => {
+        setVisible(canScroll() && viewport.scrollTop > SCROLL_THRESHOLD);
+      };
       viewport.addEventListener('scroll', onScroll, { passive: true });
       viewport.addEventListener('resize', onScroll);
       onScroll();
@@ -65,16 +77,16 @@ export default function BackToTop() {
     <AnimatePresence>
       {visible && (
         <motion.a
-          href="#top"
-          aria-label="Revenir en haut de page"
-          onClick={scrollToTop}
-          initial={{ y: 32, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 32, opacity: 0 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
+          aria-label="Revenir en haut de page"
           className="xs:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] fixed right-4 bottom-[calc(2.5rem+env(safe-area-inset-bottom))] z-40 flex h-11 w-11 items-center justify-center rounded-full bg-indigo-600/90 text-white shadow-lg ring-1 ring-black/10 hover:bg-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none sm:right-8 lg:right-16"
+          exit={{ y: 32, opacity: 0 }}
+          href="#top"
+          initial={{ y: 32, opacity: 0 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+          onClick={scrollToTop}
         >
-          <ChevronUp className="h-5 w-5" aria-hidden />
+          <ChevronUp aria-hidden className="h-5 w-5" />
         </motion.a>
       )}
     </AnimatePresence>
