@@ -26,8 +26,6 @@ function Logo3D({ type, isVisible, opacity }: { type: keyof typeof LOGO_CONFIGS 
   useFrame((state) => {
     if (groupRef.current && isVisible) {
       groupRef.current.rotation.y = state.clock.elapsedTime * 0.4;
-    } else if (groupRef.current && !isVisible) {
-      console.log('[Logo3D] Model not visible, rotation paused for:', type);
     }
   });
 

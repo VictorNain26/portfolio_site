@@ -34,7 +34,6 @@ function TechModel({ model, isVisible, opacity }: ModelProps) {
 
 export default function ModelHero() {
   const [currentModelIndex, setCurrentModelIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isInView, setIsInView] = useState(true);
@@ -53,21 +52,17 @@ export default function ModelHero() {
   // Auto-rotate models
   useEffect(() => {
     if (prefersReducedMotion || !isInView || !isPageVisible) {
-      console.log('[ModelHero] Auto-rotation paused:', { prefersReducedMotion, isInView, isPageVisible });
       return;
     }
     
-    console.log('[ModelHero] Starting auto-rotation');
     const interval = setInterval(() => {
       setCurrentModelIndex((prev) => {
         const nextIndex = (prev + 1) % TECH_MODELS.length;
-        console.log('[ModelHero] Rotating from model', prev, 'to', nextIndex);
         return nextIndex;
       });
     }, 8000);
     
     return () => {
-      console.log('[ModelHero] Stopping auto-rotation');
       clearInterval(interval);
     };
   }, [prefersReducedMotion, isInView, isPageVisible]);
@@ -78,7 +73,6 @@ export default function ModelHero() {
   useEffect(() => {
     const handleVisibilityChange = () => {
       const visible = !document.hidden;
-      console.log('[ModelHero] Page visibility changed:', visible);
       setIsPageVisible(visible);
     };
 
@@ -89,12 +83,13 @@ export default function ModelHero() {
   // Intersection Observer to pause when not in view
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry) {
-          console.log('[ModelHero] Intersection changed:', entry.isIntersecting);
           setIsInView(entry.isIntersecting);
         }
       },
@@ -112,7 +107,6 @@ export default function ModelHero() {
   // Recovery mechanism - reset if model becomes invalid
   useEffect(() => {
     if (!currentModel || !TECH_MODELS[safeIndex]) {
-      console.warn('[ModelHero] Invalid state detected, resetting to first model');
       setCurrentModelIndex(0);
     }
   }, [currentModel, safeIndex]);
@@ -167,10 +161,8 @@ export default function ModelHero() {
           {/* Current visible model */}
           {transitions((styles, item) => {
             if (!item) {
-              console.warn('[ModelHero] No item in transition');
               return null;
             }
-            console.log('[ModelHero] Rendering transition for:', item.type, 'opacity:', styles.opacity);
             return (
               <animated.group key={item.type}>
                 <TechModel model={item} isVisible={isInView && isPageVisible} opacity={styles.opacity} />
