@@ -17,22 +17,20 @@ const TECH_MODELS = [
 
 const CAMERA_Z_POSITION = 5;
 const CAMERA_FOV = 50;
-// Optimized DPR for better performance
-const DPR_MIN = 0.5;
-const DPR_MAX = 1.0;
+// Balanced DPR for performance and quality
+const DPR_MIN = 0.7;
+const DPR_MAX = 1.5;
 const AMBIENT_LIGHT_INTENSITY = 0.6;
 const DIRECTIONAL_LIGHT_INTENSITY = 1;
 const DIRECTIONAL_LIGHT_X = 10;
 const DIRECTIONAL_LIGHT_Y = 10;
 const DIRECTIONAL_LIGHT_Z = 5;
-const FOG_NEAR = 8;
-const FOG_FAR = 15;
 
 // Performance constants for mobile optimization
 const ROTATION_INTERVAL = 8000;
-// Progressive loading delays for better performance
-const INITIAL_PRELOAD_DELAY = 500;
-const PROGRESSIVE_PRELOAD_DELAY = 1000;
+// Faster initial loading
+const INITIAL_PRELOAD_DELAY = 0; // Immediate for current model
+const PROGRESSIVE_PRELOAD_DELAY = 2000; // Delayed for others
 
 type ModelProps = {
   model: (typeof TECH_MODELS)[number];
@@ -208,13 +206,12 @@ export default function ModelHero() {
         dpr={[DPR_MIN, DPR_MAX]}
         gl={{ 
           alpha: true, 
-          // Disabled antialiasing for better performance
-          antialias: false,
+          // Light antialiasing for quality balance
+          antialias: true,
           powerPreference: 'high-performance',
-          // Additional performance optimizations
+          // Performance optimizations
           preserveDrawingBuffer: false,
-          stencil: false,
-          depth: true
+          stencil: false
         }}
         onCreated={() => { setIsLoaded(true); }}
       >
@@ -222,9 +219,7 @@ export default function ModelHero() {
           {/* Simple lighting setup */}
           <ambientLight intensity={AMBIENT_LIGHT_INTENSITY} />
           <directionalLight intensity={DIRECTIONAL_LIGHT_INTENSITY} position={[DIRECTIONAL_LIGHT_X, DIRECTIONAL_LIGHT_Y, DIRECTIONAL_LIGHT_Z]} />
-          {/* Lightweight environment setup for better performance */}
-          <color args={['#0a0a0f']} attach="background" />
-          <fog args={['#0a0a0f', FOG_NEAR, FOG_FAR]} attach="fog" />
+          {/* Transparent background - no solid color */}
 
           {/* Progressive preload models invisibly for better performance */}
           {shouldPreload && isPageVisible && isLoaded
