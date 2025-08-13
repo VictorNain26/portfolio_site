@@ -29,8 +29,10 @@ const DIRECTIONAL_LIGHT_Z = 5;
 // Performance constants for mobile optimization
 const ROTATION_INTERVAL = 8000;
 // Faster initial loading
-const INITIAL_PRELOAD_DELAY = 0; // Immediate for current model
-const PROGRESSIVE_PRELOAD_DELAY = 2000; // Delayed for others
+// Immediate for current model
+const INITIAL_PRELOAD_DELAY = 0;
+// Delayed for others
+const PROGRESSIVE_PRELOAD_DELAY = 2000;
 
 type ModelProps = {
   model: (typeof TECH_MODELS)[number];
@@ -55,7 +57,8 @@ function TechModel({ model, isVisible, opacity }: ModelProps) {
   }
 }
 
-export default function ModelHero() {
+// Custom hook for performance and visibility state management  
+function useModelState() {
   const [currentModelIndex, setCurrentModelIndex] = useState(0);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -64,24 +67,18 @@ export default function ModelHero() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [shouldPreload, setShouldPreload] = useState(false);
   const [preloadedModels, setPreloadedModels] = useState<Set<string>>(new Set());
-  const containerRef = useRef<HTMLDivElement>(null);
 
   // Check for reduced motion preference
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReducedMotion(media.matches);
-    const handler = () => {
-      setPrefersReducedMotion(media.matches);
-    };
+    const handler = () => { setPrefersReducedMotion(media.matches); };
     media.addEventListener('change', handler);
-    return () => {
-      media.removeEventListener('change', handler);
-    };
+    return () => { media.removeEventListener('change', handler); };
   }, []);
 
   // Progressive preload for better initial performance
   useEffect(() => {
-    // First, preload the current model after initial delay
     const initialPreloadTimer = setTimeout(() => {
       setShouldPreload(true);
       const current = TECH_MODELS[currentModelIndex];
@@ -90,7 +87,6 @@ export default function ModelHero() {
       }
     }, INITIAL_PRELOAD_DELAY);
 
-    // Then, progressively preload other models
     const progressivePreloadTimer = setTimeout(() => {
       const allModels = new Set(TECH_MODELS.map(m => m.type));
       setPreloadedModels(allModels);
@@ -109,29 +105,51 @@ export default function ModelHero() {
     }
 
     const interval = setInterval(() => {
-      setCurrentModelIndex(prev => {
-        const nextIndex = (prev + 1) % TECH_MODELS.length;
-        return nextIndex;
-      });
+      setCurrentModelIndex(prev => (prev + 1) % TECH_MODELS.length);
     }, ROTATION_INTERVAL);
 
-    return () => {
-      clearInterval(interval);
-    };
+    return () => { clearInterval(interval); };
   }, [prefersReducedMotion, isInView, isPageVisible, isLoaded]);
 
   // Page Visibility API to handle tab changes
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      const visible = !document.hidden;
-      setIsPageVisible(visible);
-    };
-
+    const handleVisibilityChange = () => { setIsPageVisible(!document.hidden); };
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
+    return () => { document.removeEventListener('visibilitychange', handleVisibilityChange); };
   }, []);
+
+  return {
+    currentModelIndex,
+    setCurrentModelIndex,
+    prefersReducedMotion,
+    isHovered,
+    setIsHovered,
+    isInView,
+    setIsInView,
+    isPageVisible,
+    isLoaded,
+    setIsLoaded,
+    shouldPreload,
+    preloadedModels,
+  };
+}
+
+export default function ModelHero() {
+  const {
+    currentModelIndex,
+    setCurrentModelIndex,
+    prefersReducedMotion,
+    isHovered,
+    setIsHovered,
+    isInView,
+    setIsInView,
+    isPageVisible,
+    isLoaded,
+    setIsLoaded,
+    shouldPreload,
+    preloadedModels,
+  } = useModelState();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Intersection Observer to pause when not in view
   useEffect(() => {
@@ -153,7 +171,7 @@ export default function ModelHero() {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [setIsInView]);
 
   // Ensure we always have a valid model
   const safeIndex = Math.max(0, Math.min(currentModelIndex, TECH_MODELS.length - 1));
@@ -164,7 +182,7 @@ export default function ModelHero() {
     if (!currentModel || !TECH_MODELS[safeIndex]) {
       setCurrentModelIndex(0);
     }
-  }, [currentModel, safeIndex]);
+  }, [currentModel, safeIndex, setCurrentModelIndex]);
 
   // Optimized transition with reduced motion consideration
   const transitions = useTransition(currentModel, {

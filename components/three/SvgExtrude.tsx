@@ -25,8 +25,10 @@ export function SvgExtrude({ src, color, opacity = 1 }: SvgExtrudeProps) {
       bevelEnabled: true,
       bevelThickness: 0.02,
       bevelSize: 0.01,
-      bevelSegments: 1, // Minimal bevel for performance
-      curveSegments: 4, // Reduced for performance
+      // Minimal bevel for performance
+      bevelSegments: 1,
+      // Reduced for performance
+      curveSegments: 4,
     };
 
     return data.paths
