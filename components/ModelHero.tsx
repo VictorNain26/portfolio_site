@@ -3,7 +3,7 @@
 
 import { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
+// Removed Environment import for performance optimization
 import { animated, useTransition, type SpringValue } from '@react-spring/three';
 import { ReactLogo3D, NextJSLogo3D, TypeScriptLogo3D, NodeJSLogo3D, AILogo3D } from './three/Logos';
 
@@ -17,21 +17,22 @@ const TECH_MODELS = [
 
 const CAMERA_Z_POSITION = 5;
 const CAMERA_FOV = 50;
-// Reduced DPR for better mobile performance
-const DPR_MIN = 0.8;
-const DPR_MAX = 1.2;
+// Optimized DPR for better performance
+const DPR_MIN = 0.5;
+const DPR_MAX = 1.0;
 const AMBIENT_LIGHT_INTENSITY = 0.6;
 const DIRECTIONAL_LIGHT_INTENSITY = 1;
 const DIRECTIONAL_LIGHT_X = 10;
 const DIRECTIONAL_LIGHT_Y = 10;
 const DIRECTIONAL_LIGHT_Z = 5;
+const FOG_NEAR = 8;
+const FOG_FAR = 15;
 
 // Performance constants for mobile optimization
 const ROTATION_INTERVAL = 8000;
-// Delay preloading to prioritize visible content
-const PRELOAD_DELAY = 100;
-// Device pixel ratio threshold for performance optimization
-const DPR_THRESHOLD = 1.5;
+// Progressive loading delays for better performance
+const INITIAL_PRELOAD_DELAY = 500;
+const PROGRESSIVE_PRELOAD_DELAY = 1000;
 
 type ModelProps = {
   model: (typeof TECH_MODELS)[number];
@@ -64,6 +65,7 @@ export default function ModelHero() {
   const [isPageVisible, setIsPageVisible] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [shouldPreload, setShouldPreload] = useState(false);
+  const [preloadedModels, setPreloadedModels] = useState<Set<string>>(new Set());
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Check for reduced motion preference
@@ -79,14 +81,28 @@ export default function ModelHero() {
     };
   }, []);
 
-  // Delayed preload for better initial performance
+  // Progressive preload for better initial performance
   useEffect(() => {
-    const preloadTimer = setTimeout(() => {
+    // First, preload the current model after initial delay
+    const initialPreloadTimer = setTimeout(() => {
       setShouldPreload(true);
-    }, PRELOAD_DELAY);
+      const current = TECH_MODELS[currentModelIndex];
+      if (current) {
+        setPreloadedModels(new Set([current.type]));
+      }
+    }, INITIAL_PRELOAD_DELAY);
 
-    return () => { clearTimeout(preloadTimer); };
-  }, []);
+    // Then, progressively preload other models
+    const progressivePreloadTimer = setTimeout(() => {
+      const allModels = new Set(TECH_MODELS.map(m => m.type));
+      setPreloadedModels(allModels);
+    }, PROGRESSIVE_PRELOAD_DELAY);
+
+    return () => { 
+      clearTimeout(initialPreloadTimer);
+      clearTimeout(progressivePreloadTimer);
+    };
+  }, [currentModelIndex]);
 
   // Auto-rotate models with performance optimization
   useEffect(() => {
@@ -192,9 +208,13 @@ export default function ModelHero() {
         dpr={[DPR_MIN, DPR_MAX]}
         gl={{ 
           alpha: true, 
-          // Disable AA on high DPR devices for performance
-          antialias: window.devicePixelRatio <= DPR_THRESHOLD,
-          powerPreference: 'high-performance'
+          // Disabled antialiasing for better performance
+          antialias: false,
+          powerPreference: 'high-performance',
+          // Additional performance optimizations
+          preserveDrawingBuffer: false,
+          stencil: false,
+          depth: true
         }}
         onCreated={() => { setIsLoaded(true); }}
       >
@@ -202,15 +222,19 @@ export default function ModelHero() {
           {/* Simple lighting setup */}
           <ambientLight intensity={AMBIENT_LIGHT_INTENSITY} />
           <directionalLight intensity={DIRECTIONAL_LIGHT_INTENSITY} position={[DIRECTIONAL_LIGHT_X, DIRECTIONAL_LIGHT_Y, DIRECTIONAL_LIGHT_Z]} />
-          <Environment preset="city" />
+          {/* Lightweight environment setup for better performance */}
+          <color args={['#0a0a0f']} attach="background" />
+          <fog args={['#0a0a0f', FOG_NEAR, FOG_FAR]} attach="fog" />
 
-          {/* Preload all models invisibly - delayed for better initial performance */}
+          {/* Progressive preload models invisibly for better performance */}
           {shouldPreload && isPageVisible && isLoaded
-            && TECH_MODELS.map(model => (
-              <group key={`preload-${model.type}`} visible={false}>
-                <TechModel isVisible={false} model={model} opacity={0} />
-              </group>
-            ))}
+            && TECH_MODELS
+              .filter(model => preloadedModels.has(model.type))
+              .map(model => (
+                <group key={`preload-${model.type}`} visible={false}>
+                  <TechModel isVisible={false} model={model} opacity={0} />
+                </group>
+              ))}
 
           {/* Current visible model */}
           {transitions((styles, item) => {
