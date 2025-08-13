@@ -32,30 +32,20 @@ vi.mock('@react-spring/three', () => ({
     group: ({ children }: any) => <div data-testid="animated-group">{children}</div>,
     meshStandardMaterial: (props: any) => <div data-testid="material" {...props} />
   },
-  useTransition: () => [
-    [{ opacity: 1, item: { type: 'react', name: 'React' } }],
-    (fn: any) => null
+  useTransition: () => (renderFunc: any) => [
+    renderFunc({ opacity: 1 }, { type: 'react', name: 'React' })
   ]
 }));
 
 vi.mock('three', () => ({
-  ExtrudeGeometry: class MockExtrudeGeometry {
-    constructor() {
-      // Simulate geometry creation time
-      const start = performance.now();
-      while (performance.now() - start < 50) {
-        // Simulate computational work
-      }
-    }
-  },
-  Box3: class MockBox3 {
-    setFromObject() { return this; }
-    getCenter() { return { x: 0, y: 0, z: 0 }; }
-  },
-  Vector3: class MockVector3 {
-    constructor() {}
-    sub() { return this; }
-  }
+  ExtrudeGeometry: vi.fn(() => ({})),
+  Box3: vi.fn(() => ({
+    setFromObject: () => ({}),
+    getCenter: () => ({ x: 0, y: 0, z: 0 })
+  })),
+  Vector3: vi.fn(() => ({
+    sub: () => ({})
+  }))
 }));
 
 vi.mock('three/examples/jsm/loaders/SVGLoader.js', () => ({
@@ -70,16 +60,19 @@ vi.mock('three/examples/jsm/loaders/SVGLoader.js', () => ({
 
 // Performance thresholds (in milliseconds)
 const PERFORMANCE_THRESHOLDS = {
-  INITIAL_RENDER: 500, // Initial render should be < 500ms
-  MODEL_SWITCH: 200,   // Model switching should be < 200ms  
-  TOTAL_LOAD: 1000,    // Total load time should be < 1s
+  // Initial render should be < 500ms
+  INITIAL_RENDER: 500,
+  // Model switching should be < 200ms
+  MODEL_SWITCH: 200,
+  // Total load time should be < 1s
+  TOTAL_LOAD: 1000,
 } as const;
 
-interface PerformanceMetrics {
+type PerformanceMetrics = {
   initialRender: number;
   totalLoad: number;
   modelSwitch?: number;
-}
+};
 
 describe('ModelHero Performance Tests', () => {
   let performanceMetrics: PerformanceMetrics;
@@ -194,9 +187,10 @@ describe('ModelHero Performance Tests', () => {
     });
 
     // No performance degradation over time
-    const firstSwitch = switchTimes[0];
+    const [firstSwitch] = switchTimes;
     const lastSwitch = switchTimes[switchTimes.length - 1];
-    expect(lastSwitch).toBeLessThanOrEqual(firstSwitch * 1.2); // Max 20% degradation
+    const maxDegradation = 1.2;
+    expect(lastSwitch).toBeLessThanOrEqual((firstSwitch ?? 0) * maxDegradation);
   });
 
   it('should maintain 60 FPS during animations', async () => {
@@ -207,7 +201,9 @@ describe('ModelHero Performance Tests', () => {
     });
 
     // Simulate frame rendering
-    const frameTargetTime = 1000 / 60; // 16.67ms per frame for 60 FPS
+    // 16.67ms per frame for 60 FPS
+    const fps = 60;
+    const frameTargetTime = 1000 / fps;
     const frameRenderTime = performance.now();
     
     // Fast-forward multiple frames

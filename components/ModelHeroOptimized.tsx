@@ -24,9 +24,13 @@ const TECH_MODELS = [
 // Ultra-optimized constants
 const CAMERA_Z_POSITION = 4;
 const CAMERA_FOV = 45;
-const ROTATION_INTERVAL = 6000; // Faster rotation
+// Faster rotation
+const ROTATION_INTERVAL = 6000;
 const DPR_MIN = 0.8;
 const DPR_MAX = 1.2;
+const LIGHT_POSITION_X = 5;
+const LIGHT_POSITION_Y = 5;
+const LIGHT_POSITION_Z = 5;
 
 type ModelProps = {
   model: (typeof TECH_MODELS)[number];
@@ -60,13 +64,17 @@ function useOptimizedModelState() {
   
   // Simplified rotation logic
   useEffect(() => {
-    if (!isInView || !isPageVisible) return;
+    if (!isInView || !isPageVisible) {
+      return;
+    }
 
     const interval = setInterval(() => {
       setCurrentModelIndex(prev => (prev + 1) % TECH_MODELS.length);
     }, ROTATION_INTERVAL);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, [isInView, isPageVisible]);
 
   // Page visibility handling
@@ -76,7 +84,9 @@ function useOptimizedModelState() {
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   return {
@@ -107,9 +117,12 @@ export default function ModelHeroOptimized() {
     startRenderTracking,
     endRenderTracking,
   } = usePerformanceMetrics({
-    maxLoadTime: 500,   // Ultra-strict: 500ms max
-    maxRenderTime: 50,  // Ultra-strict: 50ms max
-    minFrameRate: 45,   // Higher minimum FPS
+    // Ultra-strict: 500ms max
+    maxLoadTime: 500,
+    // Ultra-strict: 50ms max
+    maxRenderTime: 50,
+    // Higher minimum FPS
+    minFrameRate: 45,
   });
 
   // Start performance tracking
@@ -120,7 +133,9 @@ export default function ModelHeroOptimized() {
   // Intersection Observer for visibility
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -130,7 +145,9 @@ export default function ModelHeroOptimized() {
     );
 
     observer.observe(container);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+    };
   }, [setIsInView]);
 
   const currentModel = TECH_MODELS[currentModelIndex];
@@ -141,17 +158,19 @@ export default function ModelHeroOptimized() {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
-    config: { duration: 200 }, // Super fast transitions
+    // Super fast transitions
+    config: { duration: 200 },
     exitBeforeEnter: true,
   });
 
   // Memoized Canvas configuration for zero re-renders
   const canvasConfig = useMemo(() => ({
-    camera: { position: [0, 0, CAMERA_Z_POSITION], fov: CAMERA_FOV },
-    dpr: [DPR_MIN, DPR_MAX],
+    camera: { position: [0, 0, CAMERA_Z_POSITION] as [number, number, number], fov: CAMERA_FOV },
+    dpr: [DPR_MIN, DPR_MAX] as [number, number],
     gl: { 
       alpha: true,
-      antialias: false, // Disabled for max performance
+      // Disabled for max performance
+      antialias: false,
       powerPreference: 'high-performance' as const,
       preserveDrawingBuffer: false,
       stencil: false,
@@ -196,11 +215,13 @@ export default function ModelHeroOptimized() {
           <Suspense fallback={null}>
             {/* Minimal lighting for max performance */}
             <ambientLight intensity={0.8} />
-            <directionalLight intensity={0.6} position={[5, 5, 5]} />
+            <directionalLight intensity={0.6} position={[LIGHT_POSITION_X, LIGHT_POSITION_Y, LIGHT_POSITION_Z]} />
 
             {/* Only render current model - no preloading */}
             {isLoaded && transitions((styles, item) => {
-              if (!item) return null;
+              if (!item) {
+                return null;
+              }
               
               return (
                 <animated.group key={item.type}>

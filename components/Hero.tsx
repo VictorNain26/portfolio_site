@@ -19,7 +19,7 @@ const ModelHero = dynamic(async () => import('@/components/ModelHeroOptimized'),
   ssr: false,
   loading: () => (
     <div className="flex h-full items-center justify-center">
-      <div className="h-16 w-16 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600"></div>
+      <div className="h-16 w-16 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600" />
     </div>
   ),
 });

@@ -10,19 +10,19 @@ import ModelHeroOptimized from '../ModelHeroOptimized';
 // Mock the optimized components
 vi.mock('../three/OptimizedLogo3D', () => ({
   OptimizedReactLogo: ({ isVisible, opacity }: any) => (
-    <div data-testid="optimized-react" data-visible={isVisible} data-opacity={opacity} />
+    <div data-opacity={opacity} data-testid="optimized-react" data-visible={isVisible} />
   ),
   OptimizedNextJSLogo: ({ isVisible, opacity }: any) => (
-    <div data-testid="optimized-nextjs" data-visible={isVisible} data-opacity={opacity} />
+    <div data-opacity={opacity} data-testid="optimized-nextjs" data-visible={isVisible} />
   ),
   OptimizedTypeScriptLogo: ({ isVisible, opacity }: any) => (
-    <div data-testid="optimized-typescript" data-visible={isVisible} data-opacity={opacity} />
+    <div data-opacity={opacity} data-testid="optimized-typescript" data-visible={isVisible} />
   ),
   OptimizedNodeJSLogo: ({ isVisible, opacity }: any) => (
-    <div data-testid="optimized-nodejs" data-visible={isVisible} data-opacity={opacity} />
+    <div data-opacity={opacity} data-testid="optimized-nodejs" data-visible={isVisible} />
   ),
   OptimizedAILogo: ({ isVisible, opacity }: any) => (
-    <div data-testid="optimized-openai" data-visible={isVisible} data-opacity={opacity} />
+    <div data-opacity={opacity} data-testid="optimized-openai" data-visible={isVisible} />
   ),
 }));
 
@@ -49,22 +49,39 @@ vi.mock('@react-spring/three', () => ({
   animated: {
     group: ({ children }: any) => <div data-testid="animated-group">{children}</div>,
   },
-  useTransition: () => [
-    [{ opacity: 1, item: { type: 'react', name: 'React' } }],
+  useTransition: () => (fn: any) => [
+    fn({ opacity: 1 }, { type: 'react', name: 'React' })
   ]
 }));
 
 // Ultra-strict performance thresholds for optimized version
 const OPTIMIZED_THRESHOLDS = {
-  INITIAL_RENDER: 100,   // 100ms max
-  TOTAL_LOAD: 300,       // 300ms max
-  MODEL_SWITCH: 50,      // 50ms max
+  // 100ms max
+  INITIAL_RENDER: 100,
+  // 300ms max
+  TOTAL_LOAD: 300,
+  // 50ms max
+  MODEL_SWITCH: 50,
 } as const;
+
+// Mock IntersectionObserver
+const mockIntersectionObserver = vi.fn((callback) => ({
+  observe: vi.fn((element) => {
+    // Simulate immediate intersection
+    callback([{ isIntersecting: true }]);
+  }),
+  disconnect: vi.fn(),
+  unobserve: vi.fn(),
+}));
+
+// @ts-ignore
+global.IntersectionObserver = mockIntersectionObserver;
 
 describe('ModelHeroOptimized Performance Tests', () => {
   beforeEach(() => {
     vi.clearAllTimers();
     vi.useFakeTimers();
+    mockIntersectionObserver.mockClear();
   });
 
   afterEach(() => {
@@ -188,9 +205,10 @@ describe('ModelHeroOptimized Performance Tests', () => {
     });
 
     // Performance should not degrade
-    const firstRender = renderTimes[0];
+    const [firstRender] = renderTimes;
     const lastRender = renderTimes[renderTimes.length - 1];
-    expect(lastRender).toBeLessThanOrEqual(firstRender * 1.1); // Max 10% variation
+    const maxVariation = 1.1;
+    expect(lastRender).toBeLessThanOrEqual((firstRender ?? 0) * maxVariation);
   });
 
   // Strict regression baseline
@@ -205,9 +223,10 @@ describe('ModelHeroOptimized Performance Tests', () => {
 
     const totalTime = performance.now() - startTime;
 
+    const baselineThreshold = 50;
     console.log(`🚀 Optimized Performance: ${totalTime.toFixed(2)}ms`);
 
     // Should be under 50ms for the optimized version
-    expect(totalTime).toBeLessThan(50);
+    expect(totalTime).toBeLessThan(baselineThreshold);
   });
 });

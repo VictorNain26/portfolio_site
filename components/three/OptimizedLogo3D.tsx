@@ -1,13 +1,14 @@
 /* components/three/OptimizedLogo3D.tsx */
+/* eslint-disable no-magic-numbers */
 'use client';
 
 import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { type Group, PlaneGeometry, MeshBasicMaterial, Mesh, DoubleSide, TextureLoader } from 'three';
+import { type Group, PlaneGeometry, MeshBasicMaterial, DoubleSide } from 'three';
 import { type SpringValue } from '@react-spring/three';
 
 export type OptimizedLogoProps = {
-  type: 'react' | 'nextjs' | 'typescript' | 'nodejs' | 'openai';
+  type: 'nextjs' | 'nodejs' | 'openai' | 'react' | 'typescript';
   isVisible: boolean;
   opacity?: SpringValue<number> | number;
 };
@@ -17,12 +18,16 @@ const LOGO_GEOMETRIES = {
   react: {
     color: '#61DAFB',
     vertices: [
-      [-1, -1, 0], [1, -1, 0], [1, 1, 0], [-1, 1, 0], // Square base
-      [0, 0, 0.2], // Center point for extrusion
+      // Square base
+      [-1, -1, 0], [1, -1, 0], [1, 1, 0], [-1, 1, 0],
+      // Center point for extrusion
+      [0, 0, 0.2],
     ],
     faces: [
-      [0, 1, 4], [1, 2, 4], [2, 3, 4], [3, 0, 4], // Top faces
-      [0, 3, 2], [0, 2, 1], // Bottom faces
+      // Top faces
+      [0, 1, 4], [1, 2, 4], [2, 3, 4], [3, 0, 4],
+      // Bottom faces
+      [0, 3, 2], [0, 2, 1],
     ]
   },
   nextjs: {
@@ -77,8 +82,9 @@ export function OptimizedLogo3D({ type, isVisible, opacity = 1 }: OptimizedLogoP
   const logoData = LOGO_GEOMETRIES[type];
 
   // Ultra-simple geometry with minimal vertices
+  const geometrySize = 2;
   const geometry = useMemo(() => {
-    return new PlaneGeometry(2, 2);
+    return new PlaneGeometry(geometrySize, geometrySize);
   }, []);
 
   // Basic material for maximum performance
@@ -95,21 +101,21 @@ export function OptimizedLogo3D({ type, isVisible, opacity = 1 }: OptimizedLogoP
   }, [logoData.color, opacity]);
 
   // Minimal rotation animation
-  const ROTATION_SPEED = 0.3;
+  const rotationSpeed = 0.3;
+  const floatingSpeed = 0.5;
+  const floatingAmplitude = 0.1;
   useFrame((state) => {
     if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * ROTATION_SPEED;
+      groupRef.current.rotation.y = state.clock.elapsedTime * rotationSpeed;
       // Add subtle floating animation
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * floatingSpeed) * floatingAmplitude;
     }
   });
 
   // Update material opacity
   useEffect(() => {
-    if (material) {
-      material.opacity = typeof opacity === 'number' ? opacity : 1;
-      material.needsUpdate = true;
-    }
+    material.opacity = typeof opacity === 'number' ? opacity : 1;
+    material.needsUpdate = true;
   }, [material, opacity]);
 
   return (
@@ -120,7 +126,7 @@ export function OptimizedLogo3D({ type, isVisible, opacity = 1 }: OptimizedLogoP
         geometry={geometry}
         material={material}
         position={[0, 0, -0.05]}
-        scale={0.95}
+        scale={[0.95, 0.95, 0.95]}
       />
     </group>
   );
@@ -132,6 +138,7 @@ export function SpriteLogo3D({ type, isVisible, opacity = 1 }: OptimizedLogoProp
   const logoData = LOGO_GEOMETRIES[type];
 
   // Create a simple colored square sprite
+  const spriteSize = 1.5;
   const material = useMemo(() => {
     return new MeshBasicMaterial({
       color: logoData.color,
@@ -141,13 +148,14 @@ export function SpriteLogo3D({ type, isVisible, opacity = 1 }: OptimizedLogoProp
   }, [logoData.color, opacity]);
 
   const geometry = useMemo(() => {
-    return new PlaneGeometry(1.5, 1.5);
+    return new PlaneGeometry(spriteSize, spriteSize);
   }, []);
 
   // Minimal rotation
+  const spriteRotationSpeed = 0.2;
   useFrame((state) => {
     if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.2;
+      groupRef.current.rotation.y = state.clock.elapsedTime * spriteRotationSpeed;
     }
   });
 
