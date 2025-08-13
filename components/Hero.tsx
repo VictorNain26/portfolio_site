@@ -15,11 +15,11 @@ const BEZIER_END = 1;
 const BEZIER_CURVE = [BEZIER_START, BEZIER_MID_LOW, BEZIER_MID_HIGH, BEZIER_END] as const;
 const INITIAL_DELAY = 0.2;
 
-const ModelHero = dynamic(async () => import('@/components/ModelHeroOptimized'), {
+const ModelHero = dynamic(async () => import('@/components/ModelHeroFast'), {
   ssr: false,
   loading: () => (
     <div className="flex h-full items-center justify-center">
-      <div className="h-16 w-16 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600" />
+      <div className="h-8 w-8 animate-pulse rounded-full bg-indigo-500/20" />
     </div>
   ),
 });

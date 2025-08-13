@@ -101,13 +101,11 @@ function useOptimizedModelState() {
 export default function ModelHeroOptimized() {
   const {
     currentModelIndex,
-    isInView,
     setIsInView,
-    isPageVisible,
   } = useOptimizedModelState();
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  // Immediate rendering - no loading state needed
   const [isHovered, setIsHovered] = useState(false);
 
   // Performance tracking
@@ -178,7 +176,7 @@ export default function ModelHeroOptimized() {
   }), []);
 
   const handleCanvasCreated = () => {
-    setIsLoaded(true);
+    // Canvas is ready, performance tracking
     endLoadTracking();
   };
 
@@ -217,8 +215,8 @@ export default function ModelHeroOptimized() {
             <ambientLight intensity={0.8} />
             <directionalLight intensity={0.6} position={[LIGHT_POSITION_X, LIGHT_POSITION_Y, LIGHT_POSITION_Z]} />
 
-            {/* Only render current model - no preloading */}
-            {isLoaded && transitions((styles, item) => {
+            {/* Render current model immediately */}
+            {transitions((styles, item) => {
               if (!item) {
                 return null;
               }
@@ -226,7 +224,7 @@ export default function ModelHeroOptimized() {
               return (
                 <animated.group key={item.type}>
                   <OptimizedTechModel
-                    isVisible={isInView && isPageVisible}
+                    isVisible
                     model={item}
                     opacity={styles.opacity}
                   />

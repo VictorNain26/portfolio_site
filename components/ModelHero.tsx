@@ -28,11 +28,6 @@ const DIRECTIONAL_LIGHT_Z = 5;
 
 // Performance constants for mobile optimization
 const ROTATION_INTERVAL = 8000;
-// Faster initial loading
-// Immediate for current model
-const INITIAL_PRELOAD_DELAY = 0;
-// Delayed for others
-const PROGRESSIVE_PRELOAD_DELAY = 2000;
 
 type ModelProps = {
   model: (typeof TECH_MODELS)[number];
@@ -64,9 +59,9 @@ function useModelState() {
   const [isHovered, setIsHovered] = useState(false);
   const [isInView, setIsInView] = useState(true);
   const [isPageVisible, setIsPageVisible] = useState(true);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [shouldPreload, setShouldPreload] = useState(false);
-  const [preloadedModels, setPreloadedModels] = useState<Set<string>>(new Set());
+  // Start with preload enabled for immediate display
+  const [shouldPreload, setShouldPreload] = useState(true);
+  const [preloadedModels, setPreloadedModels] = useState<Set<string>>(new Set(TECH_MODELS.map(m => m.type)));
 
   // Check for reduced motion preference
   useEffect(() => {
@@ -77,30 +72,17 @@ function useModelState() {
     return () => { media.removeEventListener('change', handler); };
   }, []);
 
-  // Progressive preload for better initial performance
+  // Immediate preload for instant display
   useEffect(() => {
-    const initialPreloadTimer = setTimeout(() => {
-      setShouldPreload(true);
-      const current = TECH_MODELS[currentModelIndex];
-      if (current) {
-        setPreloadedModels(new Set([current.type]));
-      }
-    }, INITIAL_PRELOAD_DELAY);
+    // Ensure all models are immediately available
+    const allModels = new Set(TECH_MODELS.map(m => m.type));
+    setPreloadedModels(allModels);
+    setShouldPreload(true);
+  }, []);
 
-    const progressivePreloadTimer = setTimeout(() => {
-      const allModels = new Set(TECH_MODELS.map(m => m.type));
-      setPreloadedModels(allModels);
-    }, PROGRESSIVE_PRELOAD_DELAY);
-
-    return () => { 
-      clearTimeout(initialPreloadTimer);
-      clearTimeout(progressivePreloadTimer);
-    };
-  }, [currentModelIndex]);
-
-  // Auto-rotate models with performance optimization
+  // Auto-rotate models with simplified conditions
   useEffect(() => {
-    if (prefersReducedMotion || !isInView || !isPageVisible || !isLoaded) {
+    if (prefersReducedMotion || !isInView || !isPageVisible) {
       return;
     }
 
@@ -109,7 +91,7 @@ function useModelState() {
     }, ROTATION_INTERVAL);
 
     return () => { clearInterval(interval); };
-  }, [prefersReducedMotion, isInView, isPageVisible, isLoaded]);
+  }, [prefersReducedMotion, isInView, isPageVisible]);
 
   // Page Visibility API to handle tab changes
   useEffect(() => {
@@ -127,8 +109,6 @@ function useModelState() {
     isInView,
     setIsInView,
     isPageVisible,
-    isLoaded,
-    setIsLoaded,
     shouldPreload,
     preloadedModels,
   };
@@ -144,8 +124,6 @@ export default function ModelHero() {
     isInView,
     setIsInView,
     isPageVisible,
-    isLoaded,
-    setIsLoaded,
     shouldPreload,
     preloadedModels,
   } = useModelState();
@@ -184,11 +162,11 @@ export default function ModelHero() {
     }
   }, [currentModel, safeIndex, setCurrentModelIndex]);
 
-  // Optimized transition with reduced motion consideration
+  // Optimized transition with immediate visibility
   const transitions = useTransition(currentModel, {
     keys: m => m?.type ?? 'default',
     from: { opacity: 0 },
-    enter: { opacity: isLoaded ? 1 : 0 },
+    enter: { opacity: 1 },
     leave: { opacity: 0 },
     config: prefersReducedMotion 
       // Instant transition for reduced motion preference
@@ -231,7 +209,7 @@ export default function ModelHero() {
           preserveDrawingBuffer: false,
           stencil: false
         }}
-        onCreated={() => { setIsLoaded(true); }}
+        onCreated={() => { /* Canvas ready */ }}
       >
         <Suspense fallback={null}>
           {/* Simple lighting setup */}
@@ -240,7 +218,7 @@ export default function ModelHero() {
           {/* Transparent background - no solid color */}
 
           {/* Progressive preload models invisibly for better performance */}
-          {shouldPreload && isPageVisible && isLoaded
+          {shouldPreload && isPageVisible
             && TECH_MODELS
               .filter(model => preloadedModels.has(model.type))
               .map(model => (
