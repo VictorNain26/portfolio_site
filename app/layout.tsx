@@ -1,11 +1,13 @@
 import './globals.css';
 import { Inter, Sora } from 'next/font/google';
 import { type ReactNode, Suspense } from 'react';
-import Script from 'next/script';
 
 import ScrollView from '@/components/ScrollView';
 import BackToTop from '@/components/BackToTop';
 import HeaderBar from '@/components/HeaderBar';
+import PageLoader from '@/components/PageLoader';
+import MetaTags from './components/MetaTags';
+import JsonLdScripts from './components/JsonLdScripts';
 
 /* -------------------------------------------------------------------------- */
 /* Polices                                                                    */
@@ -104,212 +106,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html className={`${inter.variable} ${sora.variable}`} lang="fr">
       <head>
-        <meta content="victorlenain" name="Victor-Lenain" />
-
-        {/* ---- Favicons et icônes ---- */}
-        <link href="/favicon.ico" rel="icon" sizes="48x48" />
-        <link href="/icon0.svg" rel="icon" type="image/svg+xml" />
-        <link href="/apple-icon.png" rel="apple-touch-icon" />
-        <link href="/manifest.json" rel="manifest" />
-        <meta content="#6366f1" name="theme-color" />
-        <meta content="#6366f1" name="msapplication-TileColor" />
-
-        {/* ---- SEO et performance ---- */}
-        <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
-        <meta content="telephone=no" name="format-detection" />
-        <meta content="dark" name="color-scheme" />
-
-        {/* ---- Verification et ownership ---- */}
-        <meta content="votre-code-verification-google" name="google-site-verification" />
-        <meta content="votre-code-verification-bing" name="msvalidate.01" />
-
-        {/* ---- Préchargement de ressources critiques ---- */}
-        <link as="image" href="/images/hero-bg.jpg" rel="preload" type="image/jpeg" />
-        <link href="//fonts.googleapis.com" rel="dns-prefetch" />
-        <link crossOrigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect" />
-
-        {/* ---- JSON-LD Structured Data ---- */}
-        <Script
-          id="ld-person"
-          strategy="afterInteractive"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Person',
-              name: 'Victor Lenain',
-              alternateName: 'Victor Lenain Dev',
-              jobTitle: 'Développeur Full-Stack JavaScript & Expert Next.js',
-              description:
-                "Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Expert en création d'applications web modernes et performantes.",
-              url: 'https://victorlenain.fr',
-              image: 'https://victorlenain.fr/og-image-dark.svg',
-              sameAs: [
-                'https://www.linkedin.com/in/victor-lenain-1907b7282/',
-                'https://github.com/victorlenain',
-                'https://twitter.com/victor_lenain',
-              ],
-              knowsAbout: [
-                'JavaScript',
-                'TypeScript',
-                'Next.js',
-                'React',
-                'Node.js',
-                'DevOps',
-                'Intelligence Artificielle',
-                'Développement Web',
-                'Applications Web',
-              ],
-              worksFor: {
-                '@type': 'Organization',
-                name: 'Freelance',
-                url: 'https://victorlenain.fr',
-              },
-              address: {
-                '@type': 'PostalAddress',
-                addressCountry: 'FR',
-                addressLocality: 'France',
-              },
-              offers: {
-                '@type': 'Offer',
-                description: 'Services de développement web Full-Stack',
-                category: 'Développement Web',
-              },
-            }),
-          }}
-        />
-
-        <Script
-          id="ld-website"
-          strategy="afterInteractive"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Website',
-              name: 'Victor Lenain - Portfolio',
-              alternateName: 'Portfolio Victor Lenain',
-              url: 'https://victorlenain.fr',
-              description:
-                'Portfolio professionnel de Victor Lenain, développeur Full-Stack JavaScript spécialisé en Next.js et React.',
-              inLanguage: 'fr-FR',
-              author: {
-                '@type': 'Person',
-                name: 'Victor Lenain',
-              },
-              publisher: {
-                '@type': 'Person',
-                name: 'Victor Lenain',
-              },
-              potentialAction: {
-                '@type': 'SearchAction',
-                target: 'https://victorlenain.fr/blog?q={search_term_string}',
-                'query-input': 'required name=search_term_string',
-              },
-              mainEntity: {
-                '@type': 'SiteNavigationElement',
-                name: 'Navigation principale',
-                hasPart: [
-                  {
-                    '@type': 'SiteNavigationElement',
-                    name: 'Accueil',
-                    description: 'Portfolio et présentation de Victor Lenain',
-                    url: 'https://victorlenain.fr',
-                  },
-                  {
-                    '@type': 'SiteNavigationElement',
-                    name: 'À propos',
-                    description: 'Expérience et compétences techniques',
-                    url: 'https://victorlenain.fr#a-propos',
-                  },
-                  {
-                    '@type': 'SiteNavigationElement',
-                    name: 'Projets',
-                    description: 'Portfolio des réalisations et projets',
-                    url: 'https://victorlenain.fr#projets',
-                  },
-                  {
-                    '@type': 'SiteNavigationElement',
-                    name: 'Blog',
-                    description: 'Articles techniques et tutoriels',
-                    url: 'https://victorlenain.fr/blog',
-                  },
-                  {
-                    '@type': 'SiteNavigationElement',
-                    name: 'Contact',
-                    description: 'Formulaire de contact et informations',
-                    url: 'https://victorlenain.fr#contact',
-                  },
-                ],
-              },
-            }),
-          }}
-        />
-
-        <Script
-          id="ld-professional-service"
-          strategy="afterInteractive"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'ProfessionalService',
-              name: 'Victor Lenain - Services de Développement Web',
-              description:
-                'Services professionnels de développement web Full-Stack avec Next.js, React et TypeScript.',
-              url: 'https://victorlenain.fr',
-              image: 'https://victorlenain.fr/og-image-dark.svg',
-              provider: {
-                '@type': 'Person',
-                name: 'Victor Lenain',
-              },
-              areaServed: {
-                '@type': 'Country',
-                name: 'France',
-              },
-              serviceType: [
-                'Développement Web',
-                'Applications Next.js',
-                'Conseil Technique',
-                'Formation JavaScript',
-              ],
-              hasOfferCatalog: {
-                '@type': 'OfferCatalog',
-                name: 'Services de développement',
-                itemListElement: [
-                  {
-                    '@type': 'Offer',
-                    itemOffered: {
-                      '@type': 'Service',
-                      name: "Développement d'applications web",
-                      description: "Création d'applications web modernes avec Next.js et React",
-                    },
-                  },
-                  {
-                    '@type': 'Offer',
-                    itemOffered: {
-                      '@type': 'Service',
-                      name: 'Conseil technique',
-                      description: 'Conseil en architecture et choix technologiques',
-                    },
-                  },
-                  {
-                    '@type': 'Offer',
-                    itemOffered: {
-                      '@type': 'Service',
-                      name: 'Formation',
-                      description: 'Formation aux technologies modernes JavaScript',
-                    },
-                  },
-                ],
-              },
-            }),
-          }}
-        />
+        <MetaTags />
+        <JsonLdScripts />
       </head>
 
-      <body className="text-foreground relative bg-[#0e082e] bg-[url('/images/hero-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased">
-        {/* Dégradé d’assombrissement du fond */}
+      <body className="text-foreground relative bg-[#0e082e] bg-[url('/images/hero-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased js-loading">
+        {/* Page loader for smooth initial load */}
+        <PageLoader />
+        
+        {/* Dégradé d'assombrissement du fond */}
         <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/25 to-black/60 sm:bg-gradient-to-t lg:bg-gradient-to-r" />
 
         {/* Barre de navigation présente partout */}

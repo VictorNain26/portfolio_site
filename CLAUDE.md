@@ -11,25 +11,35 @@ code in this repository.
 - `bun run dev` - Start development server
 - `bun run build` - Build for production
 - `bun run lint` - Run ESLint
+- `bun run lint:fix` - Auto-fix ESLint issues
+- `bun run type-check` - TypeScript type checking
+- `bun run format` - Format code with Prettier
+- `bun run format:check` - Check code formatting
+
+### Testing
+
 - `bun run test` - Run all tests with Vitest
-- `bun run typecheck` - TypeScript type checking
-
-### Single Test Execution
-
+- `bun run test:watch` - Run tests in watch mode
+- `bun run test:coverage` - Run tests with coverage report
 - `bun test components/ui/__tests__/badge.test.tsx` - Run specific test file
-- `bun test --watch` - Run tests in watch mode
+
+### Analysis and Optimization
+
+- `bun run analyze` - Bundle analysis with webpack-bundle-analyzer
+- `bun run clean` - Clean build artifacts
 
 ## Architecture Overview
 
 ### Core Technologies
 
-- **Next.js 15** with App Router - Modern React framework
-- **TypeScript** with strict configuration - Type safety
-- **Tailwind CSS 4** - Utility-first CSS framework
-- **Bun** - JavaScript runtime and package manager
-- **React Three Fiber** - 3D graphics with Three.js
-- **Content Collections** - MDX content management
-- **Vitest** - Testing framework
+- **Next.js 15** with App Router - Modern React framework with experimental features
+- **React 19** - Latest React with enhanced concurrent features
+- **TypeScript** with strict configuration - Type safety with comprehensive checks
+- **Tailwind CSS 4** - Utility-first CSS framework with PostCSS
+- **Bun** - JavaScript runtime and package manager (≥1.2.0)
+- **React Three Fiber** - 3D graphics with Three.js and @react-three/drei
+- **Content Collections** - MDX content management with Zod validation
+- **Vitest** - Testing framework with coverage reporting
 
 ### Project Structure
 
@@ -49,6 +59,7 @@ components/         # React components
 content/           # MDX content
 └── posts/         # Blog posts in MDX format
 
+hooks/             # Custom React hooks
 lib/               # Utilities and shared logic
 ```
 
@@ -99,13 +110,31 @@ lib/               # Utilities and shared logic
 
 ### Environment Setup
 
-- Environment variables go in `.env.local`
-- Optional `HF_TOKEN` for Hugging Face integration
-- Bun lockfile (`bun.lockb`) should be committed
+- Environment variables go in `.env.local` 
+- Required: Create from `.env.example` if available
+- Optional `HF_TOKEN` for Hugging Face integration (AI features)
+- Bun lockfile (`bun.lock`) should be committed
+
+### External Integrations
+
+- **GitHub API**: Used for fetching repository data in Projects section
+- **Hugging Face**: Optional AI integration for enhanced features
+- **Google Fonts**: Inter and Sora fonts loaded with display swap optimization
 
 ### Performance Considerations
 
 - 3D components use dynamic imports to avoid SSR issues
-- Images optimized with Next.js Image component
+- Images optimized with Next.js Image component (AVIF/WebP formats)
 - Font preloading enabled for critical fonts
 - Reduced motion preferences respected in animations
+- Bundle analysis available with `ANALYZE=true bun run build`
+- Partial Prerendering (PPR) enabled for enhanced performance
+- React Compiler optimization enabled
+- Optimized package imports for lucide-react and framer-motion
+
+### Quality Assurance
+
+- **TypeScript**: Extremely strict configuration with comprehensive type checking
+- **Testing**: Vitest with 80% coverage thresholds (branches, functions, lines, statements)
+- **Linting**: ESLint with TypeScript rules and Prettier integration
+- **Build Validation**: TypeScript and ESLint errors fail builds in production

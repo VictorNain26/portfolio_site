@@ -6,6 +6,15 @@ import { ChevronDown, Mail } from 'lucide-react';
 import { FaWhatsapp, FaGithub, FaLinkedin } from 'react-icons/fa';
 import { SocialIconButton } from '@/components/ui/social-icon-button';
 
+// Animation constants for performance optimization
+const ANIMATION_DURATION = 0.5;
+const BEZIER_START = 0.25;
+const BEZIER_MID_LOW = 0.1;
+const BEZIER_MID_HIGH = 0.25;
+const BEZIER_END = 1;
+const BEZIER_CURVE = [BEZIER_START, BEZIER_MID_LOW, BEZIER_MID_HIGH, BEZIER_END] as const;
+const INITIAL_DELAY = 0.2;
+
 const ModelHero = dynamic(async () => import('@/components/ModelHero'), {
   ssr: false,
 });
@@ -23,10 +32,17 @@ export default function Hero() {
         {/* Titre + tagline */}
         <motion.header
           className="order-1 flex flex-col sm:items-center lg:order-none lg:items-start"
-          initial={prefersReduceMotion ? false : { opacity: 0, y: 32 }}
-          transition={{ duration: 0.7 }}
+          // Reduced movement for better mobile performance
+          initial={prefersReduceMotion ? false : { opacity: 0, y: 16 }}
           viewport={{ once: true }}
           whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
+          transition={{ 
+            // Faster animation for better mobile performance
+            duration: prefersReduceMotion ? 0 : ANIMATION_DURATION,
+            ease: BEZIER_CURVE,
+            // Stagger after page load to prevent flash
+            delay: INITIAL_DELAY
+          }}
         >
           <h1 className="font-display gradient-brand-text mb-2 text-[clamp(2.6rem,7.5vw,5.3rem)] leading-[1.05] font-extrabold tracking-[-0.035em]">
             Victor&nbsp;Lenain

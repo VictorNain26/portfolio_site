@@ -17,13 +17,21 @@ const TECH_MODELS = [
 
 const CAMERA_Z_POSITION = 5;
 const CAMERA_FOV = 50;
-const DPR_MIN = 1;
-const DPR_MAX = 1.5;
+// Reduced DPR for better mobile performance
+const DPR_MIN = 0.8;
+const DPR_MAX = 1.2;
 const AMBIENT_LIGHT_INTENSITY = 0.6;
 const DIRECTIONAL_LIGHT_INTENSITY = 1;
 const DIRECTIONAL_LIGHT_X = 10;
 const DIRECTIONAL_LIGHT_Y = 10;
 const DIRECTIONAL_LIGHT_Z = 5;
+
+// Performance constants for mobile optimization
+const ROTATION_INTERVAL = 8000;
+// Delay preloading to prioritize visible content
+const PRELOAD_DELAY = 100;
+// Device pixel ratio threshold for performance optimization
+const DPR_THRESHOLD = 1.5;
 
 type ModelProps = {
   model: (typeof TECH_MODELS)[number];
@@ -54,6 +62,8 @@ export default function ModelHero() {
   const [isHovered, setIsHovered] = useState(false);
   const [isInView, setIsInView] = useState(true);
   const [isPageVisible, setIsPageVisible] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [shouldPreload, setShouldPreload] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Check for reduced motion preference
@@ -69,13 +79,21 @@ export default function ModelHero() {
     };
   }, []);
 
-  // Auto-rotate models
+  // Delayed preload for better initial performance
   useEffect(() => {
-    if (prefersReducedMotion || !isInView || !isPageVisible) {
+    const preloadTimer = setTimeout(() => {
+      setShouldPreload(true);
+    }, PRELOAD_DELAY);
+
+    return () => { clearTimeout(preloadTimer); };
+  }, []);
+
+  // Auto-rotate models with performance optimization
+  useEffect(() => {
+    if (prefersReducedMotion || !isInView || !isPageVisible || !isLoaded) {
       return;
     }
 
-    const ROTATION_INTERVAL = 8000;
     const interval = setInterval(() => {
       setCurrentModelIndex(prev => {
         const nextIndex = (prev + 1) % TECH_MODELS.length;
@@ -86,7 +104,7 @@ export default function ModelHero() {
     return () => {
       clearInterval(interval);
     };
-  }, [prefersReducedMotion, isInView, isPageVisible]);
+  }, [prefersReducedMotion, isInView, isPageVisible, isLoaded]);
 
   // Page Visibility API to handle tab changes
   useEffect(() => {
@@ -134,13 +152,17 @@ export default function ModelHero() {
     }
   }, [currentModel, safeIndex]);
 
-  // Simple fade transition
+  // Optimized transition with reduced motion consideration
   const transitions = useTransition(currentModel, {
     keys: m => m?.type ?? 'default',
     from: { opacity: 0 },
-    enter: { opacity: 1 },
+    enter: { opacity: isLoaded ? 1 : 0 },
     leave: { opacity: 0 },
-    config: { mass: 1, tension: 280, friction: 40 },
+    config: prefersReducedMotion 
+      // Instant transition for reduced motion preference
+      ? { duration: 0 }
+      // Faster, lighter animation for smooth transitions
+      : { mass: 0.8, tension: 300, friction: 35 },
     exitBeforeEnter: true,
   });
 
@@ -168,7 +190,13 @@ export default function ModelHero() {
       <Canvas
         camera={{ position: [0, 0, CAMERA_Z_POSITION], fov: CAMERA_FOV }}
         dpr={[DPR_MIN, DPR_MAX]}
-        gl={{ alpha: true, antialias: true }}
+        gl={{ 
+          alpha: true, 
+          // Disable AA on high DPR devices for performance
+          antialias: window.devicePixelRatio <= DPR_THRESHOLD,
+          powerPreference: 'high-performance'
+        }}
+        onCreated={() => { setIsLoaded(true); }}
       >
         <Suspense fallback={null}>
           {/* Simple lighting setup */}
@@ -176,11 +204,11 @@ export default function ModelHero() {
           <directionalLight intensity={DIRECTIONAL_LIGHT_INTENSITY} position={[DIRECTIONAL_LIGHT_X, DIRECTIONAL_LIGHT_Y, DIRECTIONAL_LIGHT_Z]} />
           <Environment preset="city" />
 
-          {/* Preload all models invisibly */}
-          {isPageVisible
+          {/* Preload all models invisibly - delayed for better initial performance */}
+          {shouldPreload && isPageVisible && isLoaded
             && TECH_MODELS.map(model => (
               <group key={`preload-${model.type}`} visible={false}>
-                <TechModel isVisible={isInView && isPageVisible} model={model} opacity={0} />
+                <TechModel isVisible={false} model={model} opacity={0} />
               </group>
             ))}
 

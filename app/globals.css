@@ -100,15 +100,51 @@
     color: hsl(var(--primary-foreground));
   }
 
-  /* Prevent horizontal overflow */
+  /* Prevent horizontal overflow and layout shifts */
   body {
     overflow-x: clip;
+    /* Optimize for mobile performance */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent zoom on input focus */
+    -webkit-text-size-adjust: 100%;
   }
 
   /* Safe area insets for mobile */
   @media (max-width: 640px) {
     body {
       padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+
+  /* Initial page load optimization */
+  .js-loading {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+
+  .js-loaded {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Mobile-specific optimizations */
+  @media (max-width: 768px) {
+    /* Disable hover effects on touch devices */
+    @media (hover: none) {
+      * {
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      button,
+      a {
+        -webkit-touch-callout: none;
+      }
+    }
+
+    /* Optimize font rendering on mobile */
+    body {
+      text-rendering: optimizeSpeed;
     }
   }
 
