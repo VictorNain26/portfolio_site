@@ -12,6 +12,12 @@ export type LogoProps = {
   opacity?: SpringValue<number> | number | undefined;
 };
 
+// Animation constants
+const ROTATION_SPEED = 0.4;
+const METALNESS_VALUE = 0.1;
+const ROUGHNESS_VALUE = 0.3;
+const BOX_SCALE_Z = 0.2;
+
 const LOGO_CONFIGS = {
   react: { src: '/logos/react.svg', color: '#61DAFB' },
   nextjs: { src: '/logos/nextjs.svg', color: '#000000' },
@@ -22,8 +28,6 @@ const LOGO_CONFIGS = {
 
 function FastLogo3D({ type, isVisible, opacity }: LogoProps & { type: keyof typeof LOGO_CONFIGS }) {
   const groupRef = useRef<Group>(null);
-
-  const ROTATION_SPEED = 0.4;
 
   useFrame(state => {
     if (groupRef.current && isVisible) {
@@ -49,20 +53,20 @@ function SimpleLogo3D({ type, isVisible, opacity }: LogoProps & { type: keyof ty
 
   useFrame(state => {
     if (groupRef.current && isVisible) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.4;
+      groupRef.current.rotation.y = state.clock.elapsedTime * ROTATION_SPEED;
     }
   });
 
   return (
     <group ref={groupRef}>
-      <mesh scale={[2, 2, 0.2]}>
+      <mesh scale={[2, 2, BOX_SCALE_Z]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial
           transparent
           color={config.color}
-          metalness={0.1}
+          metalness={METALNESS_VALUE}
           opacity={typeof opacity === 'number' ? opacity : 1}
-          roughness={0.3}
+          roughness={ROUGHNESS_VALUE}
         />
       </mesh>
     </group>

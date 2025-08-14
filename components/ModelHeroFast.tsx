@@ -27,6 +27,13 @@ const CAMERA_FOV = 50;
 const DPR_MIN = 0.7;
 const DPR_MAX = 1.5;
 const ROTATION_INTERVAL = 8000;
+const INTERSECTION_THRESHOLD = 0.1;
+const AMBIENT_LIGHT_INTENSITY = 0.6;
+const DIRECTIONAL_LIGHT_INTENSITY = 1;
+const DIRECTIONAL_LIGHT_X = 10;
+const DIRECTIONAL_LIGHT_Y = 10;
+const DIRECTIONAL_LIGHT_Z = 5;
+const BOX_SCALE_FACTOR = 0.3;
 
 type ModelProps = {
   model: (typeof TECH_MODELS)[number];
@@ -54,7 +61,7 @@ function FastTechModel({ model, isVisible, opacity }: ModelProps) {
 // Simple fallback component for immediate display
 function SimpleFallbackLogo() {
   return (
-    <mesh scale={[2, 2, 0.3]}>
+    <mesh scale={[2, 2, BOX_SCALE_FACTOR]}>
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial
         color="#61DAFB"
@@ -147,7 +154,7 @@ function ModelHeroCore() {
           setIsInView(entry.isIntersecting);
         }
       },
-      { threshold: 0.1 }
+      { threshold: INTERSECTION_THRESHOLD }
     );
 
     observer.observe(container);
@@ -210,8 +217,8 @@ function ModelHeroCore() {
       <Canvas {...canvasConfig}>
         <Suspense fallback={<SimpleFallbackLogo />}>
           {/* Lighting */}
-          <ambientLight intensity={0.6} />
-          <directionalLight intensity={1} position={[10, 10, 5]} />
+          <ambientLight intensity={AMBIENT_LIGHT_INTENSITY} />
+          <directionalLight intensity={DIRECTIONAL_LIGHT_INTENSITY} position={[DIRECTIONAL_LIGHT_X, DIRECTIONAL_LIGHT_Y, DIRECTIONAL_LIGHT_Z]} />
 
           {/* Current model with immediate display */}
           {transitions((styles, item) => {

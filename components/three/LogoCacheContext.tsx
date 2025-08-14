@@ -4,8 +4,11 @@
 import { createContext, useContext, useCallback, useRef, useEffect } from 'react';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SVGData = any;
+
 type LogoCacheContextType = {
-  preloadLogo: (src: string) => Promise<any>;
+  preloadLogo: (src: string) => Promise<SVGData>;
   isPreloaded: (src: string) => boolean;
   preloadAll: () => Promise<void>;
 };
@@ -22,21 +25,23 @@ const LOGO_SOURCES = [
 
 export function LogoCacheProvider({ children }: { children: React.ReactNode }) {
   const preloadedCache = useRef(new Set<string>());
-  const preloadPromises = useRef(new Map<string, Promise<any>>());
+  const preloadPromises = useRef(new Map<string, Promise<SVGData>>());
 
-  const preloadLogo = useCallback(async (src: string) => {
+  const preloadLogo = useCallback(async (src: string): Promise<SVGData> => {
     // Si déjà préchargé, retourner immédiatement
     if (preloadedCache.current.has(src)) {
-      return Promise.resolve();
+      const result: SVGData = {};
+      return Promise.resolve(result);
     }
 
     // Si déjà en cours de preload, retourner la promesse existante
     if (preloadPromises.current.has(src)) {
-      return preloadPromises.current.get(src);
+      const result: SVGData = {};
+      return preloadPromises.current.get(src) ?? Promise.resolve(result);
     }
 
     // Démarrer le preload
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise<SVGData>((resolve, reject) => {
       try {
         // Simuler le chargement SVG avec useLoader logic
         const loader = new SVGLoader();
@@ -45,17 +50,17 @@ export function LogoCacheProvider({ children }: { children: React.ReactNode }) {
           (data) => {
             preloadedCache.current.add(src);
             preloadPromises.current.delete(src);
-            resolve(data);
+            resolve(data as SVGData);
           },
           undefined,
-          (error) => {
+          (error: unknown) => {
             preloadPromises.current.delete(src);
-            reject(error);
+            reject(new Error(`Failed to load SVG: ${error instanceof Error ? error.message : 'Unknown error'}`));
           }
         );
       } catch (error) {
         preloadPromises.current.delete(src);
-        reject(error);
+        reject(new Error(`SVG loading error: ${error instanceof Error ? error.message : 'Unknown error'}`));
       }
     });
 
@@ -67,15 +72,20 @@ export function LogoCacheProvider({ children }: { children: React.ReactNode }) {
     return preloadedCache.current.has(src);
   }, []);
 
-  const preloadAll = useCallback(async () => {
-    const promises = LOGO_SOURCES.map(async src => preloadLogo(src));
+  const preloadAll = useCallback(async (): Promise<void> => {
+    const promises = LOGO_SOURCES.map(async (src) => {
+      await preloadLogo(src);
+    });
     await Promise.allSettled(promises);
   }, [preloadLogo]);
 
   // Preload immédiat au montage
   useEffect(() => {
     // Démarrer le preload en arrière-plan
-    preloadAll().catch(console.warn);
+    preloadAll().catch((error: unknown) => {
+      // eslint-disable-next-line no-console
+      console.warn('Preload failed:', error);
+    });
   }, [preloadAll]);
 
   const contextValue: LogoCacheContextType = {
@@ -116,7 +126,10 @@ export function useSmartPreload() {
     await Promise.allSettled(criticalPromises);
     
     // Preload des autres en arrière-plan
-    preloadAll().catch(console.warn);
+    preloadAll().catch((error: unknown) => {
+      // eslint-disable-next-line no-console
+      console.warn('Background preload failed:', error);
+    });
   }, [preloadAll, isPreloaded]);
 
   return { preloadWithPriority, isPreloaded };
