@@ -53,44 +53,33 @@ export default function OGImage() {
           </span>
         </div>
 
-        {/* Nom */}
+        {/* Proposition de valeur - centrée client */}
         <h1
           style={{
-            fontSize: '80px',
+            fontSize: '64px',
             fontWeight: 700,
             color: '#ffffff',
             margin: 0,
             marginBottom: '16px',
+            textAlign: 'center',
           }}
         >
-          Victor Lenain
+          Votre application web,{' '}
+          <span style={{ color: '#818cf8' }}>livrée et maintenue</span>
         </h1>
 
-        {/* Titre + Crédibilité */}
+        {/* Expérience */}
         <p
           style={{
-            fontSize: '32px',
-            color: '#9ca3af',
-            margin: 0,
-            marginBottom: '32px',
-          }}
-        >
-          Développeur Full-Stack JavaScript{' '}
-          <span style={{ color: '#818cf8' }}>· Ex Capsens</span>
-        </p>
-
-        {/* Proposition de valeur */}
-        <p
-          style={{
-            fontSize: '26px',
+            fontSize: '28px',
             color: '#d1d5db',
             textAlign: 'center',
-            maxWidth: '700px',
+            maxWidth: '800px',
             lineHeight: 1.5,
             margin: 0,
           }}
         >
-          Applications web performantes avec React, Next.js et Node.js
+          Développeur Full-Stack · 2 ans d&apos;expérience en agence
         </p>
 
         {/* URL */}

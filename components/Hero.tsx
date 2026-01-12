@@ -32,38 +32,29 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        {/* Nom */}
+        {/* Proposition de valeur - centrée sur le client */}
         <motion.h1
           {...fadeIn}
-          className="font-display mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl"
+          className="font-display mb-6 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl"
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Victor Lenain
+          Votre application web,{' '}
+          <span className="text-indigo-400">livrée et maintenue</span>
         </motion.h1>
 
-        {/* Titre + Crédibilité */}
-        <motion.p
-          {...fadeIn}
-          className="mb-6 text-lg text-gray-400 sm:text-xl"
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          Développeur Full-Stack JavaScript{' '}
-          <span className="text-indigo-400">· Ex Capsens</span>
-        </motion.p>
-
-        {/* Proposition de valeur - une seule phrase */}
+        {/* Sous-titre explicatif */}
         <motion.p
           {...fadeIn}
           className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-gray-300 sm:text-lg"
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
         >
-          Je crée des applications web performantes avec React, Next.js et Node.js.
+          Développeur Full-Stack avec 2 ans d&apos;expérience en agence sur des applications métier complexes.
         </motion.p>
 
         {/* CTA unique et fort */}
         <motion.div
           {...fadeIn}
-          transition={{ duration: 0.5, delay: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
         >
           <a
             className="group inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-base font-semibold text-gray-900 shadow-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl"
@@ -79,7 +70,7 @@ export default function Hero() {
         <motion.p
           {...fadeIn}
           className="mt-6 text-sm text-gray-500"
-          transition={{ duration: 0.5, delay: 0.6 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
         >
           ou via{' '}
           <a
