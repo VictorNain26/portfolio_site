@@ -1,7 +1,7 @@
 import { ImageResponse } from '@vercel/og';
 
 export const runtime = 'edge';
-export const alt = 'Victor Lenain - Développeur Full-Stack JavaScript';
+export const alt = 'Victor Lenain - Blog Développement Web';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -21,7 +21,7 @@ export default function OGImage() {
           fontFamily: 'system-ui, sans-serif',
         }}
       >
-        {/* Badge disponible */}
+        {/* Badge Blog */}
         <div
           style={{
             display: 'flex',
@@ -30,68 +30,83 @@ export default function OGImage() {
             marginBottom: '40px',
             padding: '12px 24px',
             borderRadius: '50px',
-            border: '1px solid rgba(34, 197, 94, 0.3)',
-            background: 'rgba(34, 197, 94, 0.1)',
+            border: '1px solid rgba(99, 102, 241, 0.3)',
+            background: 'rgba(99, 102, 241, 0.1)',
           }}
         >
-          <div
-            style={{
-              width: '12px',
-              height: '12px',
-              borderRadius: '50%',
-              background: '#22c55e',
-            }}
-          />
           <span
             style={{
-              color: '#4ade80',
+              color: '#a5b4fc',
               fontSize: '22px',
               fontWeight: 500,
             }}
           >
-            Disponible pour une mission
+            Blog · Articles & Tutoriels
           </span>
         </div>
 
-        {/* Nom */}
+        {/* Titre */}
         <h1
           style={{
-            fontSize: '80px',
+            fontSize: '72px',
             fontWeight: 700,
             color: '#ffffff',
             margin: 0,
-            marginBottom: '16px',
+            marginBottom: '24px',
+            textAlign: 'center',
           }}
         >
-          Victor Lenain
+          Développement Web
         </h1>
 
-        {/* Titre + Crédibilité */}
+        {/* Description */}
         <p
           style={{
-            fontSize: '32px',
+            fontSize: '28px',
             color: '#9ca3af',
-            margin: 0,
-            marginBottom: '32px',
-          }}
-        >
-          Développeur Full-Stack JavaScript{' '}
-          <span style={{ color: '#818cf8' }}>· Ex Capsens</span>
-        </p>
-
-        {/* Proposition de valeur */}
-        <p
-          style={{
-            fontSize: '26px',
-            color: '#d1d5db',
             textAlign: 'center',
             maxWidth: '700px',
             lineHeight: 1.5,
             margin: 0,
+            marginBottom: '40px',
           }}
         >
-          Applications web performantes avec React, Next.js et Node.js
+          React, Next.js, Node.js et bonnes pratiques du développement moderne
         </p>
+
+        {/* Auteur */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+          }}
+        >
+          <div
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#ffffff',
+              fontSize: '20px',
+              fontWeight: 700,
+            }}
+          >
+            VL
+          </div>
+          <span
+            style={{
+              color: '#d1d5db',
+              fontSize: '22px',
+            }}
+          >
+            Par Victor Lenain
+          </span>
+        </div>
 
         {/* URL */}
         <div
@@ -100,11 +115,11 @@ export default function OGImage() {
             bottom: '40px',
             right: '60px',
             color: '#6366f1',
-            fontSize: '22px',
+            fontSize: '20px',
             fontWeight: 500,
           }}
         >
-          victorlenain.fr
+          victorlenain.fr/blog
         </div>
       </div>
     ),
