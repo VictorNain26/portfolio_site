@@ -18,10 +18,14 @@ export default function Hero() {
 
   return (
     <section
-      className="relative flex min-h-[100svh] flex-col items-center justify-center px-4 sm:px-8"
+      className="relative flex min-h-[100svh] flex-col items-center justify-between px-4 py-20 sm:px-8 sm:py-24"
       id="accueil"
     >
-      <div className="mx-auto max-w-3xl text-center">
+      {/* Spacer top pour centrer le contenu */}
+      <div className="flex-1" />
+
+      {/* Contenu principal centré */}
+      <div className="mx-auto w-full max-w-3xl text-center">
         {/* Badge intro */}
         <motion.div
           {...fadeIn}
@@ -37,7 +41,7 @@ export default function Hero() {
         {/* Nom */}
         <motion.h1
           {...fadeIn}
-          className="font-display gradient-brand-text mb-4 text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl"
+          className="font-display gradient-brand-text mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-7xl"
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           Victor Lenain
@@ -46,29 +50,28 @@ export default function Hero() {
         {/* Titre */}
         <motion.p
           {...fadeIn}
-          className="mb-6 text-xl font-medium text-indigo-200 sm:text-2xl"
+          className="mb-5 text-lg font-medium text-indigo-200 sm:mb-6 sm:text-2xl"
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           Développeur Full-Stack JavaScript
         </motion.p>
 
-        {/* Description courte - proposition de valeur */}
+        {/* Description courte */}
         <motion.p
           {...fadeIn}
-          className="mx-auto mb-8 max-w-xl text-base leading-relaxed text-gray-400 sm:text-lg"
+          className="mx-auto mb-6 max-w-xl text-sm leading-relaxed text-gray-400 sm:mb-8 sm:text-lg"
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           Je transforme vos idées en{' '}
-          <span className="text-indigo-300">applications web performantes</span>{' '}
-          qui font la différence. Sites sur mesure, automatisation et{' '}
-          <span className="text-indigo-300">intégration IA</span> pour booster
-          votre activité.
+          <span className="text-indigo-300">applications web performantes</span>.
+          Sites sur mesure, automatisation et{' '}
+          <span className="text-indigo-300">intégration IA</span>.
         </motion.p>
 
-        {/* Crédibilité - nouveau freelance */}
+        {/* Tech badges */}
         <motion.div
           {...fadeIn}
-          className="mb-10 flex flex-wrap items-center justify-center gap-3 text-sm text-gray-400 sm:gap-5"
+          className="mb-8 flex flex-wrap items-center justify-center gap-2 text-xs sm:gap-3 sm:text-sm"
           transition={{ duration: 0.5, delay: 0.5 }}
         >
           <span className="rounded-full border border-gray-700 bg-gray-800/50 px-3 py-1">
@@ -82,35 +85,38 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        {/* CTA principal */}
+        {/* CTA */}
         <motion.div
           {...fadeIn}
-          className="mb-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+          className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4"
           transition={{ duration: 0.5, delay: 0.6 }}
         >
           <a
-            className="group inline-flex items-center gap-2 rounded-full bg-indigo-600 px-8 py-4 text-sm font-medium text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-xl hover:shadow-indigo-500/30"
+            className="group inline-flex items-center gap-2 rounded-full bg-indigo-600 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-xl sm:px-8 sm:py-4"
             href="mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission"
           >
-            <Mail aria-hidden="true" className="h-5 w-5" />
+            <Mail aria-hidden="true" className="h-4 w-4 sm:h-5 sm:w-5" />
             Discutons de votre projet
             <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </a>
           <a
-            className="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800/50 px-6 py-4 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-gray-600 hover:bg-gray-800 hover:text-white"
+            className="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800/50 px-5 py-3 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-gray-600 hover:bg-gray-800 hover:text-white sm:px-6 sm:py-4"
             href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous"
             rel="noopener noreferrer"
             target="_blank"
           >
-            <FaWhatsapp aria-hidden="true" className="h-5 w-5 text-green-400" />
+            <FaWhatsapp aria-hidden="true" className="h-4 w-4 text-green-400 sm:h-5 sm:w-5" />
             WhatsApp
           </a>
         </motion.div>
+      </div>
 
+      {/* Spacer bottom + éléments de navigation */}
+      <div className="flex flex-1 flex-col items-center justify-end gap-6 pt-8">
         {/* Réseaux sociaux */}
         <motion.nav
           {...fadeIn}
-          className="flex justify-center gap-4"
+          className="flex justify-center gap-3"
           transition={{ duration: 0.5, delay: 0.7 }}
         >
           <SocialIconButton
@@ -130,20 +136,22 @@ export default function Hero() {
             <FaLinkedin />
           </SocialIconButton>
         </motion.nav>
-      </div>
 
-      {/* Flèche vers la section suivante */}
-      <a
-        aria-label="Voir mes services"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-gray-500 transition-colors hover:text-white"
-        href="#services"
-        onClick={(e) => {
-          e.preventDefault();
-          document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-        }}
-      >
-        <ChevronDown className="h-6 w-6 animate-bounce" />
-      </a>
+        {/* Flèche scroll - dans le flux, plus de chevauchement */}
+        <motion.a
+          {...fadeIn}
+          aria-label="Voir mes services"
+          className="text-gray-500 transition-colors hover:text-white"
+          href="#services"
+          transition={{ duration: 0.5, delay: 0.8 }}
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+        >
+          <ChevronDown className="h-6 w-6 animate-bounce" />
+        </motion.a>
+      </div>
     </section>
   );
 }
