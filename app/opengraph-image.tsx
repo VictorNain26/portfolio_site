@@ -96,11 +96,11 @@ export default function OGImage() {
           Applications web sur mesure, automatisation et intégration IA pour booster votre activité
         </p>
 
-        {/* Stats */}
+        {/* Tech stack + crédibilité */}
         <div
           style={{
             display: 'flex',
-            gap: '32px',
+            gap: '16px',
           }}
         >
           <div
@@ -108,51 +108,48 @@ export default function OGImage() {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              color: '#9ca3af',
-              fontSize: '18px',
+              padding: '8px 16px',
+              borderRadius: '50px',
+              border: '1px solid #374151',
+              background: 'rgba(31, 41, 55, 0.5)',
+              color: '#ffffff',
+              fontSize: '16px',
+              fontWeight: 600,
             }}
           >
-            <span style={{ fontWeight: 700, color: '#ffffff', fontSize: '22px' }}>3+</span>
-            ans d&apos;expérience
+            React / Next.js
           </div>
-          <div
-            style={{
-              width: '1px',
-              height: '24px',
-              background: '#374151',
-            }}
-          />
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              color: '#9ca3af',
-              fontSize: '18px',
+              padding: '8px 16px',
+              borderRadius: '50px',
+              border: '1px solid #374151',
+              background: 'rgba(31, 41, 55, 0.5)',
+              color: '#ffffff',
+              fontSize: '16px',
+              fontWeight: 600,
             }}
           >
-            <span style={{ fontWeight: 600, color: '#a5b4fc' }}>Capsens</span>
-            <span style={{ fontWeight: 700, color: '#ffffff', fontSize: '22px' }}>2</span>
-            ans
+            Node.js / TypeScript
           </div>
-          <div
-            style={{
-              width: '1px',
-              height: '24px',
-              background: '#374151',
-            }}
-          />
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              color: '#9ca3af',
-              fontSize: '18px',
+              padding: '8px 16px',
+              borderRadius: '50px',
+              border: '1px solid rgba(99, 102, 241, 0.3)',
+              background: 'rgba(99, 102, 241, 0.1)',
+              color: '#a5b4fc',
+              fontSize: '16px',
+              fontWeight: 600,
             }}
           >
-            Formation
-            <span style={{ fontWeight: 600, color: '#a5b4fc' }}>Le Wagon</span>
+            Ex Capsens
           </div>
         </div>
 

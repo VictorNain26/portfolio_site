@@ -65,30 +65,20 @@ export default function Hero() {
           votre activité.
         </motion.p>
 
-        {/* Stats rapides */}
+        {/* Crédibilité - nouveau freelance */}
         <motion.div
           {...fadeIn}
-          className="mb-10 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400"
+          className="mb-10 flex flex-wrap items-center justify-center gap-3 text-sm text-gray-400 sm:gap-5"
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <span className="flex items-center gap-2">
-            <span className="text-lg font-bold text-white">3+</span> ans
-            d&apos;expérience
+          <span className="rounded-full border border-gray-700 bg-gray-800/50 px-3 py-1">
+            <span className="font-semibold text-white">React</span> / <span className="font-semibold text-white">Next.js</span>
           </span>
-          <span className="hidden h-4 w-px bg-gray-700 sm:block" />
-          <span className="flex items-center gap-2">
-            <span className="text-lg font-bold text-white">20+</span> projets
-            réalisés
+          <span className="rounded-full border border-gray-700 bg-gray-800/50 px-3 py-1">
+            <span className="font-semibold text-white">Node.js</span> / <span className="font-semibold text-white">TypeScript</span>
           </span>
-          <span className="hidden h-4 w-px bg-gray-700 sm:block" />
-          <span className="flex items-center gap-2">
-            <span className="font-semibold text-indigo-300">Capsens</span>{' '}
-            <span className="text-lg font-bold text-white">2</span> ans
-          </span>
-          <span className="hidden h-4 w-px bg-gray-700 sm:block" />
-          <span className="flex items-center gap-2">
-            Formation{' '}
-            <span className="font-semibold text-indigo-300">Le Wagon</span>
+          <span className="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1">
+            Ex <span className="font-semibold text-indigo-300">Capsens</span>
           </span>
         </motion.div>
 
