@@ -82,6 +82,11 @@ export default function Hero() {
           </span>
           <span className="hidden h-4 w-px bg-gray-700 sm:block" />
           <span className="flex items-center gap-2">
+            <span className="font-semibold text-indigo-300">Capsens</span>{' '}
+            <span className="text-lg font-bold text-white">2</span> ans
+          </span>
+          <span className="hidden h-4 w-px bg-gray-700 sm:block" />
+          <span className="flex items-center gap-2">
             Formation{' '}
             <span className="font-semibold text-indigo-300">Le Wagon</span>
           </span>

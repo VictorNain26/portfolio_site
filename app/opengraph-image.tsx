@@ -100,7 +100,7 @@ export default function OGImage() {
         <div
           style={{
             display: 'flex',
-            gap: '48px',
+            gap: '32px',
           }}
         >
           <div
@@ -109,10 +109,10 @@ export default function OGImage() {
               alignItems: 'center',
               gap: '8px',
               color: '#9ca3af',
-              fontSize: '20px',
+              fontSize: '18px',
             }}
           >
-            <span style={{ fontWeight: 700, color: '#ffffff', fontSize: '24px' }}>3+</span>
+            <span style={{ fontWeight: 700, color: '#ffffff', fontSize: '22px' }}>3+</span>
             ans d&apos;expérience
           </div>
           <div
@@ -128,11 +128,12 @@ export default function OGImage() {
               alignItems: 'center',
               gap: '8px',
               color: '#9ca3af',
-              fontSize: '20px',
+              fontSize: '18px',
             }}
           >
-            <span style={{ fontWeight: 700, color: '#ffffff', fontSize: '24px' }}>20+</span>
-            projets réalisés
+            <span style={{ fontWeight: 600, color: '#a5b4fc' }}>Capsens</span>
+            <span style={{ fontWeight: 700, color: '#ffffff', fontSize: '22px' }}>2</span>
+            ans
           </div>
           <div
             style={{
@@ -147,7 +148,7 @@ export default function OGImage() {
               alignItems: 'center',
               gap: '8px',
               color: '#9ca3af',
-              fontSize: '20px',
+              fontSize: '18px',
             }}
           >
             Formation
