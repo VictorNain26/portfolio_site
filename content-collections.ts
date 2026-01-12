@@ -10,7 +10,7 @@ const posts = defineCollection({
   schema: z.object({
     title: z.string(),
     summary: z.string(),
-    coverImage: z.string().regex(/^\/images\/.+\.(jpg|jpeg|png|webp|avif)$/i),
+    coverImage: z.string().regex(/^\/images\/.+\.(jpg|jpeg|png|webp|avif)$/i).optional(),
     publishedAt: z.string(),
     tags: z.array(z.string()).default([]),
   }),

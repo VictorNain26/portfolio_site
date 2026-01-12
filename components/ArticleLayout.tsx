@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 type Post = {
   title: string;
   summary: string;
-  coverImage: string;
+  coverImage?: string;
   publishedAt: string;
   readingTime: number;
   slug: string;
@@ -42,8 +42,19 @@ export default function ArticleLayout({
 
       {/* ---------- HERO ---------- */}
       <header className="relative h-56 w-full overflow-hidden sm:h-[40vh]">
-        <Image fill priority alt="" className="object-cover object-center" src={post.coverImage} />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-transparent" />
+        {post.coverImage ? (
+          <>
+            <Image fill priority alt="" className="object-cover object-center" src={post.coverImage} />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-transparent" />
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0e082e] via-[#1a0f4a] to-[#2d1b69]">
+            {/* Decorative elements */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(99,102,241,0.15),_transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(139,92,246,0.1),_transparent_50%)]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
+          </div>
+        )}
 
         {/* Titre + résumé */}
         <div className="absolute inset-x-4 bottom-6 mx-auto max-w-4xl text-center drop-shadow-[0_3px_8px_rgba(0,0,0,0.55)]">

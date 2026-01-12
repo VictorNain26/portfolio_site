@@ -77,7 +77,7 @@ export default function BlogIndex() {
         '@type': 'Person',
         name: 'Victor Lenain',
       },
-      image: `https://victorlenain.fr${post.coverImage}`,
+      ...(post.coverImage && { image: `https://victorlenain.fr${post.coverImage}` }),
       keywords: post.tags,
       articleSection: 'Technologie',
       inLanguage: 'fr-FR',
@@ -113,13 +113,25 @@ export default function BlogIndex() {
                 href={`/blog/${post.slug}`}
               >
                 <div className="relative h-48">
-                  <Image
-                    fill
-                    alt=""
-                    className="object-cover transition-transform duration-300 group-hover:scale-[1.05]"
-                    src={post.coverImage}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
+                  {post.coverImage ? (
+                    <>
+                      <Image
+                        fill
+                        alt=""
+                        className="object-cover transition-transform duration-300 group-hover:scale-[1.05]"
+                        src={post.coverImage}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
+                    </>
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#0e082e] via-[#1a0f4a] to-[#2d1b69] transition-all duration-300 group-hover:scale-[1.02]">
+                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(99,102,241,0.2),_transparent_50%)]" />
+                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(139,92,246,0.15),_transparent_50%)]" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-4xl font-bold text-white/10">{'</>'}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-6">
