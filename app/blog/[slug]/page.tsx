@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import MDX from '@/components/MDX';
 import ArticleLayout from '@/components/ArticleLayout';
 
+const BASE_URL = 'https://victorlenain.fr';
+
 /* ---------------- Params statiques ---------------- */
 export function generateStaticParams() {
   return allPosts.map(p => ({ slug: p.slug }));
@@ -15,10 +17,37 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!post) {
     return {};
   }
+
+  const url = `${BASE_URL}/blog/${post.slug}`;
+
   return {
     title: post.title,
     description: post.summary,
-    openGraph: { images: [post.coverImage] },
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.summary,
+      url,
+      type: 'article',
+      publishedTime: post.publishedAt,
+      authors: ['Victor Lenain'],
+      images: [
+        {
+          url: post.coverImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.summary,
+      images: [post.coverImage],
+    },
   };
 }
 

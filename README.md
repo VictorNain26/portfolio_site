@@ -1,45 +1,78 @@
-# Victor Lenain – Portfolio Dev Web & DevOps
+# Victor Lenain - Portfolio Développeur Freelance
 
-> **Elevator-pitch :** je conçois des applications web modernes (Next 15 / R3F)
-> et j’automatise leur déploiement cloud. Démo 👉 <https://victorlenain.fr>
+> Site portfolio minimaliste et orienté conversion pour le démarchage de missions freelance.
+> Démo : <https://victorlenain.fr>
 
-![screencast](docs/assets/screen.gif)
+## Stack technique
 
-|                          |                                                                                                               |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| **Stack principale**     | Next.js 15 (App Router), Tailwind CSS 4, shadcn/ui, Framer Motion, React-three-fiber, Hugging Face Inference. |
-| **Fonctionnalités clés** | 3 D Hero (génération Shap-E), scroll animé Radix/UI, formulaire de contact mailto.                            |
+| Catégorie | Technologies |
+|-----------|-------------|
+| **Framework** | Next.js 15 (App Router), React 19, TypeScript |
+| **Styling** | Tailwind CSS 4, Framer Motion |
+| **Content** | MDX via Content Collections |
+| **Qualité** | ESLint strict, Vitest, Prettier |
 
-## 🚀 Démarrage rapide
+## Structure du site
 
-```bash
-# 1. Cloner
-git clone https://github.com/<you>/victornain26-portfolio_site.git
-cd victornain26-portfolio_site
-
-# 2. Installer
-bun install    # bun.lockb doit être commit-safe
-
-# 3. Init UI
-bunx shadcn init
-
-# 4. Variables d’env.
-cp .env.example .env.local   # puis renseigner HF_TOKEN
-
-# 5. Dev
-bun run dev
+```
+Hero         → Présentation + CTA contact
+Services     → Ce que je peux faire pour vous
+Projets      → Portfolio GitHub (filtrés par topic "demo")
+Contact      → Appel à l'action final
+Blog         → Articles techniques (route /blog)
 ```
 
-## 🎨 Modèles 3D (Hero)
+## Démarrage rapide
 
-- Fichier: `components/ModelHero.tsx`
-- Techs cyclées: React, Next.js, TypeScript, Tailwind, Node.js
-- Chaque logo est un modèle procédural (R3F + drei) avec matériaux PBR, ombres
-  de contact et bloom léger.
+```bash
+# Cloner et installer
+git clone https://github.com/victornain26/portfolio_site.git
+cd portfolio_site
+bun install
 
-Ajouter une technologie:
+# Développement
+bun run dev
 
-- Ajouter une entrée dans `TECH_MODELS` avec `name`, `type`, `color`.
-- Implémenter un composant `XxxLogo` dédié et l’enregistrer dans `TechModel`
-  (switch `model.type`).
-- Ajuster l’éclairage si besoin via les `pointLight` conditionnels.
+# Build production
+bun run build
+```
+
+## Scripts disponibles
+
+| Commande | Description |
+|----------|-------------|
+| `bun run dev` | Serveur de développement |
+| `bun run build` | Build production |
+| `bun run lint` | Vérification ESLint |
+| `bun run test` | Tests Vitest |
+| `bun run format` | Formatage Prettier |
+
+## Personnalisation
+
+### Modifier les informations de contact
+
+Éditer `components/Hero.tsx` :
+- Email, WhatsApp, liens sociaux
+
+### Ajouter des services
+
+Éditer `components/Services.tsx` :
+- Modifier le tableau `services` avec titre, description, résultats
+
+### Ajouter des projets
+
+Sur GitHub, ajouter le topic `demo` aux repos à afficher.
+
+### Ajouter un article de blog
+
+Créer un fichier `.mdx` dans `content/posts/` avec le frontmatter :
+
+```yaml
+---
+title: "Titre de l'article"
+summary: "Résumé court"
+coverImage: "/images/posts/cover.jpg"
+publishedAt: "2025-01-01"
+tags: ["tag1", "tag2"]
+---
+```

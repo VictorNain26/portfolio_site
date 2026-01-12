@@ -1,36 +1,32 @@
 import type { MetadataRoute } from 'next';
+import { allPosts } from 'content-collections';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+  const baseUrl = 'https://victorlenain.fr';
+
+  // Pages statiques principales
+  const staticPages: MetadataRoute.Sitemap = [
     {
-      url: 'https://victorlenain.fr',
+      url: baseUrl,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1,
     },
     {
-      url: 'https://victorlenain.fr/blog',
+      url: `${baseUrl}/blog`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
-    {
-      url: 'https://victorlenain.fr#a-propos',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: 'https://victorlenain.fr#projets',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: 'https://victorlenain.fr#contact',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
   ];
+
+  // Articles de blog dynamiques
+  const blogPosts: MetadataRoute.Sitemap = allPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.publishedAt),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...blogPosts];
 }

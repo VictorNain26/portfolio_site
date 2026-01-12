@@ -1,38 +1,28 @@
-import Script from 'next/script';
-import { personJsonLd, websiteJsonLd, professionalServiceJsonLd } from '../metadata-config';
+import {
+  personJsonLd,
+  websiteJsonLd,
+  professionalServiceJsonLd,
+} from '../metadata-config';
 
+/**
+ * JSON-LD structured data for SEO and AEO.
+ * Uses inline script tags (not next/script with afterInteractive)
+ * to ensure crawlers and AI engines can read the data immediately.
+ * Data is static and trusted from metadata-config.ts.
+ */
 export default function JsonLdScripts() {
+  // All data is static from metadata-config.ts, safe for inline rendering
+  const schemas = [personJsonLd, websiteJsonLd, professionalServiceJsonLd];
+
   return (
     <>
-      {/* JSON-LD for Person */}
-      <Script
-        id="ld-person"
-        strategy="afterInteractive"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(personJsonLd),
-        }}
-      />
-
-      {/* JSON-LD for Website */}
-      <Script
-        id="ld-website"
-        strategy="afterInteractive"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(websiteJsonLd),
-        }}
-      />
-
-      {/* JSON-LD for Professional Service */}
-      <Script
-        id="ld-professional-service"
-        strategy="afterInteractive"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(professionalServiceJsonLd),
-        }}
-      />
+      {schemas.map((schema, index) => (
+        <script
+          key={index}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          type="application/ld+json"
+        />
+      ))}
     </>
   );
 }

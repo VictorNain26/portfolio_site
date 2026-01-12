@@ -1,92 +1,123 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronDown, Mail } from 'lucide-react';
+import { ChevronDown, Mail, ArrowRight } from 'lucide-react';
 import { FaWhatsapp, FaGithub, FaLinkedin } from 'react-icons/fa';
 import { SocialIconButton } from '@/components/ui/social-icon-button';
 
-// Animation constants for performance optimization
-const ANIMATION_DURATION = 0.5;
-const BEZIER_START = 0.25;
-const BEZIER_MID_LOW = 0.1;
-const BEZIER_MID_HIGH = 0.25;
-const BEZIER_END = 1;
-const BEZIER_CURVE = [BEZIER_START, BEZIER_MID_LOW, BEZIER_MID_HIGH, BEZIER_END] as const;
-const INITIAL_DELAY = 0.2;
-
-const ModelHero = dynamic(async () => import('@/components/ModelHeroFast'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-full items-center justify-center">
-      <div className="h-8 w-8 animate-pulse rounded-full bg-indigo-500/20" />
-    </div>
-  ),
-});
-
 export default function Hero() {
-  const prefersReduceMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+
+  const fadeIn = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 20 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true },
+      };
 
   return (
     <section
-      className="relative flex min-h-[100svh] flex-col items-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] sm:pt-0"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center px-4 sm:px-8"
       id="accueil"
     >
-      {/* ── Contenu principal ─────────────────────────────────────── */}
-      <div className="mx-auto flex max-w-7xl flex-col gap-14 px-0 sm:items-center sm:gap-10 sm:px-8 lg:grid lg:min-h-[70vh] lg:grid-cols-2 lg:place-items-center lg:gap-16 lg:px-20">
-        {/* Titre + tagline */}
-        <motion.header
-          className="order-1 flex flex-col sm:items-center lg:order-none lg:items-start"
-          // Reduced movement for better mobile performance
-          initial={prefersReduceMotion ? false : { opacity: 0, y: 16 }}
-          viewport={{ once: true }}
-          whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
-          transition={{ 
-            // Faster animation for better mobile performance
-            duration: prefersReduceMotion ? 0 : ANIMATION_DURATION,
-            ease: BEZIER_CURVE,
-            // Stagger after page load to prevent flash
-            delay: INITIAL_DELAY
-          }}
-        >
-          <h1 className="font-display gradient-brand-text mb-2 text-[clamp(2.6rem,7.5vw,5.3rem)] leading-[1.05] font-extrabold tracking-[-0.035em]">
-            Victor&nbsp;Lenain
-          </h1>
-
-          <div className="mb-3 flex items-center gap-3 sm:justify-center">
-            <span className="h-1 w-8 rounded-full bg-gradient-to-r from-[#6bb4d8] via-[#4288b7] to-[#2d5e81]" />
-            <p className="text-sm font-medium tracking-wide text-indigo-200 uppercase sm:text-base">
-              Développeur&nbsp;Full-Stack
-            </p>
-          </div>
-
-          <p className="hidden max-w-[28ch] text-sm text-gray-300 sm:block sm:max-w-md sm:text-base">
-            Conception et développement d&apos;applications web modernes, d&apos;expériences&nbsp;3D
-            et d&apos;intégrations&nbsp;IA/LLM.
-          </p>
-        </motion.header>
-
-        {/* Visuel 3D */}
+      <div className="mx-auto max-w-3xl text-center">
+        {/* Badge intro */}
         <motion.div
-          className="order-2 h-[400px] w-full touch-pan-y lg:order-none lg:h-[500px]"
-          initial={prefersReduceMotion ? false : { opacity: 0, scale: 0.93 }}
-          transition={{ delay: 0.15, duration: 0.7 }}
-          viewport={{ once: true }}
-          whileInView={prefersReduceMotion ? {} : { opacity: 1, scale: 1 }}
+          {...fadeIn}
+          className="mb-6"
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <ModelHero />
+          <span className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-sm text-indigo-300">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-green-400" />
+            Disponible pour des missions
+          </span>
         </motion.div>
-      </div>
 
-      {/* ── Réseaux sociaux ───────────────────────────────────────── */}
-      <motion.nav
-        className="absolute bottom-[calc(4.5rem+env(safe-area-inset-bottom))] w-full"
-        initial={prefersReduceMotion ? false : { opacity: 0, y: 24 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        whileInView={prefersReduceMotion ? {} : { opacity: 1, y: 0 }}
-      >
-        <div className="mx-auto flex max-w-7xl justify-center gap-4 px-4 sm:gap-6 sm:px-8 lg:px-20">
+        {/* Nom */}
+        <motion.h1
+          {...fadeIn}
+          className="font-display gradient-brand-text mb-4 text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl"
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          Victor Lenain
+        </motion.h1>
+
+        {/* Titre */}
+        <motion.p
+          {...fadeIn}
+          className="mb-6 text-xl font-medium text-indigo-200 sm:text-2xl"
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          Développeur Full-Stack JavaScript
+        </motion.p>
+
+        {/* Description courte - proposition de valeur */}
+        <motion.p
+          {...fadeIn}
+          className="mx-auto mb-8 max-w-xl text-base leading-relaxed text-gray-400 sm:text-lg"
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          Je transforme vos idées en{' '}
+          <span className="text-indigo-300">applications web performantes</span>{' '}
+          qui font la différence. Sites sur mesure, automatisation et{' '}
+          <span className="text-indigo-300">intégration IA</span> pour booster
+          votre activité.
+        </motion.p>
+
+        {/* Stats rapides */}
+        <motion.div
+          {...fadeIn}
+          className="mb-10 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400"
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <span className="flex items-center gap-2">
+            <span className="text-lg font-bold text-white">3+</span> ans
+            d&apos;expérience
+          </span>
+          <span className="hidden h-4 w-px bg-gray-700 sm:block" />
+          <span className="flex items-center gap-2">
+            <span className="text-lg font-bold text-white">20+</span> projets
+            réalisés
+          </span>
+          <span className="hidden h-4 w-px bg-gray-700 sm:block" />
+          <span className="flex items-center gap-2">
+            Formation{' '}
+            <span className="font-semibold text-indigo-300">Le Wagon</span>
+          </span>
+        </motion.div>
+
+        {/* CTA principal */}
+        <motion.div
+          {...fadeIn}
+          className="mb-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <a
+            className="group inline-flex items-center gap-2 rounded-full bg-indigo-600 px-8 py-4 text-sm font-medium text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-xl hover:shadow-indigo-500/30"
+            href="mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission"
+          >
+            <Mail aria-hidden="true" className="h-5 w-5" />
+            Discutons de votre projet
+            <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </a>
+          <a
+            className="inline-flex items-center gap-2 rounded-full border border-gray-700 bg-gray-800/50 px-6 py-4 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-gray-600 hover:bg-gray-800 hover:text-white"
+            href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <FaWhatsapp aria-hidden="true" className="h-5 w-5 text-green-400" />
+            WhatsApp
+          </a>
+        </motion.div>
+
+        {/* Réseaux sociaux */}
+        <motion.nav
+          {...fadeIn}
+          className="flex justify-center gap-4"
+          transition={{ duration: 0.5, delay: 0.7 }}
+        >
           <SocialIconButton
             aria-label="GitHub"
             href="https://github.com/victornain26"
@@ -95,7 +126,6 @@ export default function Hero() {
           >
             <FaGithub />
           </SocialIconButton>
-
           <SocialIconButton
             aria-label="LinkedIn"
             href="https://www.linkedin.com/in/victor-lenain-1907b7282/"
@@ -104,36 +134,20 @@ export default function Hero() {
           >
             <FaLinkedin />
           </SocialIconButton>
+        </motion.nav>
+      </div>
 
-          <SocialIconButton
-            aria-label="WhatsApp"
-            href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <FaWhatsapp />
-          </SocialIconButton>
-
-          <SocialIconButton
-            aria-label="Mail"
-            href="mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission"
-          >
-            <Mail />
-          </SocialIconButton>
-        </div>
-      </motion.nav>
-
-      {/* ── Flèche vers la section suivante ───────────────────────── */}
+      {/* Flèche vers la section suivante */}
       <a
-        aria-label="Faire défiler vers la section À propos"
-        className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 text-white/80 transition-opacity hover:opacity-100"
-        href="#a-propos"
-        onClick={e => {
+        aria-label="Voir mes services"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-gray-500 transition-colors hover:text-white"
+        href="#services"
+        onClick={(e) => {
           e.preventDefault();
-          document.getElementById('a-propos')?.scrollIntoView({ behavior: 'smooth' });
+          document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
         }}
       >
-        <ChevronDown aria-hidden className="h-7 w-7 animate-bounce" />
+        <ChevronDown className="h-6 w-6 animate-bounce" />
       </a>
     </section>
   );

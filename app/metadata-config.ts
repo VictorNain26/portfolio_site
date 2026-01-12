@@ -1,4 +1,5 @@
 // Configuration des métadonnées pour améliorer la lisibilité du layout
+
 export const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -8,11 +9,10 @@ export const personJsonLd = {
   description:
     "Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Expert en création d'applications web modernes et performantes.",
   url: 'https://victorlenain.fr',
-  image: 'https://victorlenain.fr/og-image-dark.svg',
+  image: 'https://victorlenain.fr/og-image.png',
   sameAs: [
     'https://www.linkedin.com/in/victor-lenain-1907b7282/',
-    'https://github.com/victorlenain',
-    'https://twitter.com/victor_lenain',
+    'https://github.com/victornain26',
   ],
   knowsAbout: [
     'JavaScript',
@@ -109,7 +109,7 @@ export const professionalServiceJsonLd = {
   description:
     'Services professionnels de développement web Full-Stack avec Next.js, React et TypeScript.',
   url: 'https://victorlenain.fr',
-  image: 'https://victorlenain.fr/og-image-dark.svg',
+  image: 'https://victorlenain.fr/og-image.png',
   provider: {
     '@type': 'Person',
     name: 'Victor Lenain',

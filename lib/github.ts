@@ -54,7 +54,6 @@ export async function getGitHubProjects(): Promise<Project[]> {
       throw new Error(`GitHub API error: ${reposResponse.status.toString()}`);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const repos: GitHubRepo[] = await reposResponse.json();
 
     // Filtrer les repos avec le topic "demo"
@@ -109,7 +108,6 @@ async function getRepoLanguages(languagesUrl: string): Promise<string[]> {
       return [];
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const languages: GitHubLanguages = await response.json();
 
     // Retourner les langages triés par usage (descending)
