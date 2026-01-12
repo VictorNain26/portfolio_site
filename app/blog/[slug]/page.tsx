@@ -33,20 +33,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: 'article',
       publishedTime: post.publishedAt,
       authors: ['Victor Lenain'],
-      images: [
-        {
-          url: post.coverImage,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
+      // Images are generated dynamically by opengraph-image.tsx
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.summary,
-      images: [post.coverImage],
+      // Images are generated dynamically by opengraph-image.tsx
     },
   };
 }
