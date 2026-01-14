@@ -1,32 +1,58 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
-import js from '@eslint/js';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextPlugin from '@next/eslint-plugin-next';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import tseslint from 'typescript-eslint';
+import prettierConfig from 'eslint-config-prettier';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+/**
+ * ESLint Flat Config for Next.js 15 + TypeScript
+ * @see https://nextjs.org/docs/app/api-reference/config/eslint
+ * @see https://eslint.org/blog/2025/03/flat-config-extends-define-config-global-ignores/
+ */
+export default defineConfig([
+  // Global ignores
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'dist/**',
+    'build/**',
+    'coverage/**',
+    'node_modules/**',
+    '.content-collections/**',
+    'next-env.d.ts',
+  ]),
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-});
-
-const eslintConfig = [
-  {
-    ignores: [
-      '.next/**',
-      'out/**',
-      'dist/**',
-      'build/**',
-      'node_modules/**',
-      '.content-collections/**',
-    ],
-  },
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  // TypeScript files configuration
   {
     files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: { jsx: true },
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+      '@next/next': nextPlugin,
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+    },
+    settings: {
+      react: { version: 'detect' },
+    },
     rules: {
-      // TypeScript rules
+      // ─────────────────────────────────────────────────────────────────────
+      // Next.js rules (from core-web-vitals)
+      // ─────────────────────────────────────────────────────────────────────
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs['core-web-vitals'].rules,
+
+      // ─────────────────────────────────────────────────────────────────────
+      // TypeScript
+      // ─────────────────────────────────────────────────────────────────────
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -40,27 +66,15 @@ const eslintConfig = [
         'error',
         { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
       ],
+      '@typescript-eslint/no-empty-object-type': 'off', // Allow {} for React props
 
-      // Code style
-      'no-console': 'error',
-      'no-debugger': 'error',
-      'no-var': 'error',
-      'prefer-const': 'error',
-      'prefer-template': 'error',
-      'object-shorthand': 'error',
-      eqeqeq: ['error', 'always'],
-      curly: ['error', 'all'],
-      'no-magic-numbers': [
-        'warn',
-        {
-          ignore: [-1, 0, 1, 2, 100, 200, 404, 500],
-          ignoreArrayIndexes: true,
-          ignoreDefaultValues: true,
-          detectObjects: false,
-        },
-      ],
-
-      // React
+      // ─────────────────────────────────────────────────────────────────────
+      // React & Hooks
+      // ─────────────────────────────────────────────────────────────────────
+      ...reactPlugin.configs.recommended.rules,
+      ...reactHooksPlugin.configs.recommended.rules,
+      'react/react-in-jsx-scope': 'off', // Not needed in Next.js
+      'react/prop-types': 'off', // Using TypeScript
       'react/jsx-boolean-value': ['error', 'never'],
       'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
       'react/jsx-no-useless-fragment': 'error',
@@ -76,16 +90,30 @@ const eslintConfig = [
       ],
       'react/self-closing-comp': 'error',
       'react-hooks/exhaustive-deps': 'error',
+
+      // ─────────────────────────────────────────────────────────────────────
+      // Code quality
+      // ─────────────────────────────────────────────────────────────────────
+      'no-console': ['error', { allow: ['error', 'warn'] }],
+      'no-debugger': 'error',
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'prefer-template': 'error',
+      'object-shorthand': 'error',
+      eqeqeq: ['error', 'always'],
+      curly: ['error', 'all'],
     },
   },
+
+  // Test files - relaxed rules
   {
     files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       'no-console': 'off',
-      'no-magic-numbers': 'off',
     },
   },
-];
 
-export default eslintConfig;
+  // Prettier must be last to override formatting rules
+  prettierConfig,
+]);

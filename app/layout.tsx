@@ -1,6 +1,7 @@
 import './globals.css';
 import { Inter, Sora } from 'next/font/google';
 import { type ReactNode, Suspense } from 'react';
+import Script from 'next/script';
 
 import ScrollView from '@/components/ScrollView';
 import BackToTop from '@/components/BackToTop';
@@ -116,6 +117,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Suspense fallback={null}>
           <BackToTop />
         </Suspense>
+
+        {/* Umami Analytics - privacy-friendly, no cookies */}
+        <Script
+          defer
+          data-website-id="REMPLACER_PAR_TON_WEBSITE_ID"
+          src="https://cloud.umami.is/script.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

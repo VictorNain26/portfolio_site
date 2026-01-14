@@ -58,6 +58,7 @@ export default function Hero() {
         >
           <a
             className="group inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-base font-semibold text-gray-900 shadow-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl"
+            data-umami-event="cta-hero-email"
             href="mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission"
           >
             <Mail aria-hidden="true" className="h-5 w-5" />
@@ -75,6 +76,7 @@ export default function Hero() {
           ou via{' '}
           <a
             className="text-green-400 underline underline-offset-4 transition-colors hover:text-green-300"
+            data-umami-event="cta-hero-whatsapp"
             href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous"
             rel="noopener noreferrer"
             target="_blank"

@@ -36,27 +36,31 @@ export default function HeaderBar() {
   const pathname = usePathname();
   const onBlog = pathname.startsWith('/blog');
 
-  /* Affichage : fixe sur /blog, sinon après scroll */
-  const [show, setShow] = useState(onBlog);
+  /* Affichage : fixe sur /blog, sinon après scroll passé le hero */
+  const [scrolledPastHero, setScrolledPastHero] = useState(false);
+
+  // Sur /blog : toujours visible. Sinon : visible après scroll passé le hero
+  const show = onBlog || scrolledPastHero;
 
   useEffect(() => {
+    // Sur /blog, pas besoin d'observer le scroll
     if (onBlog) {
-      setShow(true);
       return;
     }
+
     const hero = document.getElementById('accueil');
     if (!hero) {
       return;
     }
+
     const io = new IntersectionObserver(
       ([e]) => {
-        setShow(!e?.isIntersecting);
+        setScrolledPastHero(!e?.isIntersecting);
       },
-      {
-        threshold: 0,
-      },
+      { threshold: 0 },
     );
     io.observe(hero);
+
     return () => {
       io.disconnect();
     };

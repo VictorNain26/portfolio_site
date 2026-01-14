@@ -15,6 +15,7 @@ export default function Contact() {
       {/* Bouton mail */}
       <a
         className="relative inline-flex items-center gap-2 rounded-full bg-indigo-600 px-8 py-4 text-sm font-medium text-white shadow-lg transition-transform duration-200 hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
+        data-umami-event="cta-contact-email"
         href="mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission"
       >
         <Mail aria-hidden className="h-5 w-5" />

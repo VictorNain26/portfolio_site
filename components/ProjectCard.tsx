@@ -75,17 +75,10 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
                 {project.technologies.slice(0, MAX_VISIBLE_TECHNOLOGIES).map(tech => (
                   <span
                     key={tech}
-                    className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium text-white"
-                    style={{
-                      backgroundColor: `${getTechnologyColor(tech)}20`,
-                      borderColor: getTechnologyColor(tech),
-                      border: `1px solid ${getTechnologyColor(tech)}40`,
-                    }}
+                    className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium text-white bg-[--tech-color]/20 border-[--tech-color]/40"
+                    style={{ '--tech-color': getTechnologyColor(tech) } as React.CSSProperties}
                   >
-                    <span
-                      className="h-2 w-2 rounded-full"
-                      style={{ backgroundColor: getTechnologyColor(tech) }}
-                    />
+                    <span className="h-2 w-2 rounded-full bg-[--tech-color]" />
                     {tech}
                   </span>
                 ))}
