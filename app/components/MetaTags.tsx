@@ -21,7 +21,7 @@ export default function MetaTags() {
       <meta content="votre-code-verification-bing" name="msvalidate.01" />
 
       {/* ---- Préchargement de ressources critiques ---- */}
-      <link as="image" href="/images/hero-bg.jpg" rel="preload" type="image/jpeg" />
+      <link as="image" href="/images/hero-bg.webp" rel="preload" type="image/webp" />
       <link href="//fonts.googleapis.com" rel="dns-prefetch" />
       <link crossOrigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect" />
     </>
