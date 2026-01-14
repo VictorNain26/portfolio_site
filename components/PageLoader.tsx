@@ -2,39 +2,45 @@
 
 import { useEffect, useState } from 'react';
 
+const MAX_LOADING_TIME = 3000; // Force show content after 3s max
+
 export default function PageLoader() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Mark page as loaded after critical resources
+    const markAsLoaded = () => {
+      setIsLoaded(true);
+    };
+
+    // Fallback: always show content after MAX_LOADING_TIME
+    const fallbackTimer = setTimeout(markAsLoaded, MAX_LOADING_TIME);
+
+    // Ideal: show when page is fully loaded
     const handleLoad = () => {
-      // Small delay to ensure smooth transition
-      setTimeout(() => {
-        setIsLoaded(true);
-      }, 100);
+      clearTimeout(fallbackTimer);
+      // Small delay for smooth transition
+      setTimeout(markAsLoaded, 100);
     };
 
     if (document.readyState === 'complete') {
+      clearTimeout(fallbackTimer);
       handleLoad();
     } else {
       window.addEventListener('load', handleLoad);
     }
 
     return () => {
+      clearTimeout(fallbackTimer);
       window.removeEventListener('load', handleLoad);
     };
   }, []);
 
   useEffect(() => {
-    // Add classes to body for loading state management
     const { body } = document;
-    
+
     if (isLoaded) {
       body.classList.remove('js-loading');
       body.classList.add('js-loaded');
-    } else {
-      body.classList.add('js-loading');
-      body.classList.remove('js-loaded');
     }
 
     return () => {
@@ -42,14 +48,6 @@ export default function PageLoader() {
     };
   }, [isLoaded]);
 
-  // Render loading indicator for initial page load
-  if (!isLoaded) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-      </div>
-    );
-  }
-
+  // No visible loader - just manages the fade-in transition
   return null;
 }

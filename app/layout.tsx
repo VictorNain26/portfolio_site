@@ -101,7 +101,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <JsonLdScripts />
       </head>
 
-      <body className="text-foreground relative bg-[#0e082e] bg-[url('/images/hero-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased js-loading">
+      <body className="text-foreground relative bg-[#0e082e] bg-[url('/images/hero-bg.webp')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased js-loading">
         {/* Page loader for smooth initial load */}
         <PageLoader />
         
