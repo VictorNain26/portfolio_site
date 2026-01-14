@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-const MAX_LOADING_TIME = 3000; // Force show content after 3s max
+const MAX_LOADING_TIME = 1000; // Force show content after 1s max
 
 export default function PageLoader() {
   const [isLoaded, setIsLoaded] = useState(false);
