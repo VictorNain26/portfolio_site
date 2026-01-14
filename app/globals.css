@@ -116,18 +116,6 @@
     }
   }
 
-  /* Initial page load optimization */
-  .js-loading {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-  }
-
-  .js-loaded {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
   /* Mobile-specific optimizations */
   @media (max-width: 768px) {
     /* Disable hover effects on touch devices */

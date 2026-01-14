@@ -2,7 +2,11 @@
   "compilerOptions": {
     /* Base Options */
     "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -15,9 +19,8 @@
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
-
     /* Strict Type-Checking Options */
     "exactOptionalPropertyTypes": true,
     "noImplicitAny": true,
@@ -30,45 +33,40 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": true,
-
     /* Additional Checks */
     "noImplicitUseStrict": false,
     "noStrictGenericChecks": false,
     "suppressExcessPropertyErrors": false,
     "suppressImplicitAnyIndexErrors": false,
-
     /* Module Resolution */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "content-collections": ["./.content-collections/generated"]
+      "@/*": [
+        "./*"
+      ],
+      "content-collections": [
+        "./.content-collections/generated"
+      ]
     },
-
     /* Interop Constraints */
     "allowUmdGlobalAccess": false,
-
     /* Language and Environment */
     "experimentalDecorators": false,
     "emitDecoratorMetadata": false,
     "useDefineForClassFields": true,
-
     /* Completeness */
     "skipDefaultLibCheck": false,
-
     /* Projects */
     "composite": false,
     "disableReferencedProjectLoad": false,
     "disableSolutionSearching": false,
     "disableSourceOfProjectReferenceRedirect": false,
-
     /* Output Formatting */
     "noErrorTruncation": false,
     "preserveWatchOutput": false,
     "pretty": true,
-
     /* Watch Options */
     "assumeChangesOnlyAffectDirectDependencies": false,
-
     /* Next.js */
     "plugins": [
       {
@@ -76,8 +74,20 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", ".next", "out", "dist", "build"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "out",
+    "dist",
+    "build"
+  ],
   "ts-node": {
     "esm": true
   }

@@ -7,12 +7,17 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable experimental features
+  // Turbopack (default in Next.js 16)
+  turbopack: {},
+
+  // Cache Components (replaces PPR in Next.js 16)
+  cacheComponents: true,
+
+  // React Compiler (requires babel-plugin-react-compiler)
+  // reactCompiler: true,
+
+  // Experimental features
   experimental: {
-    // Partial Prerendering for better performance
-    ppr: true,
-    // React compiler for better optimization
-    reactCompiler: true,
     // Optimized package imports
     optimizePackageImports: [
       'lucide-react',
@@ -20,26 +25,13 @@ const nextConfig = {
       '@radix-ui/react-scroll-area',
       '@radix-ui/react-slot',
     ],
-    // Bundle size optimization
-    bundlePagesRouterDependencies: true,
     // CSS optimization
     cssChunking: 'strict',
-    // Parallel build
-    parallelServerBuildTraces: true,
-    // Memory optimization
-    memoryBasedWorkersCount: true,
   },
 
   // TypeScript configuration
   typescript: {
-    // Fail build on TypeScript errors
     ignoreBuildErrors: false,
-  },
-
-  // ESLint configuration
-  eslint: {
-    // Fail build on ESLint errors
-    ignoreDuringBuilds: false,
   },
 
   // Performance optimizations
@@ -143,15 +135,6 @@ const nextConfig = {
     buildActivityPosition: 'bottom-right',
   },
 
-  // Production optimizations
-  ...(process.env.NODE_ENV === 'production' && {
-    // Remove unused CSS
-    modularizeImports: {
-      'lucide-react': {
-        transform: 'lucide-react/dist/esm/icons/{{member}}',
-      },
-    },
-  }),
 };
 
 export default withBundleAnalyzer(withContentCollections(nextConfig));

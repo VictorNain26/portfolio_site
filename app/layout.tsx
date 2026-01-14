@@ -6,7 +6,6 @@ import Script from 'next/script';
 import ScrollView from '@/components/ScrollView';
 import BackToTop from '@/components/BackToTop';
 import HeaderBar from '@/components/HeaderBar';
-import PageLoader from '@/components/PageLoader';
 import MetaTags from './components/MetaTags';
 import JsonLdScripts from './components/JsonLdScripts';
 
@@ -101,10 +100,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <JsonLdScripts />
       </head>
 
-      <body className="text-foreground relative bg-[#0e082e] bg-[url('/images/hero-bg.webp')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased js-loading">
-        {/* Page loader for smooth initial load */}
-        <PageLoader />
-        
+      <body className="text-foreground relative bg-[#0e082e] bg-[url('/images/hero-bg.webp')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased">
         {/* Dégradé d'assombrissement du fond */}
         <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/25 to-black/60 sm:bg-gradient-to-t lg:bg-gradient-to-r" />
 
