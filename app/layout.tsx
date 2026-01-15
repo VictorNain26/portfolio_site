@@ -117,7 +117,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Umami Analytics - privacy-friendly, no cookies */}
         <Script
           defer
-          data-website-id="REMPLACER_PAR_TON_WEBSITE_ID"
+          data-website-id="cddff34c-b72b-4f84-b155-b327edd3d634"
           src="https://cloud.umami.is/script.js"
           strategy="afterInteractive"
         />
