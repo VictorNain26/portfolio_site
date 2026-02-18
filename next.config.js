@@ -17,7 +17,7 @@ const nextConfig = {
           key: 'Content-Security-Policy',
           value: [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cloud.umami.is https://app.cal.com",
+            "script-src 'self' 'unsafe-inline' https://cloud.umami.is https://app.cal.com",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://app.cal.com",
             "font-src 'self' https://fonts.gstatic.com",
             "img-src 'self' data: https://app.cal.com",

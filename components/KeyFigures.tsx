@@ -31,10 +31,10 @@ const figures = [
   },
   {
     icon: Headphones,
-    value: 30,
-    suffix: ' jours',
-    label: 'de suivi post-livraison',
-    description: 'Corrections, ajustements et accompagnement inclus après la mise en ligne',
+    value: 100,
+    suffix: '%',
+    label: 'suivi inclus',
+    description: 'Corrections, ajustements et accompagnement après la mise en ligne',
   },
 ];
 

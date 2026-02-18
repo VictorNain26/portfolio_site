@@ -122,7 +122,7 @@ export const faqJsonLd = {
       name: 'Êtes-vous disponible pour une mission ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Je suis généralement disponible sous 48\u00a0h pour un premier échange, et sous 1 à 2 semaines pour démarrer une mission. Contactez-moi pour connaître ma disponibilité actuelle.',
+        text: 'Je réponds sous 48\u00a0h et le démarrage peut être très rapide — parfois quelques jours seulement, selon ma disponibilité du moment. Contactez-moi pour en discuter.',
       },
     },
     {
@@ -146,7 +146,7 @@ export const faqJsonLd = {
       name: 'Comment se passe la collaboration ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Premier échange gratuit pour comprendre votre besoin, puis proposition détaillée. Pendant le développement, on fait des points réguliers. Vous avez accès à l'avancement en continu.",
+        text: "Premier échange gratuit pour comprendre votre besoin, puis proposition détaillée. Pendant le développement, on fait des points réguliers (visio, Slack ou email selon votre préférence). Vous avez accès à l'avancement en continu.",
       },
     },
     {

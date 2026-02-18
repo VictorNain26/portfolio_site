@@ -15,7 +15,7 @@ const faqItems = [
   {
     question: 'Êtes-vous disponible pour une mission ?',
     answer:
-      'Je suis généralement disponible sous 48\u00a0h pour un premier échange, et sous 1 à 2 semaines pour démarrer une mission. Contactez-moi pour connaître ma disponibilité actuelle.',
+      'Je réponds sous 48\u00a0h et le démarrage peut être très rapide — parfois quelques jours seulement, selon ma disponibilité du moment. Contactez-moi pour en discuter.',
   },
   {
     question: 'Travaillez-vous en remote ?',
