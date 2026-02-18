@@ -86,7 +86,8 @@
     ".next",
     "out",
     "dist",
-    "build"
+    "build",
+    "vitest.config.ts"
   ],
   "ts-node": {
     "esm": true

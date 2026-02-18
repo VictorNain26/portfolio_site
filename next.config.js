@@ -14,6 +14,14 @@ const nextConfig = {
         { key: 'X-Frame-Options', value: 'DENY' },
         { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
         {
+          key: 'Strict-Transport-Security',
+          value: 'max-age=63072000; includeSubDomains; preload',
+        },
+        {
+          key: 'Permissions-Policy',
+          value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+        },
+        {
           key: 'Content-Security-Policy',
           value: [
             "default-src 'self'",
@@ -23,6 +31,10 @@ const nextConfig = {
             "img-src 'self' data:",
             "connect-src 'self' https://api.github.com https://cloud.umami.is",
             "frame-ancestors 'none'",
+            "base-uri 'self'",
+            "form-action 'self'",
+            "object-src 'none'",
+            "upgrade-insecure-requests",
           ].join('; '),
         },
       ],

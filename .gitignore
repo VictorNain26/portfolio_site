@@ -15,6 +15,13 @@ out/
 # Temp
 .tmp/
 
+# Test coverage
+coverage/
+
+# Business documents
+content/*.docx
+content/*.pdf
+
 # TS build info
 tsconfig.tsbuildinfo
 .claude/
