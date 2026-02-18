@@ -15,7 +15,7 @@ const FEATURED_PROJECTS: FeaturedProject[] = [
     name: 'AubeSonore',
     description:
       'Web radio indépendante avec découverte musicale automatisée. Pipeline intelligent : découverte via HypeMachine, téléchargement, analyse audio par IA et diffusion en continu sur AzuraCast.',
-    demoUrl: 'https://ourmusic.fr',
+    demoUrl: 'https://www.aubesonore.fr/',
     repoUrl: null,
     technologies: ['TypeScript', 'Python', 'Next.js', 'Docker'],
     stars: 0,
@@ -28,13 +28,13 @@ const FEATURED_PROJECTS: FeaturedProject[] = [
     name: 'TomIA',
     description:
       'Plateforme de tutorat IA pour les élèves français. Programmes officiels Éduscol intégrés via RAG avec Qdrant et embeddings Mistral pour un accompagnement scolaire personnalisé.',
-    demoUrl: 'https://pitch-deck-ruddy.vercel.app',
+    demoUrl: 'https://www.tomia.fr/',
     repoUrl: null,
     technologies: ['TypeScript', 'Python', 'Qdrant', 'Mistral'],
     stars: 0,
     updatedAt: '2026-02-01T00:00:00Z',
     createdAt: '2025-09-01T00:00:00Z',
-    ctaLabel: 'Voir le pitch',
+    ctaLabel: 'Voir le site',
   },
 ];
 
