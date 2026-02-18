@@ -5,9 +5,9 @@ export const personJsonLd = {
   '@type': 'Person',
   name: 'Victor Lenain',
   alternateName: 'Victor Lenain Dev',
-  jobTitle: 'Développeur Full-Stack JavaScript & Expert Next.js',
+  jobTitle: 'Développeur Full-Stack & DevOps Freelance',
   description:
-    "Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Expert en création d'applications web modernes et performantes.",
+    "Développeur Full-Stack & DevOps freelance à Paris. Applications web, APIs, CI/CD, Docker et intégration IA. De l'idée au déploiement.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   sameAs: [
@@ -17,11 +17,14 @@ export const personJsonLd = {
   knowsAbout: [
     'JavaScript',
     'TypeScript',
-    'Next.js',
     'React',
+    'Next.js',
     'Node.js',
     'DevOps',
+    'CI/CD',
+    'Docker',
     'Intelligence Artificielle',
+    'Automatisation',
     'Développement Web',
     'Applications Web',
   ],
@@ -151,7 +154,7 @@ export const faqJsonLd = {
       name: 'Quelles technologies utilisez-vous ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "React, Next.js, TypeScript, Node.js côté technique. Mais je choisis toujours la techno adaptée à votre projet — pas l'inverse. L'objectif, c'est une solution qui marche et qui dure.",
+        text: "React, Next.js, TypeScript et Node.js pour le développement. Docker et CI/CD pour le déploiement. Mais je choisis toujours la techno adaptée à votre projet — pas l'inverse. L'objectif, c'est une solution qui marche et qui dure.",
       },
     },
   ],
@@ -160,9 +163,9 @@ export const faqJsonLd = {
 export const professionalServiceJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
-  name: 'Victor Lenain - Services de Développement Web',
+  name: 'Victor Lenain - Développeur Full-Stack & DevOps Freelance',
   description:
-    'Services professionnels de développement web Full-Stack avec Next.js, React et TypeScript.',
+    'Services de développement web Full-Stack, DevOps et intégration IA. Applications sur mesure, APIs, CI/CD et déploiement.',
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   provider: {
@@ -174,10 +177,10 @@ export const professionalServiceJsonLd = {
     name: 'France',
   },
   serviceType: [
-    'Développement Web',
-    'Applications Next.js',
+    'Développement Web Full-Stack',
+    'DevOps & CI/CD',
+    'Intégration IA & Automatisation',
     'Conseil Technique',
-    'Formation JavaScript',
   ],
   hasOfferCatalog: {
     '@type': 'OfferCatalog',

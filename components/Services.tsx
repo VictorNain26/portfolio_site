@@ -16,10 +16,10 @@ const services = [
   },
   {
     icon: Cog,
-    title: 'Solutions backend robustes',
+    title: 'Backend & DevOps',
     description:
-      'Des APIs fiables et une architecture qui évolue avec votre activité. Base de données, authentification, intégrations tierces.',
-    results: ['APIs performantes', 'Architecture évolutive', 'Déploiement automatisé'],
+      'Des APIs fiables, une infrastructure solide et un déploiement automatisé. CI/CD, Docker, base de données, authentification, intégrations tierces.',
+    results: ['APIs performantes', 'CI/CD & Docker', 'Architecture évolutive'],
   },
   {
     icon: Sparkles,

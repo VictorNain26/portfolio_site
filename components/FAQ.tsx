@@ -35,7 +35,7 @@ const faqItems = [
   {
     question: 'Quelles technologies utilisez-vous ?',
     answer:
-      'React, Next.js, TypeScript, Node.js côté technique. Mais je choisis toujours la techno adaptée à votre projet — pas l\'inverse. L\'objectif, c\'est une solution qui marche et qui dure, pas une stack à la mode.',
+      'React, Next.js, TypeScript et Node.js pour le développement. Docker et CI/CD pour le déploiement. Mais je choisis toujours la techno adaptée à votre projet — pas l\'inverse. L\'objectif, c\'est une solution qui marche et qui dure.',
   },
 ];
 

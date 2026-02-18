@@ -29,28 +29,29 @@ const sora = Sora({
 export const metadata = {
   metadataBase: new URL('https://victorlenain.fr'),
   title: {
-    default: 'Victor Lenain | Développeur Full-Stack JavaScript & Expert Next.js',
+    default: 'Victor Lenain | Développeur Full-Stack & DevOps Freelance à Paris',
     template: '%s | Victor Lenain',
   },
   description:
-    "Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Création d'applications web modernes et performantes avec intelligence artificielle intégrée.",
+    "Développeur Full-Stack & DevOps freelance à Paris. Applications web, APIs, CI/CD, Docker et intégration IA. De l'idée au déploiement, je gère toute la chaîne.",
   keywords: [
     'développeur full-stack',
-    'JavaScript',
-    'Next.js 15',
-    'React 19',
-    'TypeScript',
     'DevOps',
-    'Intelligence artificielle',
+    'freelance Paris',
+    'CI/CD',
+    'Docker',
+    'JavaScript',
+    'TypeScript',
+    'React',
+    'Next.js',
+    'Node.js',
     'IA',
     'automatisation',
     'chatbot',
     'LLM',
-    'freelance Paris',
     'développeur React Paris',
-    'Développement web',
-    'Applications modernes',
-    'Portfolio',
+    'développeur DevOps Paris',
+    'Applications web',
     'Victor Lenain',
   ],
   authors: [{ name: 'Victor Lenain', url: 'https://victorlenain.fr' }],
@@ -72,16 +73,16 @@ export const metadata = {
     locale: 'fr_FR',
     url: 'https://victorlenain.fr',
     siteName: 'Victor Lenain - Portfolio',
-    title: 'Victor Lenain | Développeur Full-Stack JavaScript & Expert Next.js',
+    title: 'Victor Lenain | Développeur Full-Stack & DevOps Freelance à Paris',
     description:
-      "Développeur Full-Stack JavaScript spécialisé en Next.js 15, React 19 et DevOps. Création d'applications web modernes et performantes.",
+      "Développeur Full-Stack & DevOps freelance à Paris. Applications web, APIs, CI/CD, Docker et intégration IA.",
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Victor Lenain | Développeur Full-Stack JavaScript',
+    title: 'Victor Lenain | Développeur Full-Stack & DevOps Freelance',
     description:
-      "Spécialisé en Next.js 15, React 19 et DevOps. Créateur d'applications web modernes.",
+      "Applications web, APIs, CI/CD et intégration IA. Freelance à Paris.",
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   alternates: {

@@ -39,8 +39,8 @@ export default function Hero() {
           className="font-display mb-6 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl"
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Votre application web,{' '}
-          <span className="text-indigo-400">livrée et maintenue</span>
+          De l&apos;idée au déploiement,{' '}
+          <span className="text-indigo-400">je gère toute la chaîne</span>
         </motion.h1>
 
         {/* Sous-titre explicatif */}
@@ -49,7 +49,7 @@ export default function Hero() {
           className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-gray-300 sm:text-lg"
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          Développeur Full-Stack React &amp; Next.js. Je transforme vos idées en applications web qui fonctionnent — et qui durent.
+          Développeur Full-Stack &amp; DevOps. Applications web, APIs, déploiement automatisé — je livre des solutions complètes, pas juste du code.
         </motion.p>
 
         {/* CTA unique et fort */}
