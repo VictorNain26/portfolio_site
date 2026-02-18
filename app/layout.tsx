@@ -29,29 +29,18 @@ const sora = Sora({
 export const metadata = {
   metadataBase: new URL('https://victorlenain.fr'),
   title: {
-    default: 'Victor Lenain | Développeur Full-Stack & DevOps Freelance à Paris',
+    default: 'Victor Lenain | Développeur Full-Stack Freelance à Paris',
     template: '%s | Victor Lenain',
   },
   description:
-    "Développeur Full-Stack & DevOps freelance à Paris. Applications web, APIs, CI/CD, Docker et intégration IA. De l'idée au déploiement, je gère toute la chaîne.",
+    "Développeur Full-Stack freelance à Paris. Applications web sur mesure, de l'idée au déploiement. Un interlocuteur unique qui s'adapte à vos besoins.",
   keywords: [
+    'développeur freelance Paris',
     'développeur full-stack',
-    'DevOps',
-    'freelance Paris',
-    'CI/CD',
-    'Docker',
-    'JavaScript',
-    'TypeScript',
-    'React',
-    'Next.js',
-    'Node.js',
-    'IA',
-    'automatisation',
-    'chatbot',
-    'LLM',
-    'développeur React Paris',
-    'développeur DevOps Paris',
-    'Applications web',
+    'application web sur mesure',
+    'freelance développeur web',
+    'création application web',
+    'développeur freelance',
     'Victor Lenain',
   ],
   authors: [{ name: 'Victor Lenain', url: 'https://victorlenain.fr' }],
@@ -73,16 +62,16 @@ export const metadata = {
     locale: 'fr_FR',
     url: 'https://victorlenain.fr',
     siteName: 'Victor Lenain - Portfolio',
-    title: 'Victor Lenain | Développeur Full-Stack & DevOps Freelance à Paris',
+    title: 'Victor Lenain | Développeur Full-Stack Freelance à Paris',
     description:
-      "Développeur Full-Stack & DevOps freelance à Paris. Applications web, APIs, CI/CD, Docker et intégration IA.",
+      "Développeur Full-Stack freelance à Paris. Applications web sur mesure, de l'idée au déploiement.",
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Victor Lenain | Développeur Full-Stack & DevOps Freelance',
+    title: 'Victor Lenain | Développeur Full-Stack Freelance',
     description:
-      "Applications web, APIs, CI/CD et intégration IA. Freelance à Paris.",
+      "Applications web sur mesure, de l'idée au déploiement. Freelance à Paris.",
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   alternates: {

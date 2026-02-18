@@ -5,9 +5,9 @@ export const personJsonLd = {
   '@type': 'Person',
   name: 'Victor Lenain',
   alternateName: 'Victor Lenain Dev',
-  jobTitle: 'Développeur Full-Stack & DevOps Freelance',
+  jobTitle: 'Développeur Full-Stack Freelance',
   description:
-    "Développeur Full-Stack & DevOps freelance à Paris. Applications web, APIs, CI/CD, Docker et intégration IA. De l'idée au déploiement.",
+    "Développeur Full-Stack freelance à Paris. Applications web sur mesure, de l'idée au déploiement. Un interlocuteur unique qui s'adapte à vos besoins.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   sameAs: [
@@ -15,18 +15,11 @@ export const personJsonLd = {
     'https://github.com/victornain26',
   ],
   knowsAbout: [
-    'JavaScript',
-    'TypeScript',
-    'React',
-    'Next.js',
-    'Node.js',
-    'DevOps',
-    'CI/CD',
-    'Docker',
-    'Intelligence Artificielle',
-    'Automatisation',
     'Développement Web',
     'Applications Web',
+    'Architecture logicielle',
+    'Déploiement',
+    'Automatisation',
   ],
   worksFor: {
     '@type': 'Organization',
@@ -52,7 +45,7 @@ export const websiteJsonLd = {
   alternateName: 'Portfolio Victor Lenain',
   url: 'https://victorlenain.fr',
   description:
-    'Portfolio professionnel de Victor Lenain, développeur Full-Stack JavaScript spécialisé en Next.js et React.',
+    'Portfolio professionnel de Victor Lenain, développeur Full-Stack freelance à Paris.',
   inLanguage: 'fr-FR',
   author: {
     '@type': 'Person',
@@ -147,9 +140,9 @@ export const faqJsonLd = {
 export const professionalServiceJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
-  name: 'Victor Lenain - Développeur Full-Stack & DevOps Freelance',
+  name: 'Victor Lenain - Développeur Full-Stack Freelance',
   description:
-    'Services de développement web Full-Stack, DevOps et intégration IA. Applications sur mesure, APIs, CI/CD et déploiement.',
+    "Applications web sur mesure, de l'idée au déploiement. Un interlocuteur unique qui s'adapte à vos besoins.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   provider: {
@@ -161,9 +154,8 @@ export const professionalServiceJsonLd = {
     name: 'France',
   },
   serviceType: [
-    'Développement Web Full-Stack',
-    'DevOps & CI/CD',
-    'Intégration IA & Automatisation',
+    'Développement Web',
+    'Applications sur mesure',
     'Conseil Technique',
   ],
   hasOfferCatalog: {
@@ -175,7 +167,7 @@ export const professionalServiceJsonLd = {
         itemOffered: {
           '@type': 'Service',
           name: "Développement d'applications web",
-          description: "Création d'applications web modernes avec Next.js et React",
+          description: "Création d'applications web sur mesure, adaptées à vos besoins",
         },
       },
       {
@@ -191,7 +183,7 @@ export const professionalServiceJsonLd = {
         itemOffered: {
           '@type': 'Service',
           name: 'Formation',
-          description: 'Formation aux technologies modernes JavaScript',
+          description: 'Formation et montée en compétences techniques',
         },
       },
     ],

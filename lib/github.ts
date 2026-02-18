@@ -21,7 +21,7 @@ export type Project = {
   name: string;
   description: string;
   demoUrl: string | null;
-  repoUrl: string;
+  repoUrl: string | null;
   technologies: string[];
   stars: number;
   updatedAt: string;
@@ -156,6 +156,8 @@ export function getTechnologyColor(tech: string): string {
     Redis: '#DC382D',
     Docker: '#2496ED',
     Kubernetes: '#326CE5',
+    Qdrant: '#24B47E',
+    Mistral: '#F54E42',
   };
 
   return colors[tech] ?? '#6B7280';
