@@ -141,22 +141,6 @@ export const faqJsonLd = {
         text: 'Un site vitrine prend 2 à 4 semaines. Une application métier, 1 à 3 mois selon le périmètre. Je privilégie les livraisons itératives pour que vous ayez de la visibilité rapidement.',
       },
     },
-    {
-      '@type': 'Question',
-      name: 'Comment se passe la collaboration ?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Premier échange gratuit pour comprendre votre besoin, puis proposition détaillée. Pendant le développement, on fait des points réguliers (visio, Slack ou email selon votre préférence). Vous avez accès à l'avancement en continu.",
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Quelles technologies utilisez-vous ?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "React, Next.js, TypeScript et Node.js pour le développement. Docker et CI/CD pour le déploiement. Mais je choisis toujours la techno adaptée à votre projet — pas l'inverse. L'objectif, c'est une solution qui marche et qui dure.",
-      },
-    },
   ],
 };
 
