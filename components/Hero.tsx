@@ -1,7 +1,8 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Mail, ArrowRight } from 'lucide-react';
+import { Calendar, ArrowRight } from 'lucide-react';
+import CalPopupButton from '@/components/CalPopupButton';
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
@@ -56,15 +57,14 @@ export default function Hero() {
           {...fadeIn}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <a
+          <CalPopupButton
             className="group inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-base font-semibold text-gray-900 shadow-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl"
-            data-umami-event="cta-hero-email"
-            href="mailto:victor.lenain26@gmail.com?subject=Demande%20de%20mission"
+            data-umami-event="cta-hero-cal"
           >
-            <Mail aria-hidden="true" className="h-5 w-5" />
-            Discuter de votre projet
+            <Calendar aria-hidden="true" className="h-5 w-5" />
+            Réserver un échange gratuit
             <ArrowRight aria-hidden="true" className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-          </a>
+          </CalPopupButton>
         </motion.div>
 
         {/* Lien secondaire discret */}
