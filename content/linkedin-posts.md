@@ -23,39 +23,31 @@
 
 ---
 
-## Post 1 - Hook émotionnel / Positionnement + Disponibilité (à épingler)
+## Post 1 - Positionnement + Disponibilité (à épingler)
 
 > **Format recommandé :** Carousel PDF de 5-6 slides (chaque paragraphe clé = 1 slide avec visuel minimaliste).
 > Ne PAS mettre de lien dans le post — le mettre en premier commentaire avec le lien du portfolio.
 
-Le pire projet sur lequel j'ai travaillé ?
+Plus d'autonomie. C'est ce qui m'a poussé à me lancer.
 
-Celui où le client avait déjà dépensé 40 000 € avec une agence.
+J'ai passé 2 ans à construire des applications métier — fintech, crowdfunding, plateformes complexes.
 
-Résultat : une application inutilisable, un code impossible à reprendre, et un entrepreneur dégoûté du digital.
+J'ai beaucoup appris. Mais j'avais envie d'autre chose.
 
-J'ai passé 3 mois à reconstruire ce qui aurait dû prendre 6 semaines.
+Plus d'autonomie. Plus de contact direct avec les clients. Plus de liberté dans mes choix techniques.
 
-Ça m'a appris une chose : le problème n'est jamais technique.
+Alors je me suis lancé en freelance.
 
-C'est toujours un problème de communication, de cadrage, d'écoute.
-
-Aujourd'hui je suis freelance. Et ma promesse est simple :
-
-→ Vous comprenez ce que je fais.
-→ Je comprends ce dont vous avez besoin.
-→ On avance ensemble, pas de mauvaises surprises.
-
-Ce que j'apporte concrètement :
+Ce que j'apporte :
 → Des applications qui marchent, pas des prototypes abandonnés
-→ Une communication claire, sans jargon technique
-→ Un suivi après livraison, parce que le travail ne s'arrête pas là
+→ Une communication directe, sans jargon
+→ Un suivi après livraison
 
-Je suis disponible pour une nouvelle mission — remote, hybride ou sur site en région parisienne.
+Je suis disponible pour une nouvelle mission — remote, hybride ou en région parisienne.
 
-Si vous cherchez quelqu'un qui livre, pas quelqu'un qui disparaît, mes DM sont ouverts.
+Un projet en tête ? Mes DM sont ouverts.
 
-#Freelance #DéveloppeurWeb #PME
+#Freelance #DéveloppeurWeb #FullStack
 
 ---
 
