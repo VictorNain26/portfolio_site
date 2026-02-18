@@ -11,6 +11,27 @@ const CAL_CONFIG = JSON.stringify({
   layout: 'month_view',
 });
 
+/**
+ * CSS injected into the cal-modal-box shadow DOM to fix the white background.
+ * The .message-container inside the shadow root has bg white even with .dark class.
+ */
+const SHADOW_FIX_CSS = `
+  .message-container, .message-container.dark {
+    background: #111827 !important;
+    color-scheme: dark !important;
+  }
+  .my-backdrop {
+    background: rgba(0, 0, 0, 0.8) !important;
+  }
+  .body.dark {
+    background: transparent !important;
+    color-scheme: dark !important;
+  }
+  .modal-box {
+    color-scheme: dark !important;
+  }
+`;
+
 type CalPopupButtonProps = {
   children: ReactNode;
   className?: string;
@@ -28,18 +49,20 @@ export default function CalPopupButton({
     if (initialised.current) return;
     initialised.current = true;
 
-    // Fix: the browser gives iframes an opaque white background when the
-    // parent page uses color-scheme:dark and the iframe doesn't match.
-    const style = document.createElement('style');
-    style.textContent = `
-      [data-cal-namespace="${CAL_NAMESPACE}"] iframe {
-        color-scheme: dark !important;
+    // Observe DOM for cal-modal-box insertion, then patch its shadow DOM
+    const observer = new MutationObserver(() => {
+      const modalBox = document.querySelector('cal-modal-box');
+      if (modalBox?.shadowRoot) {
+        const existing = modalBox.shadowRoot.querySelector('#cal-dark-fix');
+        if (!existing) {
+          const style = document.createElement('style');
+          style.id = 'cal-dark-fix';
+          style.textContent = SHADOW_FIX_CSS;
+          modalBox.shadowRoot.appendChild(style);
+        }
       }
-      .cal-modal-overlay, [class*="cal-modal"] {
-        background: rgba(0, 0, 0, 0.7) !important;
-      }
-    `;
-    document.head.appendChild(style);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
 
     void (async () => {
       const cal = await getCalApi({ namespace: CAL_NAMESPACE });
@@ -72,7 +95,7 @@ export default function CalPopupButton({
     })();
 
     return () => {
-      document.head.removeChild(style);
+      observer.disconnect();
       initialised.current = false;
     };
   }, []);
