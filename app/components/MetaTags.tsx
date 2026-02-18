@@ -16,10 +16,6 @@ export default function MetaTags() {
       <meta content="telephone=no" name="format-detection" />
       <meta content="dark" name="color-scheme" />
 
-      {/* ---- Verification et ownership ---- */}
-      <meta content="votre-code-verification-google" name="google-site-verification" />
-      <meta content="votre-code-verification-bing" name="msvalidate.01" />
-
       {/* ---- Préchargement de ressources critiques ---- */}
       <link as="image" href="/images/hero-bg.webp" rel="preload" type="image/webp" />
       <link href="//fonts.googleapis.com" rel="dns-prefetch" />

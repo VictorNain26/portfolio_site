@@ -1,14 +1,13 @@
 // components/ProjectCard.tsx
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ExternalLink, Star, Calendar } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { type Project, getTechnologyColor } from '@/lib/github';
 
 const ANIMATION_DELAY_MULTIPLIER = 0.1;
 const MAX_VISIBLE_TECHNOLOGIES = 4;
-const MAX_TECH_REMAINING = 4;
 
 type ProjectCardProps = {
   project: Project;
@@ -16,6 +15,8 @@ type ProjectCardProps = {
 };
 
 export default function ProjectCard({ project, index }: ProjectCardProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('fr-FR', {
       year: 'numeric',
@@ -26,10 +27,10 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
   return (
     <motion.div
       className="group relative"
-      initial={{ opacity: 0, y: 20 }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
       transition={{ delay: index * ANIMATION_DELAY_MULTIPLIER, duration: 0.6 }}
       viewport={{ once: true }}
-      whileInView={{ opacity: 1, y: 0 }}
+      whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
     >
       <div className="relative flex h-96 flex-col overflow-hidden rounded-xl border border-gray-700/50 bg-gray-800/60 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-gray-600/70 hover:bg-gray-800/80 hover:shadow-xl hover:shadow-indigo-500/10">
         {/* Header avec gradient */}
@@ -39,13 +40,18 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           {/* Badges en haut à droite */}
           <div className="absolute top-4 right-4 flex items-center gap-2">
             {project.stars > 0 && (
-              <div className="flex items-center gap-1 rounded-full bg-gray-900/60 px-2 py-1 text-xs text-yellow-400 backdrop-blur-sm">
-                <Star className="h-3 w-3 fill-current" />
+              <div
+                aria-label={`${project.stars} étoile${project.stars > 1 ? 's' : ''} sur GitHub`}
+                className="flex items-center gap-1 rounded-full bg-gray-900/60 px-2 py-1 text-xs text-yellow-400 backdrop-blur-sm"
+                role="img"
+              >
+                <Star aria-hidden className="h-3 w-3 fill-current" />
                 {project.stars}
               </div>
             )}
             <div className="flex items-center gap-1 rounded-full bg-gray-900/60 px-2 py-1 text-xs text-gray-300 backdrop-blur-sm">
-              <Calendar className="h-3 w-3" />
+              <Calendar aria-hidden className="h-3 w-3" />
+              <span className="sr-only">Dernière mise à jour : </span>
               {formatDate(project.updatedAt)}
             </div>
           </div>
@@ -84,7 +90,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
                 ))}
                 {project.technologies.length > MAX_VISIBLE_TECHNOLOGIES && (
                   <span className="inline-flex items-center rounded-full bg-gray-700/50 px-2.5 py-1 text-xs font-medium text-gray-400">
-                    +{project.technologies.length - MAX_TECH_REMAINING}
+                    +{project.technologies.length - MAX_VISIBLE_TECHNOLOGIES}
                   </span>
                 )}
               </div>

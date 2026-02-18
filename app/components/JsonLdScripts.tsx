@@ -2,6 +2,7 @@ import {
   personJsonLd,
   websiteJsonLd,
   professionalServiceJsonLd,
+  faqJsonLd,
 } from '../metadata-config';
 
 /**
@@ -12,7 +13,7 @@ import {
  */
 export default function JsonLdScripts() {
   // All data is static from metadata-config.ts, safe for inline rendering
-  const schemas = [personJsonLd, websiteJsonLd, professionalServiceJsonLd];
+  const schemas = [personJsonLd, websiteJsonLd, professionalServiceJsonLd, faqJsonLd];
 
   return (
     <>

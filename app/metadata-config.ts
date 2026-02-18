@@ -102,6 +102,61 @@ export const websiteJsonLd = {
   },
 };
 
+export const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Quel est votre tarif journalier (TJM) ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Mon TJM démarre à 500\u00a0€ selon la complexité du projet, la durée de la mission et les technologies impliquées. Je propose toujours un devis détaillé après notre premier échange.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Êtes-vous disponible pour une mission ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Je suis généralement disponible sous 48\u00a0h pour un premier échange, et sous 1 à 2 semaines pour démarrer une mission. Contactez-moi pour connaître ma disponibilité actuelle.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Travaillez-vous en remote ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Oui, je travaille principalement en remote. Je suis basé en région parisienne et peux me déplacer ponctuellement pour des réunions, ateliers ou phases de lancement.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Combien de temps dure un projet type ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Un site vitrine prend 2 à 4 semaines. Une application métier, 1 à 3 mois selon le périmètre. Je privilégie les livraisons itératives pour que vous ayez de la visibilité rapidement.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Comment se passe la collaboration ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "Premier échange gratuit pour comprendre votre besoin, puis proposition détaillée. Pendant le développement, on fait des points réguliers. Vous avez accès à l'avancement en continu.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Quelles technologies utilisez-vous ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "React, Next.js, TypeScript, Node.js côté technique. Mais je choisis toujours la techno adaptée à votre projet — pas l'inverse. L'objectif, c'est une solution qui marche et qui dure.",
+      },
+    },
+  ],
+};
+
 export const professionalServiceJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',

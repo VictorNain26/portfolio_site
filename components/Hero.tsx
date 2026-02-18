@@ -48,7 +48,7 @@ export default function Hero() {
           className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-gray-300 sm:text-lg"
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          Développeur Full-Stack avec 2 ans d&apos;expérience en agence sur des applications métier complexes.
+          Développeur Full-Stack React &amp; Next.js. Je transforme vos idées en applications web qui fonctionnent — et qui durent.
         </motion.p>
 
         {/* CTA unique et fort */}
