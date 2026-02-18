@@ -32,7 +32,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       viewport={{ once: true }}
       whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
     >
-      <div className="relative flex h-96 flex-col overflow-hidden rounded-xl border border-gray-700/50 bg-gray-800/60 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-gray-600/70 hover:bg-gray-800/80 hover:shadow-xl hover:shadow-indigo-500/10">
+      <div className="relative flex h-96 flex-col overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/50 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:border-indigo-500/30 hover:bg-gray-900/80 hover:shadow-xl hover:shadow-indigo-500/10">
         {/* Header avec gradient */}
         <div className="relative h-32 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
@@ -124,7 +124,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
         </div>
 
         {/* Effet de survol */}
-        <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-500/5 via-purple-500/5 to-pink-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-500/5 via-purple-500/5 to-pink-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       </div>
     </motion.div>
   );

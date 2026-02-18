@@ -1,3 +1,6 @@
+'use client';
+
+import { motion, useReducedMotion } from 'framer-motion';
 import { MessageCircle, FileText, Code, Rocket } from 'lucide-react';
 import Section from '@/components/Section';
 
@@ -33,6 +36,8 @@ const steps = [
 ];
 
 export default function Process() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <Section className="scroll-mt-28" id="process">
       <div className="mb-12 text-center">
@@ -44,23 +49,33 @@ export default function Process() {
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {steps.map((step) => {
+      <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Connecting line (desktop) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-14 right-0 left-0 hidden h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent lg:block"
+        />
+
+        {steps.map((step, index) => {
           const Icon = step.icon;
           return (
-            <div
+            <motion.div
               key={step.number}
-              className="relative rounded-2xl border border-gray-800 bg-gray-900/50 p-6 transition-colors hover:border-indigo-500/30 hover:bg-gray-900/80"
+              className="group relative rounded-2xl border border-gray-800 bg-gray-900/50 p-6 transition-colors hover:border-indigo-500/30 hover:bg-gray-900/80"
+              initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+              transition={{ delay: index * 0.12, duration: 0.5 }}
+              viewport={{ once: true }}
+              whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
             >
-              <span className="font-display mb-4 block text-3xl font-bold text-indigo-500/30">
+              <span className="font-display mb-4 block text-3xl font-bold text-indigo-500/20">
                 {step.number}
               </span>
-              <div className="mb-4 inline-flex rounded-xl bg-indigo-500/10 p-3 text-indigo-400">
+              <div className="mb-4 inline-flex rounded-xl bg-indigo-500/10 p-3 text-indigo-400 transition-colors group-hover:bg-indigo-500/15">
                 <Icon aria-hidden="true" className="h-6 w-6" />
               </div>
               <h3 className="mb-2 text-lg font-semibold text-white">{step.title}</h3>
               <p className="text-sm leading-relaxed text-gray-400">{step.description}</p>
-            </div>
+            </motion.div>
           );
         })}
       </div>
