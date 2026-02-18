@@ -7,10 +7,10 @@ import CalPopupButton from '@/components/CalPopupButton';
 const stack = ['React', 'Next.js', 'Node.js', 'TypeScript', 'Docker', 'CI/CD'];
 
 const statusLines = [
-  { label: 'Build', value: 'passed', ok: true },
-  { label: 'Tests', value: '100%', ok: true },
-  { label: 'Deploy', value: 'production', ok: true },
-  { label: 'Suivi', value: 'actif', ok: true },
+  { label: 'Build', value: 'passed' },
+  { label: 'Tests', value: '100%' },
+  { label: 'Deploy', value: 'production' },
+  { label: 'Suivi', value: 'actif' },
 ];
 
 export default function Hero() {
@@ -42,8 +42,6 @@ export default function Hero() {
       id="accueil"
     >
       {/* --- Decorative background layers --- */}
-
-      {/* Grid pattern */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.035]"
@@ -53,17 +51,15 @@ export default function Hero() {
           backgroundSize: '72px 72px',
         }}
       />
-
-      {/* Indigo glow orb */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-40 top-1/3 h-[560px] w-[560px] rounded-full bg-indigo-600/[0.07] blur-[140px]"
       />
 
-      {/* --- Content grid --- */}
-      <div className="relative mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-20">
-        {/* Left column — text content */}
-        <div className="max-w-2xl pt-20 lg:pt-0">
+      {/* --- Content --- */}
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center gap-12 lg:flex-row lg:items-center lg:gap-16 xl:gap-24">
+        {/* Left — text content */}
+        <div className="flex-1">
           {/* Availability badge */}
           <motion.div {...fadeUp(0.1)} className="mb-8">
             <span className="inline-flex items-center gap-2.5 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-2 text-sm font-medium text-green-400 backdrop-blur-sm">
@@ -150,27 +146,27 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Right column — decorative status card (desktop) */}
+        {/* Right — status card */}
         <motion.div
-          {...fadeIn(0.6)}
+          {...fadeIn(0.5)}
           aria-hidden="true"
-          className="hidden lg:block"
+          className="hidden w-full max-w-sm shrink-0 md:block lg:w-[340px] xl:w-[380px]"
         >
-          <div className="relative w-[280px] rounded-2xl border border-gray-800/60 bg-gray-900/30 p-5 backdrop-blur-md">
-            {/* Card header */}
-            <div className="mb-5 flex items-center gap-2">
+          <div className="relative rounded-2xl border border-gray-800/60 bg-gray-900/30 p-6 backdrop-blur-md sm:p-7">
+            {/* Terminal dots + filename */}
+            <div className="mb-6 flex items-center gap-2">
               <div className="flex gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
-                <span className="h-2.5 w-2.5 rounded-full bg-yellow-400/70" />
-                <span className="h-2.5 w-2.5 rounded-full bg-green-400/70" />
+                <span className="h-3 w-3 rounded-full bg-red-400/70" />
+                <span className="h-3 w-3 rounded-full bg-yellow-400/70" />
+                <span className="h-3 w-3 rounded-full bg-green-400/70" />
               </div>
-              <span className="ml-auto font-mono text-[10px] tracking-wider text-gray-600">
+              <span className="ml-auto font-mono text-xs tracking-wider text-gray-600">
                 deploy.sh
               </span>
             </div>
 
             {/* Status lines */}
-            <div className="space-y-3">
+            <div className="space-y-4">
               {statusLines.map((line, i) => (
                 <motion.div
                   key={line.label}
@@ -181,14 +177,14 @@ export default function Hero() {
                         initial: { opacity: 0, x: 12 } as const,
                         whileInView: { opacity: 1, x: 0 } as const,
                         viewport: { once: true } as const,
-                        transition: { duration: 0.4, delay: 0.8 + i * 0.1 },
+                        transition: { duration: 0.4, delay: 0.7 + i * 0.1 },
                       })}
                 >
-                  <span className="font-mono text-xs text-gray-500">
+                  <span className="font-mono text-sm text-gray-500">
                     {line.label}
                   </span>
-                  <span className="flex items-center gap-1.5 font-mono text-xs text-green-400/90">
-                    <Check className="h-3 w-3" />
+                  <span className="flex items-center gap-2 font-mono text-sm text-green-400/90">
+                    <Check className="h-3.5 w-3.5" />
                     {line.value}
                   </span>
                 </motion.div>
@@ -196,19 +192,19 @@ export default function Hero() {
             </div>
 
             {/* Divider */}
-            <div className="my-4 h-px bg-gray-800/60" />
+            <div className="my-5 h-px bg-gradient-to-r from-transparent via-gray-700/60 to-transparent" />
 
-            {/* Uptime line */}
+            {/* Availability */}
             <div className="flex items-center justify-between">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-gray-600">
+              <span className="font-mono text-xs uppercase tracking-wider text-gray-600">
                 Disponibilité
               </span>
-              <span className="font-mono text-xs font-semibold text-indigo-400">
+              <span className="font-mono text-sm font-semibold text-indigo-400">
                 sous 48h
               </span>
             </div>
 
-            {/* Card glow border */}
+            {/* Card glow */}
             <div className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-b from-indigo-500/[0.08] via-transparent to-transparent" />
           </div>
         </motion.div>
