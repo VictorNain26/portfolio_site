@@ -16,7 +16,7 @@ const socials = [
     label: 'GitHub',
   },
   {
-    href: 'https://www.linkedin.com/in/victor-lenain-1907b7282/',
+    href: 'https://www.linkedin.com/in/victor-lenain/',
     icon: FaLinkedin,
     label: 'LinkedIn',
   },

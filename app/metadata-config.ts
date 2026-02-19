@@ -11,7 +11,7 @@ export const personJsonLd = {
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   sameAs: [
-    'https://www.linkedin.com/in/victor-lenain-1907b7282/',
+    'https://www.linkedin.com/in/victor-lenain/',
     'https://github.com/victornain26',
   ],
   knowsAbout: [
