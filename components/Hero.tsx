@@ -44,15 +44,6 @@ export default function Hero() {
       {/* --- Decorative background layers --- */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(129,140,248,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(129,140,248,.6) 1px,transparent 1px)',
-          backgroundSize: '72px 72px',
-        }}
-      />
-      <div
-        aria-hidden="true"
         className="pointer-events-none absolute -right-40 top-1/3 h-[560px] w-[560px] rounded-full bg-indigo-600/[0.07] blur-[140px]"
       />
 
