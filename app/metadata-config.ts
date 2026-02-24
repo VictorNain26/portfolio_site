@@ -7,7 +7,7 @@ export const personJsonLd = {
   alternateName: 'Victor Lenain Dev',
   jobTitle: 'Développeur Full-Stack Freelance',
   description:
-    "Développeur Full-Stack freelance à Paris. Applications web sur mesure, de l'idée au déploiement. Un interlocuteur unique qui s'adapte à vos besoins.",
+    "Développeur Full-Stack freelance à Paris. Je conçois des applications web sur mesure, de l'idée au déploiement. Devis gratuit sous 48 h.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   sameAs: [
@@ -142,7 +142,7 @@ export const professionalServiceJsonLd = {
   '@type': 'ProfessionalService',
   name: 'Victor Lenain - Développeur Full-Stack Freelance',
   description:
-    "Applications web sur mesure, de l'idée au déploiement. Un interlocuteur unique qui s'adapte à vos besoins.",
+    "Applications web sur mesure, de l'idée au déploiement. Devis gratuit sous 48 h.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   provider: {
