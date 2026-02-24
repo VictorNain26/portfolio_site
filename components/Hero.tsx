@@ -191,7 +191,7 @@ export default function Hero() {
                 Disponibilité
               </span>
               <span className="font-mono text-sm font-semibold text-indigo-400">
-                sous 48h
+                sous 24h
               </span>
             </div>
 
