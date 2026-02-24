@@ -36,6 +36,11 @@ export const personJsonLd = {
     description: 'Services de développement web Full-Stack',
     category: 'Développement Web',
   },
+  potentialAction: {
+    '@type': 'ReserveAction',
+    target: 'https://cal.com/victor-lenain-ejsjfb/echange-decouverte',
+    name: 'Prendre rendez-vous',
+  },
 };
 
 export const websiteJsonLd = {
@@ -158,6 +163,19 @@ export const professionalServiceJsonLd = {
     'Applications sur mesure',
     'Conseil Technique',
   ],
+  potentialAction: {
+    '@type': 'ReserveAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://cal.com/victor-lenain-ejsjfb/echange-decouverte',
+      actionPlatform: [
+        'http://schema.org/DesktopWebPlatform',
+        'http://schema.org/MobileWebPlatform',
+      ],
+    },
+    name: 'Prendre rendez-vous',
+    description: 'Réserver un appel découverte gratuit de 30 minutes',
+  },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Services de développement',
