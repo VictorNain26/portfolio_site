@@ -35,7 +35,9 @@ export default function BlogIndex() {
 
       {/* Liste des articles */}
       <div className="space-y-12">
-        {allPosts.map(post => (
+        {allPosts
+          .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+          .map(post => (
           <article key={post.slug}>
             <Link className="group block" href={`/blog/${post.slug}`}>
               <time className="text-sm text-gray-500" dateTime={post.publishedAt}>
