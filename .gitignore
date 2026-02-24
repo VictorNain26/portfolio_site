@@ -21,3 +21,6 @@ coverage/
 # TS build info
 tsconfig.tsbuildinfo
 .claude/
+
+# Docs stratégie/prospection
+docs/
