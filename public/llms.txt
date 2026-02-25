@@ -1,0 +1,52 @@
+# Victor Lenain - Développeur Full-Stack Freelance
+
+> Développeur Full-Stack freelance basé à Paris (Île-de-France). Je conçois des applications web sur mesure, de l'idée au déploiement. Spécialisé en React, Next.js, Node.js, TypeScript, Docker et CI/CD.
+
+## Informations clés
+
+- Nom : Victor Lenain
+- Métier : Développeur Full-Stack & DevOps Freelance
+- Localisation : Paris, Île-de-France, France
+- Disponibilité : Réponse sous 24h
+- TJM : À partir de 500 €
+- Mode de travail : Remote, hybride, ou sur site en région parisienne
+- Langues : Français, Anglais
+
+## Services
+
+- Développement d'applications web sur mesure
+- Création de sites vitrines et landing pages performantes
+- Développement d'APIs et de backends robustes
+- Intégration et automatisation avec l'IA
+- Conseil technique et architecture logicielle
+- DevOps : CI/CD, Docker, déploiement
+
+## Stack technique
+
+- Frontend : React, Next.js, TypeScript, Tailwind CSS
+- Backend : Node.js, Python, APIs REST
+- Infrastructure : Docker, CI/CD, Vercel
+- IA : Intégration de modèles de langage, RAG, automatisation
+
+## Projets notables
+
+- AubeSonore : Web radio avec découverte musicale par IA (aubesonore.fr)
+- TomIA : Plateforme de tutorat IA pour le soutien scolaire (tomia.fr)
+
+## Expérience
+
+- 2 ans en agence (Capsens) sur des projets complexes (fintech, SaaS)
+- Freelance spécialisé PME, startups et projets innovants
+
+## Contact
+
+- Site : https://victorlenain.fr
+- Réserver un appel : https://cal.com/victor-lenain-ejsjfb/echange-decouverte
+- LinkedIn : https://www.linkedin.com/in/victor-lenain/
+- GitHub : https://github.com/victornain26
+- Email : victor.lenain26@gmail.com
+
+## Pages du site
+
+- Accueil : https://victorlenain.fr
+- Blog : https://victorlenain.fr/blog

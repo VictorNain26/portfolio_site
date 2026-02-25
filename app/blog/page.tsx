@@ -1,6 +1,25 @@
 import { allPosts } from 'content-collections';
 import Link from 'next/link';
 
+const blogBreadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Accueil',
+      item: 'https://victorlenain.fr',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Blog',
+      item: 'https://victorlenain.fr/blog',
+    },
+  ],
+};
+
 export const metadata = {
   title: 'Blog',
   description:
@@ -23,6 +42,10 @@ export const metadata = {
 export default function BlogIndex() {
   return (
     <main className="mx-auto max-w-2xl px-4 pt-24 pb-24 sm:px-6">
+      <script
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogBreadcrumbJsonLd) }}
+        type="application/ld+json"
+      />
       {/* Header */}
       <header className="mb-16">
         <h1 className="font-display text-4xl font-bold text-white sm:text-5xl">

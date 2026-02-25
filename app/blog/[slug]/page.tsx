@@ -2,6 +2,7 @@ import { allPosts } from 'content-collections';
 import { notFound } from 'next/navigation';
 import MDX from '@/components/MDX';
 import ArticleLayout from '@/components/ArticleLayout';
+import BlogPostJsonLd from '@/app/components/BlogPostJsonLd';
 
 const BASE_URL = 'https://victorlenain.fr';
 
@@ -23,6 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: post.title,
     description: post.summary,
+    keywords: post.tags,
     alternates: {
       canonical: url,
     },
@@ -32,7 +34,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       url,
       type: 'article',
       publishedTime: post.publishedAt,
+      modifiedTime: post.publishedAt,
       authors: ['Victor Lenain'],
+      tags: post.tags,
       // Images are generated dynamically by opengraph-image.tsx
     },
     twitter: {
@@ -56,8 +60,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const prev = allPosts[idx - 1] ?? null;
   const next = allPosts[idx + 1] ?? null;
 
+  const words = post.content.split(/\s+/);
   const WORDS_PER_MINUTE = 200;
-  const readingTime = Math.ceil(post.content.split(/\s+/).length / WORDS_PER_MINUTE);
+  const readingTime = Math.ceil(words.length / WORDS_PER_MINUTE);
   const article = { ...post, readingTime };
 
   const code = post.mdx as unknown as string;
@@ -66,8 +71,18 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   }
 
   return (
-    <ArticleLayout next={next} post={article} prev={prev}>
-      <MDX code={code} />
-    </ArticleLayout>
+    <>
+      <BlogPostJsonLd
+        publishedAt={post.publishedAt}
+        slug={post.slug}
+        summary={post.summary}
+        tags={post.tags}
+        title={post.title}
+        wordCount={words.length}
+      />
+      <ArticleLayout next={next} post={article} prev={prev}>
+        <MDX code={code} />
+      </ArticleLayout>
+    </>
   );
 }

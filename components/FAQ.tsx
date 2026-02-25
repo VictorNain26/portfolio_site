@@ -15,7 +15,7 @@ const faqItems = [
   {
     question: 'Êtes-vous disponible pour une mission ?',
     answer:
-      'Je réponds sous 48\u00a0h et le démarrage peut être très rapide — parfois quelques jours seulement, selon ma disponibilité du moment. Contactez-moi pour en discuter.',
+      'Je réponds sous 24\u00a0h et le démarrage peut être très rapide — parfois quelques jours seulement, selon ma disponibilité du moment. Contactez-moi pour en discuter.',
   },
   {
     question: 'Travaillez-vous en remote ?',
@@ -63,9 +63,9 @@ export default function FAQ() {
                   id={`faq-btn-${index}`}
                   onClick={() => toggle(index)}
                 >
-                  <span className="pr-4 text-sm font-semibold text-white sm:text-base">
+                  <h3 className="pr-4 text-sm font-semibold text-white sm:text-base">
                     {item.question}
-                  </span>
+                  </h3>
                   <ChevronDown
                     aria-hidden="true"
                     className={cn(

@@ -68,6 +68,39 @@ export default function ArticleLayout({
         <ShareButton slug={post.slug} summary={post.summary} title={post.title} />
       </div>
 
+      {/* ---------- AUTEUR ---------- */}
+      <aside className="mt-12 rounded-xl border border-gray-800 bg-gray-900/50 p-6">
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-sm font-bold text-white">
+            VL
+          </div>
+          <div>
+            <p className="font-semibold text-white">Victor Lenain</p>
+            <p className="text-sm text-gray-400">
+              Développeur Full-Stack freelance à Paris. React, Next.js, Node.js, TypeScript.
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 flex gap-3">
+          <a
+            className="text-sm text-indigo-400 transition-colors hover:text-indigo-300"
+            href="https://www.linkedin.com/in/victor-lenain/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            LinkedIn
+          </a>
+          <a
+            className="text-sm text-indigo-400 transition-colors hover:text-indigo-300"
+            href="https://github.com/victornain26"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            GitHub
+          </a>
+        </div>
+      </aside>
+
       {/* ---------- NAVIGATION ARTICLES ---------- */}
       {(prev ?? next) && (
         <nav className="mt-12 grid gap-4 sm:grid-cols-2">

@@ -11,6 +11,9 @@ export default function MetaTags() {
       <meta content="#6366f1" name="theme-color" />
       <meta content="#6366f1" name="msapplication-TileColor" />
 
+      {/* ---- GEO : fichier llms.txt pour les moteurs IA ---- */}
+      <link href="/llms.txt" rel="alternate" title="LLMs.txt" type="text/plain" />
+
       {/* ---- SEO et performance ---- */}
       <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
       <meta content="telephone=no" name="format-detection" />

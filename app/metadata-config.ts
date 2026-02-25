@@ -17,9 +17,16 @@ export const personJsonLd = {
   knowsAbout: [
     'Développement Web',
     'Applications Web',
+    'React',
+    'Next.js',
+    'Node.js',
+    'TypeScript',
+    'Docker',
+    'CI/CD',
     'Architecture logicielle',
     'Déploiement',
     'Automatisation',
+    'Intelligence Artificielle',
   ],
   worksFor: {
     '@type': 'Organization',
@@ -29,7 +36,8 @@ export const personJsonLd = {
   address: {
     '@type': 'PostalAddress',
     addressCountry: 'FR',
-    addressLocality: 'France',
+    addressLocality: 'Paris',
+    addressRegion: 'Île-de-France',
   },
   offers: {
     '@type': 'Offer',
@@ -150,18 +158,31 @@ export const professionalServiceJsonLd = {
     "Applications web sur mesure, de l'idée au déploiement. Devis gratuit sous 24 h.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
+  priceRange: '€€',
+  availableLanguage: ['fr', 'en'],
   provider: {
     '@type': 'Person',
     name: 'Victor Lenain',
   },
-  areaServed: {
-    '@type': 'Country',
-    name: 'France',
-  },
+  areaServed: [
+    {
+      '@type': 'City',
+      name: 'Paris',
+    },
+    {
+      '@type': 'AdministrativeArea',
+      name: 'Île-de-France',
+    },
+    {
+      '@type': 'Country',
+      name: 'France',
+    },
+  ],
   serviceType: [
     'Développement Web',
     'Applications sur mesure',
     'Conseil Technique',
+    'Intégration IA',
   ],
   potentialAction: {
     '@type': 'ReserveAction',
