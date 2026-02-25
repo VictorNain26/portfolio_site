@@ -52,13 +52,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = allPosts.find(p => p.slug === slug);
-  if (!post) {
+  if (!post || new Date(post.publishedAt) > new Date()) {
     notFound();
   }
 
-  const idx = allPosts.indexOf(post);
-  const prev = allPosts[idx - 1] ?? null;
-  const next = allPosts[idx + 1] ?? null;
+  // Navigation uniquement entre articles publiés
+  const published = allPosts
+    .filter((p) => new Date(p.publishedAt) <= new Date())
+    .sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
+  const idx = published.indexOf(post);
+  const prev = published[idx - 1] ?? null;
+  const next = published[idx + 1] ?? null;
 
   const words = post.content.split(/\s+/);
   const WORDS_PER_MINUTE = 200;

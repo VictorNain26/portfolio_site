@@ -18,7 +18,8 @@
     "test:coverage": "vitest run --coverage",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "clean": "rm -rf .next out dist"
+    "clean": "rm -rf .next out dist",
+    "notify": "bun run scripts/notify-search-engines.ts"
   },
   "dependencies": {
     "@radix-ui/react-scroll-area": "^1.2.9",

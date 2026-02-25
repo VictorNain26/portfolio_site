@@ -81,17 +81,20 @@ export default function ArticleLayout({
             </p>
           </div>
         </div>
-        <div className="mt-4 flex gap-3">
+        <p className="mt-4 text-sm text-gray-400">
+          Je partage aussi des conseils et retours d&apos;expérience sur LinkedIn.
+        </p>
+        <div className="mt-3 flex gap-3">
           <a
-            className="text-sm text-indigo-400 transition-colors hover:text-indigo-300"
+            className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-sm font-medium text-indigo-400 transition-colors hover:bg-indigo-500/20"
             href="https://www.linkedin.com/in/victor-lenain/"
             rel="noopener noreferrer"
             target="_blank"
           >
-            LinkedIn
+            Suivre sur LinkedIn
           </a>
           <a
-            className="text-sm text-indigo-400 transition-colors hover:text-indigo-300"
+            className="text-sm text-gray-500 transition-colors hover:text-gray-300 self-center"
             href="https://github.com/victornain26"
             rel="noopener noreferrer"
             target="_blank"

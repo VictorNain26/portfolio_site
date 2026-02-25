@@ -1,0 +1,83 @@
+---
+title: "AubeSonore : comment j'ai automatisé une web radio entière avec l'IA"
+summary: "AubeSonore est une radio en ligne qui tourne 24/7 sans intervention humaine. Découverte musicale par IA, programmation automatique, déploiement Docker. Retour d'expérience technique."
+publishedAt: "2026-03-02"
+tags:
+  - AubeSonore
+  - Automatisation
+  - Docker
+  - Python
+  - TypeScript
+  - Intelligence Artificielle
+  - Projet
+---
+
+AubeSonore est une web radio qui tourne 24 heures sur 24, 7 jours sur 7. Sans DJ. Sans intervention humaine. Juste du code.
+
+Elle découvre, sélectionne et diffuse de la musique indépendante de manière autonome. C'est mon projet le plus ambitieux — et celui qui m'a le plus appris sur l'automatisation.
+
+## Le concept
+
+L'idée est née d'une frustration : les algorithmes de recommandation musicale tournent en boucle. Spotify me proposait toujours les mêmes artistes. J'avais envie de découvrir des choses nouvelles, vraiment nouvelles.
+
+J'ai voulu créer une radio qui explore là où les humains ne vont pas — les artistes indépendants, les labels de niche, les sorties qui passent sous le radar.
+
+## Comment ça marche sous le capot
+
+### Découverte musicale
+
+Un scraper Python explore les plateformes de musique indépendante. Il récupère les nouveautés, les métadonnées et les aperçus audio.
+
+L'IA intervient ensuite pour analyser et filtrer. Pas tous les morceaux se valent — l'objectif est de garder une cohérence musicale tout en surprenant l'auditeur.
+
+### Programmation automatique
+
+Un système de programmation gère les playlists et les transitions. Il évite de passer deux morceaux similaires à la suite, gère les créneaux horaires (plus calme le matin, plus énergique l'après-midi), et s'assure que la rotation est variée.
+
+### Infrastructure
+
+Le tout est orchestré dans **Docker** :
+- Un conteneur pour le scraper (Python)
+- Un conteneur pour l'API et le frontend (TypeScript, Next.js)
+- Un conteneur pour le serveur de streaming
+- Docker Compose pour orchestrer l'ensemble
+
+Déployé sur un serveur dédié avec monitoring et alertes.
+
+## Les 3 leçons que j'en tire
+
+### 1. L'automatisation, c'est 20% de code et 80% de gestion d'erreurs
+
+Le pipeline fonctionne parfaitement… 95% du temps. Ce sont les 5% restants qui demandent le plus de travail.
+
+Un lien qui ne répond plus. Un format audio inattendu. Une API qui change sans prévenir. Chaque cas d'erreur doit être anticipé, loggé, et géré gracieusement.
+
+La robustesse d'un système automatisé ne se mesure pas quand tout va bien. Elle se mesure quand quelque chose casse — et que le système se remet en route tout seul.
+
+### 2. Un système 24/7 vous force à penser fiabilité dès le départ
+
+Quand un site classique tombe, l'utilisateur revient 10 minutes plus tard. Quand une radio s'arrête, le silence est immédiat.
+
+Ça m'a obligé à mettre en place :
+- Des **health checks** sur chaque conteneur
+- Du **monitoring** avec des alertes
+- Des **redémarrages automatiques** en cas de crash
+- Des **logs structurés** pour diagnostiquer rapidement
+
+Ces pratiques, je les applique maintenant à tous mes projets — même ceux qui ne tournent pas 24/7.
+
+### 3. Docker + Python + TypeScript = un combo sous-estimé
+
+Python pour le scraping et le traitement de données. TypeScript pour l'interface et l'API. Docker pour tout faire cohabiter proprement.
+
+Ce stack n'est pas le plus à la mode. Mais il est pragmatique, fiable, et couvre 90% des besoins d'automatisation.
+
+## Le résultat
+
+AubeSonore tourne depuis des mois. Des milliers de morceaux découverts. Zéro intervention manuelle au quotidien.
+
+Le plus satisfaisant ? Allumer la radio à 3h du matin et entendre un morceau que l'IA a découvert toute seule.
+
+**Vous pouvez écouter AubeSonore en direct sur [aubesonore.fr](https://www.aubesonore.fr/).**
+
+Vous avez un process métier que vous aimeriez automatiser ? [Échangeons](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) — je peux probablement vous aider.

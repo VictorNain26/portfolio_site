@@ -1,6 +1,9 @@
 import { allPosts } from 'content-collections';
 import Link from 'next/link';
 
+// Régénérer la page toutes les heures pour publier les articles programmés
+export const revalidate = 3600;
+
 const blogBreadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -40,6 +43,12 @@ export const metadata = {
 };
 
 export default function BlogIndex() {
+  const now = new Date();
+  // Ne montrer que les articles dont la date est passée ou aujourd'hui
+  const publishedPosts = allPosts
+    .filter((post) => new Date(post.publishedAt) <= now)
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+
   return (
     <main className="mx-auto max-w-2xl px-4 pt-24 pb-24 sm:px-6">
       <script
@@ -58,9 +67,7 @@ export default function BlogIndex() {
 
       {/* Liste des articles */}
       <div className="space-y-12">
-        {allPosts
-          .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-          .map(post => (
+        {publishedPosts.map(post => (
           <article key={post.slug}>
             <Link className="group block" href={`/blog/${post.slug}`}>
               <time className="text-sm text-gray-500" dateTime={post.publishedAt}>
@@ -98,7 +105,7 @@ export default function BlogIndex() {
         ))}
       </div>
 
-      {allPosts.length === 0 && (
+      {publishedPosts.length === 0 && (
         <p className="text-center text-gray-500">Aucun article pour le moment.</p>
       )}
     </main>

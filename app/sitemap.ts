@@ -20,8 +20,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Articles de blog dynamiques
-  const blogPosts: MetadataRoute.Sitemap = allPosts.map((post) => ({
+  // Articles de blog publiés (exclure les articles programmés dans le futur)
+  const now = new Date();
+  const blogPosts: MetadataRoute.Sitemap = allPosts.filter((post) => new Date(post.publishedAt) <= now).map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.publishedAt),
     changeFrequency: 'monthly' as const,
