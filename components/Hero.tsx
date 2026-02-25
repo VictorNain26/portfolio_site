@@ -1,17 +1,16 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Calendar, ArrowRight, Check } from 'lucide-react';
+import { Calendar, ArrowRight, MessageCircle } from 'lucide-react';
 import CalPopupButton from '@/components/CalPopupButton';
 
-const stack = ['React', 'Next.js', 'Node.js', 'TypeScript', 'Docker', 'CI/CD'];
-
-const statusLines = [
-  { label: 'Build', value: 'passed' },
-  { label: 'Tests', value: '100%' },
-  { label: 'Deploy', value: 'production' },
-  { label: 'Suivi', value: 'actif' },
+const metrics = [
+  { value: '2+', label: "ans d'expérience" },
+  { value: '20+', label: 'projets livrés' },
+  { value: '<24h', label: 'temps de réponse' },
 ];
+
+const stack = ['React', 'Next.js', 'Node.js', 'TypeScript', 'Docker', 'CI/CD'];
 
 export default function Hero() {
   const reduced = useReducedMotion();
@@ -23,181 +22,138 @@ export default function Hero() {
           initial: { opacity: 0, y: 24 } as const,
           whileInView: { opacity: 1, y: 0 } as const,
           viewport: { once: true } as const,
-          transition: { duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] as const },
-        };
-
-  const fadeIn = (delay: number) =>
-    reduced
-      ? {}
-      : {
-          initial: { opacity: 0 } as const,
-          whileInView: { opacity: 1 } as const,
-          viewport: { once: true } as const,
-          transition: { duration: 0.8, delay },
+          transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
         };
 
   return (
     <section
-      className="relative flex min-h-[100svh] items-center overflow-hidden px-4 sm:px-8 lg:px-20"
+      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-4 sm:px-8"
       id="accueil"
     >
-      {/* --- Decorative background layers --- */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-40 top-1/3 h-[560px] w-[560px] rounded-full bg-indigo-600/[0.07] blur-[140px]"
-      />
+      {/* --- Subtle glow accent (blends with body bg) --- */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute left-1/2 top-1/3 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/[0.04] blur-[150px]" />
+      </div>
 
       {/* --- Content --- */}
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center gap-12 lg:flex-row lg:items-center lg:gap-16 xl:gap-24">
-        {/* Left — text content */}
-        <div className="flex-1">
-          {/* Availability badge */}
-          <motion.div {...fadeUp(0.1)} className="mb-8">
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-2 text-sm font-medium text-green-400 backdrop-blur-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
-              </span>
-              Disponible pour une mission
+      <div className="relative z-10 mx-auto max-w-5xl text-center">
+        {/* Availability badge */}
+        <motion.div {...fadeUp(0.1)} className="mb-8 flex justify-center">
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-2 text-sm font-medium text-green-400 backdrop-blur-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
             </span>
-          </motion.div>
+            Disponible pour une mission
+          </span>
+        </motion.div>
 
-          {/* Headline */}
-          <motion.h1
-            {...fadeUp(0.2)}
-            className="font-display mb-6 text-4xl font-bold leading-[1.08] tracking-tight text-white text-balance sm:text-5xl lg:text-6xl"
-          >
-            De l&apos;idée au{' '}
-            <span className="bg-gradient-to-r from-indigo-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">
-              déploiement
-            </span>
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            {...fadeUp(0.3)}
-            className="mb-10 max-w-lg text-lg leading-relaxed text-gray-400"
-          >
-            Développeur Full-Stack &amp; DevOps freelance à Paris.{' '}
-            <span className="text-gray-300">
-              Applications web, APIs, infrastructure
-            </span>{' '}
-            — je livre des solutions complètes, pas juste du code.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div {...fadeUp(0.4)} className="flex flex-wrap items-center gap-4">
-            <CalPopupButton
-              className="group inline-flex items-center gap-3 rounded-full bg-indigo-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-xl hover:shadow-indigo-500/30 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
-              data-umami-event="cta-hero-cal"
-            >
-              <Calendar aria-hidden="true" className="h-4 w-4" />
-              Réserver un échange gratuit
-              <ArrowRight
-                aria-hidden="true"
-                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
-              />
-            </CalPopupButton>
-
-            <a
-              className="inline-flex items-center gap-2 rounded-full border border-gray-700/50 bg-white/[0.03] px-6 py-3.5 text-sm font-medium text-gray-400 backdrop-blur-sm transition-colors hover:border-gray-600 hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
-              data-umami-event="cta-hero-whatsapp"
-              href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Ou par WhatsApp
-            </a>
-          </motion.div>
-
-          {/* Tech stack trust bar */}
-          <motion.div
-            {...fadeUp(0.55)}
-            className="mt-12 flex flex-wrap items-center gap-2"
-          >
-            <span className="mr-1 text-[11px] font-semibold uppercase tracking-widest text-gray-600">
-              Stack
-            </span>
-            {stack.map((tech, i) => (
-              <motion.span
-                key={tech}
-                className="rounded-full border border-gray-800/80 bg-gray-900/40 px-3 py-1 text-xs text-gray-500 backdrop-blur-sm transition-colors hover:border-indigo-500/30 hover:text-gray-300"
-                {...(reduced
-                  ? {}
-                  : {
-                      initial: { opacity: 0, scale: 0.85 } as const,
-                      whileInView: { opacity: 1, scale: 1 } as const,
-                      viewport: { once: true } as const,
-                      transition: { duration: 0.3, delay: 0.65 + i * 0.06 },
-                    })}
-              >
-                {tech}
-              </motion.span>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Right — status card */}
-        <motion.div
-          {...fadeIn(0.5)}
-          aria-hidden="true"
-          className="hidden w-full max-w-sm shrink-0 md:block lg:w-[340px] xl:w-[380px]"
+        {/* Headline */}
+        <motion.h1
+          {...fadeUp(0.2)}
+          className="font-display text-[2.75rem] font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[6.5rem]"
         >
-          <div className="relative rounded-2xl border border-gray-800/60 bg-gray-900/30 p-6 backdrop-blur-md sm:p-7">
-            {/* Terminal dots + filename */}
-            <div className="mb-6 flex items-center gap-2">
-              <div className="flex gap-1.5">
-                <span className="h-3 w-3 rounded-full bg-red-400/70" />
-                <span className="h-3 w-3 rounded-full bg-yellow-400/70" />
-                <span className="h-3 w-3 rounded-full bg-green-400/70" />
+          De l&apos;idée au{' '}
+          <span className="hero-gradient-text">déploiement</span>
+        </motion.h1>
+
+        {/* Subtitle */}
+        <motion.p
+          {...fadeUp(0.3)}
+          className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-400 text-balance sm:mt-8 sm:text-xl"
+        >
+          Développeur Full-Stack &amp; DevOps freelance à Paris.{' '}
+          <span className="text-gray-300">
+            Applications web, APIs, infrastructure
+          </span>{' '}
+          — des solutions complètes, pas juste du code.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          {...fadeUp(0.4)}
+          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+        >
+          <CalPopupButton
+            className="group relative inline-flex items-center gap-3 rounded-full bg-indigo-600 px-8 py-4 text-base font-semibold text-white shadow-[0_0_32px_-8px_rgba(99,102,241,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-[0_0_48px_-8px_rgba(99,102,241,0.6)] focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
+            data-umami-event="cta-hero-cal"
+          >
+            <Calendar aria-hidden="true" className="h-5 w-5" />
+            Réserver un échange gratuit
+            <ArrowRight
+              aria-hidden="true"
+              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+            />
+          </CalPopupButton>
+
+          <a
+            className="group inline-flex items-center gap-2.5 rounded-full border border-gray-700/50 bg-white/[0.03] px-7 py-4 text-base font-medium text-gray-300 backdrop-blur-sm transition-all duration-300 hover:border-gray-500/50 hover:bg-white/[0.06] hover:text-white focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
+            data-umami-event="cta-hero-whatsapp"
+            href="https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <MessageCircle aria-hidden="true" className="h-4 w-4" />
+            Ou par WhatsApp
+          </a>
+        </motion.div>
+
+        {/* Metrics */}
+        <motion.div
+          {...fadeUp(0.55)}
+          className="mx-auto mt-16 grid max-w-lg grid-cols-3 divide-x divide-gray-800/60"
+        >
+          {metrics.map((metric, i) => (
+            <motion.div
+              key={metric.label}
+              className="px-4 text-center sm:px-6"
+              {...(reduced
+                ? {}
+                : {
+                    initial: { opacity: 0, scale: 0.8 } as const,
+                    whileInView: { opacity: 1, scale: 1 } as const,
+                    viewport: { once: true } as const,
+                    transition: {
+                      duration: 0.5,
+                      delay: 0.7 + i * 0.1,
+                      ease: [0.22, 1, 0.36, 1] as const,
+                    },
+                  })}
+            >
+              <div className="font-display text-2xl font-bold text-white sm:text-3xl">
+                {metric.value}
               </div>
-              <span className="ml-auto font-mono text-xs tracking-wider text-gray-600">
-                deploy.sh
-              </span>
-            </div>
+              <p className="mt-1 text-[11px] font-medium uppercase tracking-wider text-gray-500 sm:text-xs">
+                {metric.label}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
 
-            {/* Status lines */}
-            <div className="space-y-4">
-              {statusLines.map((line, i) => (
-                <motion.div
-                  key={line.label}
-                  className="flex items-center justify-between"
-                  {...(reduced
-                    ? {}
-                    : {
-                        initial: { opacity: 0, x: 12 } as const,
-                        whileInView: { opacity: 1, x: 0 } as const,
-                        viewport: { once: true } as const,
-                        transition: { duration: 0.4, delay: 0.7 + i * 0.1 },
-                      })}
-                >
-                  <span className="font-mono text-sm text-gray-500">
-                    {line.label}
-                  </span>
-                  <span className="flex items-center gap-2 font-mono text-sm text-green-400/90">
-                    <Check className="h-3.5 w-3.5" />
-                    {line.value}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Divider */}
-            <div className="my-5 h-px bg-gradient-to-r from-transparent via-gray-700/60 to-transparent" />
-
-            {/* Availability */}
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs uppercase tracking-wider text-gray-600">
-                Disponibilité
-              </span>
-              <span className="font-mono text-sm font-semibold text-indigo-400">
-                sous 24h
-              </span>
-            </div>
-
-            {/* Card glow */}
-            <div className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-b from-indigo-500/[0.08] via-transparent to-transparent" />
-          </div>
+        {/* Tech stack */}
+        <motion.div
+          {...fadeUp(0.75)}
+          className="mt-12 flex flex-wrap items-center justify-center gap-2"
+        >
+          <span className="mr-1 text-[11px] font-semibold uppercase tracking-widest text-gray-600">
+            Stack
+          </span>
+          {stack.map((tech, i) => (
+            <motion.span
+              key={tech}
+              className="rounded-full border border-gray-800/60 bg-gray-900/30 px-3.5 py-1.5 text-xs font-medium text-gray-500 backdrop-blur-sm transition-colors duration-200 hover:border-indigo-500/30 hover:text-gray-300"
+              {...(reduced
+                ? {}
+                : {
+                    initial: { opacity: 0, y: 8 } as const,
+                    whileInView: { opacity: 1, y: 0 } as const,
+                    viewport: { once: true } as const,
+                    transition: { duration: 0.3, delay: 0.9 + i * 0.05 },
+                  })}
+            >
+              {tech}
+            </motion.span>
+          ))}
         </motion.div>
       </div>
 

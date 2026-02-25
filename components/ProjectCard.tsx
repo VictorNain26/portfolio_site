@@ -28,10 +28,10 @@ export default function ProjectCard({
       viewport={{ once: true }}
       whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
     >
-      <div className="relative flex flex-col overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/50 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-500/30 hover:bg-gray-900/80 hover:shadow-xl hover:shadow-indigo-500/10">
+      <div className="relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-500/20 hover:bg-white/[0.04] hover:shadow-xl hover:shadow-indigo-500/5">
         {/* Header avec gradient */}
         <div className="relative h-40 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e082e]/80 to-transparent" />
 
           {/* Badge projet personnel */}
           <div className="absolute top-4 left-4">
@@ -82,7 +82,7 @@ export default function ProjectCard({
           <div className="mt-auto flex items-center gap-3">
             {project.demoUrl !== null && project.demoUrl !== '' && (
               <a
-                className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
+                className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-indigo-500 hover:shadow-lg hover:shadow-indigo-500/20 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
                 href={project.demoUrl}
                 rel="noopener noreferrer"
                 target="_blank"

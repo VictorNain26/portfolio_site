@@ -4,8 +4,6 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Rocket, Cog, Sparkles } from 'lucide-react';
 import Section from '@/components/Section';
 
-const STAGGER_DELAY = 0.1;
-
 const services = [
   {
     icon: Rocket,
@@ -31,17 +29,34 @@ const services = [
 ];
 
 export default function Services() {
-  const prefersReducedMotion = useReducedMotion();
+  const reduced = useReducedMotion();
+
+  const fadeUp = (delay: number) =>
+    reduced
+      ? {}
+      : {
+          initial: { opacity: 0, y: 24 } as const,
+          whileInView: { opacity: 1, y: 0 } as const,
+          viewport: { once: true } as const,
+          transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
+        };
 
   return (
     <Section className="scroll-mt-28 pb-28" id="services">
-      <div className="mb-12 text-center">
-        <h2 className="font-display mb-4 text-3xl font-bold text-indigo-400">
-          Ce que je peux faire pour vous
-        </h2>
-        <p className="mx-auto max-w-2xl text-gray-400">
+      <div className="mb-16 text-center">
+        <motion.h2
+          {...fadeUp(0)}
+          className="font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl"
+        >
+          Ce que je peux faire{' '}
+          <span className="hero-gradient-text">pour vous</span>
+        </motion.h2>
+        <motion.p
+          {...fadeUp(0.1)}
+          className="mx-auto mt-4 max-w-2xl text-lg text-gray-400"
+        >
           Des solutions concrètes pour développer votre activité en ligne
-        </p>
+        </motion.p>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -50,24 +65,21 @@ export default function Services() {
           return (
             <motion.div
               key={service.title}
-              className="group rounded-2xl border border-gray-800 bg-gray-900/50 p-6 transition-colors hover:border-indigo-500/30 hover:bg-gray-900/80"
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-              transition={{ delay: index * STAGGER_DELAY, duration: 0.4 }}
-              viewport={{ once: true }}
-              whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+              className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/20 hover:bg-white/[0.04]"
+              {...fadeUp(0.15 + index * 0.1)}
             >
-              <div className="mb-4 inline-flex rounded-xl bg-indigo-500/10 p-3 text-indigo-400">
+              <div className="mb-5 inline-flex rounded-xl bg-indigo-500/10 p-3 text-indigo-400 transition-colors group-hover:bg-indigo-500/15">
                 <Icon aria-hidden="true" className="h-6 w-6" />
               </div>
-              <h3 className="mb-2 text-lg font-semibold text-white">{service.title}</h3>
-              <p className="mb-4 text-sm leading-relaxed text-gray-400">{service.description}</p>
-              <ul className="space-y-1">
+              <h3 className="mb-3 text-lg font-semibold text-white">{service.title}</h3>
+              <p className="mb-5 text-sm leading-relaxed text-gray-400">{service.description}</p>
+              <ul className="space-y-2">
                 {service.results.map((result) => (
                   <li
                     key={result}
-                    className="flex items-center gap-2 text-sm text-indigo-300"
+                    className="flex items-center gap-2.5 text-sm text-indigo-300"
                   >
-                    <span aria-hidden="true" className="h-1 w-1 rounded-full bg-indigo-400" />
+                    <span aria-hidden="true" className="h-1 w-1 shrink-0 rounded-full bg-indigo-400" />
                     {result}
                   </li>
                 ))}

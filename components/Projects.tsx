@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import Section from '@/components/Section';
 import ProjectCard from '@/components/ProjectCard';
 import { type Project } from '@/lib/github';
@@ -39,16 +39,27 @@ const FEATURED_PROJECTS: FeaturedProject[] = [
 ];
 
 export default function Projects() {
+  const reduced = useReducedMotion();
+
+  const fadeUp = (delay: number) =>
+    reduced
+      ? {}
+      : {
+          initial: { opacity: 0, y: 24 } as const,
+          whileInView: { opacity: 1, y: 0 } as const,
+          viewport: { once: true } as const,
+          transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
+        };
+
   return (
     <Section className="scroll-mt-28 pb-28" id="projets">
-      <div className="mb-12 text-center">
+      <div className="mb-16 text-center">
         <motion.h2
-          className="font-display mb-4 text-3xl font-bold text-indigo-400"
-          initial={{ opacity: 0, y: 20 }}
-          viewport={{ once: true }}
-          whileInView={{ opacity: 1, y: 0 }}
+          {...fadeUp(0)}
+          className="font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl"
         >
-          Mes Projets
+          Mes{' '}
+          <span className="hero-gradient-text">Projets</span>
         </motion.h2>
       </div>
 

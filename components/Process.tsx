@@ -36,17 +36,34 @@ const steps = [
 ];
 
 export default function Process() {
-  const prefersReducedMotion = useReducedMotion();
+  const reduced = useReducedMotion();
+
+  const fadeUp = (delay: number) =>
+    reduced
+      ? {}
+      : {
+          initial: { opacity: 0, y: 24 } as const,
+          whileInView: { opacity: 1, y: 0 } as const,
+          viewport: { once: true } as const,
+          transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
+        };
 
   return (
     <Section className="scroll-mt-28" id="process">
-      <div className="mb-12 text-center">
-        <h2 className="font-display mb-4 text-3xl font-bold text-indigo-400">
-          Comment je travaille
-        </h2>
-        <p className="mx-auto max-w-2xl text-gray-400">
+      <div className="mb-16 text-center">
+        <motion.h2
+          {...fadeUp(0)}
+          className="font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl"
+        >
+          Comment je{' '}
+          <span className="hero-gradient-text">travaille</span>
+        </motion.h2>
+        <motion.p
+          {...fadeUp(0.1)}
+          className="mx-auto mt-4 max-w-2xl text-lg text-gray-400"
+        >
           Un process simple et transparent, du premier échange à la mise en ligne
-        </p>
+        </motion.p>
       </div>
 
       <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -61,11 +78,8 @@ export default function Process() {
           return (
             <motion.div
               key={step.number}
-              className="group relative rounded-2xl border border-gray-800 bg-gray-900/50 p-6 transition-colors hover:border-indigo-500/30 hover:bg-gray-900/80"
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-              transition={{ delay: index * 0.12, duration: 0.5 }}
-              viewport={{ once: true }}
-              whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+              className="group relative rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/20 hover:bg-white/[0.04]"
+              {...fadeUp(0.15 + index * 0.1)}
             >
               <span className="font-display mb-4 block text-3xl font-bold text-indigo-500/20">
                 {step.number}
