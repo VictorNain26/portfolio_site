@@ -4,6 +4,9 @@ import MDX from '@/components/MDX';
 import ArticleLayout from '@/components/ArticleLayout';
 import BlogPostJsonLd from '@/app/components/BlogPostJsonLd';
 
+// Régénérer toutes les heures pour publier les articles programmés
+export const revalidate = 3600;
+
 const BASE_URL = 'https://victorlenain.fr';
 
 /* ---------------- Params statiques ---------------- */
