@@ -147,6 +147,14 @@ export const faqJsonLd = {
         text: 'Un site vitrine prend 2 à 4 semaines. Une application métier, 1 à 3 mois selon le périmètre. Je privilégie les livraisons itératives pour que vous ayez de la visibilité rapidement.',
       },
     },
+    {
+      '@type': 'Question',
+      name: 'Faites-vous des interventions courtes (fix, refonte, ajout de feature) ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "Oui. Je ne fais pas que des projets from scratch. Correction de bugs urgents, refonte d'un site existant, ajout d'une fonctionnalité, optimisation de performances — j'interviens aussi ponctuellement, à partir d'une demi-journée.",
+      },
+    },
   ],
 };
 
@@ -181,6 +189,10 @@ export const professionalServiceJsonLd = {
   serviceType: [
     'Développement Web',
     'Applications sur mesure',
+    'Refonte de site web',
+    'Correction de bugs',
+    'Maintenance web',
+    'Audit technique',
     'Conseil Technique',
     'Intégration IA',
   ],
@@ -213,16 +225,24 @@ export const professionalServiceJsonLd = {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Conseil technique',
-          description: 'Conseil en architecture et choix technologiques',
+          name: 'Refonte et modernisation de sites web',
+          description: 'Migration technique, redesign, optimisation de performances sur sites existants',
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Formation',
-          description: 'Formation et montée en compétences techniques',
+          name: 'Interventions ponctuelles',
+          description: 'Correction de bugs, ajout de fonctionnalités, audits techniques et maintenance',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Conseil technique',
+          description: 'Conseil en architecture et choix technologiques',
         },
       },
     ],

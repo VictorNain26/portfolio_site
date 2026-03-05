@@ -27,6 +27,11 @@ const faqItems = [
     answer:
       'Un site vitrine prend 2 à 4 semaines. Une application métier, 1 à 3 mois selon le périmètre. Je privilégie les livraisons itératives pour que vous ayez de la visibilité rapidement.',
   },
+  {
+    question: 'Faites-vous des interventions courtes (fix, refonte, ajout de feature) ?',
+    answer:
+      'Oui. Je ne fais pas que des projets from scratch. Correction de bugs urgents, refonte d\'un site existant, ajout d\'une fonctionnalité, optimisation de performances — j\'interviens aussi ponctuellement, à partir d\'une demi-journée.',
+  },
 ];
 
 export default function FAQ() {

@@ -33,13 +33,17 @@ export const metadata = {
     template: '%s | Victor Lenain',
   },
   description:
-    "Développeur Full-Stack freelance à Paris. Je conçois des applications web sur mesure, de l'idée au déploiement. Devis gratuit sous 24 h.",
+    "Développeur Full-Stack freelance à Paris. Création d'applications web, refonte de sites, interventions ponctuelles et intégration IA. Devis gratuit sous 24 h.",
   keywords: [
     'développeur freelance Paris',
     'développeur full-stack',
     'application web sur mesure',
     'freelance développeur web',
     'création application web',
+    'refonte site web',
+    'correction bugs site web',
+    'maintenance site web freelance',
+    'audit technique site web',
     'développeur freelance',
     'développeur React freelance',
     'développeur Next.js',
@@ -70,14 +74,14 @@ export const metadata = {
     siteName: 'Victor Lenain - Portfolio',
     title: 'Victor Lenain | Développeur Full-Stack Freelance à Paris',
     description:
-      "Développeur Full-Stack freelance à Paris. Applications web sur mesure, de l'idée au déploiement. Devis gratuit sous 24 h.",
+      "Développeur Full-Stack freelance à Paris. Création, refonte, interventions ponctuelles et intégration IA. Devis gratuit sous 24 h.",
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Victor Lenain | Développeur Full-Stack Freelance',
     description:
-      "Applications web sur mesure, de l'idée au déploiement. Freelance à Paris.",
+      "Création, refonte, fix et intégration IA. Développeur Full-Stack freelance à Paris.",
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   alternates: {

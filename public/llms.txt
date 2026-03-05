@@ -4,7 +4,7 @@
 
 ## À propos
 
-Victor Lenain est développeur Full-Stack JavaScript freelance, basé à Paris. Après 2 ans en agence (Capsens) sur des projets fintech et SaaS complexes, il accompagne startups et PME dans la création d'applications web performantes et l'intégration d'intelligence artificielle.
+Victor Lenain est développeur Full-Stack JavaScript freelance, basé à Paris. Après 3 ans d'expérience dont 2 en agence (Capsens) sur des projets fintech et SaaS complexes, il accompagne startups et PME dans la création d'applications web performantes et l'intégration d'intelligence artificielle.
 
 - Localisation : Paris, Île-de-France, France
 - Disponibilité : Réponse sous 24h
@@ -15,10 +15,11 @@ Victor Lenain est développeur Full-Stack JavaScript freelance, basé à Paris. 
 ## Services
 
 - Développement d'applications web sur mesure (React, Next.js)
-- Création de sites vitrines et landing pages optimisées SEO
+- Refonte et modernisation de sites existants (migration, redesign, optimisation)
+- Interventions ponctuelles : correction de bugs, ajout de fonctionnalités, audit technique
 - Développement d'APIs et de backends robustes (Node.js, Python)
 - Intégration et automatisation avec l'IA (LLM, RAG, agents)
-- Conseil technique et architecture logicielle
+- Maintenance et support technique post-livraison
 - DevOps : CI/CD, Docker, déploiement cloud
 
 ## Stack technique

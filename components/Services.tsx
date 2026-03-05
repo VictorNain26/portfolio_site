@@ -1,16 +1,23 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Rocket, Cog, Sparkles } from 'lucide-react';
+import { Rocket, Cog, Sparkles, Wrench } from 'lucide-react';
 import Section from '@/components/Section';
 
 const services = [
   {
     icon: Rocket,
-    title: 'Applications web sur mesure',
+    title: 'Création d\'applications web',
     description:
       'Des interfaces modernes, rapides et accessibles qui convertissent vos visiteurs en clients. Sites vitrines, applications métier, plateformes e-commerce.',
     results: ['Sites rapides et bien référencés', 'Interfaces intuitives', 'Mobile-first'],
+  },
+  {
+    icon: Wrench,
+    title: 'Refonte & interventions ponctuelles',
+    description:
+      'Votre site est lent, daté ou buggé ? Je modernise, corrige et optimise l\'existant. Refonte visuelle, migration technique, fix urgent ou ajout de fonctionnalité.',
+    results: ['Refonte et modernisation', 'Correction de bugs', 'Optimisation performances'],
   },
   {
     icon: Cog,
@@ -59,7 +66,7 @@ export default function Services() {
         </motion.p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2">
         {services.map((service, index) => {
           const Icon = service.icon;
           return (

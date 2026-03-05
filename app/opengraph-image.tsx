@@ -79,7 +79,7 @@ export default function OGImage() {
             margin: 0,
           }}
         >
-          Développeur Full-Stack · 2 ans d&apos;expérience en agence
+          Développeur Full-Stack · 3+ ans d&apos;expérience
         </p>
 
         {/* URL */}

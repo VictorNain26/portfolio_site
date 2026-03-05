@@ -5,7 +5,7 @@ import { Calendar, ArrowRight, MessageCircle } from 'lucide-react';
 import CalPopupButton from '@/components/CalPopupButton';
 
 const metrics = [
-  { value: '2+', label: "ans d'expérience" },
+  { value: '3+', label: "ans d'expérience" },
   { value: '20+', label: 'projets livrés' },
   { value: '<24h', label: 'temps de réponse' },
 ];
@@ -64,7 +64,7 @@ export default function Hero() {
         >
           Développeur Full-Stack &amp; DevOps freelance à Paris.{' '}
           <span className="text-gray-300">
-            Applications web, APIs, infrastructure
+            Création, refonte, intervention ponctuelle
           </span>{' '}
           — des solutions complètes, pas juste du code.
         </motion.p>
