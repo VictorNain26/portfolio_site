@@ -4,14 +4,18 @@ import MDX from '@/components/MDX';
 import ArticleLayout from '@/components/ArticleLayout';
 import BlogPostJsonLd from '@/app/components/BlogPostJsonLd';
 
-// Régénérer toutes les heures pour publier les articles programmés
-export const revalidate = 3600;
-
 const BASE_URL = 'https://victorlenain.fr';
 
 /* ---------------- Params statiques ---------------- */
+// Ne pré-rendre que les articles déjà publiés.
+// Les articles futurs ne sont PAS générés au build (évite les 404 en cache).
+// dynamicParams = true (défaut) : un article futur est rendu à la demande
+// quand on accède à son URL, sans créer de 404 persistant.
 export function generateStaticParams() {
-  return allPosts.map(p => ({ slug: p.slug }));
+  const now = new Date();
+  return allPosts
+    .filter((p) => new Date(p.publishedAt) <= now)
+    .map((p) => ({ slug: p.slug }));
 }
 
 /* ---------------- SEO / OG ------------------------ */
@@ -40,13 +44,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       modifiedTime: post.publishedAt,
       authors: ['Victor Lenain'],
       tags: post.tags,
-      // Images are generated dynamically by opengraph-image.tsx
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.summary,
-      // Images are generated dynamically by opengraph-image.tsx
     },
   };
 }
@@ -55,27 +57,28 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = allPosts.find(p => p.slug === slug);
-  if (!post || new Date(post.publishedAt) > new Date()) {
+  if (!post) {
     notFound();
   }
-
-  // Navigation uniquement entre articles publiés
-  const published = allPosts
-    .filter((p) => new Date(p.publishedAt) <= new Date())
-    .sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
-  const idx = published.indexOf(post);
-  const prev = published[idx - 1] ?? null;
-  const next = published[idx + 1] ?? null;
-
-  const words = post.content.split(/\s+/);
-  const WORDS_PER_MINUTE = 200;
-  const readingTime = Math.ceil(words.length / WORDS_PER_MINUTE);
-  const article = { ...post, readingTime };
 
   const code = post.mdx as unknown as string;
   if (code.length === 0) {
     notFound();
   }
+
+  // Navigation entre tous les articles publiés (exclut les futurs de la nav)
+  const now = new Date();
+  const published = allPosts
+    .filter((p) => new Date(p.publishedAt) <= now)
+    .sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
+  const idx = published.findIndex((p) => p.slug === post.slug);
+  const prev = idx > 0 ? (published[idx - 1] ?? null) : null;
+  const next = idx >= 0 && idx < published.length - 1 ? (published[idx + 1] ?? null) : null;
+
+  const words = post.content.split(/\s+/);
+  const WORDS_PER_MINUTE = 200;
+  const readingTime = Math.ceil(words.length / WORDS_PER_MINUTE);
+  const article = { ...post, readingTime, tags: post.tags };
 
   return (
     <>

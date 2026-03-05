@@ -18,6 +18,7 @@ export default function BlogPostJsonLd({
   wordCount,
 }: Props) {
   const url = `${BASE_URL}/blog/${slug}`;
+  const readingMinutes = Math.ceil(wordCount / 200);
 
   const blogPostingSchema = {
     '@context': 'https://schema.org',
@@ -28,7 +29,9 @@ export default function BlogPostJsonLd({
     datePublished: publishedAt,
     dateModified: publishedAt,
     wordCount,
+    timeRequired: `PT${readingMinutes}M`,
     inLanguage: 'fr-FR',
+    articleSection: tags[0] ?? 'Développement Web',
     author: {
       '@type': 'Person',
       name: 'Victor Lenain',
@@ -50,6 +53,7 @@ export default function BlogPostJsonLd({
     },
     image: `${url}/opengraph-image`,
     keywords: tags.join(', '),
+    isAccessibleForFree: true,
   };
 
   const breadcrumbSchema = {

@@ -10,11 +10,11 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: ['/api/', '/_next/', '/admin/'],
       },
-      // Autoriser explicitement les crawlers IA pour le GEO
+      // Autoriser explicitement les crawlers IA pour le GEO (2026)
       {
         userAgent: 'GPTBot',
         allow: '/',
-        disallow: ['/api/', '/_next/', '/admin/'],
+        disallow: ['/api/', '/_next/'],
       },
       {
         userAgent: 'ChatGPT-User',
@@ -30,6 +30,22 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: 'Applebot-Extended',
+        allow: '/',
+      },
+      {
+        userAgent: 'Google-Extended',
+        allow: '/',
+      },
+      {
+        userAgent: 'Amazonbot',
+        allow: '/',
+      },
+      {
+        userAgent: 'cohere-ai',
+        allow: '/',
+      },
+      {
+        userAgent: 'Meta-ExternalAgent',
         allow: '/',
       },
     ],

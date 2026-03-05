@@ -1,11 +1,11 @@
 # Victor Lenain - Développeur Full-Stack Freelance
 
-> Développeur Full-Stack freelance basé à Paris (Île-de-France). Je conçois des applications web sur mesure, de l'idée au déploiement. Spécialisé en React, Next.js, Node.js, TypeScript, Docker et CI/CD.
+> Développeur Full-Stack freelance basé à Paris (Île-de-France). Je conçois des applications web sur mesure avec React, Next.js, Node.js et TypeScript. Spécialisé dans l'intégration IA et l'automatisation pour startups et PME. Devis gratuit sous 24h.
 
-## Informations clés
+## À propos
 
-- Nom : Victor Lenain
-- Métier : Développeur Full-Stack & DevOps Freelance
+Victor Lenain est développeur Full-Stack JavaScript freelance, basé à Paris. Après 2 ans en agence (Capsens) sur des projets fintech et SaaS complexes, il accompagne startups et PME dans la création d'applications web performantes et l'intégration d'intelligence artificielle.
+
 - Localisation : Paris, Île-de-France, France
 - Disponibilité : Réponse sous 24h
 - TJM : À partir de 500 €
@@ -14,29 +14,33 @@
 
 ## Services
 
-- Développement d'applications web sur mesure
-- Création de sites vitrines et landing pages performantes
-- Développement d'APIs et de backends robustes
-- Intégration et automatisation avec l'IA
+- Développement d'applications web sur mesure (React, Next.js)
+- Création de sites vitrines et landing pages optimisées SEO
+- Développement d'APIs et de backends robustes (Node.js, Python)
+- Intégration et automatisation avec l'IA (LLM, RAG, agents)
 - Conseil technique et architecture logicielle
-- DevOps : CI/CD, Docker, déploiement
+- DevOps : CI/CD, Docker, déploiement cloud
 
 ## Stack technique
 
 - Frontend : React, Next.js, TypeScript, Tailwind CSS
 - Backend : Node.js, Python, APIs REST
-- Infrastructure : Docker, CI/CD, Vercel
-- IA : Intégration de modèles de langage, RAG, automatisation
+- Infrastructure : Docker, CI/CD, Vercel, GitHub Actions
+- IA : Intégration de modèles de langage, RAG, automatisation, Claude, OpenAI
 
 ## Projets notables
 
-- AubeSonore : Web radio avec découverte musicale par IA (aubesonore.fr)
-- TomIA : Plateforme de tutorat IA pour le soutien scolaire (tomia.fr)
+- [AubeSonore](https://aubesonore.fr) : Web radio avec découverte musicale par IA
+- [TomIA](https://tomia.fr) : Plateforme de tutorat IA pour le soutien scolaire
 
-## Expérience
+## Blog
 
-- 2 ans en agence (Capsens) sur des projets complexes (fintech, SaaS)
-- Freelance spécialisé PME, startups et projets innovants
+- [Accueil blog](https://victorlenain.fr/blog) : Articles sur le développement web, le freelancing et les bonnes pratiques
+- [Pourquoi travailler avec un freelance Full-Stack](https://victorlenain.fr/blog/2026-02-18-pourquoi-travailler-avec-un-freelance-fullstack)
+- [TomIA : tuteur IA pour le soutien scolaire](https://victorlenain.fr/blog/2026-02-24-tomia-tuteur-ia-soutien-scolaire)
+- [La communication, clé d'un projet web réussi](https://victorlenain.fr/blog/2026-02-26-communication-cle-projet-web-reussi)
+- [AubeSonore : web radio automatisée avec IA](https://victorlenain.fr/blog/2026-03-03-aubesonore-web-radio-automatisee-ia)
+- [Site vitrine ou application web : comment choisir](https://victorlenain.fr/blog/2026-03-05-site-vitrine-vs-application-web)
 
 ## Contact
 
@@ -46,7 +50,6 @@
 - GitHub : https://github.com/victornain26
 - Email : victor.lenain26@gmail.com
 
-## Pages du site
+## Optional
 
-- Accueil : https://victorlenain.fr
-- Blog : https://victorlenain.fr/blog
+- [Développeur freelance à Paris](https://victorlenain.fr/blog/2025-01-12-developpeur-freelance-paris) : Page de présentation détaillée

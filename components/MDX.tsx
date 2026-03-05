@@ -32,7 +32,7 @@ const components: MDXComponents = {
       <figure className="my-8">
         <Image
           alt={alt}
-          className={cn('rounded-lg border border-gray-700/50', className)}
+          className={cn('rounded-lg border border-white/[0.06]', className)}
           height={h}
           src={src}
           width={w}
@@ -45,27 +45,32 @@ const components: MDXComponents = {
     );
   },
 
-  /* -------- tableaux -------- */
+  /* -------- tableaux responsive -------- */
   table: ({ children }) => (
-    <div className="my-8 overflow-x-auto">
-      <table className="min-w-full overflow-hidden rounded-lg border border-gray-700/50">
+    <div className="my-8 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+      <table className="w-full min-w-[480px] border-collapse overflow-hidden rounded-xl border border-white/[0.08] text-sm">
         {children}
       </table>
     </div>
   ),
-  thead: ({ children }) => <thead className="bg-gray-800/60">{children}</thead>,
+  thead: ({ children }) => (
+    <thead className="bg-white/[0.04]">{children}</thead>
+  ),
+  tr: ({ children }) => (
+    <tr className="border-b border-white/[0.06] last:border-b-0">{children}</tr>
+  ),
   th: ({ children }) => (
-    <th className="border-b border-gray-700/50 px-6 py-3 text-left text-sm font-semibold text-gray-200">
+    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 sm:px-6">
       {children}
     </th>
   ),
   td: ({ children }) => (
-    <td className="border-b border-gray-700/30 px-6 py-4 text-sm text-gray-300">{children}</td>
+    <td className="px-4 py-3.5 text-sm text-gray-300 sm:px-6">{children}</td>
   ),
 
   /* -------- citations -------- */
   blockquote: ({ children }) => (
-    <blockquote className="my-8 border-l-4 border-indigo-500/60 py-4 pl-6">
+    <blockquote className="my-8 rounded-r-xl border-l-4 border-indigo-500/60 bg-white/[0.02] py-4 pl-6 pr-4">
       <div className="text-gray-300 italic">{children}</div>
     </blockquote>
   ),
@@ -86,7 +91,7 @@ const components: MDXComponents = {
   /* -------- titres ancrables -------- */
   h2: ({ children }) => (
     <h2
-      className="font-display mt-16 mb-6 scroll-mt-28 text-2xl font-bold text-white"
+      className="font-display mt-16 mb-6 scroll-mt-28 text-2xl font-bold tracking-tight text-white"
       id={String(children).toLowerCase().replace(/\s+/g, '-')}
     >
       {children}
@@ -115,7 +120,7 @@ const components: MDXComponents = {
 
   /* -------- code blocks -------- */
   pre: ({ children }) => (
-    <pre className="my-8 overflow-x-auto rounded-lg border border-gray-700/50 bg-gray-900/60 p-6">
+    <pre className="my-8 overflow-x-auto rounded-xl border border-white/[0.06] bg-gray-900/60 p-6 text-sm">
       {children}
     </pre>
   ),
