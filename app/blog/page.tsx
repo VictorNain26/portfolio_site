@@ -39,6 +39,8 @@ export const metadata = {
   },
 };
 
+export const revalidate = 3600; // Re-generate every hour so scheduled posts appear on time
+
 const WORDS_PER_MINUTE = 200;
 const BASE_URL = 'https://victorlenain.fr';
 

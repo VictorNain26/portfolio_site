@@ -4,6 +4,8 @@ import MDX from '@/components/MDX';
 import ArticleLayout from '@/components/ArticleLayout';
 import BlogPostJsonLd from '@/app/components/BlogPostJsonLd';
 
+export const revalidate = 3600; // Re-generate every hour so scheduled posts appear on time
+
 const BASE_URL = 'https://victorlenain.fr';
 
 /* ---------------- Params statiques ---------------- */
