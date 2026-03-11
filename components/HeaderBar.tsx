@@ -122,9 +122,9 @@ export default function HeaderBar() {
             <Image
               priority
               alt="Logo"
-              className="select-none rounded-md"
+              className="select-none"
               height={32}
-              src="/web-app-manifest-192x192.png"
+              src="/logo.png"
               width={32}
             />
             <span className="hidden font-display text-sm font-semibold tracking-tight text-white sm:block">
