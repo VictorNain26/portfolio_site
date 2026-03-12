@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Rocket, Cog, Sparkles, Wrench } from 'lucide-react';
+import { Rocket, Cog, Sparkles, Wrench, ArrowRight } from 'lucide-react';
 import Section from '@/components/Section';
 
 const services = [
@@ -80,7 +80,7 @@ export default function Services() {
               </div>
               <h3 className="mb-3 text-lg font-semibold text-white">{service.title}</h3>
               <p className="mb-5 text-sm leading-relaxed text-gray-400">{service.description}</p>
-              <ul className="space-y-2">
+              <ul className="mb-5 space-y-2">
                 {service.results.map((result) => (
                   <li
                     key={result}
@@ -91,6 +91,17 @@ export default function Services() {
                   </li>
                 ))}
               </ul>
+              <a
+                className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-400"
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                Discuter de votre projet
+                <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+              </a>
             </motion.div>
           );
         })}

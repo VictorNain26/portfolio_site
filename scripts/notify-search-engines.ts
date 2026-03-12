@@ -37,13 +37,13 @@ async function main() {
     }
   }
 
-  console.log(`Notifying search engines about ${urls.length} URL(s):`);
-  urls.forEach((u) => console.log(`  ${u}`));
+  console.warn(`Notifying search engines about ${urls.length} URL(s):`);
+  urls.forEach((u) => console.warn(`  ${u}`));
 
   await notifyIndexNow(urls);
 
-  console.log('\nDone! Bing/Yandex/Naver will process these URLs shortly.');
-  console.log('Note: Google does not support IndexNow. Submit URLs manually via Search Console.');
+  console.warn('\nDone! Bing/Yandex/Naver will process these URLs shortly.');
+  console.warn('Note: Google does not support IndexNow. Submit URLs manually via Search Console.');
 }
 
 main().catch(console.error);

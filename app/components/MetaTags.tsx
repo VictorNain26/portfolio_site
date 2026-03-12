@@ -15,7 +15,7 @@ export default function MetaTags() {
       <link href="/llms.txt" rel="alternate" title="LLMs.txt" type="text/plain" />
 
       {/* ---- SEO et performance ---- */}
-      <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
+{/* viewport already set by Next.js — only override here */}
       <meta content="telephone=no" name="format-detection" />
       <meta content="dark" name="color-scheme" />
 

@@ -128,8 +128,8 @@ export default function BlogIndex() {
                   <div className="mt-4 flex flex-wrap gap-2">
                     {post.tags.slice(0, 4).map((tag) => (
                       <span
-                        className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-medium text-gray-400"
                         key={tag}
+                        className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-medium text-gray-400"
                       >
                         {tag}
                       </span>

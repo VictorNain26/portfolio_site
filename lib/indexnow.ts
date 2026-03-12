@@ -32,7 +32,7 @@ export async function notifyIndexNow(urls: string[]) {
   for (const result of results) {
     if (result.status === 'fulfilled') {
       const { endpoint, status } = result.value;
-      console.log(`IndexNow ${endpoint}: ${status === 200 || status === 202 ? 'OK' : status}`);
+      console.warn(`IndexNow ${endpoint}: ${status === 200 || status === 202 ? 'OK' : status}`);
     } else {
       console.error('IndexNow error:', result.reason);
     }

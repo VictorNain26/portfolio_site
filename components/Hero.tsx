@@ -5,12 +5,10 @@ import { Calendar, ArrowRight, MessageCircle } from 'lucide-react';
 import CalPopupButton from '@/components/CalPopupButton';
 
 const metrics = [
-  { value: '3+', label: "ans d'expérience" },
+  { value: '4+', label: "ans d'expérience" },
   { value: '20+', label: 'projets livrés' },
   { value: '<24h', label: 'temps de réponse' },
 ];
-
-const stack = ['React', 'Next.js', 'Node.js', 'TypeScript', 'Docker', 'CI/CD'];
 
 export default function Hero() {
   const reduced = useReducedMotion();
@@ -22,7 +20,7 @@ export default function Hero() {
           initial: { opacity: 0, y: 24 } as const,
           whileInView: { opacity: 1, y: 0 } as const,
           viewport: { once: true } as const,
-          transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
+          transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] as const },
         };
 
   return (
@@ -38,7 +36,7 @@ export default function Hero() {
       {/* --- Content --- */}
       <div className="relative z-10 mx-auto max-w-5xl text-center">
         {/* Availability badge */}
-        <motion.div {...fadeUp(0.1)} className="mb-8 flex justify-center">
+        <motion.div {...fadeUp(0)} className="mb-8 flex justify-center">
           <span className="inline-flex items-center gap-2.5 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-2 text-sm font-medium text-green-400 backdrop-blur-sm">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
@@ -50,16 +48,16 @@ export default function Hero() {
 
         {/* Headline */}
         <motion.h1
-          {...fadeUp(0.2)}
+          {...fadeUp(0.05)}
           className="font-display text-[2.75rem] font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[6.5rem]"
         >
-          De l&apos;idée au{' '}
-          <span className="hero-gradient-text">déploiement</span>
+          Votre projet web,{' '}
+          <span className="hero-gradient-text">livré</span>
         </motion.h1>
 
         {/* Subtitle */}
         <motion.p
-          {...fadeUp(0.3)}
+          {...fadeUp(0.1)}
           className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-400 text-balance sm:mt-8 sm:text-xl"
         >
           Développeur Full-Stack &amp; DevOps freelance à Paris.{' '}
@@ -71,7 +69,7 @@ export default function Hero() {
 
         {/* CTAs */}
         <motion.div
-          {...fadeUp(0.4)}
+          {...fadeUp(0.15)}
           className="mt-10 flex flex-wrap items-center justify-center gap-4"
         >
           <CalPopupButton
@@ -100,7 +98,7 @@ export default function Hero() {
 
         {/* Metrics */}
         <motion.div
-          {...fadeUp(0.55)}
+          {...fadeUp(0.25)}
           className="mx-auto mt-16 grid max-w-lg grid-cols-3 divide-x divide-gray-800/60"
         >
           {metrics.map((metric, i) => (
@@ -114,8 +112,8 @@ export default function Hero() {
                     whileInView: { opacity: 1, scale: 1 } as const,
                     viewport: { once: true } as const,
                     transition: {
-                      duration: 0.5,
-                      delay: 0.7 + i * 0.1,
+                      duration: 0.4,
+                      delay: 0.35 + i * 0.08,
                       ease: [0.22, 1, 0.36, 1] as const,
                     },
                   })}
@@ -130,30 +128,23 @@ export default function Hero() {
           ))}
         </motion.div>
 
-        {/* Tech stack */}
+        {/* Credibility bar */}
         <motion.div
-          {...fadeUp(0.75)}
-          className="mt-12 flex flex-wrap items-center justify-center gap-2"
+          {...fadeUp(0.4)}
+          className="mx-auto mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-gray-500"
         >
-          <span className="mr-1 text-[11px] font-semibold uppercase tracking-widest text-gray-600">
-            Stack
+          <span className="flex items-center gap-1.5">
+            <span aria-hidden="true" className="h-1 w-1 rounded-full bg-indigo-500/60" />
+            Ex-Capsens (fintech)
           </span>
-          {stack.map((tech, i) => (
-            <motion.span
-              key={tech}
-              className="rounded-full border border-gray-800/60 bg-gray-900/30 px-3.5 py-1.5 text-xs font-medium text-gray-500 backdrop-blur-sm transition-colors duration-200 hover:border-indigo-500/30 hover:text-gray-300"
-              {...(reduced
-                ? {}
-                : {
-                    initial: { opacity: 0, y: 8 } as const,
-                    whileInView: { opacity: 1, y: 0 } as const,
-                    viewport: { once: true } as const,
-                    transition: { duration: 0.3, delay: 0.9 + i * 0.05 },
-                  })}
-            >
-              {tech}
-            </motion.span>
-          ))}
+          <span className="flex items-center gap-1.5">
+            <span aria-hidden="true" className="h-1 w-1 rounded-full bg-indigo-500/60" />
+            React, Next.js, Node.js, TypeScript
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span aria-hidden="true" className="h-1 w-1 rounded-full bg-indigo-500/60" />
+            Docker &amp; CI/CD
+          </span>
         </motion.div>
       </div>
 
@@ -166,7 +157,7 @@ export default function Hero() {
           : {
               initial: { opacity: 0 } as const,
               animate: { opacity: 1 } as const,
-              transition: { delay: 1.4, duration: 0.8 },
+              transition: { delay: 0.8, duration: 0.6 },
             })}
       >
         <div className="flex h-9 w-[22px] items-start justify-center rounded-full border border-gray-700/40 p-1.5">

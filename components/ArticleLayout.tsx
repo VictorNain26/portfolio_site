@@ -48,8 +48,8 @@ export default function ArticleLayout({
           <div className="mb-4 flex flex-wrap gap-2">
             {post.tags.map((tag) => (
               <span
-                className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-400"
                 key={tag}
+                className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-400"
               >
                 {tag}
               </span>

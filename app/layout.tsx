@@ -6,6 +6,7 @@ import Script from 'next/script';
 import ScrollView from '@/components/ScrollView';
 import BackToTop from '@/components/BackToTop';
 import HeaderBar from '@/components/HeaderBar';
+import Footer from '@/components/Footer';
 import MetaTags from './components/MetaTags';
 import JsonLdScripts from './components/JsonLdScripts';
 
@@ -110,10 +111,21 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Dégradé d'assombrissement du fond */}
         <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/25 to-black/60 sm:bg-gradient-to-t lg:bg-gradient-to-r" />
 
+        {/* Skip link — accessibilité */}
+        <a
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-indigo-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:outline-none"
+          href="#main"
+        >
+          Aller au contenu
+        </a>
+
         {/* Barre de navigation présente partout */}
         <HeaderBar />
 
-        <ScrollView>{children}</ScrollView>
+        <ScrollView>
+          {children}
+          <Footer />
+        </ScrollView>
 
         {/* Bouton « Remonter » */}
         <Suspense fallback={null}>

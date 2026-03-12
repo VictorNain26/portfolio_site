@@ -36,7 +36,7 @@ export default function ProjectCard({
           {/* Badge projet personnel */}
           <div className="absolute top-4 left-4">
             <span className="rounded-full border border-indigo-500/30 bg-indigo-500/20 px-3 py-1 text-xs font-medium text-indigo-300 backdrop-blur-sm">
-              Projet personnel
+              Projet live
             </span>
           </div>
 
