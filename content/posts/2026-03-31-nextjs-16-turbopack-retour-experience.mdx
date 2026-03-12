@@ -1,0 +1,74 @@
+---
+title: "Next.js 16 + Turbopack : retour d'expérience sur un vrai projet"
+summary: "Turbopack est enfin stable. Après plusieurs mois d'utilisation sur des projets clients, voici ce qui change vraiment — et ce qui ne change pas."
+publishedAt: '2026-03-31'
+tags:
+  - Next.js
+  - React
+  - Performance
+  - Turbopack
+  - Développement Web
+---
+
+Quand Vercel a annoncé Turbopack, la promesse était claire : un bundler plus rapide que Webpack, pensé pour les gros projets. Après des mois en beta, le File System Caching est maintenant stable dans Next.js 16.
+
+J'utilise Turbopack au quotidien sur mes projets depuis plusieurs mois. Voici un retour honnête.
+
+## Ce qui change vraiment
+
+### Le démarrage du serveur de dev
+
+C'est le gain le plus visible. Sur un projet avec une centaine de composants et plusieurs routes dynamiques, le `next dev` passe de 8-12 secondes avec Webpack à 2-3 secondes avec Turbopack.
+
+Au quotidien, ça s'additionne. Chaque redémarrage gagné, c'est du flow de travail préservé.
+
+### Le Hot Module Replacement (HMR)
+
+Les changements s'affichent quasi instantanément. Pas de latence visible entre la sauvegarde et le rafraîchissement dans le navigateur. Sur Webpack, les projets complexes pouvaient avoir 1 à 3 secondes de délai — avec Turbopack, c'est systématiquement sous la seconde.
+
+### Le cache sur le système de fichiers
+
+C'est la nouveauté majeure de la version stable. Les résultats de compilation sont mis en cache sur le disque, ce qui signifie que même après un redémarrage du serveur, le temps de compilation est réduit.
+
+**En pratique :** quand je reprends un projet le matin, la première page se charge presque aussi vite que si le serveur tournait déjà.
+
+## Ce qui ne change pas
+
+### Le build de production
+
+Turbopack ne remplace pas encore Webpack pour les builds de production dans tous les cas. Pour le `next build`, la stack reste la même. Ce n'est pas un problème — les builds de production tournent une fois en CI, pas toutes les 30 secondes sur ma machine.
+
+### La compatibilité
+
+La plupart des packages npm fonctionnent sans problème. J'ai rencontré quelques soucis avec des plugins Webpack très spécifiques, mais c'est de plus en plus rare. Les cas de bord se réduisent à chaque version.
+
+### La qualité du code produit
+
+Turbopack change la vitesse de compilation, pas le code généré. Vos composants React, votre architecture, vos patterns — tout ça reste identique. C'est transparent.
+
+## Cloudflare vinext : faut-il s'inquiéter ?
+
+Cloudflare a récemment présenté vinext, une réimplémentation expérimentale de Next.js basée sur Vite. Les premiers benchmarks sont impressionnants — builds 4x plus rapides dans certains cas.
+
+Mon avis : c'est intéressant à surveiller, mais **pas un signal pour changer de stack**. vinext est expérimental, couvre un sous-ensemble des fonctionnalités de Next.js, et n'a pas l'écosystème de production de Vercel.
+
+En 2026, Next.js reste le choix pragmatique pour un projet qui doit tourner en production. Si vinext mûrit, il fera pression sur Vercel pour accélérer encore — et c'est tout le monde qui y gagne.
+
+## Quand migrer vers Turbopack ?
+
+Si vous êtes déjà sur Next.js 15+, activer Turbopack en dev est simple — une option dans votre `next.config`. Le risque est minimal et le gain est immédiat.
+
+Si vous êtes sur une version plus ancienne, la migration vers Next.js 16 vaut le coup pour d'autres raisons aussi : React 19, Server Components améliorés, meilleure gestion du cache.
+
+**Ce que je recommande :**
+
+1. Activez Turbopack en dev sur votre projet actuel
+2. Vérifiez que tout fonctionne (ça prend 10 minutes)
+3. Si un plugin bloque, vérifiez s'il existe une alternative — souvent oui
+4. Profitez du gain de vitesse au quotidien
+
+## Mon approche
+
+Quand je développe un projet Next.js, je configure Turbopack dès le départ. Mes clients ne voient pas la différence dans le produit final — mais ils voient la différence dans les délais de livraison.
+
+**Un projet Next.js à lancer ou à moderniser ?** [Parlons-en](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) — je vous aide à choisir la bonne stack pour votre besoin.

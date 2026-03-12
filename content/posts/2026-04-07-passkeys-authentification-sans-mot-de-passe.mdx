@@ -1,0 +1,90 @@
+---
+title: "Passkeys : en finir avec les mots de passe dans vos apps web"
+summary: "Google a dépassé le milliard d'authentifications par passkeys. Si votre application utilise encore des mots de passe classiques, voici pourquoi et comment migrer."
+publishedAt: '2026-04-07'
+tags:
+  - Sécurité
+  - Authentification
+  - Passkeys
+  - Web
+  - Développement Web
+---
+
+"Mot de passe oublié." C'est le lien le plus cliqué de l'internet. Et pour cause — on demande aux gens de retenir des dizaines de mots de passe uniques et complexes. Résultat : tout le monde utilise le même partout.
+
+Les passkeys changent la donne. Et en 2026, ce n'est plus de la théorie — c'est un standard mature.
+
+## C'est quoi, une passkey ?
+
+Une passkey, c'est une clé cryptographique stockée sur votre appareil (téléphone, ordinateur, clé de sécurité). Pour se connecter, il suffit de déverrouiller son appareil — empreinte digitale, Face ID, code PIN.
+
+**Pas de mot de passe à retenir. Pas de mot de passe à fuiter.**
+
+Techniquement, c'est basé sur WebAuthn et FIDO2, des standards ouverts supportés par tous les navigateurs modernes.
+
+## Pourquoi c'est le moment
+
+- **Google** a dépassé 1 milliard d'authentifications par passkeys sur 400 millions de comptes
+- **Apple, Microsoft, Amazon** ont tous intégré les passkeys
+- Le support navigateur est **universel** : Chrome, Safari, Firefox, Edge
+- Les **gestionnaires de mots de passe** (1Password, Bitwarden) synchronisent les passkeys entre appareils
+
+Le standard est là. L'adoption aussi. Il manque juste les applications métier.
+
+## Ce que ça change pour vos utilisateurs
+
+### Plus de frictions à la connexion
+
+Fini le "mot de passe incorrect" après 3 tentatives. L'utilisateur touche son capteur d'empreinte et il est connecté. Le taux d'abandon à la connexion chute drastiquement.
+
+### Plus de phishing
+
+Les passkeys sont liées au domaine. Une passkey créée pour `votreapp.com` ne fonctionnera jamais sur `v0treapp.com`. Le phishing par fausse page de connexion devient techniquement impossible.
+
+### Plus de base de mots de passe à protéger
+
+Si vous n'avez pas de mots de passe, il n'y a rien à fuiter. Pas de table de hash à sécuriser, pas de politique de complexité à imposer, pas de rotation forcée tous les 90 jours.
+
+## Comment intégrer les passkeys
+
+### L'approche progressive
+
+Vous n'avez pas besoin de supprimer les mots de passe du jour au lendemain. L'approche qui fonctionne :
+
+1. **Proposer la passkey en option** à la création de compte et dans les paramètres
+2. **Encourager la migration** avec un bandeau discret pour les utilisateurs existants
+3. **Garder le mot de passe en fallback** pendant la transition
+4. **Mesurer l'adoption** et retirer le mot de passe quand le taux est suffisant
+
+### Côté technique
+
+La plupart des frameworks auth modernes supportent WebAuthn :
+
+- **Next-Auth / Auth.js** : support natif des passkeys
+- **Supabase Auth** : intégration WebAuthn disponible
+- **Bibliothèques dédiées** : `@simplewebauthn/server` et `@simplewebauthn/browser` pour une implémentation sur mesure
+
+L'intégration typique prend **2 à 5 jours** selon la complexité de votre système d'authentification existant.
+
+## Les cas où les passkeys ne suffisent pas (encore)
+
+- **Appareils partagés** (bornes, ordinateurs publics) : la passkey est liée à l'appareil, pas à la personne
+- **Utilisateurs peu technophiles** : certains auront besoin d'accompagnement pour comprendre le concept
+- **Applications critiques** : pour la banque ou le médical, les passkeys devraient être combinées avec un deuxième facteur
+
+Ce ne sont pas des blocages — ce sont des cas à anticiper dans votre parcours utilisateur.
+
+## Le coût de ne rien faire
+
+Chaque mois avec des mots de passe classiques, c'est :
+
+- Des tickets support pour des mots de passe oubliés
+- Un risque de fuite de données et les conséquences RGPD associées
+- Des utilisateurs qui abandonnent à la connexion
+- Une expérience utilisateur datée face à des concurrents qui ont migré
+
+## Mon approche
+
+Quand je développe un système d'authentification en 2026, les passkeys font partie de la discussion dès le départ. Pas comme un gadget — comme le standard vers lequel tout converge.
+
+**Votre app utilise encore des mots de passe classiques ?** [Parlons-en](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) — je peux évaluer la migration en 15 minutes.
