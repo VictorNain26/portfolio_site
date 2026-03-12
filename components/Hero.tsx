@@ -36,7 +36,7 @@ export default function Hero() {
       {/* --- Content --- */}
       <div className="relative z-10 mx-auto max-w-5xl text-center">
         {/* Availability badge */}
-        <motion.div {...fadeUp(0)} className="mb-8 flex justify-center">
+        <motion.div {...fadeUp(0)} className="mb-6 flex justify-center">
           <span className="inline-flex items-center gap-2.5 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-2 text-sm font-medium text-green-400 backdrop-blur-sm">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
@@ -49,7 +49,7 @@ export default function Hero() {
         {/* Headline */}
         <motion.h1
           {...fadeUp(0.05)}
-          className="font-display text-[2.75rem] font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[6.5rem]"
+          className="font-display text-[2.5rem] font-extrabold leading-[1.08] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[5rem]"
         >
           Votre projet web,{' '}
           <span className="hero-gradient-text">livré</span>
@@ -58,7 +58,7 @@ export default function Hero() {
         {/* Subtitle */}
         <motion.p
           {...fadeUp(0.1)}
-          className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-400 text-balance sm:mt-8 sm:text-xl"
+          className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-gray-400 text-balance sm:mt-6 sm:text-xl"
         >
           Développeur Full-Stack &amp; DevOps freelance à Paris.{' '}
           <span className="text-gray-300">
@@ -70,7 +70,7 @@ export default function Hero() {
         {/* CTAs */}
         <motion.div
           {...fadeUp(0.15)}
-          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+          className="mt-8 flex flex-wrap items-center justify-center gap-4"
         >
           <CalPopupButton
             className="group relative inline-flex items-center gap-3 rounded-full bg-indigo-600 px-8 py-4 text-base font-semibold text-white shadow-[0_0_32px_-8px_rgba(99,102,241,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-[0_0_48px_-8px_rgba(99,102,241,0.6)] focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
@@ -99,7 +99,7 @@ export default function Hero() {
         {/* Metrics */}
         <motion.div
           {...fadeUp(0.25)}
-          className="mx-auto mt-16 grid max-w-lg grid-cols-3 divide-x divide-gray-800/60"
+          className="mx-auto mt-10 grid max-w-lg grid-cols-3 divide-x divide-gray-800/60"
         >
           {metrics.map((metric, i) => (
             <motion.div
@@ -131,7 +131,7 @@ export default function Hero() {
         {/* Credibility bar */}
         <motion.div
           {...fadeUp(0.4)}
-          className="mx-auto mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-gray-500"
+          className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-gray-500"
         >
           <span className="flex items-center gap-1.5">
             <span aria-hidden="true" className="h-1 w-1 rounded-full bg-indigo-500/60" />
