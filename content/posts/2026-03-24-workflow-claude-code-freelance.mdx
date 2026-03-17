@@ -10,63 +10,62 @@ tags:
   - Claude Code
 ---
 
-Il y a un an, j'utilisais l'IA pour générer des bouts de code à copier-coller. Aujourd'hui, c'est un outil intégré à chaque étape de mon travail.
+Il y a un an, je copiais-collais des bouts de code générés par ChatGPT dans mon éditeur comme un stagiaire qui recopie des réponses de Stack Overflow. Soyons honnête, c'était artisanal. Aujourd'hui, l'IA est branchée directement dans mon terminal, elle lit mon code, comprend le contexte, et me propose des solutions qui tiennent la route.
 
-Pas pour remplacer ma réflexion — pour amplifier mon exécution.
+Le changement n'est pas cosmétique. Il est structurel.
 
-## Pourquoi j'en parle ouvertement
+## Un menuisier ne cache pas sa scie électrique
 
-Beaucoup de développeurs utilisent l'IA sans le dire. Comme si c'était tricher. Je vois les choses différemment.
+J'ai remarqué un truc bizarre dans notre métier. Beaucoup de développeurs utilisent l'IA en douce. Comme si c'était de la triche. Comme si admettre qu'on utilise Claude Code revenait à dire qu'on ne sait pas coder.
 
-Un menuisier ne cache pas qu'il utilise une scie électrique au lieu d'une scie à main. L'outil change la vitesse, pas la compétence. Ce qui compte, c'est le résultat : un meuble solide, livré dans les temps.
+C'est absurde. Un menuisier ne se vante pas d'utiliser une scie à main quand la scie électrique fait un travail plus propre en moins de temps. Personne ne lui demande de scier ses planches à la force du poignet pour "prouver sa compétence". Ce qui compte, c'est le meuble. Est-ce qu'il est solide ? Est-ce qu'il est livré dans les temps ? Est-ce qu'il correspond à ce que le client voulait ?
 
-Pour mes clients, ça signifie **des livraisons plus rapides** sans sacrifier la qualité. Et ça, je préfère l'assumer.
+Pour le code, c'est pareil. Je préfère être transparent là-dessus plutôt que de faire semblant.
 
-## Ce que Claude Code change concrètement
+## L'exploration de codebase, le vrai game changer
 
-### Exploration de codebase
+Quand un nouveau client m'envoie accès à son repo GitHub, la première étape c'est toujours la même : comprendre. Lire le code, tracer les dépendances, cartographier qui appelle quoi, repérer les zones de dette technique, identifier les patterns utilisés.
 
-Quand je reprends un projet existant — un client qui a déjà une app, un code hérité d'un précédent prestataire — la première étape, c'est comprendre. Lire le code, tracer les dépendances, cartographier l'architecture.
+Avant Claude Code, cette phase me prenait un à deux jours complets. Je parcourais les fichiers un par un, je prenais des notes, je dessinais des schémas sur papier. C'était nécessaire mais lent.
 
-Avant, ça prenait 1 à 2 jours. Aujourd'hui, avec un agent qui navigue le code en temps réel, je suis productif dès les premières heures.
+Maintenant, j'ouvre le terminal, je lance Claude Code dans le projet, et je lui pose des questions en langage naturel. "Montre-moi comment les paiements sont gérés." "Où est la logique de validation des commandes ?" "Quels composants utilisent ce hook ?" L'agent navigue le code en temps réel, suit les imports, remonte les chaînes d'appel. En quelques heures, je suis productif sur un projet que je n'avais jamais vu.
 
-### Tests et refactoring
+Quelques heures au lieu de deux jours. Sur un mois avec trois clients différents, faites le calcul.
 
-L'IA excelle pour écrire des tests unitaires à partir de code existant. Pas des tests parfaits — mais une couverture de base solide qui me permet de refactorer en confiance.
+## Les tests, enfin sans souffrir
 
-**Résultat :** je passe moins de temps sur le boilerplate et plus de temps sur la logique métier qui a de la valeur.
+Écrire des tests, c'est comme passer le balai. Tout le monde sait que c'est important, personne n'a envie de le faire. L'IA ne rend pas les tests passionnants, mais elle rend le boilerplate quasi indolore. Je pointe Claude Code vers un module, je lui demande de générer la couverture de base, et j'obtiens une suite de tests unitaires en quelques minutes. Pas des tests parfaits. Des tests de départ solides que je revois, que j'ajuste, que je complète avec les edge cases que seul un humain qui connaît le métier du client peut anticiper.
 
-### Debugging
+Le résultat concret ? Je passe mon temps sur la logique métier qui a de la valeur, pas sur le setup de mocks et les assertions triviales.
 
-Un bug cryptique sur un edge case ? Au lieu de fouiller Stack Overflow pendant 45 minutes, j'ai un assistant qui analyse le contexte complet — le fichier, les dépendances, les logs — et propose des hypothèses pertinentes.
+## Le debugging, version copilote
 
-Je reste le décideur. Mais j'ai un copilote qui accélère le diagnostic.
+La semaine dernière, un bug cryptique sur un edge case de pagination avec des filtres combinés. Le genre de truc qui, il y a un an, m'aurait envoyé fouiller Stack Overflow et GitHub Issues pendant 45 minutes avant de tomber sur une réponse vaguement pertinente de 2019. Là, j'ai donné le contexte complet à Claude Code. Le fichier, les logs, les dépendances. En trois minutes, il m'a proposé deux hypothèses dont une était la bonne.
 
-## Ce que l'IA ne fait pas (et ne devrait pas faire)
+Je reste le décideur. Toujours. Mais avoir un copilote qui accélère le diagnostic, ça change le rythme d'une journée.
 
-- **Comprendre votre métier.** L'IA ne sait pas pourquoi votre process de validation a trois étapes. Moi si, parce que je vous pose les bonnes questions.
-- **Prendre des décisions d'architecture.** Choisir entre un monolithe et des microservices, c'est un jugement basé sur l'expérience, pas un prompt.
-- **Garantir la sécurité.** Le code généré peut contenir des failles subtiles. La relecture humaine reste indispensable.
+## Ce que l'IA ne fait pas
 
-## Le piège à éviter
+Il faut être clair là-dessus parce que le marketing de certains outils laisse croire que l'IA va bientôt remplacer les développeurs. Non.
 
-Le risque avec l'IA, c'est de produire du code "presque correct" — du code qui marche en surface mais qui accumule de la dette technique. C'est le syndrome du développeur junior qui code vite mais mal, multiplié par dix.
+L'IA ne comprend pas votre métier. Elle ne sait pas pourquoi votre processus de validation a trois étapes au lieu de deux, pourquoi le champ "statut" a six valeurs possibles, pourquoi la notification part à J+3 et pas à J+1. Moi je le sais, parce que je vous pose les questions et que j'écoute les réponses.
 
-Ma règle : **tout ce qui sort de l'IA passe par ma relecture.** Tests, review manuelle, validation fonctionnelle. L'IA accélère la production, pas le contrôle qualité.
+L'IA ne prend pas de décisions d'architecture. Monolithe ou microservices ? Serverless ou conteneurs ? Base relationnelle ou document ? Ce sont des jugements basés sur l'expérience, le contexte client, le budget, la taille de l'équipe. Pas un prompt.
 
-## Ce que ça change pour mes clients
+L'IA ne garantit pas la sécurité. Le code généré peut contenir des failles subtiles, des injections mal gérées, des données sensibles mal protégées. La relecture humaine n'est pas optionnelle.
 
-Concrètement :
+## La règle absolue
 
-- **Délais réduits** — ce qui prenait 3 semaines peut souvent se faire en 2
-- **Plus de temps sur l'essentiel** — moins de boilerplate, plus de réflexion sur votre besoin réel
-- **Meilleure couverture de tests** — parce que l'effort d'écriture est réduit, j'en écris plus
-- **Même tarif** — je facture la valeur livrée, pas les heures passées
+Le piège de l'IA, c'est le code "presque correct". Du code qui passe les tests de surface mais qui accumule de la dette technique en silence. Le syndrome du développeur junior qui code vite mais mal, multiplié par dix.
 
-## Le futur, c'est le développeur augmenté
+Ma règle est simple et non négociable : **tout ce qui sort de l'IA passe par ma relecture.** Tests automatisés, review manuelle ligne par ligne, validation fonctionnelle avec le client. L'IA accélère la production. Elle n'accélère jamais le contrôle qualité.
 
-En 2026, un développeur qui n'utilise pas l'IA se prive d'un levier important. Mais un développeur qui utilise l'IA sans esprit critique produit du code jetable.
+## Ce que vous y gagnez, concrètement
 
-La vraie compétence, c'est de savoir **quand** utiliser l'IA, **comment** la cadrer, et **quoi** vérifier ensuite. C'est ça, un développeur augmenté.
+Je ne vais pas tourner autour du pot. Quand je dis que l'IA change mon workflow, la question légitime c'est : qu'est-ce que ça change pour vous, le client ?
 
-**Vous voulez travailler avec quelqu'un qui livre vite et bien ?** [Parlons-en](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) — je vous explique comment je peux accélérer votre projet.
+Les délais baissent. Ce qui prenait trois semaines peut souvent se faire en deux, parfois moins. Je passe plus de temps à réfléchir à votre besoin réel et moins à écrire du boilerplate. La couverture de tests est meilleure parce que le coût d'écriture ayant baissé, j'en écris tout simplement plus. Et le tarif ? Il ne bouge pas. Je facture la valeur livrée, pas les heures passées à taper sur un clavier.
+
+Un développeur qui n'utilise pas l'IA en 2026 se prive d'un levier important. Mais un développeur qui utilise l'IA sans esprit critique produit du code jetable. La vraie compétence, c'est de savoir quand l'utiliser, comment la cadrer, et quoi vérifier ensuite.
+
+**Vous cherchez quelqu'un qui livre vite sans sacrifier la qualité ?** [Réservez un créneau](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) et je vous montre comment ça se traduit sur votre projet.

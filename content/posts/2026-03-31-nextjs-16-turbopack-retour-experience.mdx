@@ -10,65 +10,50 @@ tags:
   - Développement Web
 ---
 
-Quand Vercel a annoncé Turbopack, la promesse était claire : un bundler plus rapide que Webpack, pensé pour les gros projets. Après des mois en beta, le File System Caching est maintenant stable dans Next.js 16.
+Quand Vercel a annoncé Turbopack, la promesse était claire : un bundler plus rapide que Webpack, pensé pour les gros projets. Beaucoup de promesses dans le JavaScript, on a l'habitude. Sauf que cette fois, après des mois en beta, le File System Caching est maintenant stable dans Next.js 16.
 
-J'utilise Turbopack au quotidien sur mes projets depuis plusieurs mois. Voici un retour honnête.
+J'utilise Turbopack au quotidien sur mes projets clients depuis plusieurs mois. Pas sur un side project un samedi après-midi. Sur de vrais projets, avec de vrais utilisateurs, de vraies deadlines. Voici ce que j'en pense.
 
-## Ce qui change vraiment
+## Le démarrage du serveur de dev
 
-### Le démarrage du serveur de dev
+C'est le gain le plus viscéral. Celui qu'on ressent physiquement. Sur un projet avec une centaine de composants et plusieurs routes dynamiques, le `next dev` passait de 8 à 12 secondes avec Webpack. Avec Turbopack ? Entre 2 et 3 secondes.
 
-C'est le gain le plus visible. Sur un projet avec une centaine de composants et plusieurs routes dynamiques, le `next dev` passe de 8-12 secondes avec Webpack à 2-3 secondes avec Turbopack.
+Ça paraît anodin. Ça ne l'est pas. Sur une journée de développement où on redémarre le serveur dix, quinze, vingt fois, ces secondes gagnées s'accumulent. Mais surtout, c'est le flow de travail qui change. Quand le feedback est instantané, on itère plus vite, on teste plus de choses, on hésite moins à redémarrer pour vérifier un doute.
 
-Au quotidien, ça s'additionne. Chaque redémarrage gagné, c'est du flow de travail préservé.
+## Le HMR sous la seconde
 
-### Le Hot Module Replacement (HMR)
+Les changements s'affichent quasi instantanément dans le navigateur. J'ai chronométré sur un projet complexe avec Webpack : entre 1 et 3 secondes de latence entre la sauvegarde et le rafraîchissement visible. Avec Turbopack, c'est systématiquement sous la seconde. Souvent autour de 200 à 300 millisecondes.
 
-Les changements s'affichent quasi instantanément. Pas de latence visible entre la sauvegarde et le rafraîchissement dans le navigateur. Sur Webpack, les projets complexes pouvaient avoir 1 à 3 secondes de délai — avec Turbopack, c'est systématiquement sous la seconde.
+Ça semble technique et ennuyeux. En pratique, c'est la différence entre un outil qui répond quand on lui parle et un outil qui met un temps de réflexion agaçant avant chaque réponse.
 
-### Le cache sur le système de fichiers
+## Le cache sur le système de fichiers
 
-C'est la nouveauté majeure de la version stable. Les résultats de compilation sont mis en cache sur le disque, ce qui signifie que même après un redémarrage du serveur, le temps de compilation est réduit.
+C'est la nouveauté majeure de la version stable et celle qui m'a le plus surpris au quotidien. Les résultats de compilation sont mis en cache sur le disque. Ce qui signifie que même après un redémarrage complet du serveur (la nuit, un reboot, un changement de branche), le temps de compilation est drastiquement réduit.
 
-**En pratique :** quand je reprends un projet le matin, la première page se charge presque aussi vite que si le serveur tournait déjà.
+En pratique, quand je reprends un projet le matin avec mon café, la première page se charge presque aussi vite que si le serveur tournait déjà. Avant, le cold start du matin c'était 15 secondes de contemplation existentielle devant le terminal. Maintenant c'est 3 secondes et je suis dedans.
 
 ## Ce qui ne change pas
 
-### Le build de production
+Le build de production. Turbopack ne remplace pas encore Webpack pour le `next build` dans tous les cas. Honnêtement, ce n'est pas un problème. Les builds de production tournent une fois en CI, pas toutes les 30 secondes sur ma machine. Le gain en dev est tellement significatif que le build prod peut attendre.
 
-Turbopack ne remplace pas encore Webpack pour les builds de production dans tous les cas. Pour le `next build`, la stack reste la même. Ce n'est pas un problème — les builds de production tournent une fois en CI, pas toutes les 30 secondes sur ma machine.
+La compatibilité est bonne. La plupart des packages npm fonctionnent sans accroc. J'ai rencontré quelques soucis avec des plugins Webpack très spécifiques il y a quelques mois, mais les cas de bord se réduisent à chaque version. Si vous n'utilisez pas de configuration Webpack exotique, vous ne verrez probablement aucune différence.
 
-### La compatibilité
+Et surtout, la qualité du code produit ne change pas. Turbopack change la vitesse de compilation, pas le code généré. Vos composants React, votre architecture, vos patterns, tout reste identique. C'est transparent pour le produit final.
 
-La plupart des packages npm fonctionnent sans problème. J'ai rencontré quelques soucis avec des plugins Webpack très spécifiques, mais c'est de plus en plus rare. Les cas de bord se réduisent à chaque version.
+## Cloudflare vinext, faut-il s'inquiéter ?
 
-### La qualité du code produit
+Cloudflare a récemment présenté vinext, une réimplémentation expérimentale de Next.js basée sur Vite. Les premiers benchmarks sont impressionnants : builds 4x plus rapides dans certains cas.
 
-Turbopack change la vitesse de compilation, pas le code généré. Vos composants React, votre architecture, vos patterns — tout ça reste identique. C'est transparent.
+Mon avis franc : c'est intéressant à surveiller, mais ce n'est pas un signal pour changer de stack. vinext est expérimental, couvre un sous-ensemble des fonctionnalités de Next.js, et n'a pas l'écosystème de production de Vercel. Pour un projet qui doit tourner en production aujourd'hui, Next.js reste le choix pragmatique.
 
-## Cloudflare vinext : faut-il s'inquiéter ?
+Le meilleur scénario ? vinext mûrit, fait pression sur Vercel pour accélérer encore, et c'est tout l'écosystème qui en bénéficie. La concurrence, c'est toujours bon pour les développeurs.
 
-Cloudflare a récemment présenté vinext, une réimplémentation expérimentale de Next.js basée sur Vite. Les premiers benchmarks sont impressionnants — builds 4x plus rapides dans certains cas.
+## Quand migrer
 
-Mon avis : c'est intéressant à surveiller, mais **pas un signal pour changer de stack**. vinext est expérimental, couvre un sous-ensemble des fonctionnalités de Next.js, et n'a pas l'écosystème de production de Vercel.
+Si vous êtes déjà sur Next.js 15+, activer Turbopack en dev se fait en une ligne dans votre `next.config`. Dix minutes pour tester, risque minimal, gain immédiat. Il n'y a vraiment aucune raison de ne pas essayer. Si un plugin bloque, vérifiez s'il existe une alternative (souvent oui), et si le problème persiste, vous pouvez revenir en arrière en commentant une seule ligne.
 
-En 2026, Next.js reste le choix pragmatique pour un projet qui doit tourner en production. Si vinext mûrit, il fera pression sur Vercel pour accélérer encore — et c'est tout le monde qui y gagne.
+Si vous êtes sur une version plus ancienne, la migration vers Next.js 16 vaut le coup pour d'autres raisons aussi : React 19, Server Components améliorés, meilleure gestion du cache. Turbopack est la cerise, pas le gâteau.
 
-## Quand migrer vers Turbopack ?
+Sur mes projets, je configure Turbopack dès le départ. Mes clients ne voient pas la différence dans le produit final. Mais ils voient la différence dans les délais de livraison.
 
-Si vous êtes déjà sur Next.js 15+, activer Turbopack en dev est simple — une option dans votre `next.config`. Le risque est minimal et le gain est immédiat.
-
-Si vous êtes sur une version plus ancienne, la migration vers Next.js 16 vaut le coup pour d'autres raisons aussi : React 19, Server Components améliorés, meilleure gestion du cache.
-
-**Ce que je recommande :**
-
-1. Activez Turbopack en dev sur votre projet actuel
-2. Vérifiez que tout fonctionne (ça prend 10 minutes)
-3. Si un plugin bloque, vérifiez s'il existe une alternative — souvent oui
-4. Profitez du gain de vitesse au quotidien
-
-## Mon approche
-
-Quand je développe un projet Next.js, je configure Turbopack dès le départ. Mes clients ne voient pas la différence dans le produit final — mais ils voient la différence dans les délais de livraison.
-
-**Un projet Next.js à lancer ou à moderniser ?** [Parlons-en](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) — je vous aide à choisir la bonne stack pour votre besoin.
+**Un projet Next.js à lancer ou à moderniser ?** [Prenez un créneau](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) et on regarde ensemble quelle stack correspond à votre besoin.

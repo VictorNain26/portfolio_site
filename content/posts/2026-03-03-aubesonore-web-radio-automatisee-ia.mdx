@@ -9,74 +9,51 @@ tags:
   - Projet
 ---
 
-AubeSonore est une web radio qui diffuse de la musique indépendante 24 heures sur 24.
+AubeSonore est une web radio qui diffuse de la musique indépendante 24 heures sur 24. Pas un side project abandonné après un week-end. Un vrai produit, en ligne, qui tourne.
 
-Pas un side project abandonné après un week-end. Un vrai produit, en ligne, qui tourne.
+## Le point de départ
 
-## Pourquoi
+Spotify me rendait fou. Toujours les mêmes recommandations, les mêmes artistes qui tournent en boucle, le même algorithme qui confond "tu as écouté ça une fois" avec "tu veux écouter ça pour toujours". Les radios classiques ne font pas mieux avec leurs playlists formatées.
 
-Les algorithmes de recommandation musicale tournent en boucle. Spotify me propose les mêmes artistes. Les radios classiques passent les mêmes playlists.
+Je voulais un truc simple. Une radio qui passe de la musique indépendante que je n'aurais jamais trouvée tout seul. Et comme ce truc n'existait pas exactement comme je l'imaginais, je l'ai construit.
 
-J'avais envie d'un truc simple : une radio qui passe de la musique indépendante que je n'aurais jamais trouvée tout seul. Et tant qu'à faire, la construire moi-même.
+## Le coeur : un serveur de streaming qui ne dort jamais
 
-## Le stack
+AzuraCast tourne dans un conteneur Docker sur un serveur dédié Hetzner. C'est lui qui gère toute la diffusion audio avec Liquidsoap comme moteur de streaming et Icecast pour la distribution aux auditeurs. J'ai configuré 8 playlists correspondant à 8 créneaux horaires : early morning, morning commute, morning work, lunch, afternoon, evening commute, evening, night. La programmation s'adapte au moment de la journée. Plus calme à 6h du matin, plus soutenu à 15h. Environ 500 morceaux en rotation, 100% artistes indépendants.
 
-### Le serveur de streaming
+## Plus qu'un bouton play
 
-**AzuraCast** tourne dans un conteneur Docker sur un serveur dédié. C'est lui qui gère la diffusion audio — Liquidsoap pour le moteur de streaming, Icecast pour la distribution.
+Le player web n'est pas un simple lecteur audio. C'est une application complète construite en React 19 avec Vite côté front et Bun avec Elysia côté API, le tout avec PostgreSQL pour les données et organisé en monorepo avec Turborepo.
 
-J'ai configuré **8 playlists par créneaux horaires** : early morning, morning commute, morning work, lunch, afternoon, evening commute, evening, night. La programmation s'adapte au moment de la journée — plus calme le matin, plus soutenu l'après-midi.
+Quand vous écoutez un morceau, vous voyez le titre en cours, l'historique de ce qui est passé, la pochette, une waveform, un indicateur live. Si un morceau vous plaît, vous le likez, et TomIA le sauvegarde dans votre bibliothèque. Et c'est là que ça devient intéressant : chaque morceau liké est automatiquement résolu vers Spotify, Apple Music, Deezer, YouTube Music, Tidal et SoundCloud via l'API Songlink. Vous découvrez un artiste sur AubeSonore, vous le retrouvez en un clic sur votre plateforme préférée.
 
-~500 morceaux en rotation, 100% artistes indépendants.
+Il y a aussi les infos artiste via Last.fm (bio, genres, artistes similaires), l'export de votre bibliothèque en CSV ou vers TuneMyMusic, le cast Chromecast direct sur vos enceintes, et c'est une PWA installable sur mobile comme une app native.
 
-### La webapp
+## L'infra, en quatre briques indépendantes
 
-Le player n'est pas juste un bouton play. C'est une app complète :
+AzuraCast vit sur son serveur Hetzner en Docker. Le backend est déployé sur Koyeb. Le frontend tourne sur Vercel. La base de données est hébergée sur Railway. Chaque brique a son rôle, chaque brique peut évoluer ou tomber sans entraîner les autres.
 
-- **Player temps réel** — titre en cours, historique, pochette, waveform, indicateur live
-- **Likes** — tu entends un morceau qui te plaît, tu le sauvegardes
-- **Liens multi-plateformes** — chaque morceau liké est automatiquement résolu vers Spotify, Apple Music, Deezer, YouTube Music, Tidal, SoundCloud via l'API Songlink
-- **Info artiste** — bio, genres, artistes similaires via Last.fm
-- **Export** — exporte ta bibliothèque en CSV ou vers TuneMyMusic
-- **Chromecast** — cast direct sur tes enceintes
-- **PWA** — installable sur mobile comme une app native
+## Ce que ce projet m'a appris
 
-Le tout construit en **React 19 + Vite** côté front, **Bun + Elysia** côté API, **PostgreSQL** pour les données, organisé en **monorepo avec Turborepo**.
+### 20% de code, 80% de gestion d'erreurs
 
-### L'infra
+La leçon la plus marquante. Le code "intéressant" d'AubeSonore, le player, les likes, la résolution Songlink, tout ça représente peut-être 20% du travail total. Les 80% restants, c'est tout ce qui n'est pas glamour mais qui fait qu'un produit tient dans la durée.
 
-- **AzuraCast** sur un serveur Hetzner (Docker)
-- **Backend** déployé sur Koyeb
-- **Frontend** déployé sur Vercel
-- **Base de données** sur Railway
+Un morceau liké dont la pochette disparaît trois jours plus tard parce que le CDN de l'artiste a changé d'URL ? Il faut persister les covers en base64. L'API Songlink qui met 10 secondes à répondre sur certains morceaux obscurs ? Il faut faire la résolution en asynchrone pour ne pas bloquer l'interface. Last.fm qui rate-limit à 5 requêtes par seconde ? Cache en mémoire de 24h. L'authentification, la gestion d'erreurs, le monitoring, les edge cases. C'est ça la différence entre un prototype et un produit.
 
-Chaque brique a son rôle, chaque brique est indépendante.
+### Une radio 24/7 ne pardonne pas le silence
 
-## Ce que j'ai appris
+Il est 3h du matin. Vous dormez. Votre radio, elle, doit continuer à diffuser. Quand un site classique tombe, l'utilisateur revient plus tard. Quand une radio s'arrête, c'est du silence. Et un auditeur qui tombe sur du silence ne revient pas.
 
-### Construire un produit, pas un prototype
+Ce projet m'a forcé à intégrer des réflexes que j'applique maintenant sur tous mes projets : health checks sur les conteneurs, redémarrages automatiques, logs structurés, alertes. Ce ne sont pas des nice-to-have. C'est la base pour tout système qui doit tourner sans intervention humaine.
 
-La différence entre un side project et un produit, c'est tout ce qui n'est pas le code "intéressant" : l'auth, la gestion d'erreurs, le monitoring, les edge cases.
+### Le meilleur stack est celui qui ne vous gêne pas
 
-Un morceau liké dont la pochette disparaît 3 jours plus tard ? Il faut persister les covers en base64. Un lien Songlink qui met 10 secondes à répondre ? Il faut faire la résolution en asynchrone pour ne pas bloquer l'UI. L'API Last.fm qui rate-limit ? Cache en mémoire de 24h.
-
-C'est pas glamour. Mais c'est ça qui fait qu'un truc tient dans la durée.
-
-### Un système 24/7 ne pardonne pas
-
-Quand un site classique tombe, l'utilisateur revient plus tard. Quand une radio s'arrête, c'est du silence.
-
-Health checks sur les conteneurs. Redémarrages automatiques. Logs structurés. Ce sont des réflexes que ce projet m'a forcé à intégrer — et que j'applique maintenant partout.
-
-### Le choix des technos compte moins que la cohérence
-
-Bun + Elysia côté serveur, React + Vite côté client, Drizzle comme ORM, Zustand pour le state. Ce ne sont pas les technos les plus populaires. Mais elles fonctionnent bien ensemble, elles sont rapides, et elles ne me ralentissent pas.
-
-Le meilleur stack, c'est celui qui ne te gêne pas.
+Bun + Elysia côté serveur, React + Vite côté client, Drizzle comme ORM, Zustand pour le state management. Ce ne sont pas les technos les plus populaires. Mais elles fonctionnent bien ensemble, elles sont rapides, et elles ne me ralentissent pas. J'ai passé zéro heure à me battre contre mon framework. C'est ça, le critère.
 
 ## Le résultat
 
-AubeSonore tourne. ~500 morceaux d'artistes indépendants, programmation automatique par créneaux, webapp complète avec likes et liens multi-plateformes.
+AubeSonore tourne. Environ 500 morceaux d'artistes indépendants en rotation, programmation automatique par créneaux, webapp complète avec likes et liens multi-plateformes.
 
 **Écoutez en direct sur [aubesonore.fr](https://www.aubesonore.fr/).**
 

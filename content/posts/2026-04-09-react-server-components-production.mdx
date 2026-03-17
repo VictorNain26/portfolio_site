@@ -10,33 +10,23 @@ tags:
   - Architecture
 ---
 
-Les React Server Components (RSC) existent depuis React 18 et sont devenus le modèle par défaut dans Next.js App Router. Deux ans après leur introduction, j'ai suffisamment de recul pour en parler concrètement.
-
-Pas la théorie — ce que j'ai observé sur de vrais projets.
+Les React Server Components existent depuis React 18 et sont devenus le modèle par défaut dans Next.js App Router. Deux ans après leur introduction, j'ai suffisamment de recul pour en parler sans répéter la documentation officielle. Ce qui suit vient de vrais projets, pas de tutoriels.
 
 ## Le principe en 30 secondes
 
-Un Server Component s'exécute uniquement sur le serveur. Il peut accéder directement à la base de données, lire des fichiers, appeler des APIs internes — sans envoyer le code correspondant au navigateur.
+Un Server Component s'exécute uniquement sur le serveur. Il peut accéder directement à la base de données, lire des fichiers, appeler des APIs internes, le tout sans envoyer le code correspondant au navigateur. Le bundle JavaScript côté client est plus léger. La page se charge plus vite. L'utilisateur voit le contenu plus tôt.
 
-**Résultat :** le bundle JavaScript envoyé au client est plus léger. La page se charge plus vite. L'utilisateur voit le contenu plus tôt.
+C'est la théorie. En pratique, c'est plus nuancé.
 
-## Ce qui fonctionne bien
+## Là où ça brille vraiment
 
-### Les pages à contenu dynamique
+Les pages à contenu dynamique. Pages de blog, fiches produit, dashboards de consultation : tout ce qui affiche des données sans interaction complexe. Les Server Components excellent ici parce que les données sont récupérées côté serveur, le HTML est généré, et le client reçoit une page prête à l'emploi sans avoir besoin de télécharger et exécuter tout le JavaScript qui aurait été nécessaire pour faire la même chose côté client.
 
-Pages de blog, fiches produit, dashboards de consultation — tout ce qui affiche des données sans interaction complexe. Les Server Components excellent ici : les données sont récupérées côté serveur, le HTML est généré, et le client reçoit une page prête à l'emploi.
+Les chiffres parlent d'eux-mêmes. Sur un projet e-commerce, le passage aux RSC a réduit le bundle JavaScript de la page produit de 40%. Le Largest Contentful Paint est passé sous la barre des 1,5 secondes. Pas sur un benchmark de labo. En production, avec de vrais utilisateurs, sur des connexions variées.
 
-Sur un projet e-commerce, le passage aux RSC a réduit le bundle JavaScript de la page produit de **40%**. Le Largest Contentful Paint est passé sous la barre des 1,5 secondes.
+La cohabitation avec les Client Components fonctionne bien une fois qu'on a compris la logique. Le `'use client'` n'est pas un aveu d'échec. C'est un outil. Les formulaires, les modales, les composants interactifs restent des Client Components. Le reste est serveur par défaut. La clé, c'est de pousser le `'use client'` le plus bas possible dans l'arbre de composants. Un bouton interactif dans une page n'a pas besoin de rendre toute la page côté client.
 
-### La cohabitation avec les Client Components
-
-Le `'use client'` n'est pas un échec — c'est un outil. Les formulaires, les modales, les composants interactifs restent des Client Components. Le reste est serveur par défaut.
-
-La clé, c'est de **pousser le `'use client'` le plus bas possible** dans l'arbre de composants. Un bouton interactif dans une page n'a pas besoin de rendre toute la page côté client.
-
-### Le data fetching simplifié
-
-Plus besoin de `useEffect` + `useState` + loading state pour afficher des données. Un `async` Server Component qui fait un `fetch` ou une requête Prisma directement. Le code est plus lisible et plus court.
+Et le data fetching, enfin simplifié. Plus besoin du trio infernal `useEffect` + `useState` + loading state pour afficher des données. Un `async` Server Component qui fait un `fetch` ou une requête Prisma directement. Le code est plus lisible, plus court, et il y a moins d'endroits où un bug peut se cacher.
 
 ```tsx
 // Avant : Client Component avec useEffect
@@ -49,47 +39,28 @@ async function ProductPage({ id }) {
 }
 ```
 
-## Les pièges que j'ai rencontrés
+## Les pièges, parce qu'il y en a
 
-### La frontière serveur/client mal placée
+La frontière serveur/client mal placée. C'est l'erreur que je vois le plus souvent, y compris dans mon propre code au début. Mettre `'use client'` trop haut dans l'arbre, sur un layout par exemple, et d'un coup tout ce qui est en dessous devient client. Même les composants qui n'ont aucun besoin d'être côté client. La règle est simple : chaque `'use client'` doit être justifié par une interaction utilisateur. Un onClick, un onChange, un useState, un useEffect. Si le composant n'a rien de tout ça, il n'a pas besoin d'être client.
 
-L'erreur classique : mettre `'use client'` trop haut dans l'arbre. Un `'use client'` sur un layout, et tout ce qui est en dessous devient client — même les composants qui n'ont pas besoin de l'être.
+La sérialisation des props est un piège récurrent. Les données qui passent d'un Server Component à un Client Component doivent être sérialisables en JSON. Pas de fonctions, pas de classes, pas d'objets Date bruts. C'est logique quand on y réfléchit (les données traversent la frontière réseau), mais c'est un piège classique quand on refactore du code existant qui passait des callbacks partout.
 
-**Règle :** chaque `'use client'` doit être justifié par une interaction utilisateur (onClick, onChange, useState, useEffect).
+Le cache qui joue des tours. Next.js cache agressivement les résultats des Server Components. Excellent pour les performances, source de bugs subtils quand les données doivent être fraîches. J'ai passé deux heures à chercher pourquoi un dashboard affichait des données d'il y a 15 minutes avant de réaliser que c'était le cache. Maintenant je configure explicitement la stratégie de cache pour chaque route : `revalidate` avec un intervalle pour le contenu éditorial, `no-store` pour les données temps réel.
 
-### La sérialisation des props
-
-Les données qui passent d'un Server Component à un Client Component doivent être sérialisables en JSON. Pas de fonctions, pas de classes, pas de `Date` objects bruts. C'est logique mais c'est un piège récurrent quand on refactore du code existant.
-
-### Le cache qui joue des tours
-
-Next.js cache agressivement les résultats des Server Components. C'est excellent pour les performances, mais ça peut créer des bugs subtils quand les données doivent être fraîches.
-
-**Mon approche :** je configure explicitement la stratégie de cache pour chaque route. `revalidate` avec un intervalle pour le contenu éditorial, `no-store` pour les données temps réel.
-
-### Les vulnérabilités récentes
-
-Deux CVE ont été publiées récemment sur les RSC (CVE-2025-55184 et CVE-2025-55183), affectant Next.js 13.x à 16.x. Rien de catastrophique, mais un rappel que **la veille sécurité reste indispensable**, même sur un framework mature.
-
-Mettez à jour vos dépendances. Toujours.
+Et les vulnérabilités récentes. Deux CVE ont été publiées sur les RSC (CVE-2025-55184 et CVE-2025-55183), affectant Next.js 13.x à 16.x. Rien de catastrophique, mais un rappel utile que la veille sécurité reste indispensable même sur un framework mature et populaire. Mettez à jour vos dépendances. Pas demain. Cette semaine.
 
 ## Quand ne pas utiliser les RSC
 
-- **Applications temps réel** (chat, collaboration) : les WebSockets et les interactions continues vivent mieux côté client
-- **Interfaces très interactives** (éditeurs, drag & drop) : le surcoût de la frontière serveur/client ne vaut pas le coup
-- **Prototypes rapides** : si vous itérez vite et que la performance n'est pas critique, restez en full client — c'est plus simple
+Les applications temps réel comme le chat ou la collaboration en direct. Les WebSockets et les interactions continues vivent mieux côté client, et essayer de forcer les RSC dans ce contexte ajoute de la complexité sans bénéfice.
 
-## Mon conseil pour commencer
+Les interfaces très interactives comme les éditeurs de texte riche ou le drag and drop complexe. Le surcoût de la frontière serveur/client ne vaut pas le coup, et vous allez vous retrouver à mettre `'use client'` sur tellement de composants que l'intérêt des RSC disparaît.
 
-Si vous démarrez un projet Next.js aujourd'hui :
+Les prototypes rapides. Si vous itérez vite et que la performance n'est pas critique, restez en full client. C'est plus simple, il y a moins de concepts à gérer, et vous pourrez toujours migrer vers les RSC plus tard si le projet grandit.
 
-1. **Laissez tout en Server Component par défaut** — c'est le comportement natif de l'App Router
-2. **Ajoutez `'use client'` uniquement quand le navigateur en a besoin** — interactions, hooks d'état, effets
-3. **Mesurez** — Core Web Vitals, taille du bundle, temps de chargement
-4. **Itérez** — déplacez la frontière serveur/client en fonction des résultats réels
+## Pour commencer concrètement
 
-## Mon approche
+Si vous démarrez un projet Next.js aujourd'hui, laissez tout en Server Component par défaut. C'est le comportement natif de l'App Router, vous n'avez rien à faire. Ajoutez `'use client'` uniquement quand le navigateur en a besoin, c'est-à-dire quand il y a des interactions, des hooks d'état ou des effets. Mesurez avec les Core Web Vitals, la taille du bundle, le temps de chargement réel. Et ajustez la frontière serveur/client en fonction des résultats, pas en fonction de ce qu'un article de blog (y compris celui-ci) vous dit de faire.
 
-Les RSC ne sont pas une mode — c'est la direction que prend React. Sur mes projets, c'est le modèle par défaut. Pas par dogme, mais parce que les résultats en performance et en maintenabilité sont mesurables.
+Les RSC ne sont pas une mode. C'est la direction que prend React. Sur mes projets, c'est le modèle par défaut, pas par dogme, mais parce que les résultats en performance et en maintenabilité sont mesurables.
 
-**Un projet React/Next.js à optimiser ou à lancer ?** [Parlons-en](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) — je vous aide à faire les bons choix d'architecture.
+**Un projet React/Next.js à optimiser ou à lancer ?** [Réservez un créneau](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) et on regarde ensemble les bons choix d'architecture pour votre cas.

@@ -10,78 +10,32 @@ tags:
   - Architecture
 ---
 
-Votre produit fonctionne. Vous avez des utilisateurs. La croissance est là. Tout va bien.
+"Chaque nouvelle fonctionnalité prend trois fois plus de temps qu'il y a un an." C'est ce que m'a expliqué le CTO d'une startup SaaS parisienne lors de notre premier appel. Son produit tournait, il avait des utilisateurs, la croissance était là. Mais sous le capot, tout se dégradait. Les bugs revenaient malgré les corrections. Personne dans l'équipe n'osait toucher à certains fichiers. Et le déploiement en production ? Manuel. Le vendredi soir. Avec tout le monde qui croise les doigts.
 
-Et puis un jour, un développeur vous dit : "On ne peut pas ajouter cette fonctionnalité sans tout refactorer." Ou pire : une panne en production qui dure des heures parce que personne ne comprend comment le système tient debout.
+J'ai fait un audit de sa codebase. Trois jours. Ce que j'ai trouvé n'avait rien d'exceptionnel, c'était exactement les mêmes problèmes que je retrouve chez la plupart des startups post-MVP.
 
-Ce scénario, je l'ai vu plusieurs fois. Et à chaque fois, un audit technique en amont aurait évité des semaines de travail et des milliers d'euros.
+## Ce qu'un audit révèle vraiment
 
-## C'est quoi, un audit technique ?
+Un audit technique, ce n'est pas un exercice académique. C'est un diagnostic concret. Je regarde le code, l'architecture, la sécurité, les tests, le pipeline de déploiement, et surtout ce qui ralentit l'équipe au quotidien. L'objectif n'est jamais de dire "tout est à refaire", parce que c'est presque jamais vrai. L'objectif, c'est d'identifier les 3 ou 4 points critiques qui, une fois corrigés, débloquent tout le reste.
 
-C'est un diagnostic. Un regard extérieur et expérimenté sur votre codebase, votre architecture et vos pratiques de développement.
+Pour ce CTO, le rapport tenait en 15 pages. Pas de jargon inutile, pas de recommandations théoriques. Des problèmes concrets classés par priorité, avec des solutions actionnables.
 
-**Ce que j'examine :**
-- La **qualité du code** : lisibilité, cohérence, conventions
-- L'**architecture** : est-ce que ça scale ? est-ce maintenable ?
-- La **sécurité** : failles connues, dépendances vulnérables, gestion des données sensibles
-- Les **tests** : couverture, pertinence, automatisation
-- Le **déploiement** : CI/CD, monitoring, gestion des erreurs
-- La **dette technique** : ce qui ralentit l'équipe aujourd'hui
+## Trois corrections, trois impacts
 
-## Les signaux d'alerte
+La première correction concernait le déploiement. L'équipe passait 4 heures par semaine à déployer manuellement et à vérifier que rien n'avait cassé. On a mis en place un pipeline CI/CD correct en deux jours. Résultat : déploiement automatique en 12 minutes, 4 heures libérées chaque semaine, et plus personne ne déploie le vendredi soir en sueur.
 
-Vous avez probablement besoin d'un audit si :
+La deuxième, c'était les tests. Il y en avait quelques-uns, mais ils testaient les mauvaises choses. Des tests unitaires sur des fonctions triviales, zéro test sur les parcours critiques. On a réécrit la stratégie de test en se concentrant sur les flux utilisateur principaux. En six semaines, les régressions ont été divisées par deux.
 
-- Les **nouvelles fonctionnalités** prennent de plus en plus de temps à développer
-- Les **bugs** reviennent régulièrement malgré les corrections
-- Votre équipe **a peur de toucher** à certaines parties du code
-- Vous avez **changé de développeurs** et le nouveau a du mal à comprendre le code existant
-- Vous n'avez **pas de tests automatisés** (ou très peu)
-- Le **déploiement** est manuel et stressant
+La troisième touchait l'architecture du code. Certains fichiers faisaient plus de 800 lignes. Un seul fichier gérait à la fois l'authentification, la facturation et l'envoi d'emails. Personne ne voulait y toucher, à raison. On a découpé les responsabilités proprement. Après ça, un développeur junior a pu contribuer au projet sans supervision constante. Avant, c'était impossible.
 
-Si vous cochez 2 ou plus de ces points, un audit vous fera gagner du temps.
+## Les signaux qui ne trompent pas
 
-## Ce que ça change concrètement
+Si les nouvelles fonctionnalités prennent de plus en plus de temps, si les bugs reviennent malgré les corrections, si votre équipe évite certaines parties du code, si un nouveau développeur met des semaines à comprendre la base existante, si le déploiement est une source de stress plutôt qu'une routine, ce sont des signaux clairs. Pas des signaux de catastrophe, mais des signaux que la dette technique commence à peser plus lourd que la vitesse de développement.
 
-### Avant l'audit
-- L'équipe avance à l'aveugle
-- Les estimations sont toujours fausses (trop optimistes)
-- Chaque nouvelle fonctionnalité crée des régressions
-- Le stress augmente à chaque mise en production
+## Le vrai calcul
 
-### Après l'audit
-- Une **cartographie claire** des problèmes et de leur priorité
-- Un **plan d'action concret** : quoi corriger, dans quel ordre, avec quel impact
-- Des **recommandations** sur l'architecture, les outils et les pratiques
-- Une **estimation réaliste** du temps nécessaire pour rembourser la dette technique
+Un audit coûte quelques milliers d'euros et prend 2 à 3 jours. Une refonte complète après deux ans de dette accumulée en coûte des dizaines de milliers et prend des mois. Le calcul est simple, mais beaucoup de fondateurs attendent trop longtemps parce que "ça marche encore". Ça marche, oui. Mais chaque mois qui passe, les développeurs passent plus de temps à corriger qu'à construire, les fonctionnalités prennent du retard face à la concurrence, et le risque d'une panne majeure en production augmente.
 
-## Ce que je livre
+Ce CTO m'a rappelé trois mois après l'audit. Son équipe déployait deux fois par semaine sans stress. Le junior était autonome. Et ils avaient rattrapé leur retard sur la roadmap produit.
 
-Un audit technique avec moi, c'est :
-
-1. **2-3 jours d'analyse** de votre codebase
-2. Un **rapport structuré** avec des problèmes classés par priorité (critique, important, mineur)
-3. Des **recommandations actionnables** — pas de la théorie, des solutions concrètes
-4. Un **échange de restitution** pour expliquer les findings et répondre à vos questions
-
-Je ne vous dis pas "tout est à refaire" (c'est presque jamais vrai). Je vous dis "voici les 3 choses à corriger en priorité pour débloquer votre équipe."
-
-## Le coût de ne rien faire
-
-La dette technique, c'est comme une dette financière : les intérêts s'accumulent.
-
-Chaque mois sans audit, c'est :
-- Des développeurs qui passent plus de temps à corriger qu'à construire
-- Des fonctionnalités retardées face à la concurrence
-- Un risque croissant de panne majeure
-
-Un audit coûte quelques milliers d'euros. Une refonte complète après 2 ans de dette accumulée en coûte des dizaines de milliers.
-
-## Pour qui c'est pertinent
-
-- **Startups post-seed** qui ont construit un MVP rapidement et veulent structurer avant de scaler
-- **PME** qui ont externalisé le développement et veulent vérifier la qualité
-- **Équipes tech** qui sentent que quelque chose ne va pas mais ne savent pas par où commencer
-- **Fondateurs non-techniques** qui veulent un avis neutre sur leur codebase
-
-**Vous avez un doute sur la santé de votre code ?** [Parlons-en](https://cal.com/victor-lenain-ejsjfb/echange-decouverte). En 15 minutes, je peux déjà vous dire si un audit est pertinent pour votre situation.
+**Vous avez un doute sur la santé de votre code ?** [Prenez 15 minutes pour qu'on en parle](https://cal.com/victor-lenain-ejsjfb/echange-decouverte). C'est souvent suffisant pour savoir si un audit vaut le coup pour votre situation.

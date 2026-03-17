@@ -10,61 +10,38 @@ tags:
   - Paris
 ---
 
-Quand on parle d'intelligence artificielle en entreprise, beaucoup imaginent des projets à 6 chiffres, des équipes de data scientists et des mois de R&D. C'était vrai il y a 3 ans. Ça ne l'est plus.
+"L'IA, c'est pas pour nous." C'est ce que m'a dit le directeur d'une PME industrielle de 12 personnes en région parisienne, lors d'un premier échange en visio. Il imaginait des budgets à six chiffres, des équipes de data scientists, des mois de R&D avant le moindre résultat. C'était vrai il y a trois ans. Ça ne l'est plus du tout.
 
-Aujourd'hui, intégrer l'IA dans un process métier existant, c'est souvent **quelques semaines de développement** et un budget accessible à une PME.
+Je lui ai posé une seule question : combien de temps votre équipe passe-t-elle chaque semaine à répondre aux mêmes emails ?
 
-## Ce qui a changé
+Silence. Puis : "Facilement 15 heures. Peut-être 20."
 
-Les modèles de langage (GPT, Claude, Mistral) sont disponibles via des APIs simples. Pas besoin d'entraîner son propre modèle. Pas besoin de GPU. On connecte une API, on configure le contexte, et on obtient des résultats concrets.
+## Un chatbot en 4 jours
 
-**Concrètement, ça signifie :**
-- Pas d'infrastructure lourde à déployer
-- Pas de data scientist à embaucher
-- Des résultats visibles en quelques jours
+On a construit un chatbot support en 4 jours. Pas un gadget, un vrai outil branché sur leur documentation existante, leur FAQ, leurs conditions générales, leurs guides techniques. Le chatbot filtre les demandes entrantes et répond directement aux questions simples. L'équipe ne traite plus que les cas complexes, ceux qui nécessitent vraiment une expertise humaine.
 
-## Cas d'usage concrets pour une PME
+Le coût total : moins de 3 000 euros de développement, plus environ 50 euros par mois d'appels API. En face, 70% des demandes entrantes sont traitées automatiquement. Le retour sur investissement s'est compté en semaines, pas en mois.
 
-### Chatbot support client
+## Ce qui a changé dans l'IA
 
-Un chatbot qui répond aux questions fréquentes en s'appuyant sur votre documentation existante (FAQ, CGV, guides). Il ne remplace pas votre équipe — il filtre 60-80% des demandes simples pour que vos collaborateurs se concentrent sur les cas complexes.
+Les modèles de langage comme GPT, Claude ou Mistral sont désormais accessibles via des APIs simples. On ne parle plus d'entraîner son propre modèle ou d'investir dans des GPU. On connecte une API, on configure le contexte métier, et on obtient des résultats exploitables. L'infrastructure lourde, c'est fini. Le data scientist à plein temps, ce n'est plus nécessaire pour la plupart des cas d'usage PME.
 
-**Coût typique :** 2 000 – 5 000 € de développement + ~50 €/mois d'API.
+## Au-delà du chatbot
 
-### Automatisation de la saisie documentaire
+Ce qui m'a frappé avec cette PME, c'est que le chatbot a ouvert la discussion sur d'autres sujets. Leur responsable administratif passait un jour et demi par semaine à saisir des données depuis des bons de commande papier dans leur ERP. On a mis en place un pipeline d'extraction documentaire : l'IA lit le document, identifie les champs, et injecte les données directement. Coût de développement entre 3 000 et 8 000 euros selon la complexité des documents. Temps de saisie divisé par cinq.
 
-Factures, bons de commande, formulaires papier — l'IA peut extraire les données et les injecter directement dans votre ERP ou tableur. Fini la saisie manuelle.
+Un autre client, dans le conseil, voulait automatiser ses rapports hebdomadaires. Chaque lundi, quelqu'un compilait des données brutes pendant trois heures pour produire une synthèse. On a monté un pipeline d'analyse qui génère le rapport automatiquement : tendances, anomalies, résumé exécutif. Le premier jet est prêt à 7h le lundi matin. Le consultant passe 20 minutes à relire et ajuster au lieu de 3 heures à compiler. Ce type de projet coûte entre 2 000 et 6 000 euros pour la mise en place initiale.
 
-**Coût typique :** 3 000 – 8 000 € selon la complexité des documents.
+J'ai aussi travaillé avec une agence immobilière qui voulait personnaliser ses emails commerciaux à grande échelle. Descriptions de biens adaptées au profil de chaque prospect, relances contextuelles, comptes-rendus de visite automatiques. L'IA génère un premier jet que les commerciaux affinent en quelques minutes. Intégration : entre 1 500 et 3 000 euros.
 
-### Analyse et synthèse de données
+## Les coûts récurrents, la bonne surprise
 
-Rapports hebdomadaires automatiques à partir de vos données brutes. Tendances, anomalies, résumés — générés sans intervention humaine.
+La plupart des projets IA pour PME consomment entre 20 et 100 euros par mois en appels API. C'est moins cher qu'un abonnement SaaS classique. Le vrai coût, c'est le développement initial : comprendre le métier, connecter l'IA aux outils existants, s'assurer que les réponses sont fiables et pas hallucinées.
 
-**Coût typique :** 2 000 – 6 000 € pour le pipeline initial.
+## Avant de se lancer
 
-### Aide à la rédaction et personnalisation
+Tous les problèmes ne se résolvent pas avec de l'IA. Si votre problème est répétitif, avec des variations mais un schéma récurrent, l'IA est probablement pertinente. Si chaque cas est complètement unique, c'est moins évident. Il faut aussi des données de départ, même brutes : des documents, des emails, une base de données. Et surtout, il faut se poser la question du retour sur investissement. Si l'automatisation fait gagner 2 heures par jour à un collaborateur, le calcul est vite fait.
 
-Emails commerciaux personnalisés, descriptions produit, comptes-rendus de réunion automatiques. L'IA génère un premier jet que vos équipes affinent.
+Si votre problème se résout mieux avec un simple tableur ou un Zapier bien configuré, je vous le dirai. Je ne vends pas de l'IA pour le plaisir d'en mettre partout. Quand c'est pertinent, je développe une solution sur mesure intégrée à vos outils, pas un proof of concept qui prend la poussière, mais un outil utilisé au quotidien par votre équipe.
 
-**Coût typique :** 1 500 – 3 000 € d'intégration.
-
-## Les coûts récurrents sont faibles
-
-La plupart des projets IA pour PME consomment entre 20 € et 100 €/mois en appels API. C'est moins cher qu'un abonnement à un logiciel SaaS classique.
-
-Le coût principal, c'est le développement initial : comprendre votre métier, connecter l'IA à vos outils existants, et s'assurer que les réponses sont fiables.
-
-## Ce qu'il faut vérifier avant de se lancer
-
-1. **Le problème est-il répétitif ?** L'IA excelle sur les tâches répétitives avec des variations. Si chaque cas est unique, ce n'est peut-être pas le bon outil.
-2. **Avez-vous des données ?** Même brutes, des documents, emails ou bases de données suffisent comme point de départ.
-3. **Quel ROI attendez-vous ?** Si l'automatisation fait gagner 2h/jour à un collaborateur, le retour sur investissement se compte en semaines.
-
-## Mon approche
-
-Je ne vends pas de l'IA pour le plaisir. Si votre problème se résout mieux avec un simple tableur ou un Zapier, je vous le dirai.
-
-Quand l'IA est pertinente, je développe une solution sur mesure intégrée à vos outils existants — pas un PoC qui prend la poussière, mais un outil utilisé au quotidien.
-
-**Vous vous demandez si l'IA peut vous faire gagner du temps ?** [Parlons-en](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) — 15 minutes suffisent pour évaluer le potentiel.
+**Vous vous demandez si l'IA peut vous faire gagner du temps ?** [Prenez 15 minutes pour qu'on en parle](https://cal.com/victor-lenain-ejsjfb/echange-decouverte). C'est souvent suffisant pour savoir si ça vaut le coup.

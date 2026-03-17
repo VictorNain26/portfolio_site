@@ -5,99 +5,56 @@ publishedAt: '2026-02-24'
 tags: ['TomIA', 'EdTech', 'Intelligence Artificielle', 'Soutien Scolaire', 'Éducation', 'Projet']
 ---
 
-## Un problème que je connais de l'intérieur
+## 19h30, un mardi soir
 
-Mon petit frère galérait en maths. Pas par manque d'intelligence — par manque d'accompagnement.
+Ma mère rentre du travail. Mon petit frère est devant son cahier de maths depuis une heure. Il n'a pas avancé. Elle s'assoit à côté de lui, fatiguée, et essaie de lui expliquer les fractions. Au bout de 45 minutes, elle craque. Elle lui donne la réponse. Il recopie sans comprendre. Tout le monde va se coucher frustré.
 
-Ma mère passait ses soirées à l'aider. Mais entre la fatigue et le manque de temps, elle finissait par donner la réponse. Et lui, il recopiait sans comprendre.
+Ce rituel, je l'ai vu se répéter des dizaines de fois.
 
-Des millions de familles en France vivent la même chose. Parents solo, horaires décalés, budget serré. Pas les moyens de payer un prof particulier à 30 € de l'heure.
+Mon frère n'est pas bête. Il a juste besoin qu'on lui réexplique autrement, qu'on lui pose la bonne question au bon moment, qu'on soit patient quand il bloque pour la troisième fois sur le même type d'exercice. Ma mère, après une journée de travail, n'a plus cette patience. Personne ne l'aurait.
 
-C'est en vivant ce problème au quotidien que l'idée de **TomIA** est née.
+Un prof particulier aurait pu aider. Sauf qu'un prof particulier, c'est entre 35 et 50 euros de l'heure. Deux séances par semaine, ça fait 280 à 400 euros par mois. Pour une famille de classe moyenne, c'est un budget impossible. Le soutien scolaire en France pèse plus de 2 milliards d'euros par an, et cet argent va très majoritairement dans les poches de familles qui n'en avaient pas le plus besoin.
 
----
+C'est en voyant mon frère galérer que j'ai commencé à construire TomIA.
 
-## Le soutien scolaire en France : un système à deux vitesses
+## Le vrai problème n'est pas le manque de contenu
 
-En France, le marché du soutien scolaire pèse plus de 2 milliards d'euros. Pourtant, seuls les foyers les plus aisés y ont réellement accès.
+Des cours en ligne, il y en a des milliers. Khan Academy, YouTube, manuels numériques. Ce n'est pas ça qui manque. Le problème, c'est que quand un gamin de 12 ans bloque sur un exercice à 20h un mardi, il n'a personne pour lui poser la bonne question. Personne pour lui dire "OK, tu bloques ici, mais est-ce que tu te souviens de ce qu'on a vu sur les proportions ?" et le guider vers le raisonnement.
 
-Les solutions existantes posent plusieurs problèmes :
+ChatGPT pourrait aider, non ? J'y ai pensé. Sauf que ChatGPT fait exactement ce que ma mère faisait quand elle craquait : il donne la réponse. Un élève qui tape son exercice dans ChatGPT obtient la solution en 10 secondes. Il recopie. Il n'a rien appris. Pire, il a perdu l'habitude de réfléchir.
 
-- **Le coût** : un cours particulier coûte entre 25 et 50 € de l'heure, hors de portée pour beaucoup de familles
-- **La disponibilité** : trouver un bon prof, au bon moment, dans la bonne matière, c'est un parcours du combattant
-- **L'adaptation** : chaque élève a son rythme, ses lacunes, ses blocages — un format unique ne fonctionne pas
-- **Les outils IA généralistes** : ChatGPT ou Google donnent des réponses, mais pas de pédagogie. Un élève qui reçoit la solution toute faite n'apprend rien
+Ce dont les élèves ont besoin, ce n'est pas un moteur de réponses. C'est un tuteur patient qui les guide vers la compréhension sans jamais leur donner la solution toute cuite.
 
-Le vrai besoin, ce n'est pas une réponse. C'est un accompagnement.
+## TomIA ne donne pas la réponse
 
----
+C'est la règle fondamentale du projet. TomIA utilise la méthode socratique : au lieu de résoudre l'exercice à la place de l'élève, il pose des questions. "Qu'est-ce que tu sais déjà ?", "Quel théorème pourrait t'aider ici ?", "Tu as essayé de dessiner un schéma ?" Il décompose le problème en étapes, reformule quand l'élève ne comprend pas, et ne lâche rien jusqu'à ce que le raisonnement soit clair.
 
-## TomIA : un tuteur, pas un moteur de réponses
+Ça marche du CP à la Terminale, sur 11 matières : maths, français, histoire-géo, physique-chimie, SVT, anglais, et d'autres encore. Pour chaque niveau, j'ai construit une base de plus de 250 documents pédagogiques alignés sur les programmes officiels Éduscol. Ce ne sont pas des pages Wikipédia aspirées. Ce sont des documents structurés : définitions, théorèmes, méthodes de résolution pas à pas, erreurs courantes des élèves pour chaque notion, objectifs pédagogiques.
 
-TomIA est un tuteur IA conçu pour les élèves du **CP à la Terminale**, aligné sur les **programmes officiels Éduscol** et connecté à **Pronote**.
+Cette base est le coeur du système. Quand un élève pose une question, TomIA ne cherche pas sur Internet et n'invente pas sa réponse. Il interroge cette base avec un système de recherche hybride qui combine des embeddings vectoriels et du BM25 pour retrouver les documents les plus pertinents. Ensuite seulement, il formule sa réponse pédagogique en s'appuyant sur ces documents vérifiés. C'est ce qu'on appelle le RAG, Retrieval-Augmented Generation. Ça réduit drastiquement les hallucinations, ce problème des IA qui inventent des informations avec un aplomb déconcertant.
 
-La différence fondamentale avec les IA généralistes : TomIA ne donne pas la réponse. Il guide l'élève vers la compréhension, grâce à la **méthode socratique** — poser les bonnes questions pour faire émerger le raisonnement.
+## Connecté à la vraie vie scolaire
 
-### Ce que TomIA apporte concrètement
+TomIA se connecte à Pronote. Ça change tout. Au lieu d'un outil générique qui ne sait rien de l'élève, TomIA sait où il en est dans son programme, quelles notes il a eues, quels devoirs il doit rendre. Quand un élève de 4ème ouvre TomIA le dimanche soir, l'IA peut lui dire "Tu as un contrôle de maths mardi sur les équations du premier degré. On s'y met ?"
 
-- **11 matières couvertes** par niveau : mathématiques, français, histoire-géographie, physique-chimie, SVT, anglais, et plus encore
-- **Un contenu pédagogique structuré** : définitions, théorèmes, méthodes, exemples et erreurs courantes — le tout validé et aligné sur les programmes officiels
-- **Une connexion à Pronote** : TomIA sait où en est l'élève dans son programme, ses notes, ses devoirs à venir
-- **La voix** : l'élève peut parler à TomIA comme à un tuteur humain, et écouter ses explications à voix haute — idéal pour les plus jeunes ou les profils auditifs
-- **Une app mobile** : disponible sur iOS et Android, pour réviser n'importe où
+L'élève peut aussi parler à TomIA. Littéralement. La fonctionnalité voix permet de discuter comme avec un vrai tuteur, d'écouter les explications. Pour les plus jeunes qui tapent encore lentement au clavier, ou pour les profils auditifs qui retiennent mieux en écoutant, ça fait une vraie différence.
 
----
+L'application mobile est disponible sur iOS et Android. L'idée, c'est que l'élève puisse réviser dans le bus, dans sa chambre, n'importe où. Pas besoin d'un ordinateur.
 
-## Comment ça marche sous le capot
+## Les données des enfants, ce n'est pas un détail
 
-Derrière l'interface simple, TomIA s'appuie sur une architecture pensée pour la précision pédagogique.
+Toutes les données sont hébergées en France. Conformité RGPD complète, chiffrement de bout en bout. Quand on travaille avec des données de mineurs, la sécurité n'est pas une feature qu'on ajoute à la fin. C'est un prérequis non négociable.
 
-### Un socle de connaissances vérifié
+## Le résultat
 
-Contrairement aux IA qui « hallucinent », TomIA utilise le **RAG** (Retrieval-Augmented Generation). Chaque réponse s'appuie sur une base de **250+ documents pédagogiques** par niveau, rédigés et structurés selon les programmes Éduscol.
+Mon frère a gagné 3 points de moyenne en maths en deux mois. Est-ce que c'est uniquement grâce à TomIA ? Difficile de dire. Mais ce que je sais, c'est que ma mère ne passe plus ses soirées à s'énerver sur des fractions. Et mon frère a repris confiance. Il ose réessayer quand il se trompe, parce que TomIA ne soupire pas, ne s'impatiente pas, ne donne pas la réponse pour en finir.
 
-Ces documents couvrent :
-- Les **définitions** et **théorèmes** essentiels
-- Les **méthodes** de résolution pas à pas
-- Les **erreurs courantes** des élèves (pour les anticiper)
-- Les **objectifs pédagogiques** de chaque notion
+C'est ça que je voulais construire. L'équivalent d'un grand frère patient, disponible à n'importe quelle heure, qui connaît le programme scolaire sur le bout des doigts et qui ne facture pas 40 euros de l'heure. Pas un remplaçant du professeur. Un complément. Un filet de sécurité pour les familles qui n'ont pas les moyens ou le temps de payer un tuteur humain.
 
-### Une recherche intelligente
+## Suivre le projet
 
-Quand un élève pose une question, TomIA ne cherche pas sur Google. Il interroge sa base vectorielle avec un système de **recherche hybride** (embeddings + BM25) pour retrouver les documents les plus pertinents, puis formule une réponse contextualisée et pédagogique.
+L'application est en ligne. Pour la découvrir :
 
-### Des données hébergées en France
+**[Découvrir TomIA sur tomia.fr](https://tomia.fr)**
 
-Toutes les données sont stockées en France, conformes au **RGPD**. La sécurité des données des mineurs est une priorité absolue, avec un chiffrement de bout en bout.
-
----
-
-## Pourquoi ce projet est différent
-
-### Il naît d'un vrai problème
-
-Les meilleurs projets naissent d'un problème qu'on vit au quotidien. TomIA n'est pas né d'une étude de marché — il est né d'un besoin réel, dans ma propre famille.
-
-### Il ne remplace pas le professeur
-
-TomIA est un **complément**, pas un substitut. L'objectif est de donner à chaque élève l'équivalent d'un grand frère patient qui a le temps d'expliquer, de reformuler, de poser les bonnes questions.
-
-### Il est accessible
-
-Pas de forfait à 200 € par mois. L'ambition de TomIA est de **démocratiser l'accompagnement scolaire** pour que chaque famille y ait accès, quel que soit son budget.
-
----
-
-## Et maintenant ?
-
-L'application mobile arrive bientôt. Pour suivre l'avancement du projet et être informé du lancement :
-
-**[Découvrir TomIA → tomia.fr](https://tomia.fr)**
-
----
-
-## Et vous ?
-
-Quel problème personnel vous a donné envie de construire quelque chose ? Les projets les plus impactants sont souvent ceux qui résolvent un problème que leur créateur connaît intimement.
-
-Si vous êtes parent, enseignant ou simplement curieux, n'hésitez pas à [me contacter](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) pour échanger sur le sujet.
+Si vous êtes parent, enseignant, ou que le sujet vous intéresse, je serais content d'en discuter. [Réservez un créneau](https://cal.com/victor-lenain-ejsjfb/echange-decouverte) ou écrivez-moi. Ce projet est né d'un problème personnel et chaque retour d'un parent ou d'un prof me permet de l'améliorer.
