@@ -11,13 +11,25 @@ type ProjectCardProps = {
   project: Project;
   index: number;
   ctaLabel?: string;
+  status?: 'live' | 'development';
 };
+
+const STATUS_BADGE = {
+  live: { label: 'Projet live', tone: 'green' },
+  development: { label: 'En développement', tone: 'amber' },
+} as const;
 
 export default function ProjectCard({
   project,
   index,
   ctaLabel = 'Voir le site',
+  status = 'live',
 }: ProjectCardProps) {
+  const badge = STATUS_BADGE[status];
+  const badgeClasses =
+    badge.tone === 'green'
+      ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300'
+      : 'border-amber-500/30 bg-amber-500/15 text-amber-200';
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -33,10 +45,10 @@ export default function ProjectCard({
         <div className="relative h-40 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e082e]/80 to-transparent" />
 
-          {/* Badge projet personnel */}
+          {/* Badge statut projet */}
           <div className="absolute top-4 left-4">
-            <span className="rounded-full border border-indigo-500/30 bg-indigo-500/20 px-3 py-1 text-xs font-medium text-indigo-300 backdrop-blur-sm">
-              Projet live
+            <span className={`rounded-full border px-3 py-1 text-xs font-medium backdrop-blur-sm ${badgeClasses}`}>
+              {badge.label}
             </span>
           </div>
 

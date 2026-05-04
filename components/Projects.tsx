@@ -7,6 +7,7 @@ import { type Project } from '@/lib/github';
 
 type FeaturedProject = Project & {
   ctaLabel: string;
+  status: 'live' | 'development';
 };
 
 const FEATURED_PROJECTS: FeaturedProject[] = [
@@ -22,19 +23,21 @@ const FEATURED_PROJECTS: FeaturedProject[] = [
     updatedAt: '2026-02-01T00:00:00Z',
     createdAt: '2025-06-01T00:00:00Z',
     ctaLabel: 'Écouter la radio',
+    status: 'live',
   },
   {
     id: 2,
     name: 'TomIA',
     description:
-      'Plateforme de tutorat IA pour les élèves français. Programmes officiels Éduscol intégrés via RAG avec Qdrant et embeddings Mistral pour un accompagnement scolaire personnalisé.',
+      'Plateforme de tutorat IA pour les élèves français. Programmes officiels Éduscol intégrés via RAG avec Qdrant et embeddings Mistral pour un accompagnement scolaire personnalisé. Lancement prévu 2026.',
     demoUrl: 'https://www.tomia.fr/',
     repoUrl: null,
     technologies: ['TypeScript', 'Python', 'Qdrant', 'Mistral'],
     stars: 0,
     updatedAt: '2026-02-01T00:00:00Z',
     createdAt: '2025-09-01T00:00:00Z',
-    ctaLabel: 'Voir le site',
+    ctaLabel: 'Voir la landing',
+    status: 'development',
   },
 ];
 
@@ -70,6 +73,7 @@ export default function Projects() {
             ctaLabel={project.ctaLabel}
             index={index}
             project={project}
+            status={project.status}
           />
         ))}
       </div>

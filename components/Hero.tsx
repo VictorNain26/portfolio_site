@@ -25,7 +25,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-4 sm:px-8"
+      className="relative flex min-h-[88vh] items-start justify-center overflow-hidden px-4 pt-24 sm:px-8 sm:pt-28 lg:pt-32"
       id="accueil"
     >
       {/* --- Subtle glow accent (blends with body bg) --- */}
@@ -52,7 +52,7 @@ export default function Hero() {
           className="font-display text-[2.5rem] font-extrabold leading-[1.08] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[5rem]"
         >
           Votre projet web,{' '}
-          <span className="hero-gradient-text">livré</span>
+          <span className="hero-gradient-text">IA intégrée</span>
         </motion.h1>
 
         {/* Subtitle */}
