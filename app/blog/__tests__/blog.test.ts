@@ -100,8 +100,8 @@ describe('Blog post filtering logic', () => {
 
     it('sorts newest first', () => {
       const published = getPublishedPosts(mockPosts, new Date());
-      expect(published[0].slug).toBe('2026-03-05-article-aujourdhui');
-      expect(published[1].slug).toBe('2025-01-12-article-passe');
+      expect(published[0]?.slug).toBe('2026-03-05-article-aujourdhui');
+      expect(published[1]?.slug).toBe('2025-01-12-article-passe');
     });
   });
 
@@ -132,7 +132,9 @@ describe('Blog post filtering logic', () => {
   describe('Reading time calculation', () => {
     it('calculates reading time correctly', () => {
       const wordsPerMinute = 200;
-      const words = mockPosts[0].content.split(/\s+/);
+      const firstPost = mockPosts[0];
+      if (!firstPost) throw new Error('mockPosts[0] should exist');
+      const words = firstPost.content.split(/\s+/);
       const readingTime = Math.ceil(words.length / wordsPerMinute);
       expect(readingTime).toBeGreaterThan(0);
       expect(readingTime).toBe(1); // short content = 1 min
