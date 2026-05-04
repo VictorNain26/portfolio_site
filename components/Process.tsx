@@ -10,7 +10,7 @@ const steps = [
     number: '01',
     title: 'Échange gratuit',
     description:
-      'On discute de votre projet, vos objectifs et vos contraintes. Je vous donne un premier avis honnête — sans engagement.',
+      'On discute de votre projet, vos objectifs et vos contraintes. Je vous donne un premier avis honnête, sans engagement.',
   },
   {
     icon: FileText,

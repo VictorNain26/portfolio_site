@@ -34,16 +34,19 @@ export default function BlogPostJsonLd({
     articleSection: tags[0] ?? 'Développement Web',
     author: {
       '@type': 'Person',
+      '@id': `${BASE_URL}/#person`,
       name: 'Victor Lenain',
       url: BASE_URL,
-      jobTitle: 'Développeur Full-Stack Freelance',
+      jobTitle: 'Développeur full-stack · Intégration IA',
       sameAs: [
         'https://www.linkedin.com/in/victor-lenain/',
-        'https://github.com/victornain26',
+        'https://github.com/VictorNain26',
+        'https://www.malt.fr/profile/victorlenain',
       ],
     },
     publisher: {
       '@type': 'Person',
+      '@id': `${BASE_URL}/#person`,
       name: 'Victor Lenain',
       url: BASE_URL,
     },

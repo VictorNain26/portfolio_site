@@ -1,37 +1,51 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Rocket, Cog, Sparkles, Wrench, ArrowRight } from 'lucide-react';
+import { Rocket, Bot, Database, Sparkles, Wrench, Workflow, ArrowRight } from 'lucide-react';
 import Section from '@/components/Section';
 
 const services = [
   {
-    icon: Rocket,
-    title: 'Création d\'applications web',
+    icon: Bot,
+    title: 'Agents IA & assistants conversationnels',
     description:
-      'Des interfaces modernes, rapides et accessibles qui convertissent vos visiteurs en clients. Sites vitrines, applications métier, plateformes e-commerce.',
-    results: ['Sites rapides et bien référencés', 'Interfaces intuitives', 'Mobile-first'],
+      'Je conçois des agents qui prennent en charge des tâches concrètes : tri de mails, qualification de leads, génération de réponses, exécution d\'actions. Stack Claude Agent SDK ou LangChain selon le besoin.',
+    results: ['Agents Claude / OpenAI', 'Tool use et orchestration', 'Déploiement en prod'],
+  },
+  {
+    icon: Database,
+    title: 'RAG & recherche sur documents',
+    description:
+      'Vos documents internes deviennent interrogeables en langage naturel. Ingestion, embeddings, recherche sémantique, réponses sourcées. pgvector pour rester sur PostgreSQL, Qdrant si volume.',
+    results: ['Embeddings et chunking', 'pgvector ou Qdrant', 'Réponses citées et traçables'],
+  },
+  {
+    icon: Workflow,
+    title: 'Automatisations LLM sur mesure',
+    description:
+      'Plutôt que d\'empiler des outils no-code, je code des automatisations sur mesure quand le ROI est là. Génération de contenu, classification, extraction structurée, scoring. Et un script de 50 lignes si c\'est le bon outil.',
+    results: ['Pipelines LLM en prod', 'Coûts tokens maîtrisés', 'Eval avant déploiement'],
+  },
+  {
+    icon: Rocket,
+    title: 'Applications web sur mesure',
+    description:
+      'Sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js. Je porte le projet du POC au déployé, IA embarquée si elle apporte de la valeur réelle.',
+    results: ['Next.js, TypeScript', 'API Node.js, PostgreSQL', 'Vercel ou Docker'],
   },
   {
     icon: Wrench,
-    title: 'Refonte & interventions ponctuelles',
+    title: 'Refonte et interventions ponctuelles',
     description:
-      'Votre site est lent, daté ou buggé ? Je modernise, corrige et optimise l\'existant. Refonte visuelle, migration technique, fix urgent ou ajout de fonctionnalité.',
+      'Site lent, daté ou buggé ? Je modernise, corrige, optimise. Refonte visuelle, migration technique, fix urgent, ajout de fonctionnalité. À partir d\'une demi-journée.',
     results: ['Refonte et modernisation', 'Correction de bugs', 'Optimisation performances'],
   },
   {
-    icon: Cog,
-    title: 'Backend & DevOps',
-    description:
-      'Des APIs fiables, une infrastructure solide et un déploiement automatisé. CI/CD, Docker, base de données, authentification, intégrations tierces.',
-    results: ['APIs performantes', 'CI/CD & Docker', 'Architecture évolutive'],
-  },
-  {
     icon: Sparkles,
-    title: 'Intégration IA & automatisation',
+    title: 'Conseil et audit IA',
     description:
-      'Gagnez du temps en automatisant vos tâches répétitives. Chatbots, génération de contenu, analyse de données, assistants intelligents.',
-    results: ['Automatisation des process', 'Chatbots sur mesure', 'Gain de productivité'],
+      'Avant de coder, on regarde si l\'IA est vraiment le bon outil. Je vous aide à arbitrer entre script classique, automatisation no-code et intégration LLM, et à cadrer un POC sérieux.',
+    results: ['Cadrage POC', 'Choix de stack et coûts', 'Audit d\'un projet existant'],
   },
 ];
 
@@ -60,13 +74,17 @@ export default function Services() {
         </motion.h2>
         <motion.p
           {...fadeUp(0.1)}
-          className="mx-auto mt-4 max-w-2xl text-lg text-gray-400"
+          className="mx-auto mt-4 max-w-3xl text-lg leading-relaxed text-gray-400"
         >
-          Des solutions concrètes pour développer votre activité en ligne
+          Je code des applications web sur mesure et j&apos;y intègre de l&apos;IA
+          quand ça apporte vraiment de la valeur. Agents conversationnels, RAG sur
+          vos documents, automatisations LLM, refontes et interventions ponctuelles.
+          Stack Next.js, TypeScript, Claude / OpenAI, pgvector. Si un script de 50
+          lignes fait le travail, je le dis avant de proposer un agent.
         </motion.p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {services.map((service, index) => {
           const Icon = service.icon;
           return (

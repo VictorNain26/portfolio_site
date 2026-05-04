@@ -95,7 +95,8 @@ export default function ArticleLayout({
           <div>
             <p className="font-semibold text-white">Victor Lenain</p>
             <p className="mt-0.5 text-sm leading-relaxed text-gray-400">
-              Développeur Full-Stack freelance. React, Next.js, Node.js, TypeScript.
+              Développeur full-stack freelance · Intégration IA · Paris.
+              Next.js, TypeScript, Claude, OpenAI.
             </p>
           </div>
         </div>
@@ -110,7 +111,7 @@ export default function ArticleLayout({
           </a>
           <a
             className="inline-flex items-center self-center text-sm text-gray-500 transition-colors hover:text-gray-300"
-            href="https://github.com/victornain26"
+            href="https://github.com/VictorNain26"
             rel="noopener noreferrer"
             target="_blank"
           >

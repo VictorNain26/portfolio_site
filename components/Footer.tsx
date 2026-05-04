@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { FaGithub, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
+import { SiMalt } from 'react-icons/si';
 
 const socials = [
   { href: 'https://github.com/VictorNain26', icon: FaGithub, label: 'GitHub' },
   { href: 'https://www.linkedin.com/in/victor-lenain/', icon: FaLinkedin, label: 'LinkedIn' },
+  { href: 'https://www.malt.fr/profile/victorlenain', icon: SiMalt, label: 'Malt' },
   {
     href: 'https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous',
     icon: FaWhatsapp,

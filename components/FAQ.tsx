@@ -15,7 +15,7 @@ const faqItems = [
   {
     question: 'Êtes-vous disponible pour une mission ?',
     answer:
-      'Je réponds sous 24\u00a0h et le démarrage peut être très rapide — parfois quelques jours seulement, selon ma disponibilité du moment. Contactez-moi pour en discuter.',
+      'Je réponds sous 24\u00a0h et le démarrage peut être très rapide, parfois quelques jours seulement, selon ma disponibilité du moment. Contactez-moi pour en discuter.',
   },
   {
     question: 'Travaillez-vous en remote ?',
@@ -30,7 +30,7 @@ const faqItems = [
   {
     question: 'Faites-vous des interventions courtes (fix, refonte, ajout de feature) ?',
     answer:
-      'Oui. Je ne fais pas que des projets from scratch. Correction de bugs urgents, refonte d\'un site existant, ajout d\'une fonctionnalité, optimisation de performances — j\'interviens aussi ponctuellement, à partir d\'une demi-journée.',
+      'Oui. Je ne fais pas que des projets from scratch. Correction de bugs urgents, refonte d\'un site existant, ajout d\'une fonctionnalité, optimisation de performances, j\'interviens aussi ponctuellement, à partir d\'une demi-journée.',
   },
 ];
 

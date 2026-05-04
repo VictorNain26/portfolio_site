@@ -141,7 +141,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
                   fontSize: '18px',
                 }}
               >
-                Développeur Full-Stack JavaScript
+                Développeur full-stack · Intégration IA
               </span>
             </div>
           </div>

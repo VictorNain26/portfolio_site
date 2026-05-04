@@ -1,7 +1,7 @@
 import { ImageResponse } from '@vercel/og';
 
 export const runtime = 'edge';
-export const alt = 'Victor Lenain - Développeur Full-Stack JavaScript';
+export const alt = 'Victor Lenain - Développeur full-stack · Intégration IA';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -64,22 +64,22 @@ export default function OGImage() {
             textAlign: 'center',
           }}
         >
-          Votre application web,{' '}
-          <span style={{ color: '#818cf8' }}>livrée et maintenue</span>
+          Votre projet web,{' '}
+          <span style={{ color: '#818cf8' }}>avec ou sans IA</span>
         </h1>
 
-        {/* Expérience */}
+        {/* Sous-titre */}
         <p
           style={{
             fontSize: '28px',
             color: '#d1d5db',
             textAlign: 'center',
-            maxWidth: '800px',
+            maxWidth: '900px',
             lineHeight: 1.5,
             margin: 0,
           }}
         >
-          Développeur Full-Stack · 3+ ans d&apos;expérience
+          Développeur full-stack · Intégration IA · Freelance · Paris
         </p>
 
         {/* URL */}

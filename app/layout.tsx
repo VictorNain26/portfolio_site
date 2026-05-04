@@ -30,28 +30,28 @@ const sora = Sora({
 export const metadata = {
   metadataBase: new URL('https://victorlenain.fr'),
   title: {
-    default: 'Victor Lenain | Développeur Full-Stack Freelance à Paris',
+    default: 'Victor Lenain | Développeur full-stack · Intégration IA · Paris',
     template: '%s | Victor Lenain',
   },
   description:
-    "Développeur Full-Stack freelance à Paris. Création d'applications web, refonte de sites, interventions ponctuelles et intégration IA. Devis gratuit sous 24 h.",
+    "Développeur full-stack freelance à Paris. J'intègre de l'IA (agents, RAG, automatisations LLM) dans des produits web et SaaS. Stack Next.js, Claude, OpenAI.",
   keywords: [
     'développeur freelance Paris',
     'développeur full-stack',
+    'intégration IA',
+    'intégration LLM',
+    'agents IA',
+    'RAG',
+    'Claude API',
+    'OpenAI API',
+    'Anthropic Claude',
+    'pgvector',
+    'LangChain',
+    'Claude Agent SDK',
     'application web sur mesure',
-    'freelance développeur web',
-    'création application web',
-    'refonte site web',
-    'correction bugs site web',
-    'maintenance site web freelance',
-    'audit technique site web',
-    'développeur freelance',
-    'développeur React freelance',
     'développeur Next.js',
-    'développeur Node.js Paris',
-    'freelance TypeScript',
-    'développeur web Île-de-France',
-    'intégration IA entreprise',
+    'développeur TypeScript',
+    'freelance développeur web',
     'Victor Lenain',
   ],
   authors: [{ name: 'Victor Lenain', url: 'https://victorlenain.fr' }],
@@ -73,16 +73,16 @@ export const metadata = {
     locale: 'fr_FR',
     url: 'https://victorlenain.fr',
     siteName: 'Victor Lenain - Portfolio',
-    title: 'Victor Lenain | Développeur Full-Stack Freelance à Paris',
+    title: 'Victor Lenain | Développeur full-stack · Intégration IA · Paris',
     description:
-      "Développeur Full-Stack freelance à Paris. Création, refonte, interventions ponctuelles et intégration IA. Devis gratuit sous 24 h.",
+      "Développeur full-stack freelance à Paris. J'intègre de l'IA (agents, RAG, automatisations LLM) dans des produits web et SaaS. Stack Next.js, Claude, OpenAI.",
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Victor Lenain | Développeur Full-Stack Freelance',
+    title: 'Victor Lenain | Développeur full-stack · Intégration IA',
     description:
-      "Création, refonte, fix et intégration IA. Développeur Full-Stack freelance à Paris.",
+      "Freelance Paris. Agents IA, RAG, automatisations LLM dans vos produits web et SaaS. Stack Next.js, Claude, OpenAI.",
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   alternates: {

@@ -60,11 +60,11 @@ export default function Hero() {
           {...fadeUp(0.1)}
           className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-gray-400 text-balance sm:mt-6 sm:text-xl"
         >
-          Développeur Full-Stack &amp; DevOps freelance à Paris.{' '}
+          Développeur full-stack freelance à Paris,{' '}
           <span className="text-gray-300">
-            Création, refonte, intervention ponctuelle
+            spécialisé dans l&apos;intégration d&apos;IA
           </span>{' '}
-          — des solutions complètes, pas juste du code.
+          (agents, RAG, automatisations LLM) dans des produits web et SaaS.
         </motion.p>
 
         {/* CTAs */}
@@ -139,11 +139,11 @@ export default function Hero() {
           </span>
           <span className="flex items-center gap-1.5">
             <span aria-hidden="true" className="h-1 w-1 rounded-full bg-indigo-500/60" />
-            React, Next.js, Node.js, TypeScript
+            Next.js, TypeScript, Node.js
           </span>
           <span className="flex items-center gap-1.5">
             <span aria-hidden="true" className="h-1 w-1 rounded-full bg-indigo-500/60" />
-            Docker &amp; CI/CD
+            Claude, OpenAI, RAG, agents
           </span>
         </motion.div>
       </div>

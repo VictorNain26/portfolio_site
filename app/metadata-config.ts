@@ -3,30 +3,38 @@
 export const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
+  '@id': 'https://victorlenain.fr/#person',
   name: 'Victor Lenain',
   alternateName: 'Victor Lenain Dev',
-  jobTitle: 'Développeur Full-Stack Freelance',
+  jobTitle: 'Développeur full-stack · Intégration IA',
   description:
-    "Développeur Full-Stack freelance à Paris. Je conçois des applications web sur mesure, de l'idée au déploiement. Devis gratuit sous 24 h.",
+    "Développeur full-stack freelance à Paris. J'intègre de l'IA (agents, RAG, automatisations LLM) dans des produits web et SaaS. Stack Next.js, Claude, OpenAI, pgvector.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   sameAs: [
     'https://www.linkedin.com/in/victor-lenain/',
-    'https://github.com/victornain26',
+    'https://github.com/VictorNain26',
+    'https://www.malt.fr/profile/victorlenain',
   ],
   knowsAbout: [
-    'Développement Web',
-    'Applications Web',
-    'React',
+    'Intégration IA',
+    'LLM',
+    'Large Language Models',
+    'Anthropic Claude',
+    'OpenAI',
+    'RAG',
+    'Retrieval-Augmented Generation',
+    'AI Agents',
+    'Claude Agent SDK',
+    'LangChain',
+    'pgvector',
+    'Prompt Engineering',
+    'Développement web',
     'Next.js',
-    'Node.js',
     'TypeScript',
-    'Docker',
-    'CI/CD',
-    'Architecture logicielle',
-    'Déploiement',
-    'Automatisation',
-    'Intelligence Artificielle',
+    'Node.js',
+    'React',
+    'PostgreSQL',
   ],
   worksFor: {
     '@type': 'Organization',
@@ -41,8 +49,8 @@ export const personJsonLd = {
   },
   offers: {
     '@type': 'Offer',
-    description: 'Services de développement web Full-Stack',
-    category: 'Développement Web',
+    description: 'Développement web full-stack et intégration IA',
+    category: 'Intégration IA et développement web',
   },
   potentialAction: {
     '@type': 'ReserveAction',
@@ -53,20 +61,19 @@ export const personJsonLd = {
 
 export const websiteJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Website',
+  '@type': 'WebSite',
+  '@id': 'https://victorlenain.fr/#website',
   name: 'Victor Lenain - Portfolio',
   alternateName: 'Portfolio Victor Lenain',
   url: 'https://victorlenain.fr',
   description:
-    'Portfolio professionnel de Victor Lenain, développeur Full-Stack freelance à Paris.',
+    "Portfolio de Victor Lenain, développeur full-stack freelance à Paris spécialisé dans l'intégration d'IA dans des produits web et SaaS.",
   inLanguage: 'fr-FR',
   author: {
-    '@type': 'Person',
-    name: 'Victor Lenain',
+    '@id': 'https://victorlenain.fr/#person',
   },
   publisher: {
-    '@type': 'Person',
-    name: 'Victor Lenain',
+    '@id': 'https://victorlenain.fr/#person',
   },
   potentialAction: {
     '@type': 'SearchAction',
@@ -128,7 +135,7 @@ export const faqJsonLd = {
       name: 'Êtes-vous disponible pour une mission ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Je réponds sous 24\u00a0h et le démarrage peut être très rapide — parfois quelques jours seulement, selon ma disponibilité du moment. Contactez-moi pour en discuter.',
+        text: 'Je réponds sous 24\u00a0h et le démarrage peut être très rapide, parfois quelques jours seulement, selon ma disponibilité du moment. Contactez-moi pour en discuter.',
       },
     },
     {
@@ -152,7 +159,7 @@ export const faqJsonLd = {
       name: 'Faites-vous des interventions courtes (fix, refonte, ajout de feature) ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Oui. Je ne fais pas que des projets from scratch. Correction de bugs urgents, refonte d'un site existant, ajout d'une fonctionnalité, optimisation de performances — j'interviens aussi ponctuellement, à partir d'une demi-journée.",
+        text: "Oui. Je ne fais pas que des projets from scratch. Correction de bugs urgents, refonte d'un site existant, ajout d'une fonctionnalité, optimisation de performances, j'interviens aussi ponctuellement, à partir d'une demi-journée.",
       },
     },
   ],
@@ -161,16 +168,25 @@ export const faqJsonLd = {
 export const professionalServiceJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
-  name: 'Victor Lenain - Développeur Full-Stack Freelance',
+  '@id': 'https://victorlenain.fr/#service',
+  name: 'Victor Lenain · Développeur full-stack · Intégration IA',
   description:
-    "Applications web sur mesure, de l'idée au déploiement. Devis gratuit sous 24 h.",
+    "Intégration d'IA (agents, RAG, automatisations LLM) dans des produits web et SaaS. Développement full-stack Next.js / TypeScript / Node.js. Freelance à Paris.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   priceRange: '€€',
   availableLanguage: ['fr', 'en'],
   provider: {
-    '@type': 'Person',
-    name: 'Victor Lenain',
+    '@id': 'https://victorlenain.fr/#person',
+  },
+  founder: {
+    '@id': 'https://victorlenain.fr/#person',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'FR',
+    addressLocality: 'Paris',
+    addressRegion: 'Île-de-France',
   },
   areaServed: [
     {
@@ -187,14 +203,14 @@ export const professionalServiceJsonLd = {
     },
   ],
   serviceType: [
-    'Développement Web',
+    'Intégration IA',
+    'Agents IA',
+    'RAG',
+    'Automatisation LLM',
+    'Développement web full-stack',
     'Applications sur mesure',
     'Refonte de site web',
-    'Correction de bugs',
-    'Maintenance web',
-    'Audit technique',
-    'Conseil Technique',
-    'Intégration IA',
+    'Conseil technique IA',
   ],
   potentialAction: {
     '@type': 'ReserveAction',
@@ -211,38 +227,60 @@ export const professionalServiceJsonLd = {
   },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
-    name: 'Services de développement',
+    name: 'Services',
     itemListElement: [
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: "Développement d'applications web",
-          description: "Création d'applications web sur mesure, adaptées à vos besoins",
+          name: 'Agents IA et assistants conversationnels',
+          description:
+            "Conception et déploiement d'agents Claude / OpenAI : tri de mails, qualification de leads, exécution d'actions. Stack Claude Agent SDK ou LangChain.",
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Refonte et modernisation de sites web',
-          description: 'Migration technique, redesign, optimisation de performances sur sites existants',
+          name: 'RAG et recherche sur documents',
+          description:
+            'Ingestion, embeddings, recherche sémantique, réponses sourcées sur vos documents internes. pgvector ou Qdrant.',
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Interventions ponctuelles',
-          description: 'Correction de bugs, ajout de fonctionnalités, audits techniques et maintenance',
+          name: 'Automatisations LLM sur mesure',
+          description:
+            "Pipelines LLM en production : génération de contenu, classification, extraction structurée, scoring. Coûts tokens maîtrisés.",
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Conseil technique',
-          description: 'Conseil en architecture et choix technologiques',
+          name: 'Applications web sur mesure',
+          description:
+            "Sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js. IA embarquée si elle apporte de la valeur.",
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Refonte et interventions ponctuelles',
+          description:
+            "Refonte visuelle, migration technique, fix urgent, ajout de fonctionnalité. À partir d'une demi-journée.",
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Conseil et audit IA',
+          description:
+            "Cadrage POC, choix de stack et coûts, audit d'un projet existant. Arbitrage entre script classique, no-code et intégration LLM.",
         },
       },
     ],
