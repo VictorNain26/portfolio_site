@@ -1,129 +1,124 @@
-'use client';
-
-import { motion, useReducedMotion } from 'framer-motion';
-import { Rocket, Bot, Database, Sparkles, Wrench, Workflow, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import Section from '@/components/Section';
+import FadeOnView from '@/components/FadeOnView';
+import { services } from '@/app/services/content';
 
-const services = [
-  {
-    icon: Bot,
-    title: 'Agents IA & assistants conversationnels',
-    description:
-      'Je conçois des agents qui prennent en charge des tâches concrètes : tri de mails, qualification de leads, génération de réponses, exécution d\'actions. Stack Claude Agent SDK ou LangChain selon le besoin.',
-    results: ['Agents Claude / OpenAI', 'Tool use et orchestration', 'Déploiement en prod'],
-  },
-  {
-    icon: Database,
-    title: 'RAG & recherche sur documents',
-    description:
-      'Vos documents internes deviennent interrogeables en langage naturel. Ingestion, embeddings, recherche sémantique, réponses sourcées. pgvector pour rester sur PostgreSQL, Qdrant si volume.',
-    results: ['Embeddings et chunking', 'pgvector ou Qdrant', 'Réponses citées et traçables'],
-  },
-  {
-    icon: Workflow,
-    title: 'Automatisations LLM sur mesure',
-    description:
-      'Plutôt que d\'empiler des outils no-code, je code des automatisations sur mesure quand le ROI est là. Génération de contenu, classification, extraction structurée, scoring. Et un script de 50 lignes si c\'est le bon outil.',
-    results: ['Pipelines LLM en production', 'Suivi coûts tokens', 'Eval dès le démarrage'],
-  },
-  {
-    icon: Rocket,
-    title: 'Applications web sur mesure',
-    description:
-      'Sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js. Je prends le projet du prototype au déploiement, IA embarquée si elle apporte de la valeur réelle.',
-    results: ['Next.js, TypeScript', 'API Node.js, PostgreSQL', 'Vercel ou Docker'],
-  },
-  {
-    icon: Wrench,
-    title: 'Refonte et interventions ponctuelles',
-    description:
-      'Site lent, daté ou buggé ? Je modernise, corrige, optimise. Refonte visuelle, migration technique, fix urgent, ajout de fonctionnalité. À partir d\'une demi-journée.',
-    results: ['Refonte et modernisation', 'Correction de bugs', 'Optimisation performances'],
-  },
-  {
-    icon: Sparkles,
-    title: 'Conseil et audit IA',
-    description:
-      'Avant de coder, on regarde si l\'IA est vraiment le bon outil. Je vous aide à arbitrer entre script classique, automatisation no-code et intégration LLM, et à cadrer un prototype sérieux.',
-    results: ['Cadrage prototype', 'Choix de stack et coûts', 'Audit d\'un projet existant'],
-  },
-];
+/* Grille équilibrée 3 colonnes pour les services phares. Le bento
+ * asymétrique testé précédemment laissait trop de vide sur la 3e card
+ * full-width ; 3 colonnes égales donnent un rythme visuel plus pro. */
 
 export default function Services() {
-  const reduced = useReducedMotion();
-
-  const fadeUp = (delay: number) =>
-    reduced
-      ? {}
-      : {
-          initial: { opacity: 0, y: 24 } as const,
-          whileInView: { opacity: 1, y: 0 } as const,
-          viewport: { once: true } as const,
-          transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
-        };
+  const featured = services.filter((s) => s.tier === 'featured');
+  const secondary = services.filter((s) => s.tier === 'secondary');
 
   return (
     <Section className="scroll-mt-28 pb-28" id="services">
-      <div className="mb-16 text-center">
-        <motion.h2
-          {...fadeUp(0)}
-          className="font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl"
-        >
-          Ce que je peux faire{' '}
-          <span className="hero-gradient-text">pour vous</span>
-        </motion.h2>
-        <motion.p
-          {...fadeUp(0.1)}
-          className="mx-auto mt-4 max-w-3xl text-lg leading-relaxed text-gray-400"
-        >
-          Je code des applications web sur mesure et j&apos;y intègre de l&apos;IA
-          quand ça apporte vraiment de la valeur. Agents conversationnels, RAG sur
-          vos documents, automatisations LLM, refontes et interventions ponctuelles.
-          Stack Next.js, TypeScript, Claude / OpenAI, pgvector. Si un script de 50
-          lignes fait le travail, je le dis avant de proposer un agent.
-        </motion.p>
-      </div>
+      <FadeOnView className="mb-16 max-w-3xl">
+        <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-indigo-400">
+          Ce que je fais
+        </p>
+        <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl lg:text-5xl">
+          Je code la couche IA dans votre stack existante.
+        </h2>
+        <p className="mt-5 text-lg leading-relaxed text-gray-400">
+          Vous tournez sur Django, Rails, Next, Node ou FastAPI. J&apos;ajoute la couche IA dessus sans refonte et je mesure ce qui sort. Trois prestations IA, trois prestations web, le même code applicatif derrière.
+        </p>
+      </FadeOnView>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {services.map((service, index) => {
+      {/* 3 services IA phares, colonnes égales */}
+      <div className="grid gap-5 lg:grid-cols-3">
+        {featured.map((service, index) => {
           const Icon = service.icon;
           return (
-            <motion.div
-              key={service.title}
-              className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/20 hover:bg-white/[0.04]"
-              {...fadeUp(0.15 + index * 0.1)}
+            <FadeOnView
+              key={service.slug}
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.025] backdrop-blur-sm transition-colors duration-300 hover:border-indigo-400/30 hover:bg-white/[0.04]"
+              delay={0.05 + index * 0.05}
             >
-              <div className="mb-5 inline-flex rounded-xl bg-indigo-500/10 p-3 text-indigo-400 transition-colors group-hover:bg-indigo-500/15">
-                <Icon aria-hidden="true" className="h-6 w-6" />
-              </div>
-              <h3 className="mb-3 text-lg font-semibold text-white">{service.title}</h3>
-              <p className="mb-5 text-sm leading-relaxed text-gray-400">{service.description}</p>
-              <ul className="mb-5 space-y-2">
-                {service.results.map((result) => (
-                  <li
-                    key={result}
-                    className="flex items-center gap-2.5 text-sm text-indigo-300"
-                  >
-                    <span aria-hidden="true" className="h-1 w-1 shrink-0 rounded-full bg-indigo-400" />
-                    {result}
-                  </li>
-                ))}
-              </ul>
-              <a
-                className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-400"
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                }}
+              <Link
+                aria-label={`En savoir plus sur ${service.shortTitle}`}
+                className="flex h-full flex-col p-7 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e082e]"
+                href={`/services/${service.slug}`}
               >
-                Discuter de votre projet
-                <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-              </a>
-            </motion.div>
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-400/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                />
+
+                <div className="mb-5 inline-flex w-fit rounded-xl bg-indigo-500/10 p-3 text-indigo-400 transition-colors group-hover:bg-indigo-500/20">
+                  <Icon aria-hidden="true" className="h-6 w-6" />
+                </div>
+
+                <h3 className="mb-3 text-xl font-semibold text-white">{service.shortTitle}</h3>
+                <p className="mb-6 text-sm leading-relaxed text-gray-400">{service.tagline}</p>
+
+                <ul className="mb-6 flex flex-wrap gap-x-4 gap-y-2">
+                  {service.highlights.slice(0, 3).map((point) => (
+                    <li
+                      key={point}
+                      className="flex items-center gap-1.5 text-xs font-medium text-indigo-300/90"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="h-1 w-1 shrink-0 rounded-full bg-amber-400/80"
+                      />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+
+                <span className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-indigo-300 transition-colors group-hover:text-indigo-200">
+                  Voir le service
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1"
+                  />
+                </span>
+              </Link>
+            </FadeOnView>
           );
         })}
       </div>
+
+      {/* Secondaires : plus discret, plus dense */}
+      <FadeOnView className="mt-12" delay={0.2}>
+        <p className="mb-5 text-xs font-medium uppercase tracking-[0.18em] text-gray-500">
+          Aussi disponible pour
+        </p>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {secondary.map((service) => {
+            const Icon = service.icon;
+            return (
+              <Link
+                key={service.slug}
+                className="group flex gap-4 rounded-xl border border-white/[0.04] bg-white/[0.015] p-5 transition-colors duration-300 hover:border-white/[0.08] hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                href={`/services/${service.slug}`}
+              >
+                <div className="shrink-0 text-gray-500 transition-colors group-hover:text-indigo-300">
+                  <Icon aria-hidden="true" className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="mb-1 text-sm font-semibold text-gray-200">
+                    {service.shortTitle}
+                  </h3>
+                  <p className="text-xs leading-relaxed text-gray-500">{service.tagline}</p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </FadeOnView>
+
+      <FadeOnView className="mt-12 text-center" delay={0.3}>
+        <Link
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-400 transition-colors hover:text-indigo-400"
+          href="/services"
+        >
+          Voir tous les services en détail
+          <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+        </Link>
+      </FadeOnView>
     </Section>
   );
 }

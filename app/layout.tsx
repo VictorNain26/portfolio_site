@@ -1,5 +1,5 @@
 import './globals.css';
-import { Inter, Sora } from 'next/font/google';
+import { Inter, Geist } from 'next/font/google';
 import { type ReactNode, Suspense } from 'react';
 import Script from 'next/script';
 
@@ -12,16 +12,19 @@ import JsonLdScripts from './components/JsonLdScripts';
 
 /* -------------------------------------------------------------------------- */
 /* Polices                                                                    */
+/*  - Inter : body. Très lisible, neutre.                                     */
+/*  - Geist : display (headings). Identité techy/AI, signe la marque.         */
 /* -------------------------------------------------------------------------- */
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
 });
-const sora = Sora({
+const geist = Geist({
   subsets: ['latin'],
-  variable: '--font-sora',
+  variable: '--font-geist',
   display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
 });
 
 /* -------------------------------------------------------------------------- */
@@ -34,7 +37,7 @@ export const metadata = {
     template: '%s | Victor Lenain',
   },
   description:
-    "Développeur full-stack freelance à Paris. J'intègre de l'IA (agents, RAG, automatisations LLM) dans des produits web et SaaS. Stack Next.js, Claude, OpenAI.",
+    "Développeur full-stack freelance à Paris. Je greffe la couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Stack Next.js, Django, Rails, FastAPI.",
   keywords: [
     'développeur freelance Paris',
     'développeur full-stack',
@@ -75,14 +78,14 @@ export const metadata = {
     siteName: 'Victor Lenain - Portfolio',
     title: 'Victor Lenain | Développeur full-stack · Intégration IA · Paris',
     description:
-      "Développeur full-stack freelance à Paris. J'intègre de l'IA (agents, RAG, automatisations LLM) dans des produits web et SaaS. Stack Next.js, Claude, OpenAI.",
+      "Développeur full-stack freelance à Paris. Je greffe la couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Stack Next.js, Django, Rails, FastAPI.",
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Victor Lenain | Développeur full-stack · Intégration IA',
     description:
-      "Freelance Paris. Agents IA, RAG, automatisations LLM dans vos produits web et SaaS. Stack Next.js, Claude, OpenAI.",
+      "Freelance Paris. Je greffe agents, RAG et automatisations LLM sur votre stack web existante. Sans refonte.",
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   alternates: {
@@ -101,17 +104,14 @@ export const metadata = {
 /* -------------------------------------------------------------------------- */
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html className={`${inter.variable} ${sora.variable}`} lang="fr">
+    <html className={`${inter.variable} ${geist.variable}`} lang="fr">
       <head>
         <MetaTags />
         <JsonLdScripts />
       </head>
 
-      <body className="text-foreground relative bg-[#0e082e] bg-[url('/images/hero-bg.webp')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased">
-        {/* Dégradé d'assombrissement du fond */}
-        <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/25 to-black/60 sm:bg-gradient-to-t lg:bg-gradient-to-r" />
-
-        {/* Skip link — accessibilité */}
+      <body className="text-foreground relative bg-[#0e082e] font-sans antialiased">
+        {/* Skip link accessibilité */}
         <a
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-indigo-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:outline-none"
           href="#main"

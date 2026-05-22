@@ -8,7 +8,7 @@ export const personJsonLd = {
   alternateName: 'Victor Lenain Dev',
   jobTitle: 'Développeur full-stack · Intégration IA',
   description:
-    "Développeur full-stack freelance à Paris. J'intègre de l'IA (agents, RAG, automatisations LLM) dans des produits web et SaaS. Stack Next.js, Claude, OpenAI, pgvector.",
+    "Développeur full-stack freelance à Paris. Je greffe la couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Stack Next.js, Django, Rails, FastAPI, pgvector.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   sameAs: [
@@ -67,7 +67,7 @@ export const websiteJsonLd = {
   alternateName: 'Portfolio Victor Lenain',
   url: 'https://victorlenain.fr',
   description:
-    "Portfolio de Victor Lenain, développeur full-stack freelance à Paris spécialisé dans l'intégration d'IA dans des produits web et SaaS.",
+    "Portfolio de Victor Lenain, développeur full-stack freelance à Paris. Greffe d'une couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte.",
   inLanguage: 'fr-FR',
   author: {
     '@id': 'https://victorlenain.fr/#person',
@@ -159,7 +159,7 @@ export const faqJsonLd = {
       name: 'Faites-vous des interventions courtes (fix, refonte, ajout de feature) ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Oui. Je ne fais pas que des projets from scratch. Correction de bugs urgents, refonte d'un site existant, ajout d'une fonctionnalité, optimisation de performances, j'interviens aussi ponctuellement, à partir d'une demi-journée.",
+        text: "Oui. Je ne fais pas que des projets depuis zéro. Correction de bugs urgents, refonte d'un site existant, ajout d'une fonctionnalité, optimisation de performances. J'interviens ponctuellement à partir d'une demi-journée.",
       },
     },
   ],
@@ -171,7 +171,7 @@ export const professionalServiceJsonLd = {
   '@id': 'https://victorlenain.fr/#service',
   name: 'Victor Lenain · Développeur full-stack · Intégration IA',
   description:
-    "Intégration d'IA (agents, RAG, automatisations LLM) dans des produits web et SaaS. Développement full-stack Next.js / TypeScript / Node.js. Freelance à Paris.",
+    "Greffe d'une couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Développement fullstack Next.js, Django, Rails, FastAPI. Freelance à Paris.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   priceRange: '€€',
@@ -235,7 +235,7 @@ export const professionalServiceJsonLd = {
           '@type': 'Service',
           name: 'Agents IA et assistants conversationnels',
           description:
-            "Conception et déploiement d'agents Claude / OpenAI : tri de mails, qualification de leads, exécution d'actions. Stack Claude Agent SDK ou LangChain.",
+            "Agents Claude / OpenAI sur mesure : tri de mails, qualification de leads, exécution d'actions sur vos outils. Stack Claude Agent SDK ou LangChain selon le besoin.",
         },
       },
       {
@@ -253,7 +253,7 @@ export const professionalServiceJsonLd = {
           '@type': 'Service',
           name: 'Automatisations LLM sur mesure',
           description:
-            "Pipelines LLM en production : génération de contenu, classification, extraction structurée, scoring. Suivi des coûts tokens, eval dès le démarrage.",
+            "Pipelines LLM qui tournent en prod : classification, extraction, scoring, génération. Coûts tokens suivis, eval en place.",
         },
       },
       {

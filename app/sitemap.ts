@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { allPosts } from 'content-collections';
+import { services } from './services/content';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://victorlenain.fr';
@@ -18,7 +19,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/services`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
   ];
+
+  // Pages services individuelles
+  const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
+    url: `${baseUrl}/services/${service.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: service.tier === 'featured' ? 0.85 : 0.7,
+  }));
 
   // Articles de blog publiés (exclure les articles programmés dans le futur)
   const now = new Date();
@@ -29,5 +44,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...blogPosts];
+  return [...staticPages, ...servicePages, ...blogPosts];
 }

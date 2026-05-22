@@ -1,18 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import Section from '../Section';
-
-// Mock framer-motion
-vi.mock('framer-motion', () => ({
-  motion: {
-    section: ({ children, className, ...props }: any) => (
-      <section className={className} {...props}>
-        {children}
-      </section>
-    ),
-  },
-  useReducedMotion: vi.fn(() => false),
-}));
 
 describe('Section', () => {
   it('renders children correctly', () => {
@@ -32,13 +20,13 @@ describe('Section', () => {
     expect(section).toHaveClass('custom-class', 'mx-auto', 'max-w-7xl');
   });
 
-  it('passes through motion props', () => {
+  it('passes through native props', () => {
     render(
-      <Section data-testid="motion-section" id="test-section">
+      <Section data-testid="section" id="test-section">
         Content
       </Section>
     );
-    const section = screen.getByTestId('motion-section');
+    const section = screen.getByTestId('section');
     expect(section).toHaveAttribute('id', 'test-section');
   });
 

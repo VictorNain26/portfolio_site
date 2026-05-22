@@ -5,17 +5,25 @@ import { usePathname } from 'next/navigation';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import { cn } from '@/lib/utils';
 
-/** Wrapper plein écran avec custom scrollbar + reset auto */
+/**
+ * Plein-écran scroll wrapper.
+ *
+ * Décisions UI :
+ *  - `type="scroll"` : la scrollbar n'apparaît qu'au moment du scroll, puis
+ *    s'estompe. Pattern dominant 2026 (Linear, Vercel, Stripe). Zéro
+ *    distraction visuelle pendant la lecture.
+ *  - Scrollbar scopée SOUS le header (h-14 mobile, h-16 desktop). Elle ne
+ *    traverse plus la zone du header translucide, qui restait illisible
+ *    derrière la barre dégradée.
+ */
 export default function ScrollView({
   className,
   children,
   ...props
 }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
-  /* Référence sur le viewport pour pouvoir scroller */
   const viewportRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
-  /* À chaque navigation, on remonte en haut */
   useEffect(() => {
     viewportRef.current?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [pathname]);
@@ -23,7 +31,8 @@ export default function ScrollView({
   return (
     <ScrollAreaPrimitive.Root
       className={cn('relative h-[100dvh] w-full overflow-hidden', className)}
-      type="always"
+      scrollHideDelay={600}
+      type="scroll"
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
@@ -34,20 +43,12 @@ export default function ScrollView({
         {children}
       </ScrollAreaPrimitive.Viewport>
 
-      {/* Rail vertical */}
+      {/* Rail vertical : commence sous le header pour ne pas le traverser */}
       <ScrollAreaPrimitive.Scrollbar
-        className="absolute top-0 right-0 h-full w-2.5 p-px"
+        className="absolute right-0 top-14 h-[calc(100%-3.5rem)] w-2 p-px transition-opacity data-[state=hidden]:opacity-0 lg:top-16 lg:h-[calc(100%-4rem)]"
         orientation="vertical"
       >
-        <ScrollAreaPrimitive.Thumb className="flex-1 rounded-full bg-gradient-to-b from-indigo-500 to-violet-400" />
-      </ScrollAreaPrimitive.Scrollbar>
-
-      {/* Rail horizontal (facultatif) */}
-      <ScrollAreaPrimitive.Scrollbar
-        className="absolute bottom-0 left-0 h-2.5 w-full p-px"
-        orientation="horizontal"
-      >
-        <ScrollAreaPrimitive.Thumb className="flex-1 rounded-full bg-gradient-to-r from-indigo-500 to-violet-400" />
+        <ScrollAreaPrimitive.Thumb className="flex-1 rounded-full bg-gradient-to-b from-indigo-500/80 to-violet-400/80" />
       </ScrollAreaPrimitive.Scrollbar>
 
       <ScrollAreaPrimitive.Corner />
