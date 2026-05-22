@@ -39,7 +39,7 @@ export default function BlogPostJsonLd({
       url: BASE_URL,
       jobTitle: 'Développeur full-stack · Intégration IA',
       sameAs: [
-        'https://www.linkedin.com/in/victor-lenain/',
+        'https://www.linkedin.com/in/victorlenain/',
         'https://github.com/VictorNain26',
         'https://www.malt.fr/profile/victorlenain',
       ],

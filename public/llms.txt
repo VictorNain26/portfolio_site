@@ -17,7 +17,7 @@
 
 - [Agents IA et assistants conversationnels](https://victorlenain.fr/#services) : conception et déploiement d'agents Claude / OpenAI (tri de mails, qualification de leads, exécution d'actions). Stack Claude Agent SDK ou LangChain
 - [RAG et recherche sur documents](https://victorlenain.fr/#services) : ingestion, embeddings, recherche sémantique, réponses sourcées. pgvector pour rester sur PostgreSQL, Qdrant si volume
-- [Automatisations LLM sur mesure](https://victorlenain.fr/#services) : pipelines LLM en production, classification, extraction structurée, génération de contenu. Coûts tokens maîtrisés, eval avant déploiement
+- [Automatisations LLM sur mesure](https://victorlenain.fr/#services) : pipelines LLM en production, classification, extraction structurée, génération de contenu. Suivi des coûts tokens, eval dès le démarrage
 - [Applications web sur mesure](https://victorlenain.fr/#services) : sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js
 - [Refonte et interventions ponctuelles](https://victorlenain.fr/#services) : refonte visuelle, migration technique, fix urgent, ajout de fonctionnalité. À partir d'une demi-journée
 - [Conseil et audit IA](https://victorlenain.fr/#services) : cadrage POC, choix de stack et coûts, audit d'un projet existant
@@ -56,7 +56,7 @@
 - Site : https://victorlenain.fr
 - Email : victor.lenain26@gmail.com
 - Réserver un appel : https://cal.com/victor-lenain-ejsjfb/echange-decouverte
-- LinkedIn : https://www.linkedin.com/in/victor-lenain/
+- LinkedIn : https://www.linkedin.com/in/victorlenain/
 - Malt : https://www.malt.fr/profile/victorlenain
 - GitHub : https://github.com/VictorNain26
 - WhatsApp : https://wa.me/33664422529

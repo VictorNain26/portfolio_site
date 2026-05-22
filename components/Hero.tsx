@@ -60,11 +60,11 @@ export default function Hero() {
           {...fadeUp(0.1)}
           className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-gray-400 text-balance sm:mt-6 sm:text-xl"
         >
-          Développeur full-stack freelance à Paris,{' '}
+          Développeur full-stack freelance à Paris.{' '}
           <span className="text-gray-300">
-            spécialisé dans l&apos;intégration d&apos;IA
-          </span>{' '}
-          (agents, RAG, automatisations LLM) dans des produits web et SaaS.
+            Je greffe la couche IA sur votre stack web existante
+          </span>
+          , sans refonte. Vos POCs deviennent des systèmes qui tiennent.
         </motion.p>
 
         {/* CTAs */}
@@ -139,11 +139,11 @@ export default function Hero() {
           </span>
           <span className="flex items-center gap-1.5">
             <span aria-hidden="true" className="h-1 w-1 rounded-full bg-indigo-500/60" />
-            Next.js, TypeScript, Node.js
+            Stack Next.js / Node.js / PostgreSQL
           </span>
           <span className="flex items-center gap-1.5">
             <span aria-hidden="true" className="h-1 w-1 rounded-full bg-indigo-500/60" />
-            Claude, OpenAI, RAG, agents
+            Eval dès le démarrage
           </span>
         </motion.div>
       </div>

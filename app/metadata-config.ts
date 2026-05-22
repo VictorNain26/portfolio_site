@@ -12,7 +12,7 @@ export const personJsonLd = {
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   sameAs: [
-    'https://www.linkedin.com/in/victor-lenain/',
+    'https://www.linkedin.com/in/victorlenain/',
     'https://github.com/VictorNain26',
     'https://www.malt.fr/profile/victorlenain',
   ],
@@ -253,7 +253,7 @@ export const professionalServiceJsonLd = {
           '@type': 'Service',
           name: 'Automatisations LLM sur mesure',
           description:
-            "Pipelines LLM en production : génération de contenu, classification, extraction structurée, scoring. Coûts tokens maîtrisés.",
+            "Pipelines LLM en production : génération de contenu, classification, extraction structurée, scoring. Suivi des coûts tokens, eval dès le démarrage.",
         },
       },
       {

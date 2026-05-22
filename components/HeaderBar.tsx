@@ -23,7 +23,7 @@ const NAV_SECTIONS = [
 const socials = [
   { href: 'https://github.com/victornain26', icon: FaGithub, label: 'GitHub' },
   {
-    href: 'https://www.linkedin.com/in/victor-lenain/',
+    href: 'https://www.linkedin.com/in/victorlenain/',
     icon: FaLinkedin,
     label: 'LinkedIn',
   },
