@@ -24,13 +24,13 @@ const services = [
     title: 'Automatisations LLM sur mesure',
     description:
       'Plutôt que d\'empiler des outils no-code, je code des automatisations sur mesure quand le ROI est là. Génération de contenu, classification, extraction structurée, scoring. Et un script de 50 lignes si c\'est le bon outil.',
-    results: ['Pipelines LLM en prod', 'Coûts tokens maîtrisés', 'Eval avant déploiement'],
+    results: ['Pipelines LLM en production', 'Suivi coûts tokens', 'Eval dès le démarrage'],
   },
   {
     icon: Rocket,
     title: 'Applications web sur mesure',
     description:
-      'Sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js. Je porte le projet du POC au déployé, IA embarquée si elle apporte de la valeur réelle.',
+      'Sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js. Je prends le projet du POC au déploiement, IA embarquée si elle apporte de la valeur réelle.',
     results: ['Next.js, TypeScript', 'API Node.js, PostgreSQL', 'Vercel ou Docker'],
   },
   {

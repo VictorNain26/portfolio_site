@@ -96,14 +96,14 @@ export default function ArticleLayout({
             <p className="font-semibold text-white">Victor Lenain</p>
             <p className="mt-0.5 text-sm leading-relaxed text-gray-400">
               Développeur full-stack freelance · Intégration IA · Paris.
-              Next.js, TypeScript, Claude, OpenAI.
+              Je greffe la couche IA sur votre stack web existante.
             </p>
           </div>
         </div>
         <div className="mt-5 flex flex-wrap gap-3">
           <a
             className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-sm font-medium text-indigo-400 transition-colors hover:bg-indigo-500/20"
-            href="https://www.linkedin.com/in/victor-lenain/"
+            href="https://www.linkedin.com/in/victorlenain/"
             rel="noopener noreferrer"
             target="_blank"
           >
