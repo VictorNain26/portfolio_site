@@ -280,7 +280,7 @@ export const professionalServiceJsonLd = {
           '@type': 'Service',
           name: 'Conseil et audit IA',
           description:
-            "Cadrage POC, choix de stack et coûts, audit d'un projet existant. Arbitrage entre script classique, no-code et intégration LLM.",
+            "Cadrage prototype, choix de stack et coûts, audit d'un projet existant. Arbitrage entre script classique, no-code et intégration LLM.",
         },
       },
     ],

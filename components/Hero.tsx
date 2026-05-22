@@ -64,7 +64,7 @@ export default function Hero() {
           <span className="text-gray-300">
             Je greffe la couche IA sur votre stack web existante
           </span>
-          , sans refonte. Vos POCs deviennent des systèmes qui tiennent.
+          , sans refonte. Vos prototypes deviennent des systèmes qui tiennent.
         </motion.p>
 
         {/* CTAs */}

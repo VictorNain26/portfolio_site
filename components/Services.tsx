@@ -30,7 +30,7 @@ const services = [
     icon: Rocket,
     title: 'Applications web sur mesure',
     description:
-      'Sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js. Je prends le projet du POC au déploiement, IA embarquée si elle apporte de la valeur réelle.',
+      'Sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js. Je prends le projet du prototype au déploiement, IA embarquée si elle apporte de la valeur réelle.',
     results: ['Next.js, TypeScript', 'API Node.js, PostgreSQL', 'Vercel ou Docker'],
   },
   {
@@ -44,8 +44,8 @@ const services = [
     icon: Sparkles,
     title: 'Conseil et audit IA',
     description:
-      'Avant de coder, on regarde si l\'IA est vraiment le bon outil. Je vous aide à arbitrer entre script classique, automatisation no-code et intégration LLM, et à cadrer un POC sérieux.',
-    results: ['Cadrage POC', 'Choix de stack et coûts', 'Audit d\'un projet existant'],
+      'Avant de coder, on regarde si l\'IA est vraiment le bon outil. Je vous aide à arbitrer entre script classique, automatisation no-code et intégration LLM, et à cadrer un prototype sérieux.',
+    results: ['Cadrage prototype', 'Choix de stack et coûts', 'Audit d\'un projet existant'],
   },
 ];
 

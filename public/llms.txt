@@ -20,7 +20,7 @@
 - [Automatisations LLM sur mesure](https://victorlenain.fr/#services) : pipelines LLM en production, classification, extraction structurée, génération de contenu. Suivi des coûts tokens, eval dès le démarrage
 - [Applications web sur mesure](https://victorlenain.fr/#services) : sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js
 - [Refonte et interventions ponctuelles](https://victorlenain.fr/#services) : refonte visuelle, migration technique, fix urgent, ajout de fonctionnalité. À partir d'une demi-journée
-- [Conseil et audit IA](https://victorlenain.fr/#services) : cadrage POC, choix de stack et coûts, audit d'un projet existant
+- [Conseil et audit IA](https://victorlenain.fr/#services) : cadrage prototype, choix de stack et coûts, audit d'un projet existant
 
 ## Stack technique
 
