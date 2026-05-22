@@ -5,83 +5,112 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Newspaper, Menu, X } from 'lucide-react';
-import { FaWhatsapp, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { Calendar, Menu, X } from 'lucide-react';
+import {
+  GitHubIcon,
+  LinkedInIcon,
+  WhatsAppIcon,
+} from '@/components/icons/SocialIcons';
+import CalPopupButton from '@/components/CalPopupButton';
 
-/* ------------------------------------------------------------------ */
-/* Data                                                                */
-/* ------------------------------------------------------------------ */
+/** Header nav. Routes (Services, Blog) + ancres homepage (Projets, Contact).
+ * Quand on n'est pas sur la homepage, les ancres pointent vers `/#id` pour
+ * naviguer puis scroller. */
+type NavLink =
+  | { label: string; href: string; route: true }
+  | { label: string; id: string; route?: false };
 
-const NAV_SECTIONS = [
-  { id: 'services', label: 'Services' },
-  { id: 'process', label: 'Process' },
-  { id: 'projets', label: 'Projets' },
-  { id: 'faq', label: 'FAQ' },
-  { id: 'contact', label: 'Contact' },
-] as const;
+const NAV_LINKS: NavLink[] = [
+  { label: 'Services', href: '/services', route: true },
+  { label: 'Projets', id: 'projets' },
+  { label: 'Blog', href: '/blog', route: true },
+  { label: 'Contact', id: 'contact' },
+];
+
+const TRACKED_SECTION_IDS = ['projets', 'contact'] as const;
 
 const socials = [
-  { href: 'https://github.com/victornain26', icon: FaGithub, label: 'GitHub' },
+  { href: 'https://github.com/victornain26', Icon: GitHubIcon, label: 'GitHub' },
   {
     href: 'https://www.linkedin.com/in/victorlenain/',
-    icon: FaLinkedin,
+    Icon: LinkedInIcon,
     label: 'LinkedIn',
   },
   {
     href: 'https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous',
-    icon: FaWhatsapp,
+    Icon: WhatsAppIcon,
     label: 'WhatsApp',
   },
 ];
 
-/* ------------------------------------------------------------------ */
-/* Component                                                           */
-/* ------------------------------------------------------------------ */
-
 export default function HeaderBar() {
   const pathname = usePathname();
-  const onBlog = pathname.startsWith('/blog');
   const onHomepage = pathname === '/';
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [menuPathname, setMenuPathname] = useState(pathname);
+  const [scrolled, setScrolled] = useState(false);
 
-  /* Close mobile menu on route change (derived state from props) */
-  if (menuPathname !== pathname) {
-    setMenuPathname(pathname);
-    setMobileMenuOpen(false);
-  }
+  /* État "elevated" du header dès qu'on quitte le tout-haut. Listener passif
+   * sur le scroll-viewport (Radix ScrollArea), peu coûteux et plus précis
+   * qu'un IO pour ce binaire. */
+  useEffect(() => {
+    const viewport = document.getElementById('scroll-viewport');
+    if (!viewport) return;
+    const onScroll = () => {
+      setScrolled(viewport.scrollTop > 8);
+    };
+    onScroll();
+    viewport.addEventListener('scroll', onScroll, { passive: true });
+    return () => viewport.removeEventListener('scroll', onScroll);
+  }, []);
 
-  /* Track active section via scroll listener on #scroll-viewport */
   useEffect(() => {
     if (!onHomepage) return;
 
-    const viewport = document.getElementById('scroll-viewport');
-    if (!viewport) return;
+    const root =
+      (document.getElementById('scroll-viewport') as Element | null) ?? null;
 
-    const handleScroll = () => {
-      let current: string | null = null;
-      const atBottom =
-        viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight < 2;
+    const visibleSections = new Map<string, number>();
 
-      if (atBottom) {
-        const last = NAV_SECTIONS[NAV_SECTIONS.length - 1];
-        if (last) current = last.id;
-      } else {
-        for (const { id } of NAV_SECTIONS) {
-          const el = document.getElementById(id);
-          if (el && el.getBoundingClientRect().top <= 120) {
-            current = id;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const id = entry.target.id;
+          if (entry.isIntersecting) {
+            visibleSections.set(id, entry.intersectionRatio);
+          } else {
+            visibleSections.delete(id);
           }
         }
-      }
-      setActiveSection(current);
-    };
 
-    viewport.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => viewport.removeEventListener('scroll', handleScroll);
+        if (visibleSections.size === 0) {
+          setActiveSection(null);
+          return;
+        }
+
+        let chosen: string | null = null;
+        for (const id of TRACKED_SECTION_IDS) {
+          if (visibleSections.has(id)) {
+            chosen = id;
+            break;
+          }
+        }
+        setActiveSection(chosen);
+      },
+      {
+        root,
+        rootMargin: '-120px 0px -55% 0px',
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+
+    for (const id of TRACKED_SECTION_IDS) {
+      const el = document.getElementById(id);
+      if (el) io.observe(el);
+    }
+
+    return () => io.disconnect();
   }, [onHomepage]);
 
   const scrollToSection = useCallback(
@@ -102,17 +131,99 @@ export default function HeaderBar() {
     [onHomepage],
   );
 
-  const navLink = onBlog
-    ? { href: '/', icon: Home, label: 'Accueil' }
-    : { href: '/blog', icon: Newspaper, label: 'Blog' };
+  const renderNavLink = (link: NavLink, variant: 'desktop' | 'mobile') => {
+    const isMobile = variant === 'mobile';
+
+    if (link.route) {
+      const isActive = pathname.startsWith(link.href);
+      const desktopClasses = `relative rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors focus:outline-none ${
+        isActive ? 'text-white' : 'text-gray-400 hover:text-white'
+      }`;
+      const mobileClasses = `rounded-full px-6 py-3 text-lg font-medium transition-colors focus:outline-none ${
+        isActive ? 'bg-white/[0.08] text-white' : 'text-gray-400 hover:text-white'
+      }`;
+      return (
+        <Link
+          key={link.label}
+          className={isMobile ? mobileClasses : desktopClasses}
+          href={link.href}
+          onClick={() => {
+            if (isMobile) setMobileMenuOpen(false);
+          }}
+        >
+          {!isMobile && isActive && (
+            <motion.span
+              className="absolute inset-0 rounded-full bg-white/[0.08]"
+              layoutId="nav-pill"
+              transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
+            />
+          )}
+          <span className="relative z-10">{link.label}</span>
+        </Link>
+      );
+    }
+
+    // Anchor link : si on est sur la homepage, on scrolle. Sinon, on
+    // navigue vers /#id qui scrollera après mount.
+    const href = onHomepage ? `#${link.id}` : `/#${link.id}`;
+    const isActive = onHomepage && activeSection === link.id;
+
+    if (!onHomepage) {
+      const cls = isMobile
+        ? 'rounded-full px-6 py-3 text-lg font-medium text-gray-400 transition-colors hover:text-white focus:outline-none'
+        : 'relative rounded-full px-3.5 py-1.5 text-sm font-medium text-gray-400 transition-colors hover:text-white focus:outline-none';
+      return (
+        <Link
+          key={link.label}
+          className={cls}
+          href={href}
+          onClick={() => {
+            if (isMobile) setMobileMenuOpen(false);
+          }}
+        >
+          <span className="relative z-10">{link.label}</span>
+        </Link>
+      );
+    }
+
+    const desktopClasses = `relative rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors focus:outline-none ${
+      isActive ? 'text-white' : 'text-gray-400 hover:text-white'
+    }`;
+    const mobileClasses = `rounded-full px-6 py-3 text-lg font-medium transition-colors focus:outline-none ${
+      isActive ? 'bg-white/[0.08] text-white' : 'text-gray-400 hover:text-white'
+    }`;
+
+    return (
+      <a
+        key={link.label}
+        className={isMobile ? mobileClasses : desktopClasses}
+        href={href}
+        onClick={(e) => {
+          scrollToSection(e, link.id);
+        }}
+      >
+        {!isMobile && isActive && (
+          <motion.span
+            className="absolute inset-0 rounded-full bg-white/[0.08]"
+            layoutId="nav-pill"
+            transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
+          />
+        )}
+        <span className="relative z-10">{link.label}</span>
+      </a>
+    );
+  };
 
   return (
     <>
       <header
-        className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-[#0e082e]/70 px-4 text-white backdrop-blur-xl sm:px-8 lg:px-20 xl:px-28 2xl:px-36"
+        className={`fixed inset-x-0 top-0 z-50 px-4 text-white backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300 sm:px-8 lg:px-20 xl:px-28 2xl:px-36 ${
+          scrolled
+            ? 'border-b border-white/[0.08] bg-[#0e082e]/85 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.5)]'
+            : 'border-b border-transparent bg-[#0e082e]/40'
+        }`}
       >
         <div className="mx-auto flex h-14 max-w-7xl items-center lg:h-16">
-          {/* Logo + branding */}
           <Link
             aria-label="Retour à l'accueil"
             className="flex shrink-0 items-center gap-2.5 transition-opacity hover:opacity-80"
@@ -122,7 +233,7 @@ export default function HeaderBar() {
             <Image
               priority
               alt="Logo"
-              className="select-none"
+              className="h-8 w-8 select-none"
               height={32}
               src="/logo.png"
               width={32}
@@ -132,41 +243,16 @@ export default function HeaderBar() {
             </span>
           </Link>
 
-          {/* Spacer */}
           <div className="flex-1" />
 
-          {/* Desktop section nav — absolute centered in viewport */}
-          {onHomepage && (
-            <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
-              {NAV_SECTIONS.map(({ id, label }) => (
-                <a
-                  key={id}
-                  className="relative rounded-full px-3.5 py-1.5 text-sm font-medium text-gray-400 transition-colors hover:text-white focus:outline-none"
-                  href={`#${id}`}
-                  onClick={(e) => scrollToSection(e, id)}
-                >
-                  {activeSection === id && (
-                    <motion.span
-                      className="absolute inset-0 rounded-full bg-white/[0.08]"
-                      layoutId="nav-pill"
-                      transition={{
-                        type: 'spring',
-                        bounce: 0.2,
-                        duration: 0.5,
-                      }}
-                    />
-                  )}
-                  <span className="relative z-10">{label}</span>
-                </a>
-              ))}
-            </nav>
-          )}
+          {/* Desktop nav (centered absolute) */}
+          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
+            {NAV_LINKS.map((link) => renderNavLink(link, 'desktop'))}
+          </nav>
 
-          {/* Right group */}
           <div className="flex shrink-0 items-center gap-2">
-            {/* Desktop socials */}
             <div className="hidden items-center gap-1 lg:flex">
-              {socials.map(({ href, label, icon: Icon }) => (
+              {socials.map(({ href, label, Icon }) => (
                 <a
                   key={label}
                   aria-label={label}
@@ -180,38 +266,31 @@ export default function HeaderBar() {
               ))}
             </div>
 
-            {/* Divider */}
             <div className="hidden h-5 w-px bg-white/[0.08] lg:block" />
 
-            {/* Blog / Accueil button */}
-            <Link
-              className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-4 py-1.5 text-sm font-medium text-indigo-300 transition-all hover:bg-indigo-500/20 hover:text-indigo-200 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
-              href={navLink.href}
+            {/* CTA permanent — Cal.com en popup */}
+            <CalPopupButton
+              className="hidden items-center gap-2 rounded-full bg-indigo-600 px-4 py-1.5 text-sm font-medium text-white shadow-[0_0_24px_-8px_rgba(99,102,241,0.5)] transition-all hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 sm:inline-flex"
+              data-umami-event="cta-header-cal"
             >
-              <navLink.icon className="h-3.5 w-3.5" />
-              {navLink.label}
-            </Link>
+              <Calendar className="h-3.5 w-3.5" />
+              Réserver
+            </CalPopupButton>
 
-            {/* Mobile hamburger */}
             <button
+              aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
               className="rounded-full p-2 text-gray-400 transition-colors hover:bg-white/[0.06] hover:text-white lg:hidden"
               type="button"
-              aria-label={
-                mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'
-              }
-              onClick={() => setMobileMenuOpen((v) => !v)}
+              onClick={() => {
+                setMobileMenuOpen((v) => !v);
+              }}
             >
-              {mobileMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile menu overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -222,63 +301,43 @@ export default function HeaderBar() {
             transition={{ duration: 0.2 }}
           >
             <nav className="flex flex-col items-center gap-2">
-              {/* Section nav (homepage only) */}
-              {onHomepage &&
-                NAV_SECTIONS.map(({ id, label }, i) => (
-                  <motion.a
-                    key={id}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 8 }}
-                    href={`#${id}`}
-                    initial={{ opacity: 0, y: 16 }}
-                    transition={{ duration: 0.3, delay: i * 0.05 }}
-                    className={`rounded-full px-6 py-3 text-lg font-medium transition-colors focus:outline-none ${
-                      activeSection === id
-                        ? 'bg-white/[0.08] text-white'
-                        : 'text-gray-400 hover:text-white'
-                    }`}
-                    onClick={(e) => scrollToSection(e, id)}
-                  >
-                    {label}
-                  </motion.a>
-                ))}
+              {NAV_LINKS.map((link, i) => (
+                <motion.div
+                  key={link.label}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  initial={{ opacity: 0, y: 16 }}
+                  transition={{ duration: 0.3, delay: i * 0.05 }}
+                >
+                  {renderNavLink(link, 'mobile')}
+                </motion.div>
+              ))}
 
-              {/* Blog / Accueil link */}
               <motion.div
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4"
+                className="mt-6"
                 exit={{ opacity: 0, y: 8 }}
                 initial={{ opacity: 0, y: 16 }}
-                transition={{
-                  duration: 0.3,
-                  delay: onHomepage ? NAV_SECTIONS.length * 0.05 : 0,
-                }}
+                transition={{ duration: 0.3, delay: NAV_LINKS.length * 0.05 }}
               >
-                <Link
-                  className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-6 py-3 text-lg font-medium text-indigo-300 transition-all hover:bg-indigo-500/20"
-                  href={navLink.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                <CalPopupButton
+                  className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-6 py-3 text-lg font-medium text-white shadow-[0_0_32px_-8px_rgba(99,102,241,0.5)] transition-all hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                  data-umami-event="cta-mobile-menu-cal"
                 >
-                  <navLink.icon className="h-5 w-5" />
-                  {navLink.label}
-                </Link>
+                  <Calendar className="h-5 w-5" />
+                  Réserver un échange
+                </CalPopupButton>
               </motion.div>
             </nav>
 
-            {/* Social links */}
             <motion.div
               animate={{ opacity: 1, y: 0 }}
               className="mt-8 flex items-center gap-4"
               exit={{ opacity: 0, y: 8 }}
               initial={{ opacity: 0, y: 16 }}
-              transition={{
-                duration: 0.3,
-                delay: onHomepage
-                  ? (NAV_SECTIONS.length + 1) * 0.05
-                  : 0.1,
-              }}
+              transition={{ duration: 0.3, delay: (NAV_LINKS.length + 1) * 0.05 }}
             >
-              {socials.map(({ href, label, icon: Icon }) => (
+              {socials.map(({ href, label, Icon }) => (
                 <a
                   key={label}
                   aria-label={label}

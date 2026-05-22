@@ -1,5 +1,12 @@
 import { withContentCollections } from '@content-collections/next';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
+// React dev mode and Turbopack HMR require dynamic code execution to
+// reconstruct stack traces and run module updates. This is a dev-only need
+// and is explicitly gated by NODE_ENV so production CSP stays strict.
+const devOnlyScriptSrcExtras = isDev ? " 'unsafe-eval'" : '';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Disable X-Powered-By header
@@ -25,7 +32,7 @@ const nextConfig = {
           key: 'Content-Security-Policy',
           value: [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' https://cloud.umami.is",
+            `script-src 'self' 'unsafe-inline'${devOnlyScriptSrcExtras} https://cloud.umami.is`,
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "font-src 'self' https://fonts.gstatic.com",
             "img-src 'self' data:",
@@ -34,7 +41,7 @@ const nextConfig = {
             "base-uri 'self'",
             "form-action 'self'",
             "object-src 'none'",
-            "upgrade-insecure-requests",
+            'upgrade-insecure-requests',
           ].join('; '),
         },
       ],

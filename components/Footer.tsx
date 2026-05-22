@@ -1,14 +1,18 @@
 import Link from 'next/link';
-import { FaGithub, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
-import { SiMalt } from 'react-icons/si';
+import {
+  GitHubIcon,
+  LinkedInIcon,
+  WhatsAppIcon,
+  MaltIcon,
+} from '@/components/icons/SocialIcons';
 
 const socials = [
-  { href: 'https://github.com/VictorNain26', icon: FaGithub, label: 'GitHub' },
-  { href: 'https://www.linkedin.com/in/victorlenain/', icon: FaLinkedin, label: 'LinkedIn' },
-  { href: 'https://www.malt.fr/profile/victorlenain', icon: SiMalt, label: 'Malt' },
+  { href: 'https://github.com/VictorNain26', Icon: GitHubIcon, label: 'GitHub' },
+  { href: 'https://www.linkedin.com/in/victorlenain/', Icon: LinkedInIcon, label: 'LinkedIn' },
+  { href: 'https://www.malt.fr/profile/victorlenain', Icon: MaltIcon, label: 'Malt' },
   {
     href: 'https://wa.me/33664422529?text=Bonjour%20Victor%2C%20je%20souhaiterais%20discuter%20d%27un%20projet%20avec%20vous',
-    icon: FaWhatsapp,
+    Icon: WhatsAppIcon,
     label: 'WhatsApp',
   },
 ];
@@ -25,34 +29,26 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/[0.06] bg-[#0e082e]/80 backdrop-blur-sm">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-8 lg:px-20">
-        {/* Top row — nav + socials */}
         <div className="flex flex-col items-center gap-8 sm:flex-row sm:justify-between">
-          {/* Nav links */}
-          <nav aria-label="Footer" className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-500">
+          <nav
+            aria-label="Footer"
+            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-500"
+          >
             {navLinks.map(({ href, label, isRoute }) =>
-              isRoute ? (
-                <Link
-                  key={label}
-                  className="transition-colors hover:text-gray-300"
-                  href={href}
-                >
+              isRoute === true ? (
+                <Link key={label} className="transition-colors hover:text-gray-300" href={href}>
                   {label}
                 </Link>
               ) : (
-                <a
-                  key={label}
-                  className="transition-colors hover:text-gray-300"
-                  href={href}
-                >
+                <a key={label} className="transition-colors hover:text-gray-300" href={href}>
                   {label}
                 </a>
               ),
             )}
           </nav>
 
-          {/* Socials */}
           <div className="flex items-center gap-2">
-            {socials.map(({ href, label, icon: Icon }) => (
+            {socials.map(({ href, label, Icon }) => (
               <a
                 key={label}
                 aria-label={label}
@@ -67,12 +63,10 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Separator */}
         <div className="my-8 h-px bg-white/[0.06]" />
 
-        {/* Bottom row — legal */}
         <div className="flex flex-col items-center gap-2 text-center text-xs text-gray-600 sm:flex-row sm:justify-between sm:text-left">
-          <span>&copy; {new Date().getFullYear()} Victor Lenain</span>
+          <span>&copy; {new Date().getFullYear().toString()} Victor Lenain</span>
           <span>SIRET 937 817 914 00016 &middot; Ivry-sur-Seine, France</span>
         </div>
       </div>

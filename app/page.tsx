@@ -21,11 +21,11 @@ export default function Home() {
     }));
 
   return (
-    <main className="space-y-16 sm:space-y-24 lg:space-y-32" id="main">
+    <main className="space-y-14 sm:space-y-20 lg:space-y-24" id="main">
       <Hero />
       <Services />
-      <Process />
       <Projects />
+      <Process />
       <FAQ />
       <LatestPosts posts={latestPosts} />
       <Contact />
