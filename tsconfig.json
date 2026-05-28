@@ -38,8 +38,8 @@
     "noStrictGenericChecks": false,
     "suppressExcessPropertyErrors": false,
     "suppressImplicitAnyIndexErrors": false,
-    /* Module Resolution */
-    "baseUrl": ".",
+    /* Module Resolution (paths résolus relativement au tsconfig — plus de
+     * baseUrl, déprécié en TS 6+). */
     "paths": {
       "@/*": [
         "./*"
