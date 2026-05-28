@@ -25,15 +25,17 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-5xl">
-        <FadeOnView className="mb-7 flex flex-wrap items-center gap-3">
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/[0.06] px-3 py-1.5 text-xs font-medium text-emerald-300 backdrop-blur-sm">
+        {/* Rail haut : ligne de statut en monospace (signature documentaire). */}
+        <FadeOnView className="label-mono mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-gray-400">
+          <span className="inline-flex items-center gap-2 text-emerald-300">
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
             </span>
             Disponible
           </span>
-          <span className="text-xs text-gray-500">Paris · remote France</span>
+          <span aria-hidden="true" className="text-gray-700">/</span>
+          <span>Paris — Remote France</span>
         </FadeOnView>
 
         <FadeOnView
@@ -75,6 +77,20 @@ export default function Hero() {
           >
             ou par WhatsApp →
           </a>
+        </FadeOnView>
+
+        {/* Rail bas : « fiche technique » en monospace, prolongée d'un filet. */}
+        <FadeOnView
+          className="mt-14 flex items-center gap-4 border-t border-line-2 pt-6"
+          delay={0.2}
+        >
+          <p className="label-mono flex flex-wrap items-center gap-x-3 gap-y-1.5 text-gray-500">
+            <span>Fullstack + IA</span>
+            <span aria-hidden="true" className="text-gray-700">·</span>
+            <span>4 ans en prod</span>
+            <span aria-hidden="true" className="text-gray-700">·</span>
+            <span className="text-gray-400">Next / Django / Rails / FastAPI</span>
+          </p>
         </FadeOnView>
       </div>
     </section>

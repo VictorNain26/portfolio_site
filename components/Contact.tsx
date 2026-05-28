@@ -13,6 +13,9 @@ export default function Contact() {
         />
 
         <div className="relative">
+          <p className="label-mono mb-4 text-brand-accent">
+            06<span className="mx-2 text-gray-600">/</span>Contact
+          </p>
           <h2 className="font-display mb-4 text-3xl font-bold text-white sm:text-4xl">
             Parlons de votre projet
           </h2>

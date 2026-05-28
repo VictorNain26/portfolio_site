@@ -1,5 +1,6 @@
 import { MessageCircle, FileText, Code, Rocket } from 'lucide-react';
 import Section from '@/components/Section';
+import SectionHeading from '@/components/SectionHeading';
 import FadeOnView from '@/components/FadeOnView';
 
 const steps = [
@@ -40,14 +41,11 @@ const steps = [
 export default function Process() {
   return (
     <Section className="scroll-mt-28 pb-28" id="process">
-      <FadeOnView className="mb-16 max-w-2xl">
-        <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-brand-accent">
-          Comment ça démarre
-        </p>
-        <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl lg:text-5xl">
-          Quatre étapes, pas de zone d&apos;ombre.
-        </h2>
-      </FadeOnView>
+      <SectionHeading
+        index="03"
+        label="Méthode"
+        title="Quatre étapes, pas de zone d'ombre."
+      />
 
       {/* Mobile : vertical timeline ; Desktop : 4 cards alignées en grid avec gap large */}
       <ol className="relative grid gap-y-10 lg:grid-cols-4 lg:gap-x-12 lg:gap-y-0">
@@ -85,12 +83,8 @@ export default function Process() {
               )}
 
               <div className="flex items-baseline gap-3">
-                <span className="font-display text-xs font-semibold tracking-[0.18em] text-brand-accent">
-                  {step.number}
-                </span>
-                <span className="text-[11px] font-medium uppercase tracking-wider text-amber-400/80">
-                  {step.duration}
-                </span>
+                <span className="label-mono text-brand-accent">{step.number}</span>
+                <span className="label-mono text-amber-400/80">{step.duration}</span>
               </div>
 
               <h3 className="mt-2 text-lg font-semibold text-white">{step.title}</h3>

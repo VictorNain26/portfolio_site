@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import Section from '@/components/Section';
+import SectionHeading from '@/components/SectionHeading';
 import FadeOnView from '@/components/FadeOnView';
 import { cn } from '@/lib/utils';
 
@@ -48,14 +49,11 @@ export default function FAQ() {
 
   return (
     <Section className="scroll-mt-28" id="faq">
-      <FadeOnView className="mb-14 max-w-2xl">
-        <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-brand-accent">
-          Questions fréquentes
-        </p>
-        <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl lg:text-5xl">
-          Les réponses aux questions que vous vous posez probablement.
-        </h2>
-      </FadeOnView>
+      <SectionHeading
+        index="04"
+        label="FAQ"
+        title="Les réponses aux questions que vous vous posez probablement."
+      />
 
       <div className="mx-auto max-w-3xl space-y-3">
         {faqItems.map((item, index) => {

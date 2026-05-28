@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Section from '@/components/Section';
+import SectionHeading from '@/components/SectionHeading';
 import FadeOnView from '@/components/FadeOnView';
 
 type Post = {
@@ -15,23 +16,20 @@ export default function LatestPosts({ posts }: { posts: Post[] }) {
 
   return (
     <Section className="scroll-mt-28 pb-12">
-      <FadeOnView className="mb-10 flex items-end justify-between">
-        <div>
-          <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-brand-accent">
-            Derniers articles
-          </p>
-          <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl">
-            Je partage ce que j&apos;apprends.
-          </h2>
-        </div>
-        <Link
-          className="hidden items-center gap-1.5 text-sm font-medium text-gray-400 transition-colors hover:text-brand-accent sm:inline-flex"
-          href="/blog"
-        >
-          Voir tout
-          <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-        </Link>
-      </FadeOnView>
+      <SectionHeading
+        index="05"
+        label="Journal"
+        title="Je partage ce que j'apprends."
+        aside={
+          <Link
+            className="hidden items-center gap-1.5 text-sm font-medium text-gray-400 transition-colors hover:text-brand-accent sm:inline-flex"
+            href="/blog"
+          >
+            Voir tout
+            <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+          </Link>
+        }
+      />
 
       <div className="grid gap-6 md:grid-cols-3">
         {posts.map((post, index) => (
@@ -40,7 +38,7 @@ export default function LatestPosts({ posts }: { posts: Post[] }) {
               className="group block h-full rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/20 hover:bg-surface-3"
               href={`/blog/${post.slug}`}
             >
-              <time className="text-xs font-medium text-gray-500" dateTime={post.publishedAt}>
+              <time className="font-mono text-xs font-medium text-gray-500" dateTime={post.publishedAt}>
                 {new Date(post.publishedAt).toLocaleDateString('fr-FR', {
                   day: 'numeric',
                   month: 'long',

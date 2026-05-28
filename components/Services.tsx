@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import Section from '@/components/Section';
+import SectionHeading from '@/components/SectionHeading';
 import FadeOnView from '@/components/FadeOnView';
 import { services } from '@/app/services/content';
 
@@ -14,17 +15,12 @@ export default function Services() {
 
   return (
     <Section className="scroll-mt-28 pb-28" id="services">
-      <FadeOnView className="mb-16 max-w-3xl">
-        <p className="text-eyebrow mb-3 text-brand-accent">
-          Ce que je fais
-        </p>
-        <h2 className="heading-2 text-white">
-          Je code la couche IA dans votre stack existante.
-        </h2>
-        <p className="text-lead mt-5 text-gray-400">
-          Vous tournez sur Django, Rails, Next, Node ou FastAPI. J&apos;ajoute la couche IA dessus sans refonte et je mesure ce qui sort. Trois prestations IA, trois prestations web, le même code applicatif derrière.
-        </p>
-      </FadeOnView>
+      <SectionHeading
+        index="01"
+        label="Services"
+        lead="Vous tournez sur Django, Rails, Next, Node ou FastAPI. J'ajoute la couche IA dessus sans refonte et je mesure ce qui sort. Trois prestations IA, trois prestations web, le même code applicatif derrière."
+        title="Je code la couche IA dans votre stack existante."
+      />
 
       {/* 3 services IA phares, colonnes égales */}
       <div className="grid gap-5 lg:grid-cols-3">
@@ -83,9 +79,7 @@ export default function Services() {
 
       {/* Secondaires : plus discret, plus dense */}
       <FadeOnView className="mt-12" delay={0.2}>
-        <p className="mb-5 text-xs font-medium uppercase tracking-[0.18em] text-gray-500">
-          Aussi disponible pour
-        </p>
+        <p className="label-mono mb-5 text-gray-500">Aussi disponible pour</p>
         <div className="grid gap-4 sm:grid-cols-3">
           {secondary.map((service) => {
             const Icon = service.icon;

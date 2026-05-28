@@ -1,5 +1,5 @@
 import './globals.css';
-import { Inter, Geist } from 'next/font/google';
+import { Inter, Geist, Geist_Mono } from 'next/font/google';
 import { type ReactNode, Suspense } from 'react';
 import Script from 'next/script';
 
@@ -25,6 +25,12 @@ const geist = Geist({
   variable: '--font-geist',
   display: 'swap',
   weight: ['400', '500', '600', '700', '800'],
+});
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-geist-mono',
+  display: 'swap',
+  weight: ['400', '500'],
 });
 
 /* -------------------------------------------------------------------------- */
@@ -104,7 +110,7 @@ export const metadata = {
 /* -------------------------------------------------------------------------- */
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html className={`${inter.variable} ${geist.variable}`} lang="fr">
+    <html className={`${inter.variable} ${geist.variable} ${geistMono.variable}`} lang="fr">
       <head>
         <MetaTags />
         <JsonLdScripts />
