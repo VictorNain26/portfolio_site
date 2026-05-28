@@ -36,10 +36,10 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "tailwind-merge": "^3.6.0",
-    "zod": "^3.25.76"
+    "zod": "^4"
   },
   "devDependencies": {
-    "@content-collections/core": "^0.9.1",
+    "@content-collections/core": "^0.15.1",
     "@content-collections/mdx": "^0.2.2",
     "@content-collections/next": "^0.2.11",
     "@eslint/eslintrc": "^3.3.5",
