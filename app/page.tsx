@@ -10,10 +10,10 @@ import Contact from '@/components/Contact';
 export default function Home() {
   const now = new Date();
   const latestPosts = allPosts
-    .filter((post) => new Date(post.publishedAt) <= now)
+    .filter(post => new Date(post.publishedAt) <= now)
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, 3)
-    .map((post) => ({
+    .map(post => ({
       slug: post.slug,
       title: post.title,
       summary: post.summary,

@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <main className="grid min-h-screen place-content-center justify-items-center gap-8 px-4 text-center">
       {/* Titre – gradient identique au Hero */}
-      <h1 className="font-display bg-gradient-to-br from-[#818cf8] via-[#6366f1] to-[#4f46e5] bg-clip-text text-5xl leading-snug font-extrabold tracking-tight text-transparent sm:text-6xl lg:text-7xl">
+      <h1 className="bg-gradient-to-br from-[#818cf8] via-[#6366f1] to-[#4f46e5] bg-clip-text font-display text-5xl leading-snug font-extrabold tracking-tight text-transparent sm:text-6xl lg:text-7xl">
         404&nbsp;·&nbsp;Page introuvable
       </h1>
 

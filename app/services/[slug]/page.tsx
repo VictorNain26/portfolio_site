@@ -11,7 +11,7 @@ import ServiceJsonLd from '../_components/ServiceJsonLd';
 const BASE_URL = 'https://victorlenain.fr';
 
 export function generateStaticParams() {
-  return services.map((s) => ({ slug: s.slug }));
+  return services.map(s => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({
@@ -43,11 +43,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ServicePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const service = getService(slug);
   if (!service) notFound();
@@ -61,8 +57,13 @@ export default async function ServicePage({
 
       <main className="relative pt-24 sm:pt-28" id="main">
         {/* Glow accent en haut de page selon la couleur du service */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 -z-10 overflow-hidden">
-          <div className={`absolute -top-32 left-1/2 h-[420px] w-[800px] -translate-x-1/2 rounded-full blur-[140px] ${accent.glow}`} />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 -z-10 overflow-hidden"
+        >
+          <div
+            className={`absolute -top-32 left-1/2 h-[420px] w-[800px] -translate-x-1/2 rounded-full blur-[140px] ${accent.glow}`}
+          />
         </div>
 
         {/* Breadcrumb */}
@@ -90,11 +91,11 @@ export default async function ServicePage({
               className={`mb-6 inline-flex items-center gap-3 rounded-full border px-4 py-2 ${accent.border} ${accent.bg}`}
             >
               <Icon aria-hidden="true" className={`h-4 w-4 ${accent.text}`} />
-              <span className={`text-xs font-medium uppercase tracking-[0.18em] ${accent.text}`}>
+              <span className={`text-xs font-medium tracking-[0.18em] uppercase ${accent.text}`}>
                 {service.shortTitle}
               </span>
             </div>
-            <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl leading-[1.05] font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
               {service.title}
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-gray-300 sm:text-xl">
@@ -102,15 +103,12 @@ export default async function ServicePage({
             </p>
 
             <ul className="mt-8 grid gap-3 sm:grid-cols-3">
-              {service.highlights.map((h) => (
+              {service.highlights.map(h => (
                 <li
                   key={h}
                   className="flex items-start gap-2 rounded-xl border border-line-2 bg-surface-1 p-4 text-sm text-gray-300"
                 >
-                  <Check
-                    aria-hidden="true"
-                    className={`mt-0.5 h-4 w-4 shrink-0 ${accent.text}`}
-                  />
+                  <Check aria-hidden="true" className={`mt-0.5 h-4 w-4 shrink-0 ${accent.text}`} />
                   <span>{h}</span>
                 </li>
               ))}
@@ -118,7 +116,7 @@ export default async function ServicePage({
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <CalPopupButton
-                className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+                className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
                 data-umami-event={`cta-service-${service.slug}-cal`}
               >
                 <Calendar aria-hidden="true" className="h-4 w-4" />
@@ -142,7 +140,7 @@ export default async function ServicePage({
         <Section className="pb-16">
           <div className="grid gap-10 lg:grid-cols-2">
             <FadeOnView delay={0.05}>
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-warm/80">
+              <p className="mb-3 text-xs font-medium tracking-[0.18em] text-warm/80 uppercase">
                 Le contexte
               </p>
               <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
@@ -156,9 +154,7 @@ export default async function ServicePage({
             </FadeOnView>
 
             <FadeOnView delay={0.1}>
-              <p
-                className={`mb-3 text-xs font-medium uppercase tracking-[0.18em] ${accent.text}`}
-              >
+              <p className={`mb-3 text-xs font-medium tracking-[0.18em] uppercase ${accent.text}`}>
                 Mon approche
               </p>
               <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
@@ -176,11 +172,11 @@ export default async function ServicePage({
         {/* Stack */}
         <Section className="pb-16">
           <FadeOnView className="max-w-3xl">
-            <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-gray-500">
+            <p className="mb-3 text-xs font-medium tracking-[0.18em] text-gray-500 uppercase">
               Stack & outils
             </p>
             <div className="flex flex-wrap gap-2">
-              {service.stack.map((t) => (
+              {service.stack.map(t => (
                 <span
                   key={t}
                   className={`rounded-md border px-3 py-1.5 text-sm font-medium ${accent.chip}`}
@@ -195,10 +191,10 @@ export default async function ServicePage({
         {/* Use cases */}
         <Section className="pb-16">
           <FadeOnView className="mb-10 max-w-2xl">
-            <p className={`mb-3 text-xs font-medium uppercase tracking-[0.18em] ${accent.text}`}>
+            <p className={`mb-3 text-xs font-medium tracking-[0.18em] uppercase ${accent.text}`}>
               Cas d&apos;usage
             </p>
-            <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl">
+            <h2 className="font-display text-3xl leading-[1.1] font-bold text-white sm:text-4xl">
               Ce que ça donne en vrai
             </h2>
           </FadeOnView>
@@ -226,10 +222,10 @@ export default async function ServicePage({
         {service.faq.length > 0 && (
           <Section className="pb-16">
             <FadeOnView className="mb-10 max-w-2xl">
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-brand-accent">
+              <p className="mb-3 text-xs font-medium tracking-[0.18em] text-brand-accent uppercase">
                 Questions fréquentes
               </p>
-              <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl">
+              <h2 className="font-display text-3xl leading-[1.1] font-bold text-white sm:text-4xl">
                 Ce qu&apos;on me demande sur ce sujet
               </h2>
             </FadeOnView>
@@ -260,11 +256,12 @@ export default async function ServicePage({
               On en parle ?
             </h2>
             <p className="mx-auto mt-4 max-w-md text-base text-gray-400">
-              Premier échange gratuit, sans engagement. On regarde ensemble si ce service est le bon pour votre besoin.
+              Premier échange gratuit, sans engagement. On regarde ensemble si ce service est le bon
+              pour votre besoin.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <CalPopupButton
-                className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+                className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
                 data-umami-event={`cta-service-${service.slug}-cal-bottom`}
               >
                 <Calendar aria-hidden="true" className="h-4 w-4" />

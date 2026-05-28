@@ -24,13 +24,12 @@ export default function Error({
 
   return (
     <main className="grid min-h-screen place-content-center justify-items-center gap-8 px-4 text-center">
-      <h1 className="font-display bg-gradient-to-br from-[#818cf8] via-[#6366f1] to-[#4f46e5] bg-clip-text text-5xl leading-snug font-extrabold tracking-tight text-transparent sm:text-6xl">
+      <h1 className="bg-gradient-to-br from-[#818cf8] via-[#6366f1] to-[#4f46e5] bg-clip-text font-display text-5xl leading-snug font-extrabold tracking-tight text-transparent sm:text-6xl">
         Erreur technique
       </h1>
 
       <p className="max-w-xl text-base leading-relaxed text-gray-300 sm:text-lg">
-        Une erreur inattendue s&apos;est produite. Veuillez réessayer ou revenir
-        à l&apos;accueil.
+        Une erreur inattendue s&apos;est produite. Veuillez réessayer ou revenir à l&apos;accueil.
       </p>
 
       <div className="flex gap-4">

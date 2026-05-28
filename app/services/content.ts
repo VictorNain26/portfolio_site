@@ -54,7 +54,7 @@ export const services: Service[] = [
     shortTitle: 'Agents IA',
     title: 'Agents IA et assistants conversationnels sur mesure',
     tagline:
-      "Un agent qui exécute trois workflows précis dans votre produit, pas un chatbot vitrine de plus.",
+      'Un agent qui exécute trois workflows précis dans votre produit, pas un chatbot vitrine de plus.',
     metaDescription:
       "Intégration d'agents conversationnels dans votre stack web : appels d'outils internes, garde-fous, eval continue. Développeur full-stack freelance, Paris.",
     keywords: [
@@ -113,10 +113,10 @@ export const services: Service[] = [
       {
         question: 'Combien coûte un agent IA en production par mois ?',
         answer:
-          "Ça dépend du volume et du modèle. Un agent qui traite environ 1 000 requêtes par mois sur un modèle milieu de gamme tourne entre 30 et 200 € de tokens. Je vous chiffre au cadrage avec vos hypothèses de volume écrites, pour que vous puissiez challenger ligne par ligne.",
+          'Ça dépend du volume et du modèle. Un agent qui traite environ 1 000 requêtes par mois sur un modèle milieu de gamme tourne entre 30 et 200 € de tokens. Je vous chiffre au cadrage avec vos hypothèses de volume écrites, pour que vous puissiez challenger ligne par ligne.',
       },
       {
-        question: "Comment éviter les hallucinations ?",
+        question: 'Comment éviter les hallucinations ?',
         answer:
           "On ne les supprime pas, on les rend rares et détectables. Réponses contraintes par les outils que l'agent peut appeler (pas de génération libre), citation des sources via RAG quand il faut puiser dans un corpus, eval continue sur un jeu de cas connus qui détecte les régressions avant la prod. Fallback humain prévu sur les cas où la confiance n'est pas atteinte.",
       },
@@ -136,7 +136,7 @@ export const services: Service[] = [
     tagline:
       'Vos documents internes interrogeables en langage naturel, avec citation obligatoire vers la source.',
     metaDescription:
-      "Recherche sémantique sur vos documents internes : pgvector ou Qdrant, embeddings adaptés à votre langue, citations vérifiables, eval continue. Freelance Paris.",
+      'Recherche sémantique sur vos documents internes : pgvector ou Qdrant, embeddings adaptés à votre langue, citations vérifiables, eval continue. Freelance Paris.',
     keywords: [
       'RAG',
       'retrieval augmented generation',
@@ -155,7 +155,7 @@ export const services: Service[] = [
       'Eval recall@k et faithfulness mesurés à chaque déploiement',
     ],
     problem: [
-      "Une PME de 50 personnes a trois ans de documents éparpillés sur Drive, Notion et Slack. Personne ne retrouve la procédure support de l'an dernier, le contrat signé avec ce client, ou la décision technique de 2024. Le réflexe \"on demande à Marie\" ne scale pas, et Marie part en vacances.",
+      'Une PME de 50 personnes a trois ans de documents éparpillés sur Drive, Notion et Slack. Personne ne retrouve la procédure support de l\'an dernier, le contrat signé avec ce client, ou la décision technique de 2024. Le réflexe "on demande à Marie" ne scale pas, et Marie part en vacances.',
       "Brancher un assistant générique sur un export Drive donne des réponses qui ressemblent à la vérité et qui sont fausses. C'est pire qu'une absence de réponse parce que personne ne sait que c'est faux.",
     ],
     approach: [
@@ -183,7 +183,7 @@ export const services: Service[] = [
       {
         title: 'Onboarding développeurs sur codebase legacy',
         description:
-          "Indexation de la doc, des PR mergées et des ADR de votre codebase. Un nouveau dev pose sa question, obtient une réponse avec liens vers le code concerné. Les seniors arrêtent de répéter les mêmes explications trois fois par semaine.",
+          'Indexation de la doc, des PR mergées et des ADR de votre codebase. Un nouveau dev pose sa question, obtient une réponse avec liens vers le code concerné. Les seniors arrêtent de répéter les mêmes explications trois fois par semaine.',
       },
       {
         title: 'Support produit B2B sur documentation technique',
@@ -198,7 +198,7 @@ export const services: Service[] = [
           "pgvector si vous avez déjà PostgreSQL et moins d'un million de chunks. Une dépendance en moins à opérer, des requêtes hybrides faciles avec le reste de votre schéma métier. Qdrant au-delà, ou quand vous avez besoin de filtrage multi-tenant fin ou de réplicas dédiés à la recherche.",
       },
       {
-        question: "Comment vous garantissez que les réponses ne sont pas hallucinées ?",
+        question: 'Comment vous garantissez que les réponses ne sont pas hallucinées ?',
         answer:
           "Citation obligatoire dans le prompt système, vérification post-génération que chaque citation existe dans les sources retournées, eval continue sur un dataset de questions de référence. Une réponse non sourçable est rejetée ou marquée incertaine côté UI plutôt qu'affichée comme un fait.",
       },
@@ -216,9 +216,9 @@ export const services: Service[] = [
     shortTitle: 'Automatisations LLM',
     title: 'Automatisations LLM sur mesure pour vos processus métier',
     tagline:
-      "Pipelines en prod pour vos process répétitifs : classification, extraction, scoring, génération encadrée.",
+      'Pipelines en prod pour vos process répétitifs : classification, extraction, scoring, génération encadrée.',
     metaDescription:
-      "Pipelines LLM en production sur vos process métier : classification, extraction structurée, scoring, génération. Coûts tokens trackés, eval automatique, retry.",
+      'Pipelines LLM en production sur vos process métier : classification, extraction structurée, scoring, génération. Coûts tokens trackés, eval automatique, retry.',
     keywords: [
       'automatisation LLM',
       'pipeline LLM',
@@ -239,8 +239,8 @@ export const services: Service[] = [
       "Le piège, c'est d'empiler les briques no-code jusqu'à ce que la facture mensuelle dépasse le coût d'un dev. Les vrais workflows demandent du code pour le retry, le batch, le monitoring et un coût maîtrisé à long terme.",
     ],
     approach: [
-      "Pipeline codée en Python ou Node.js comme du vrai code : sortie typée et validée par schéma (Pydantic, Zod), tests sur les cas connus, retry avec backoff, batch quand le volume le justifie. Coûts tokens estimés au cadrage avec hypothèses écrites, puis trackés en prod sur un dashboard que vous lisez sans moi.",
-      "Eval automatique sur un dataset de référence : si la qualité baisse après un changement de modèle ou un ajustement de prompt, vous le voyez avant la prod. Chaque choix (modèle, prompt, batch size) est justifié par des chiffres mesurés sur votre corpus, pas par mode.",
+      'Pipeline codée en Python ou Node.js comme du vrai code : sortie typée et validée par schéma (Pydantic, Zod), tests sur les cas connus, retry avec backoff, batch quand le volume le justifie. Coûts tokens estimés au cadrage avec hypothèses écrites, puis trackés en prod sur un dashboard que vous lisez sans moi.',
+      'Eval automatique sur un dataset de référence : si la qualité baisse après un changement de modèle ou un ajustement de prompt, vous le voyez avant la prod. Chaque choix (modèle, prompt, batch size) est justifié par des chiffres mesurés sur votre corpus, pas par mode.',
     ],
     stack: [
       'Python',
@@ -297,7 +297,7 @@ export const services: Service[] = [
     shortTitle: 'Applications web',
     title: 'Applications web sur mesure (Next.js, TypeScript, Node.js)',
     tagline:
-      "Sites vitrines, applications métier, plateformes SaaS. Du cadrage au déploiement, par un dev qui code en Next.js et Rails depuis 4 ans.",
+      'Sites vitrines, applications métier, plateformes SaaS. Du cadrage au déploiement, par un dev qui code en Next.js et Rails depuis 4 ans.',
     metaDescription:
       "Développeur full-stack freelance à Paris. Applications web sur mesure en Next.js, TypeScript, Node.js, Ruby on Rails et PostgreSQL. 4 ans d'expérience, dont 2 sur du Rails métier.",
     keywords: [
@@ -315,11 +315,11 @@ export const services: Service[] = [
       "Couche IA branchée sur l'existant quand elle apporte une vraie valeur",
     ],
     problem: [
-      "Vous avez un produit, un service, ou une équipe interne qui galère sur un outil maison vieillissant. Vous cherchez un dev qui prend le projet en main du cadrage à la mise en ligne, qui code lisible, et qui sait quand il faut rester simple.",
+      'Vous avez un produit, un service, ou une équipe interne qui galère sur un outil maison vieillissant. Vous cherchez un dev qui prend le projet en main du cadrage à la mise en ligne, qui code lisible, et qui sait quand il faut rester simple.',
       "La plupart des prestas vous vendent un template WordPress maquillé ou une SPA React de 4 Mo pour un site vitrine. Les deux sont à côté de la plaque. Une application web sur mesure, c'est du code lu plus souvent qu'il n'est écrit, et déployé sans drame.",
     ],
     approach: [
-      "Je prends le projet du cadrage au déploiement. Stack selon le contexte : Next.js 15 + TypeScript pour un produit moderne, Rails 7 + PostgreSQL si vous avez besoin de monter vite sur du métier, Node.js pour les APIs. Tests sur les parties qui le méritent, pas sur le CRUD trivial.",
+      'Je prends le projet du cadrage au déploiement. Stack selon le contexte : Next.js 15 + TypeScript pour un produit moderne, Rails 7 + PostgreSQL si vous avez besoin de monter vite sur du métier, Node.js pour les APIs. Tests sur les parties qui le méritent, pas sur le CRUD trivial.',
       "Si vous voulez greffer du LLM sur l'app (résumé automatique, classification d'inputs, recherche sémantique sur vos contenus), on en parle au cadrage et on chiffre. Sinon, je livre l'app web sans pousser de l'IA partout. Le but, c'est que le projet sorte et tourne.",
     ],
     stack: [
@@ -342,7 +342,7 @@ export const services: Service[] = [
       {
         title: 'Site vitrine performant et indexable',
         description:
-          "Pas de SPA quand un rendu serveur suffit. Core Web Vitals dans le vert, indexation propre, accessibilité prise au sérieux dès la maquette, pas refondue à la fin.",
+          'Pas de SPA quand un rendu serveur suffit. Core Web Vitals dans le vert, indexation propre, accessibilité prise au sérieux dès la maquette, pas refondue à la fin.',
       },
       {
         title: 'Application interne métier',
@@ -359,7 +359,7 @@ export const services: Service[] = [
       {
         question: 'Pour une application métier ?',
         answer:
-          "1 à 3 mois en livraison itérative. Première version utilisable en 4 à 6 semaines, puis points hebdo pour ajuster. Pas de tunnel de 4 mois où vous ne voyez rien.",
+          '1 à 3 mois en livraison itérative. Première version utilisable en 4 à 6 semaines, puis points hebdo pour ajuster. Pas de tunnel de 4 mois où vous ne voyez rien.',
       },
     ],
     ctaLabel: 'Cadrer un projet web',
@@ -372,7 +372,7 @@ export const services: Service[] = [
     tagline:
       "Site lent, framework abandonné, bug en prod qui revient. Vous n'avez pas besoin d'un projet de 3 mois, juste de quelqu'un qui ouvre le capot et répare.",
     metaDescription:
-      "Interventions ponctuelles sur site existant : migration de framework, optimisation Core Web Vitals, fix de bug en prod, ajout de fonctionnalité. Demi-journée minimum, devis avant intervention.",
+      'Interventions ponctuelles sur site existant : migration de framework, optimisation Core Web Vitals, fix de bug en prod, ajout de fonctionnalité. Demi-journée minimum, devis avant intervention.',
     keywords: [
       'refonte site web',
       'migration framework',
@@ -393,14 +393,23 @@ export const services: Service[] = [
     ],
     approach: [
       "Demi-journée minimum. D'abord 1 à 2 heures d'audit pour lire le code, comprendre l'historique et identifier la cause racine. Ensuite un plan chiffré : ce qu'on touche, ce qu'on laisse, le risque associé. Vous validez, j'exécute. Pas de surprise sur la facture.",
-      "Je préfère réparer que réécrire. Une migration de framework se fait en branches, par modules, avec rollback possible à chaque étape. Une optimisation Core Web Vitals se mesure avant et après, avec des chiffres. Un fix en prod se livre avec un test qui empêche la régression.",
+      'Je préfère réparer que réécrire. Une migration de framework se fait en branches, par modules, avec rollback possible à chaque étape. Une optimisation Core Web Vitals se mesure avant et après, avec des chiffres. Un fix en prod se livre avec un test qui empêche la régression.',
     ],
-    stack: ['Next.js', 'React', 'Vue', 'Ruby on Rails', 'Node.js', 'WordPress', 'Python', 'PostgreSQL'],
+    stack: [
+      'Next.js',
+      'React',
+      'Vue',
+      'Ruby on Rails',
+      'Node.js',
+      'WordPress',
+      'Python',
+      'PostgreSQL',
+    ],
     useCases: [
       {
         title: 'Migration React 17 → 19 ou Next.js majeur',
         description:
-          "Plan progressif, branches feature, déploiement par étapes. Pas de big bang du vendredi soir qui casse la prod du lundi matin.",
+          'Plan progressif, branches feature, déploiement par étapes. Pas de big bang du vendredi soir qui casse la prod du lundi matin.',
       },
       {
         title: "Refonte visuelle d'un site vitrine vieillissant",
@@ -422,7 +431,7 @@ export const services: Service[] = [
       {
         question: 'Combien coûte une intervention courte ?',
         answer:
-          "TJM à 500 € HT, facturable à la demi-journée (250 €). Un fix simple tient souvent en une demi-journée. Sur un périmètre clair, je peux donner un forfait fixe au lieu du TJM.",
+          'TJM à 500 € HT, facturable à la demi-journée (250 €). Un fix simple tient souvent en une demi-journée. Sur un périmètre clair, je peux donner un forfait fixe au lieu du TJM.',
       },
     ],
     ctaLabel: 'Décrire votre besoin',
@@ -458,7 +467,17 @@ export const services: Service[] = [
       "Je lis votre code, vos prompts, votre architecture, vos coûts actuels. Je liste les choix qui vont vous coûter cher s'ils sont mal pris : modèle, structure de prompt, infra de retrieval, évaluation, fournisseur. Puis je vous remets une note de 4 à 10 pages, signée, avec recommandations classées par priorité.",
       "Si après audit ma conclusion c'est que l'IA n'apporte rien à votre cas et qu'une règle métier ou un script Python suffit, je l'écris dans la note. Vous me payez l'audit, pas un argumentaire pour vendre la mission qui suit.",
     ],
-    stack: ['Anthropic', 'OpenAI', 'Mistral', 'Llama auto-hébergé', 'pgvector', 'Qdrant', 'LangChain', 'Ragas', 'Langfuse'],
+    stack: [
+      'Anthropic',
+      'OpenAI',
+      'Mistral',
+      'Llama auto-hébergé',
+      'pgvector',
+      'Qdrant',
+      'LangChain',
+      'Ragas',
+      'Langfuse',
+    ],
     useCases: [
       {
         title: "Cadrage d'un prototype IA",
@@ -468,7 +487,7 @@ export const services: Service[] = [
       {
         title: "Audit d'un projet IA déjà lancé",
         description:
-          "3 à 5 jours. Revue du code et des prompts, listing des risques (coûts qui dérapent, hallucinations non détectées, latence, dépendance fournisseur), actions classées par impact et effort.",
+          '3 à 5 jours. Revue du code et des prompts, listing des risques (coûts qui dérapent, hallucinations non détectées, latence, dépendance fournisseur), actions classées par impact et effort.',
       },
       {
         title: 'Avis sur un choix de stack',
@@ -483,7 +502,7 @@ export const services: Service[] = [
           "Oui, et c'est même le but. Un audit a de la valeur uniquement s'il est indépendant de la mission qui suivrait. Si après lecture je pense que le projet n'a pas de sens, ou qu'un autre presta serait mieux placé, c'est dans la note. Vous payez mon avis, pas ma prochaine facture.",
       },
       {
-        question: "Combien coûte un audit ?",
+        question: 'Combien coûte un audit ?',
         answer:
           "TJM à 500 € HT. Un avis tranché sur un choix de stack tient en 1 à 2 jours (500 à 1 000 €). Un audit léger sur projet existant : 3 jours (1 500 €). Un audit approfondi avec lecture de code et revue d'archi : 5 jours (2 500 €). Devis fixe avant de commencer.",
       },
@@ -494,7 +513,7 @@ export const services: Service[] = [
 ];
 
 export function getService(slug: string): Service | undefined {
-  return services.find((s) => s.slug === slug);
+  return services.find(s => s.slug === slug);
 }
 
 /** Tailwind classes per accent. The Tailwind scanner reads source files as

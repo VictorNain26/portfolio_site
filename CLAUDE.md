@@ -78,6 +78,7 @@ lib/                # Utilitaires
 ### Configuration ESLint
 
 Le projet utilise ESLint flat config (`eslint.config.mjs`) avec :
+
 - `next/core-web-vitals`
 - `next/typescript`
 - Règles personnalisées pour TypeScript et React

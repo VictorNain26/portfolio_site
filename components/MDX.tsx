@@ -25,8 +25,12 @@ const components: MDXComponents = {
       height?: number | string;
     };
 
-    const w = typeof width === 'number' || typeof width === 'string' ? Number(width) : DEFAULT_IMAGE_WIDTH;
-    const h = typeof height === 'number' || typeof height === 'string' ? Number(height) : DEFAULT_IMAGE_HEIGHT;
+    const w =
+      typeof width === 'number' || typeof width === 'string' ? Number(width) : DEFAULT_IMAGE_WIDTH;
+    const h =
+      typeof height === 'number' || typeof height === 'string'
+        ? Number(height)
+        : DEFAULT_IMAGE_HEIGHT;
 
     return (
       <figure className="my-8">
@@ -47,30 +51,24 @@ const components: MDXComponents = {
 
   /* -------- tableaux responsive -------- */
   table: ({ children }) => (
-    <div className="my-8 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+    <div className="-mx-4 my-8 overflow-x-auto px-4 sm:mx-0 sm:px-0">
       <table className="w-full min-w-[480px] border-collapse overflow-hidden rounded-xl border border-line-3 text-sm">
         {children}
       </table>
     </div>
   ),
-  thead: ({ children }) => (
-    <thead className="bg-surface-3">{children}</thead>
-  ),
-  tr: ({ children }) => (
-    <tr className="border-b border-line-2 last:border-b-0">{children}</tr>
-  ),
+  thead: ({ children }) => <thead className="bg-surface-3">{children}</thead>,
+  tr: ({ children }) => <tr className="border-b border-line-2 last:border-b-0">{children}</tr>,
   th: ({ children }) => (
-    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 sm:px-6">
+    <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase sm:px-6">
       {children}
     </th>
   ),
-  td: ({ children }) => (
-    <td className="px-4 py-3.5 text-sm text-gray-300 sm:px-6">{children}</td>
-  ),
+  td: ({ children }) => <td className="px-4 py-3.5 text-sm text-gray-300 sm:px-6">{children}</td>,
 
   /* -------- citations -------- */
   blockquote: ({ children }) => (
-    <blockquote className="my-8 rounded-r-xl border-l-4 border-indigo-500/60 bg-surface-1 py-4 pl-6 pr-4">
+    <blockquote className="my-8 rounded-r-xl border-l-4 border-indigo-500/60 bg-surface-1 py-4 pr-4 pl-6">
       <div className="text-gray-300 italic">{children}</div>
     </blockquote>
   ),
@@ -91,7 +89,7 @@ const components: MDXComponents = {
   /* -------- titres ancrables -------- */
   h2: ({ children }) => (
     <h2
-      className="font-display mt-16 mb-6 scroll-mt-28 text-2xl font-bold tracking-tight text-white"
+      className="mt-16 mb-6 scroll-mt-28 font-display text-2xl font-bold tracking-tight text-white"
       id={String(children).toLowerCase().replace(/\s+/g, '-')}
     >
       {children}

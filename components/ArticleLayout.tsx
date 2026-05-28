@@ -46,7 +46,7 @@ export default function ArticleLayout({
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
+            {post.tags.map(tag => (
               <span
                 key={tag}
                 className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-brand-accent"
@@ -57,19 +57,19 @@ export default function ArticleLayout({
           </div>
         )}
 
-        <h1 className="font-display text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-[1.15]">
+        <h1 className="font-display text-3xl leading-tight font-bold tracking-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-[1.15]">
           {post.title}
         </h1>
 
         <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500">
           <time dateTime={post.publishedAt}>{date}</time>
-          <span aria-hidden="true" className="text-gray-700">/</span>
+          <span aria-hidden="true" className="text-gray-700">
+            /
+          </span>
           <span>{post.readingTime} min de lecture</span>
         </div>
 
-        <p className="mt-6 text-lg leading-relaxed text-gray-300">
-          {post.summary}
-        </p>
+        <p className="mt-6 text-lg leading-relaxed text-gray-300">{post.summary}</p>
 
         {/* Separator */}
         <div className="mt-10 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
@@ -96,8 +96,8 @@ export default function ArticleLayout({
           <div>
             <p className="font-semibold text-white">Victor Lenain</p>
             <p className="mt-0.5 text-sm leading-relaxed text-gray-400">
-              Développeur full-stack freelance · Intégration IA · Paris.
-              Je greffe la couche IA sur votre stack web existante.
+              Développeur full-stack freelance · Intégration IA · Paris. Je greffe la couche IA sur
+              votre stack web existante.
             </p>
           </div>
         </div>
@@ -129,10 +129,10 @@ export default function ArticleLayout({
               className="group rounded-2xl border border-line-2 bg-surface-1 p-5 transition-all duration-300 hover:border-indigo-500/30 hover:bg-surface-3"
               href={`/blog/${prev.slug}`}
             >
-              <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
+              <p className="text-xs font-medium tracking-wider text-gray-500 uppercase">
                 <span aria-hidden="true">← </span>Précédent
               </p>
-              <p className="mt-2 text-sm font-medium leading-snug text-white transition-colors group-hover:text-brand-accent">
+              <p className="mt-2 text-sm leading-snug font-medium text-white transition-colors group-hover:text-brand-accent">
                 {prev.title}
               </p>
             </Link>
@@ -144,10 +144,10 @@ export default function ArticleLayout({
               className="group rounded-2xl border border-line-2 bg-surface-1 p-5 text-right transition-all duration-300 hover:border-indigo-500/30 hover:bg-surface-3"
               href={`/blog/${next.slug}`}
             >
-              <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
+              <p className="text-xs font-medium tracking-wider text-gray-500 uppercase">
                 Suivant<span aria-hidden="true"> →</span>
               </p>
-              <p className="mt-2 text-sm font-medium leading-snug text-white transition-colors group-hover:text-brand-accent">
+              <p className="mt-2 text-sm leading-snug font-medium text-white transition-colors group-hover:text-brand-accent">
                 {next.title}
               </p>
             </Link>

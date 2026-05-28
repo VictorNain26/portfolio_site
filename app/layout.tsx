@@ -43,7 +43,7 @@ export const metadata = {
     template: '%s | Victor Lenain',
   },
   description:
-    "Développeur full-stack freelance à Paris. Je greffe la couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Stack Next.js, Django, Rails, FastAPI.",
+    'Développeur full-stack freelance à Paris. Je greffe la couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Stack Next.js, Django, Rails, FastAPI.',
   keywords: [
     'développeur freelance Paris',
     'développeur full-stack',
@@ -84,14 +84,14 @@ export const metadata = {
     siteName: 'Victor Lenain - Portfolio',
     title: 'Victor Lenain | Développeur full-stack · Intégration IA · Paris',
     description:
-      "Développeur full-stack freelance à Paris. Je greffe la couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Stack Next.js, Django, Rails, FastAPI.",
+      'Développeur full-stack freelance à Paris. Je greffe la couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Stack Next.js, Django, Rails, FastAPI.',
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Victor Lenain | Développeur full-stack · Intégration IA',
     description:
-      "Freelance Paris. Je greffe agents, RAG et automatisations LLM sur votre stack web existante. Sans refonte.",
+      'Freelance Paris. Je greffe agents, RAG et automatisations LLM sur votre stack web existante. Sans refonte.',
     // Images are generated dynamically by app/opengraph-image.tsx
   },
   alternates: {
@@ -116,10 +116,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <JsonLdScripts />
       </head>
 
-      <body className="text-foreground bg-background relative font-sans antialiased">
+      <body className="relative bg-background font-sans text-foreground antialiased">
         {/* Skip link accessibilité */}
         <a
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:outline-none"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:outline-none"
           href="#main"
         >
           Aller au contenu

@@ -25,7 +25,7 @@ describe('Section', () => {
     render(
       <Section data-testid="section" id="test-section">
         Content
-      </Section>
+      </Section>,
     );
     const section = screen.getByTestId('section');
     expect(section).toHaveAttribute('id', 'test-section');

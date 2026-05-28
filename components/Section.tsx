@@ -10,10 +10,7 @@ type Props = HTMLAttributes<HTMLElement> & { children: ReactNode };
  */
 export default function Section({ children, className, ...rest }: Props) {
   return (
-    <section
-      className={cn('container-site', className)}
-      {...rest}
-    >
+    <section className={cn('container-site', className)} {...rest}>
       {children}
     </section>
   );

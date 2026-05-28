@@ -42,7 +42,7 @@ describe('SocialIconButton', () => {
       'border',
       'bg-black/5',
       'shadow-sm',
-      'transition-colors'
+      'transition-colors',
     );
   });
 
@@ -62,7 +62,7 @@ describe('SocialIconButton', () => {
     render(
       <SocialIconButton href="https://github.com" rel="noopener" target="_blank">
         GitHub
-      </SocialIconButton>
+      </SocialIconButton>,
     );
     const link = screen.getByText('GitHub');
     expect(link).toHaveAttribute('href', 'https://github.com');
@@ -74,7 +74,7 @@ describe('SocialIconButton', () => {
     render(
       <SocialIconButton asChild>
         <button type="button">Custom Button</button>
-      </SocialIconButton>
+      </SocialIconButton>,
     );
     const button = screen.getByRole('button');
     expect(button).toBeInTheDocument();

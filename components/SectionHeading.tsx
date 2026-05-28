@@ -20,14 +20,7 @@ type Props = {
  * `(01) SERVICES` prolongée d'un filet, puis le titre. Unifie toutes les
  * sections de la homepage autour d'un même vocabulaire « documentaire ».
  */
-export default function SectionHeading({
-  index,
-  label,
-  title,
-  lead,
-  aside,
-  className,
-}: Props) {
+export default function SectionHeading({ index, label, title, lead, aside, className }: Props) {
   return (
     <FadeOnView
       className={cn(

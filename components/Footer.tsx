@@ -1,10 +1,5 @@
 import Link from 'next/link';
-import {
-  GitHubIcon,
-  LinkedInIcon,
-  WhatsAppIcon,
-  MaltIcon,
-} from '@/components/icons/SocialIcons';
+import { GitHubIcon, LinkedInIcon, WhatsAppIcon, MaltIcon } from '@/components/icons/SocialIcons';
 
 const socials = [
   { href: 'https://github.com/VictorNain26', Icon: GitHubIcon, label: 'GitHub' },

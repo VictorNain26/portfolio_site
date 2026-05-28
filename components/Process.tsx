@@ -10,7 +10,7 @@ const steps = [
     title: 'Échange',
     duration: '15 min',
     description:
-      "Un appel de 15 min pour cadrer le besoin, la stack en place et la contrainte qui vous bloque. Vous repartez avec un premier avis, gratuit.",
+      'Un appel de 15 min pour cadrer le besoin, la stack en place et la contrainte qui vous bloque. Vous repartez avec un premier avis, gratuit.',
   },
   {
     icon: FileText,
@@ -18,7 +18,7 @@ const steps = [
     title: 'Proposition',
     duration: '48 h',
     description:
-      "Devis chiffré sous 48 h : périmètre, jalons, livrables, budget fixe ou TJM. Vous savez à quoi ressemble le mois 1 avant de signer.",
+      'Devis chiffré sous 48 h : périmètre, jalons, livrables, budget fixe ou TJM. Vous savez à quoi ressemble le mois 1 avant de signer.',
   },
   {
     icon: Code,
@@ -41,11 +41,7 @@ const steps = [
 export default function Process() {
   return (
     <Section className="scroll-mt-28 pb-28" id="process">
-      <SectionHeading
-        index="03"
-        label="Méthode"
-        title="Quatre étapes, pas de zone d'ombre."
-      />
+      <SectionHeading index="03" label="Méthode" title="Quatre étapes, pas de zone d'ombre." />
 
       {/* Mobile : vertical timeline ; Desktop : 4 cards alignées en grid avec gap large */}
       <ol className="relative grid gap-y-10 lg:grid-cols-4 lg:gap-x-12 lg:gap-y-0">

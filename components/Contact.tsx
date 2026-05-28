@@ -16,12 +16,13 @@ export default function Contact() {
           <p className="label-mono mb-4 text-brand-accent">
             06<span className="mx-2 text-gray-600">/</span>Contact
           </p>
-          <h2 className="font-display mb-4 text-3xl font-bold text-white sm:text-4xl">
+          <h2 className="mb-4 font-display text-3xl font-bold text-white sm:text-4xl">
             Parlons de votre projet
           </h2>
 
           <p className="mx-auto mb-10 max-w-md text-lg text-gray-400">
-            15 minutes par téléphone pour cadrer le besoin. Si je ne suis pas le bon profil, je vous le dis et je vous oriente.
+            15 minutes par téléphone pour cadrer le besoin. Si je ne suis pas le bon profil, je vous
+            le dis et je vous oriente.
           </p>
 
           <CalPopupButton

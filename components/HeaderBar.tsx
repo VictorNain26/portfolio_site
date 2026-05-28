@@ -6,11 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Calendar, Menu, X } from 'lucide-react';
-import {
-  GitHubIcon,
-  LinkedInIcon,
-  WhatsAppIcon,
-} from '@/components/icons/SocialIcons';
+import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from '@/components/icons/SocialIcons';
 import CalPopupButton from '@/components/CalPopupButton';
 
 /** Header nav. Routes (Services, Blog) + ancres homepage (Projets, Contact).
@@ -68,13 +64,12 @@ export default function HeaderBar() {
   useEffect(() => {
     if (!onHomepage) return;
 
-    const root =
-      (document.getElementById('scroll-viewport') as Element | null) ?? null;
+    const root = (document.getElementById('scroll-viewport') as Element | null) ?? null;
 
     const visibleSections = new Map<string, number>();
 
     const io = new IntersectionObserver(
-      (entries) => {
+      entries => {
         for (const entry of entries) {
           const id = entry.target.id;
           if (entry.isIntersecting) {
@@ -113,14 +108,11 @@ export default function HeaderBar() {
     return () => io.disconnect();
   }, [onHomepage]);
 
-  const scrollToSection = useCallback(
-    (e: React.MouseEvent, id: string) => {
-      e.preventDefault();
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-      setMobileMenuOpen(false);
-    },
-    [],
-  );
+  const scrollToSection = useCallback((e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setMobileMenuOpen(false);
+  }, []);
 
   const scrollToTop = useCallback(
     (e: React.MouseEvent) => {
@@ -198,7 +190,7 @@ export default function HeaderBar() {
         key={link.label}
         className={isMobile ? mobileClasses : desktopClasses}
         href={href}
-        onClick={(e) => {
+        onClick={e => {
           scrollToSection(e, link.id);
         }}
       >
@@ -247,7 +239,7 @@ export default function HeaderBar() {
 
           {/* Desktop nav (centered absolute) */}
           <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
-            {NAV_LINKS.map((link) => renderNavLink(link, 'desktop'))}
+            {NAV_LINKS.map(link => renderNavLink(link, 'desktop'))}
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
@@ -270,7 +262,7 @@ export default function HeaderBar() {
 
             {/* CTA permanent — Cal.com en popup */}
             <CalPopupButton
-              className="hidden items-center gap-2 rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white shadow-glow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent sm:inline-flex"
+              className="hidden items-center gap-2 rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white shadow-glow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none sm:inline-flex"
               data-umami-event="cta-header-cal"
             >
               <Calendar className="h-3.5 w-3.5" />
@@ -282,7 +274,7 @@ export default function HeaderBar() {
               className="rounded-full p-2 text-gray-400 transition-colors hover:bg-surface-4 hover:text-white lg:hidden"
               type="button"
               onClick={() => {
-                setMobileMenuOpen((v) => !v);
+                setMobileMenuOpen(v => !v);
               }}
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -321,7 +313,7 @@ export default function HeaderBar() {
                 transition={{ duration: 0.3, delay: NAV_LINKS.length * 0.05 }}
               >
                 <CalPopupButton
-                  className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-lg font-medium text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+                  className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-lg font-medium text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
                   data-umami-event="cta-mobile-menu-cal"
                 >
                   <Calendar className="h-5 w-5" />

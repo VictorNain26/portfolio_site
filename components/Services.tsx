@@ -10,8 +10,8 @@ import { services } from '@/app/services/content';
  * full-width ; 3 colonnes égales donnent un rythme visuel plus pro. */
 
 export default function Services() {
-  const featured = services.filter((s) => s.tier === 'featured');
-  const secondary = services.filter((s) => s.tier === 'secondary');
+  const featured = services.filter(s => s.tier === 'featured');
+  const secondary = services.filter(s => s.tier === 'secondary');
 
   return (
     <Section className="scroll-mt-28 pb-28" id="services">
@@ -34,7 +34,7 @@ export default function Services() {
             >
               <Link
                 aria-label={`En savoir plus sur ${service.shortTitle}`}
-                className="flex h-full flex-col p-7 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="flex h-full flex-col p-7 focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
                 href={`/services/${service.slug}`}
               >
                 <div
@@ -50,7 +50,7 @@ export default function Services() {
                 <p className="mb-6 text-sm leading-relaxed text-gray-400">{service.tagline}</p>
 
                 <ul className="mb-6 flex flex-wrap gap-x-4 gap-y-2">
-                  {service.highlights.slice(0, 3).map((point) => (
+                  {service.highlights.slice(0, 3).map(point => (
                     <li
                       key={point}
                       className="flex items-center gap-1.5 text-xs font-medium text-indigo-300/90"
@@ -81,21 +81,19 @@ export default function Services() {
       <FadeOnView className="mt-12" delay={0.2}>
         <p className="label-mono mb-5 text-gray-500">Aussi disponible pour</p>
         <div className="grid gap-4 sm:grid-cols-3">
-          {secondary.map((service) => {
+          {secondary.map(service => {
             const Icon = service.icon;
             return (
               <Link
                 key={service.slug}
-                className="group flex gap-4 rounded-xl border border-line-1 bg-surface-1 p-5 transition-colors duration-300 hover:border-line-3 hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+                className="group flex gap-4 rounded-xl border border-line-1 bg-surface-1 p-5 transition-colors duration-300 hover:border-line-3 hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
                 href={`/services/${service.slug}`}
               >
                 <div className="shrink-0 text-gray-500 transition-colors group-hover:text-brand-light">
                   <Icon aria-hidden="true" className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="mb-1 text-sm font-semibold text-gray-200">
-                    {service.shortTitle}
-                  </h3>
+                  <h3 className="mb-1 text-sm font-semibold text-gray-200">{service.shortTitle}</h3>
                   <p className="text-xs leading-relaxed text-gray-500">{service.tagline}</p>
                 </div>
               </Link>

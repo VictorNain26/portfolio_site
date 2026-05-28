@@ -34,22 +34,20 @@ export default function Hero() {
             </span>
             Disponible
           </span>
-          <span aria-hidden="true" className="text-gray-700">/</span>
+          <span aria-hidden="true" className="text-gray-700">
+            /
+          </span>
           <span>Paris — Remote France</span>
         </FadeOnView>
 
-        <FadeOnView
-          as="h1"
-          className="heading-1 max-w-4xl text-balance text-white"
-          delay={0.05}
-        >
+        <FadeOnView as="h1" className="heading-1 max-w-4xl text-balance text-white" delay={0.05}>
           J&apos;ajoute la couche IA à votre{' '}
           <span className="hero-gradient-text">stack web existante</span>.
         </FadeOnView>
 
         <FadeOnView
           as="p"
-          className="text-lead mt-6 max-w-2xl text-gray-300 text-pretty sm:text-xl"
+          className="text-lead mt-6 max-w-2xl text-pretty text-gray-300 sm:text-xl"
           delay={0.1}
         >
           Développeur fullstack freelance à Paris, 4 ans en production. Sans refonte de votre stack.
@@ -57,7 +55,7 @@ export default function Hero() {
 
         <FadeOnView className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3" delay={0.15}>
           <CalPopupButton
-            className="group inline-flex items-center gap-2.5 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+            className="group inline-flex items-center gap-2.5 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
             data-umami-event="cta-hero-cal"
           >
             <Calendar aria-hidden="true" className="h-4 w-4" />
@@ -86,9 +84,13 @@ export default function Hero() {
         >
           <p className="label-mono flex flex-wrap items-center gap-x-3 gap-y-1.5 text-gray-500">
             <span>Fullstack + IA</span>
-            <span aria-hidden="true" className="text-gray-700">·</span>
+            <span aria-hidden="true" className="text-gray-700">
+              ·
+            </span>
             <span>4 ans en prod</span>
-            <span aria-hidden="true" className="text-gray-700">·</span>
+            <span aria-hidden="true" className="text-gray-700">
+              ·
+            </span>
             <span className="text-gray-400">Next / Django / Rails / FastAPI</span>
           </p>
         </FadeOnView>

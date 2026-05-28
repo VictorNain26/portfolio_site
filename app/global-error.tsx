@@ -37,8 +37,8 @@ export default function GlobalError({
           </h1>
 
           <p className="max-w-xl text-base leading-relaxed text-gray-300 sm:text-lg">
-            Une erreur inattendue s&apos;est produite. Veuillez réessayer ou
-            revenir à l&apos;accueil.
+            Une erreur inattendue s&apos;est produite. Veuillez réessayer ou revenir à
+            l&apos;accueil.
           </p>
 
           <div className="flex gap-4">

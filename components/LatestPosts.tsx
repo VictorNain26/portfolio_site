@@ -38,14 +38,17 @@ export default function LatestPosts({ posts }: { posts: Post[] }) {
               className="group block h-full rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/20 hover:bg-surface-3"
               href={`/blog/${post.slug}`}
             >
-              <time className="font-mono text-xs font-medium text-gray-500" dateTime={post.publishedAt}>
+              <time
+                className="font-mono text-xs font-medium text-gray-500"
+                dateTime={post.publishedAt}
+              >
                 {new Date(post.publishedAt).toLocaleDateString('fr-FR', {
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric',
                 })}
               </time>
-              <h3 className="mt-3 text-base font-semibold leading-snug text-white transition-colors group-hover:text-brand-light">
+              <h3 className="mt-3 text-base leading-snug font-semibold text-white transition-colors group-hover:text-brand-light">
                 {post.title}
               </h3>
               <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-gray-400">

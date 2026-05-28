@@ -31,10 +31,11 @@ const faqItems = [
   {
     question: 'Combien de temps dure un projet type ?',
     answer:
-      "Un site vitrine prend 2 à 4 semaines. Une application métier, 1 à 3 mois selon le périmètre. Je privilégie les livraisons itératives pour que vous ayez de la visibilité rapidement.",
+      'Un site vitrine prend 2 à 4 semaines. Une application métier, 1 à 3 mois selon le périmètre. Je privilégie les livraisons itératives pour que vous ayez de la visibilité rapidement.',
   },
   {
-    question: 'Faites-vous des interventions courtes (correction de bug, refonte, ajout de fonctionnalité) ?',
+    question:
+      'Faites-vous des interventions courtes (correction de bug, refonte, ajout de fonctionnalité) ?',
     answer:
       "Oui : bug urgent, refonte ciblée, ajout de fonctionnalité, optimisation de perf, audit de stack. Intervention à partir d'une demi-journée, devis fixe sur les périmètres bornés.",
   },
@@ -93,9 +94,7 @@ export default function FAQ() {
                 style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
               >
                 <div className="overflow-hidden">
-                  <p className="px-6 pb-4 text-sm leading-relaxed text-gray-400">
-                    {item.answer}
-                  </p>
+                  <p className="px-6 pb-4 text-sm leading-relaxed text-gray-400">{item.answer}</p>
                 </div>
               </div>
             </FadeOnView>
