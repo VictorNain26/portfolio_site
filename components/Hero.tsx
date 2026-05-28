@@ -16,7 +16,7 @@ export default function Hero() {
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-[#0e082e]/30 via-[#0e082e]/45 to-[#0e082e]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-background/30 via-background/45 to-background"
       />
 
       {/* Subtle indigo glow */}
@@ -38,7 +38,7 @@ export default function Hero() {
 
         <FadeOnView
           as="h1"
-          className="font-display max-w-4xl text-balance text-[2.5rem] font-bold leading-[1.04] tracking-[-0.025em] text-white sm:text-[3.5rem] md:text-6xl lg:text-[4.75rem]"
+          className="heading-1 max-w-4xl text-balance text-white"
           delay={0.05}
         >
           J&apos;ajoute la couche IA à votre{' '}
@@ -47,7 +47,7 @@ export default function Hero() {
 
         <FadeOnView
           as="p"
-          className="mt-6 max-w-2xl text-lg leading-relaxed text-gray-300 text-pretty sm:text-xl"
+          className="text-lead mt-6 max-w-2xl text-gray-300 text-pretty sm:text-xl"
           delay={0.1}
         >
           Développeur fullstack freelance à Paris, 4 ans en production. Sans refonte de votre stack.
@@ -55,7 +55,7 @@ export default function Hero() {
 
         <FadeOnView className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3" delay={0.15}>
           <CalPopupButton
-            className="group inline-flex items-center gap-2.5 rounded-full bg-indigo-600 px-7 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_-8px_rgba(99,102,241,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-[0_0_48px_-8px_rgba(99,102,241,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+            className="group inline-flex items-center gap-2.5 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
             data-umami-event="cta-hero-cal"
           >
             <Calendar aria-hidden="true" className="h-4 w-4" />

@@ -15,13 +15,13 @@ export default function Services() {
   return (
     <Section className="scroll-mt-28 pb-28" id="services">
       <FadeOnView className="mb-16 max-w-3xl">
-        <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-indigo-400">
+        <p className="text-eyebrow mb-3 text-brand-accent">
           Ce que je fais
         </p>
-        <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl lg:text-5xl">
+        <h2 className="heading-2 text-white">
           Je code la couche IA dans votre stack existante.
         </h2>
-        <p className="mt-5 text-lg leading-relaxed text-gray-400">
+        <p className="text-lead mt-5 text-gray-400">
           Vous tournez sur Django, Rails, Next, Node ou FastAPI. J&apos;ajoute la couche IA dessus sans refonte et je mesure ce qui sort. Trois prestations IA, trois prestations web, le même code applicatif derrière.
         </p>
       </FadeOnView>
@@ -33,12 +33,12 @@ export default function Services() {
           return (
             <FadeOnView
               key={service.slug}
-              className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.025] backdrop-blur-sm transition-colors duration-300 hover:border-indigo-400/30 hover:bg-white/[0.04]"
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-hairline bg-surface backdrop-blur-sm transition-colors duration-300 hover:border-indigo-400/30 hover:bg-surface-hover"
               delay={0.05 + index * 0.05}
             >
               <Link
                 aria-label={`En savoir plus sur ${service.shortTitle}`}
-                className="flex h-full flex-col p-7 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e082e]"
+                className="flex h-full flex-col p-7 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 href={`/services/${service.slug}`}
               >
                 <div
@@ -46,7 +46,7 @@ export default function Services() {
                   className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-400/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 />
 
-                <div className="mb-5 inline-flex w-fit rounded-xl bg-indigo-500/10 p-3 text-indigo-400 transition-colors group-hover:bg-indigo-500/20">
+                <div className="mb-5 inline-flex w-fit rounded-xl bg-indigo-500/10 p-3 text-brand-accent transition-colors group-hover:bg-indigo-500/20">
                   <Icon aria-hidden="true" className="h-6 w-6" />
                 </div>
 
@@ -68,7 +68,7 @@ export default function Services() {
                   ))}
                 </ul>
 
-                <span className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-indigo-300 transition-colors group-hover:text-indigo-200">
+                <span className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-brand-light transition-colors group-hover:text-indigo-200">
                   Voir le service
                   <ArrowRight
                     aria-hidden="true"
@@ -92,10 +92,10 @@ export default function Services() {
             return (
               <Link
                 key={service.slug}
-                className="group flex gap-4 rounded-xl border border-white/[0.04] bg-white/[0.015] p-5 transition-colors duration-300 hover:border-white/[0.08] hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                className="group flex gap-4 rounded-xl border border-hairline-muted bg-surface-muted p-5 transition-colors duration-300 hover:border-hairline-strong hover:bg-surface-muted-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
                 href={`/services/${service.slug}`}
               >
-                <div className="shrink-0 text-gray-500 transition-colors group-hover:text-indigo-300">
+                <div className="shrink-0 text-gray-500 transition-colors group-hover:text-brand-light">
                   <Icon aria-hidden="true" className="h-5 w-5" />
                 </div>
                 <div>
@@ -112,7 +112,7 @@ export default function Services() {
 
       <FadeOnView className="mt-12 text-center" delay={0.3}>
         <Link
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-400 transition-colors hover:text-indigo-400"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-400 transition-colors hover:text-brand-accent"
           href="/services"
         >
           Voir tous les services en détail
