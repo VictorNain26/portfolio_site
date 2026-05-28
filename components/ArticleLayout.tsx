@@ -76,9 +76,10 @@ export default function ArticleLayout({
       </header>
 
       {/* ---------- CONTENU ---------- */}
-      <section className="prose prose-invert prose-lg max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-h2:mt-14 prose-h2:text-2xl prose-h2:text-white prose-h3:mt-10 prose-h3:text-xl prose-h3:text-gray-100 prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-brand-accent prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-ul:text-gray-300 prose-ol:text-gray-300 prose-li:marker:text-brand-accent prose-hr:border-gray-800 prose-blockquote:border-l-brand-hover prose-blockquote:text-gray-400 prose-blockquote:not-italic prose-code:text-brand-light prose-code:bg-gray-800/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none">
-        {children}
-      </section>
+      {/* Le contenu est stylé par les composants MDX custom (cf. MDX.tsx) ;
+       * `.prose` (globals.css) ne fournit que la base (couleur de texte,
+       * fallback titres). Pas de plugin @tailwindcss/typography nécessaire. */}
+      <section className="prose max-w-none">{children}</section>
 
       {/* ---------- SHARE ---------- */}
       <div className="mt-14 flex items-center justify-between rounded-xl border border-line-2 bg-surface-1 px-6 py-4">
