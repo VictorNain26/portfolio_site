@@ -29,7 +29,7 @@ export default function Services() {
           return (
             <FadeOnView
               key={service.slug}
-              className="group relative flex flex-col overflow-hidden rounded-2xl border border-line-2 bg-surface-1 backdrop-blur-sm transition-colors duration-300 hover:border-indigo-400/30 hover:bg-surface-3"
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-line-2 bg-surface-1 backdrop-blur-sm transition-colors duration-300 hover:border-brand-accent/30 hover:bg-surface-3"
               delay={0.05 + index * 0.05}
             >
               <Link
@@ -39,10 +39,10 @@ export default function Services() {
               >
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-400/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-accent/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 />
 
-                <div className="mb-5 inline-flex w-fit rounded-xl bg-indigo-500/10 p-3 text-brand-accent transition-colors group-hover:bg-indigo-500/20">
+                <div className="mb-5 inline-flex w-fit rounded-xl bg-brand-hover/10 p-3 text-brand-accent transition-colors group-hover:bg-brand-hover/20">
                   <Icon aria-hidden="true" className="h-6 w-6" />
                 </div>
 
@@ -53,7 +53,7 @@ export default function Services() {
                   {service.highlights.slice(0, 3).map(point => (
                     <li
                       key={point}
-                      className="flex items-center gap-1.5 text-xs font-medium text-indigo-300/90"
+                      className="flex items-center gap-1.5 text-xs font-medium text-brand-light/90"
                     >
                       <span
                         aria-hidden="true"

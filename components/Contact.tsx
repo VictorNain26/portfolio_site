@@ -9,7 +9,7 @@ export default function Contact() {
       <FadeOnView className="relative mx-auto max-w-2xl overflow-hidden rounded-3xl border border-line-2 bg-surface-1 px-6 py-16 text-center backdrop-blur-sm sm:px-12">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-hover/40 to-transparent"
         />
 
         <div className="relative">

@@ -55,9 +55,9 @@ const STATUS = {
 
 const ACCENT = {
   indigo: {
-    gradient: 'from-indigo-500/25 via-violet-500/15 to-transparent',
-    glow: 'bg-indigo-500/[0.08]',
-    hover: 'hover:border-indigo-400/30',
+    gradient: 'from-brand-hover/25 via-violet-500/15 to-transparent',
+    glow: 'bg-brand-hover/[0.08]',
+    hover: 'hover:border-brand-accent/30',
   },
   warm: {
     gradient: 'from-amber-500/20 via-orange-500/12 to-transparent',

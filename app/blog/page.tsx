@@ -93,7 +93,7 @@ export default function BlogIndex() {
           return (
             <article key={post.slug}>
               <Link
-                className="group block rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/30 hover:bg-surface-3 sm:p-8"
+                className="group block rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm transition-all duration-300 hover:border-brand-hover/30 hover:bg-surface-3 sm:p-8"
                 href={`/blog/${post.slug}`}
               >
                 {/* Meta row */}

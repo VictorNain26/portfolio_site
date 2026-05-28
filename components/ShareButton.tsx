@@ -35,7 +35,7 @@ export default function ShareButton({
   return (
     <button
       aria-label="Partager l’article"
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-indigo-500/30 bg-indigo-500/10 transition-colors hover:bg-indigo-500/20 focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-hover/30 bg-brand-hover/10 transition-colors hover:bg-brand-hover/20 focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
       onClick={() => {
         void share();
       }}

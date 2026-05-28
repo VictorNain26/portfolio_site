@@ -48,7 +48,7 @@ export default function Process() {
         {/* Rail vertical (mobile only) */}
         <div
           aria-hidden="true"
-          className="absolute top-6 bottom-6 left-6 w-px bg-gradient-to-b from-indigo-500/40 via-indigo-500/15 to-transparent lg:hidden"
+          className="absolute top-6 bottom-6 left-6 w-px bg-gradient-to-b from-brand-hover/40 via-brand-hover/15 to-transparent lg:hidden"
         />
 
         {steps.map((step, index) => {
@@ -63,7 +63,7 @@ export default function Process() {
               {/* Node icon */}
               <div
                 aria-hidden="true"
-                className="absolute top-0 left-0 flex h-12 w-12 items-center justify-center rounded-full border border-indigo-500/30 bg-background text-brand-light shadow-glow-xs lg:relative lg:mb-6"
+                className="absolute top-0 left-0 flex h-12 w-12 items-center justify-center rounded-full border border-brand-hover/30 bg-background text-brand-light shadow-glow-xs lg:relative lg:mb-6"
               >
                 <Icon className="h-5 w-5" />
               </div>
@@ -74,7 +74,7 @@ export default function Process() {
                   aria-hidden="true"
                   className="absolute top-6 left-14 hidden h-px w-[calc(100%-3.5rem)] lg:block"
                 >
-                  <div className="h-full bg-gradient-to-r from-indigo-500/30 to-indigo-500/0" />
+                  <div className="h-full bg-gradient-to-r from-brand-hover/30 to-brand-hover/0" />
                 </div>
               )}
 

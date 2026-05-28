@@ -68,7 +68,7 @@ const components: MDXComponents = {
 
   /* -------- citations -------- */
   blockquote: ({ children }) => (
-    <blockquote className="my-8 rounded-r-xl border-l-4 border-indigo-500/60 bg-surface-1 py-4 pr-4 pl-6">
+    <blockquote className="my-8 rounded-r-xl border-l-4 border-brand-hover/60 bg-surface-1 py-4 pr-4 pl-6">
       <div className="text-gray-300 italic">{children}</div>
     </blockquote>
   ),
@@ -109,7 +109,7 @@ const components: MDXComponents = {
   /* -------- liens personnalisés -------- */
   a: ({ href, children }: { href?: string; children: React.ReactNode }) => (
     <NextLink
-      className="text-brand-light underline decoration-indigo-400/60 decoration-1 underline-offset-4 transition-colors hover:text-brand-lighter hover:decoration-brand-light"
+      className="text-brand-light underline decoration-brand-accent/60 decoration-1 underline-offset-4 transition-colors hover:text-brand-lighter hover:decoration-brand-light"
       href={href ?? '#'}
     >
       {children}

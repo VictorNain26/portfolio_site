@@ -87,15 +87,16 @@ pas via `@apply`) :
 - `.heading-2` — titre de section (h2)
 - `.text-lead` — chapô / accroche
 
-## Convention : tokens vs indigo brut
+## Convention : tokens vs couleurs brutes
 
-- **Décisions de marque** (CTA, accents texte/icône/ring, halo, fond) →
-  **toujours via tokens**.
-- **Indigo décoratif** laissé en `indigo-*` brut **intentionnellement** :
-  dégradés multi-teintes (`from-indigo-500 to-purple-600`), glows et filets à
-  alpha (`bg-indigo-500/10`, `border-indigo-500/30`, `via-indigo-500/40`…). Ce
-  sont des compositions illustratives, pas des décisions réutilisables ; les
-  tokeniser ajouterait de l'indirection sans valeur.
+- **Tout l'indigo passe par les tokens `brand-*`** — y compris les variantes à
+  opacité (`bg-brand-hover/10`, `border-brand-accent/30`,
+  `via-brand-accent/40`…). C'est exact : `indigo-400/30` ≡ `brand-accent/30`
+  (même couleur, même `color-mix`), donc aucune raison de laisser de l'indigo
+  brut.
+- **Seules les teintes décoratives non-marque restent en Tailwind brut** :
+  violet/purple (dégradé avatar), rose, ambre (hors token `warm`), emerald
+  (sémantique). Ce sont des hues sans token dédié, illustratives.
 
 ## Notes
 
@@ -105,4 +106,4 @@ pas via `@apply`) :
   toute façon pas actif (les styles `.prose` viennent de `globals.css`).
 - Tout le site (sections homepage, pages `services`, `blog`, article, header,
   footer) utilise désormais ces tokens : **aucune couleur de marque ni surface
-  en dur** ne subsiste. </content>
+  en dur** ne subsiste.

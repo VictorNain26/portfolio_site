@@ -49,7 +49,7 @@ export default function ArticleLayout({
             {post.tags.map(tag => (
               <span
                 key={tag}
-                className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-brand-accent"
+                className="rounded-full border border-brand-hover/20 bg-brand-hover/10 px-3 py-1 text-xs font-medium text-brand-accent"
               >
                 {tag}
               </span>
@@ -90,7 +90,7 @@ export default function ArticleLayout({
       {/* ---------- AUTEUR ---------- */}
       <aside className="mt-8 rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm sm:p-8">
         <div className="flex items-start gap-4 sm:items-center">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-sm font-bold text-white">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-hover to-purple-600 text-sm font-bold text-white">
             VL
           </div>
           <div>
@@ -103,7 +103,7 @@ export default function ArticleLayout({
         </div>
         <div className="mt-5 flex flex-wrap gap-3">
           <a
-            className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-sm font-medium text-brand-accent transition-colors hover:bg-indigo-500/20"
+            className="inline-flex items-center gap-1.5 rounded-full border border-brand-hover/30 bg-brand-hover/10 px-4 py-1.5 text-sm font-medium text-brand-accent transition-colors hover:bg-brand-hover/20"
             href="https://www.linkedin.com/in/victorlenain/"
             rel="noopener noreferrer"
             target="_blank"
@@ -126,7 +126,7 @@ export default function ArticleLayout({
         <nav className="mt-10 grid gap-4 sm:grid-cols-2">
           {prev ? (
             <Link
-              className="group rounded-2xl border border-line-2 bg-surface-1 p-5 transition-all duration-300 hover:border-indigo-500/30 hover:bg-surface-3"
+              className="group rounded-2xl border border-line-2 bg-surface-1 p-5 transition-all duration-300 hover:border-brand-hover/30 hover:bg-surface-3"
               href={`/blog/${prev.slug}`}
             >
               <p className="text-xs font-medium tracking-wider text-gray-500 uppercase">
@@ -141,7 +141,7 @@ export default function ArticleLayout({
           )}
           {next && (
             <Link
-              className="group rounded-2xl border border-line-2 bg-surface-1 p-5 text-right transition-all duration-300 hover:border-indigo-500/30 hover:bg-surface-3"
+              className="group rounded-2xl border border-line-2 bg-surface-1 p-5 text-right transition-all duration-300 hover:border-brand-hover/30 hover:bg-surface-3"
               href={`/blog/${next.slug}`}
             >
               <p className="text-xs font-medium tracking-wider text-gray-500 uppercase">

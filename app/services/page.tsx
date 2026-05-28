@@ -57,7 +57,7 @@ export default function ServicesIndexPage() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 overflow-hidden"
         >
-          <div className="absolute -top-32 left-1/2 h-[420px] w-[800px] -translate-x-1/2 rounded-full bg-indigo-500/[0.10] blur-[140px]" />
+          <div className="absolute -top-32 left-1/2 h-[420px] w-[800px] -translate-x-1/2 rounded-full bg-brand-hover/[0.10] blur-[140px]" />
         </div>
 
         {/* Hero + premier bloc collés visuellement */}
@@ -80,7 +80,7 @@ export default function ServicesIndexPage() {
         {/* Phares — cards directement sous le hero, séparées par un eyebrow discret */}
         <Section className="pb-14">
           <FadeOnView className="mb-6 flex items-center gap-3">
-            <span aria-hidden="true" className="h-px w-8 bg-indigo-400/60" />
+            <span aria-hidden="true" className="h-px w-8 bg-brand-accent/60" />
             <p className="text-xs font-medium tracking-[0.18em] text-brand-accent uppercase">
               Intégration IA
             </p>
@@ -163,7 +163,7 @@ export default function ServicesIndexPage() {
           <FadeOnView className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-line-2 bg-surface-1 px-6 py-14 text-center backdrop-blur-sm sm:px-12">
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent"
+              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-hover/40 to-transparent"
             />
             <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">
               On en discute ?

@@ -35,7 +35,7 @@ export default function LatestPosts({ posts }: { posts: Post[] }) {
         {posts.map((post, index) => (
           <FadeOnView key={post.slug} as="article" delay={0.05 + index * 0.06}>
             <Link
-              className="group block h-full rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/20 hover:bg-surface-3"
+              className="group block h-full rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm transition-all duration-300 hover:border-brand-hover/20 hover:bg-surface-3"
               href={`/blog/${post.slug}`}
             >
               <time

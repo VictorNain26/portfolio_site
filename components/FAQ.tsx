@@ -62,7 +62,7 @@ export default function FAQ() {
           return (
             <FadeOnView
               key={item.question}
-              className="rounded-xl border border-line-2 bg-surface-1 backdrop-blur-sm transition-colors hover:border-indigo-500/20"
+              className="rounded-xl border border-line-2 bg-surface-1 backdrop-blur-sm transition-colors hover:border-brand-hover/20"
               delay={0.05 + index * 0.04}
             >
               <button
