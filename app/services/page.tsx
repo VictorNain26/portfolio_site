@@ -60,7 +60,7 @@ export default function ServicesIndexPage() {
         {/* Hero + premier bloc collés visuellement */}
         <Section className="pb-10">
           <FadeOnView className="max-w-3xl">
-            <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-indigo-400">
+            <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-brand-accent">
               Services
             </p>
             <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
@@ -76,7 +76,7 @@ export default function ServicesIndexPage() {
         <Section className="pb-14">
           <FadeOnView className="mb-6 flex items-center gap-3">
             <span aria-hidden="true" className="h-px w-8 bg-indigo-400/60" />
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-indigo-400">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-brand-accent">
               Intégration IA
             </p>
           </FadeOnView>
@@ -88,7 +88,7 @@ export default function ServicesIndexPage() {
               return (
                 <FadeOnView key={s.slug} delay={0.05 + i * 0.06}>
                   <Link
-                    className={`group flex h-full flex-col gap-5 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-7 backdrop-blur-sm transition-colors duration-300 ${accent.hoverBorder} hover:bg-white/[0.04]`}
+                    className={`group flex h-full flex-col gap-5 rounded-2xl border border-line-2 bg-surface-1 p-7 backdrop-blur-sm transition-colors duration-300 ${accent.hoverBorder} hover:bg-surface-3`}
                     href={`/services/${s.slug}`}
                   >
                     <div
@@ -134,7 +134,7 @@ export default function ServicesIndexPage() {
               return (
                 <FadeOnView key={s.slug} delay={0.05 + i * 0.06}>
                   <Link
-                    className="group flex h-full gap-4 rounded-xl border border-white/[0.04] bg-white/[0.015] p-5 transition-colors duration-300 hover:border-white/[0.08] hover:bg-white/[0.03]"
+                    className="group flex h-full gap-4 rounded-xl border border-line-1 bg-surface-1 p-5 transition-colors duration-300 hover:border-line-3 hover:bg-surface-2"
                     href={`/services/${s.slug}`}
                   >
                     <div className={`shrink-0 ${accent.text} transition-transform group-hover:-translate-y-0.5`}>
@@ -153,7 +153,7 @@ export default function ServicesIndexPage() {
 
         {/* CTA */}
         <Section className="pb-24">
-          <FadeOnView className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/[0.06] bg-white/[0.02] px-6 py-14 text-center backdrop-blur-sm sm:px-12">
+          <FadeOnView className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-line-2 bg-surface-1 px-6 py-14 text-center backdrop-blur-sm sm:px-12">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent"
@@ -166,7 +166,7 @@ export default function ServicesIndexPage() {
             </p>
             <div className="mt-8">
               <CalPopupButton
-                className="group inline-flex items-center gap-3 rounded-full bg-indigo-600 px-7 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_-8px_rgba(99,102,241,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
                 data-umami-event="cta-services-index-cal"
               >
                 <Calendar aria-hidden="true" className="h-4 w-4" />

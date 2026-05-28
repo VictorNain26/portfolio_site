@@ -49,7 +49,7 @@ export default function ArticleLayout({
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-400"
+                className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-brand-accent"
               >
                 {tag}
               </span>
@@ -76,18 +76,18 @@ export default function ArticleLayout({
       </header>
 
       {/* ---------- CONTENU ---------- */}
-      <section className="prose prose-invert prose-lg max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-h2:mt-14 prose-h2:text-2xl prose-h2:text-white prose-h3:mt-10 prose-h3:text-xl prose-h3:text-gray-100 prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-ul:text-gray-300 prose-ol:text-gray-300 prose-li:marker:text-indigo-400 prose-hr:border-gray-800 prose-blockquote:border-l-indigo-500 prose-blockquote:text-gray-400 prose-blockquote:not-italic prose-code:text-indigo-300 prose-code:bg-gray-800/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none">
+      <section className="prose prose-invert prose-lg max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-h2:mt-14 prose-h2:text-2xl prose-h2:text-white prose-h3:mt-10 prose-h3:text-xl prose-h3:text-gray-100 prose-p:text-gray-300 prose-p:leading-relaxed prose-a:text-brand-accent prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-ul:text-gray-300 prose-ol:text-gray-300 prose-li:marker:text-brand-accent prose-hr:border-gray-800 prose-blockquote:border-l-brand-hover prose-blockquote:text-gray-400 prose-blockquote:not-italic prose-code:text-brand-light prose-code:bg-gray-800/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none">
         {children}
       </section>
 
       {/* ---------- SHARE ---------- */}
-      <div className="mt-14 flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-6 py-4">
+      <div className="mt-14 flex items-center justify-between rounded-xl border border-line-2 bg-surface-1 px-6 py-4">
         <span className="text-sm text-gray-400">Partager cet article</span>
         <ShareButton slug={post.slug} summary={post.summary} title={post.title} />
       </div>
 
       {/* ---------- AUTEUR ---------- */}
-      <aside className="mt-8 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm sm:p-8">
+      <aside className="mt-8 rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm sm:p-8">
         <div className="flex items-start gap-4 sm:items-center">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-sm font-bold text-white">
             VL
@@ -102,7 +102,7 @@ export default function ArticleLayout({
         </div>
         <div className="mt-5 flex flex-wrap gap-3">
           <a
-            className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-sm font-medium text-indigo-400 transition-colors hover:bg-indigo-500/20"
+            className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-sm font-medium text-brand-accent transition-colors hover:bg-indigo-500/20"
             href="https://www.linkedin.com/in/victorlenain/"
             rel="noopener noreferrer"
             target="_blank"
@@ -125,13 +125,13 @@ export default function ArticleLayout({
         <nav className="mt-10 grid gap-4 sm:grid-cols-2">
           {prev ? (
             <Link
-              className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all duration-300 hover:border-indigo-500/30 hover:bg-white/[0.04]"
+              className="group rounded-2xl border border-line-2 bg-surface-1 p-5 transition-all duration-300 hover:border-indigo-500/30 hover:bg-surface-3"
               href={`/blog/${prev.slug}`}
             >
               <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
                 <span aria-hidden="true">← </span>Précédent
               </p>
-              <p className="mt-2 text-sm font-medium leading-snug text-white transition-colors group-hover:text-indigo-400">
+              <p className="mt-2 text-sm font-medium leading-snug text-white transition-colors group-hover:text-brand-accent">
                 {prev.title}
               </p>
             </Link>
@@ -140,13 +140,13 @@ export default function ArticleLayout({
           )}
           {next && (
             <Link
-              className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 text-right transition-all duration-300 hover:border-indigo-500/30 hover:bg-white/[0.04]"
+              className="group rounded-2xl border border-line-2 bg-surface-1 p-5 text-right transition-all duration-300 hover:border-indigo-500/30 hover:bg-surface-3"
               href={`/blog/${next.slug}`}
             >
               <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
                 Suivant<span aria-hidden="true"> →</span>
               </p>
-              <p className="mt-2 text-sm font-medium leading-snug text-white transition-colors group-hover:text-indigo-400">
+              <p className="mt-2 text-sm font-medium leading-snug text-white transition-colors group-hover:text-brand-accent">
                 {next.title}
               </p>
             </Link>

@@ -18,7 +18,7 @@ export default function NotFound() {
       {/* Bouton : même gradient que le titre, pas de déplacement au hover */}
       <Button
         asChild
-        className="justify-self-center rounded-md bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] px-8 py-3 font-semibold text-white shadow-lg ring-1 ring-white/10 ring-inset hover:brightness-110 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="justify-self-center rounded-md bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] px-8 py-3 font-semibold text-white shadow-lg ring-1 ring-white/10 ring-inset hover:brightness-110 focus-visible:ring-2 focus-visible:ring-brand-light focus-visible:ring-offset-2 focus-visible:outline-none"
         size="lg"
       >
         <Link href="/">Retour à l’accueil</Link>

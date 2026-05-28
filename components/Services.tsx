@@ -33,7 +33,7 @@ export default function Services() {
           return (
             <FadeOnView
               key={service.slug}
-              className="group relative flex flex-col overflow-hidden rounded-2xl border border-hairline bg-surface backdrop-blur-sm transition-colors duration-300 hover:border-indigo-400/30 hover:bg-surface-hover"
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-line-2 bg-surface-1 backdrop-blur-sm transition-colors duration-300 hover:border-indigo-400/30 hover:bg-surface-3"
               delay={0.05 + index * 0.05}
             >
               <Link
@@ -68,7 +68,7 @@ export default function Services() {
                   ))}
                 </ul>
 
-                <span className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-brand-light transition-colors group-hover:text-indigo-200">
+                <span className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-brand-light transition-colors group-hover:text-brand-lighter">
                   Voir le service
                   <ArrowRight
                     aria-hidden="true"
@@ -92,7 +92,7 @@ export default function Services() {
             return (
               <Link
                 key={service.slug}
-                className="group flex gap-4 rounded-xl border border-hairline-muted bg-surface-muted p-5 transition-colors duration-300 hover:border-hairline-strong hover:bg-surface-muted-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+                className="group flex gap-4 rounded-xl border border-line-1 bg-surface-1 p-5 transition-colors duration-300 hover:border-line-3 hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
                 href={`/services/${service.slug}`}
               >
                 <div className="shrink-0 text-gray-500 transition-colors group-hover:text-brand-light">

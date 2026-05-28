@@ -95,7 +95,7 @@ export default function BlogIndex() {
           return (
             <article key={post.slug}>
               <Link
-                className="group block rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/30 hover:bg-white/[0.04] sm:p-8"
+                className="group block rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/30 hover:bg-surface-3 sm:p-8"
                 href={`/blog/${post.slug}`}
               >
                 {/* Meta row */}
@@ -114,7 +114,7 @@ export default function BlogIndex() {
                 </div>
 
                 {/* Title */}
-                <h2 className="mt-3 text-xl font-semibold leading-snug text-white transition-colors group-hover:text-indigo-400 sm:text-2xl">
+                <h2 className="mt-3 text-xl font-semibold leading-snug text-white transition-colors group-hover:text-brand-accent sm:text-2xl">
                   {post.title}
                 </h2>
 
@@ -129,7 +129,7 @@ export default function BlogIndex() {
                     {post.tags.slice(0, 4).map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-medium text-gray-400"
+                        className="rounded-full border border-line-3 bg-surface-3 px-3 py-1 text-xs font-medium text-gray-400"
                       >
                         {tag}
                       </span>
@@ -138,7 +138,7 @@ export default function BlogIndex() {
                 )}
 
                 {/* CTA */}
-                <span className="mt-5 inline-flex items-center text-sm font-medium text-indigo-400 transition-colors group-hover:text-indigo-300">
+                <span className="mt-5 inline-flex items-center text-sm font-medium text-brand-accent transition-colors group-hover:text-brand-light">
                   Lire l&apos;article
                   <svg
                     aria-hidden="true"

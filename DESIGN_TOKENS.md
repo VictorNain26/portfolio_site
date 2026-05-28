@@ -1,9 +1,9 @@
 # Design tokens — fondation
 
 Source unique de vérité : le bloc `@theme` de `app/globals.css`.
-En Tailwind v4, chaque `--color-*` / `--shadow-*` / `--font-*` y génère
-automatiquement les utilities correspondantes (`bg-*`, `text-*`, `border-*`,
-`shadow-*`, `font-*`).
+En Tailwind v4, chaque `--color-*` / `--shadow-*` / `--font-*` / `--breakpoint-*`
+y génère automatiquement les utilities correspondantes (`bg-*`, `text-*`,
+`border-*`, `shadow-*`, `font-*`, `xs:`…).
 
 > ⚠️ Les valeurs doivent être des couleurs **complètes** (`hsl(...)` / hex /
 > `rgb(... / a)`). Un triplet HSL nu (`220 26% 5%`) produit une utility
@@ -28,36 +28,36 @@ automatiquement les utilities correspondantes (`bg-*`, `text-*`, `border-*`,
 | `--color-brand-hover` | `#6366f1` | indigo-500 | Hover CTA |
 | `--color-brand-accent` | `#818cf8` | indigo-400 | Icônes, eyebrow, focus ring |
 | `--color-brand-light` | `#a5b4fc` | indigo-300 | Texte d'accent |
+| `--color-brand-lighter` | `#c7d2fe` | indigo-200 | Hover d'accent |
 | `--color-brand-foreground` | `#fff` | — | Texte sur fond marque |
 
 Utilities : `bg-brand`, `hover:bg-brand-hover`, `text-brand-accent`,
-`focus-visible:ring-brand-accent`…
+`focus-visible:ring-brand-accent`, `bg-brand/90`…
 
 ## Surfaces « glass » (voiles blancs translucides)
 
-Échelle d'élévation pour les cartes sur fond sombre (alpha pré-calculé → rendu
-exact, pas de `color-mix`).
+Échelle d'élévation **unique** pour les fonds (`surface-*`) et les bordures
+(`line-*`) des cartes sur fond sombre. Alpha pré-calculé → rendu exact.
 
-| Token | Alpha | Utility |
-| --- | --- | --- |
-| `--color-surface-muted` | 1.5 % | `bg-surface-muted` |
-| `--color-surface-muted-hover` | 3 % | `bg-surface-muted-hover` |
-| `--color-surface` | 2.5 % | `bg-surface` |
-| `--color-surface-hover` | 4 % | `bg-surface-hover` |
-| `--color-surface-elevated` | 6 % | `bg-surface-elevated` |
-| `--color-surface-strong` | 8 % | `bg-surface-strong` |
+| Token | Alpha | Utility | Token | Alpha | Utility |
+| --- | --- | --- | --- | --- | --- |
+| `--color-surface-1` | 2 % | `bg-surface-1` | `--color-line-1` | 4 % | `border-line-1` |
+| `--color-surface-2` | 3 % | `bg-surface-2` | `--color-line-2` | 6 % | `border-line-2` |
+| `--color-surface-3` | 4 % | `bg-surface-3` | `--color-line-3` | 8 % | `border-line-3` |
+| `--color-surface-4` | 6 % | `bg-surface-4` | `--color-line-4` | 10 % | `border-line-4` |
+| `--color-surface-5` | 8 % | `bg-surface-5` | `--color-line-5` | 12 % | `border-line-5` |
 
-Filets / bordures (même voile, usage bordure) :
-`border-hairline-muted` (4 %), `border-hairline-elevated` (6 %),
-`border-hairline` (7 %), `border-hairline-strong` (8 %).
+> Quelques quasi-doublons d'origine (0.015/0.02/0.025 ; 0.06/0.07) ont été
+> regroupés : la différence d'alpha est sub-perceptible, le vocabulaire reste net.
 
 ## Ombres — halo indigo signature
 
-| Token | Utility |
-| --- | --- |
-| `--shadow-glow-sm` | `shadow-glow-sm` (CTA compact) |
-| `--shadow-glow` | `shadow-glow` (CTA standard) |
-| `--shadow-glow-lg` | `shadow-glow-lg` (CTA hover) |
+| Token | Utility | Usage |
+| --- | --- | --- |
+| `--shadow-glow-xs` | `shadow-glow-xs` | Petit halo (pastille d'étape) |
+| `--shadow-glow-sm` | `shadow-glow-sm` | CTA compact (header) |
+| `--shadow-glow` | `shadow-glow` | CTA standard |
+| `--shadow-glow-lg` | `shadow-glow-lg` | CTA au hover |
 
 ## Typographie & conteneur (`@layer components`)
 
@@ -70,17 +70,23 @@ pas via `@apply`) :
 - `.heading-2` — titre de section (h2)
 - `.text-lead` — chapô / accroche
 
-## Reste à migrer (passes ultérieures)
+## Convention : tokens vs indigo brut
 
-La fondation est posée et `Hero`, `Services`, `HeaderBar`, `Section` + le `body`
-l'utilisent. À basculer ensuite sur les mêmes tokens :
+- **Décisions de marque** (CTA, accents texte/icône/ring, halo, fond) →
+  **toujours via tokens**.
+- **Indigo décoratif** laissé en `indigo-*` brut **intentionnellement** :
+  dégradés multi-teintes (`from-indigo-500 to-purple-600`), glows et filets à
+  alpha (`bg-indigo-500/10`, `border-indigo-500/30`, `via-indigo-500/40`…).
+  Ce sont des compositions illustratives, pas des décisions réutilisables ;
+  les tokeniser ajouterait de l'indirection sans valeur.
 
-- `Projects`, `Process`, `FAQ`, `Contact`, `Footer`, `LatestPosts`,
-  les pages `app/services/**` (encore en `#0e082e` / `bg-white/[...]` / ombre inline).
-- Teintes indigo **alpha** (`bg-indigo-500/10`, `border-indigo-400/30`…) :
-  laissées telles quelles car les tokeniser changerait légèrement le rendu
-  (alpha direct vs `color-mix` oklab). À traiter une fois cette nuance acceptée.
-- `tailwind.config.js` est aujourd'hui **inerte** (non chargé faute de `@config`
-  en v4) : à supprimer dans une passe de nettoyage dédiée.
+## Notes
+
+- `tailwind.config.js` a été **supprimé** : il était inerte en Tailwind v4
+  (non chargé faute de `@config`). Ses réglages utiles ont migré dans `@theme`
+  (`--breakpoint-xs`, polices) ; le plugin `@tailwindcss/typography` n'était de
+  toute façon pas actif (les styles `.prose` viennent de `globals.css`).
+- Tout le site (sections homepage, pages `services`, `blog`, article, header,
+  footer) utilise désormais ces tokens : **aucune couleur de marque ni surface
+  en dur** ne subsiste.
 </content>
-</invoke>

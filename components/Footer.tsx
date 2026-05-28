@@ -27,7 +27,7 @@ const navLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/[0.06] bg-[#0e082e]/80 backdrop-blur-sm">
+    <footer className="border-t border-line-2 bg-background/80 backdrop-blur-sm">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-8 lg:px-20">
         <div className="flex flex-col items-center gap-8 sm:flex-row sm:justify-between">
           <nav
@@ -52,7 +52,7 @@ export default function Footer() {
               <a
                 key={label}
                 aria-label={label}
-                className="rounded-full p-2 text-gray-600 transition-colors hover:bg-white/[0.06] hover:text-gray-300"
+                className="rounded-full p-2 text-gray-600 transition-colors hover:bg-surface-4 hover:text-gray-300"
                 href={href}
                 rel="noopener noreferrer"
                 target="_blank"
@@ -63,7 +63,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="my-8 h-px bg-white/[0.06]" />
+        <div className="my-8 h-px bg-surface-4" />
 
         <div className="flex flex-col items-center gap-2 text-center text-xs text-gray-600 sm:flex-row sm:justify-between sm:text-left">
           <span>&copy; {new Date().getFullYear().toString()} Victor Lenain</span>

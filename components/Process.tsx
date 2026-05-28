@@ -41,7 +41,7 @@ export default function Process() {
   return (
     <Section className="scroll-mt-28 pb-28" id="process">
       <FadeOnView className="mb-16 max-w-2xl">
-        <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-indigo-400">
+        <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-brand-accent">
           Comment ça démarre
         </p>
         <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl lg:text-5xl">
@@ -69,7 +69,7 @@ export default function Process() {
               {/* Node icon */}
               <div
                 aria-hidden="true"
-                className="absolute top-0 left-0 flex h-12 w-12 items-center justify-center rounded-full border border-indigo-500/30 bg-[#0e082e] text-indigo-300 shadow-[0_0_24px_-6px_rgba(99,102,241,0.4)] lg:relative lg:mb-6"
+                className="absolute top-0 left-0 flex h-12 w-12 items-center justify-center rounded-full border border-indigo-500/30 bg-background text-brand-light shadow-glow-xs lg:relative lg:mb-6"
               >
                 <Icon className="h-5 w-5" />
               </div>
@@ -85,7 +85,7 @@ export default function Process() {
               )}
 
               <div className="flex items-baseline gap-3">
-                <span className="font-display text-xs font-semibold tracking-[0.18em] text-indigo-400">
+                <span className="font-display text-xs font-semibold tracking-[0.18em] text-brand-accent">
                   {step.number}
                 </span>
                 <span className="text-[11px] font-medium uppercase tracking-wider text-amber-400/80">

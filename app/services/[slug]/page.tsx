@@ -105,7 +105,7 @@ export default async function ServicePage({
               {service.highlights.map((h) => (
                 <li
                   key={h}
-                  className="flex items-start gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-sm text-gray-300"
+                  className="flex items-start gap-2 rounded-xl border border-line-2 bg-surface-1 p-4 text-sm text-gray-300"
                 >
                   <Check
                     aria-hidden="true"
@@ -118,7 +118,7 @@ export default async function ServicePage({
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <CalPopupButton
-                className="group inline-flex items-center gap-3 rounded-full bg-indigo-600 px-7 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_-8px_rgba(99,102,241,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-[0_0_48px_-8px_rgba(99,102,241,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
                 data-umami-event={`cta-service-${service.slug}-cal`}
               >
                 <Calendar aria-hidden="true" className="h-4 w-4" />
@@ -207,7 +207,7 @@ export default async function ServicePage({
             {service.useCases.map((uc, i) => (
               <FadeOnView
                 key={uc.title}
-                className="flex flex-col gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm"
+                className="flex flex-col gap-3 rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm"
                 delay={0.05 + i * 0.06}
               >
                 <div
@@ -226,7 +226,7 @@ export default async function ServicePage({
         {service.faq.length > 0 && (
           <Section className="pb-16">
             <FadeOnView className="mb-10 max-w-2xl">
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-indigo-400">
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-brand-accent">
                 Questions fréquentes
               </p>
               <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl">
@@ -238,7 +238,7 @@ export default async function ServicePage({
               {service.faq.map((f, i) => (
                 <FadeOnView
                   key={f.question}
-                  className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm"
+                  className="rounded-xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm"
                   delay={0.05 + i * 0.04}
                 >
                   <h3 className="text-sm font-semibold text-white sm:text-base">{f.question}</h3>
@@ -251,7 +251,7 @@ export default async function ServicePage({
 
         {/* CTA bottom */}
         <Section className="pb-24">
-          <FadeOnView className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/[0.06] bg-white/[0.02] px-6 py-14 text-center backdrop-blur-sm sm:px-12">
+          <FadeOnView className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-line-2 bg-surface-1 px-6 py-14 text-center backdrop-blur-sm sm:px-12">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent"
@@ -264,14 +264,14 @@ export default async function ServicePage({
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <CalPopupButton
-                className="group inline-flex items-center gap-3 rounded-full bg-indigo-600 px-7 py-3.5 text-base font-semibold text-white shadow-[0_0_32px_-8px_rgba(99,102,241,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
                 data-umami-event={`cta-service-${service.slug}-cal-bottom`}
               >
                 <Calendar aria-hidden="true" className="h-4 w-4" />
                 Réserver 15 min
               </CalPopupButton>
               <Link
-                className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.03] px-5 py-3 text-sm font-medium text-gray-300 transition-colors hover:border-white/[0.12] hover:text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-line-2 bg-surface-2 px-5 py-3 text-sm font-medium text-gray-300 transition-colors hover:border-line-5 hover:text-white"
                 href="/services"
               >
                 <ArrowLeft aria-hidden="true" className="h-4 w-4" />

@@ -72,7 +72,7 @@ export default function Projects() {
     <Section className="scroll-mt-28 pb-28" id="projets">
       <FadeOnView className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-2xl">
-          <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-indigo-400">
+          <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-brand-accent">
             Labs
           </p>
           <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl lg:text-5xl">
@@ -87,7 +87,7 @@ export default function Projects() {
       {/* Asymetric: 7 / 5 on lg */}
       <div className="grid gap-6 lg:grid-cols-12">
         <FadeOnView
-          className={`group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.07] bg-white/[0.025] backdrop-blur-sm transition-colors duration-300 lg:col-span-7 ${ACCENT[projects[0].accent].hover}`}
+          className={`group relative flex flex-col overflow-hidden rounded-3xl border border-line-2 bg-surface-1 backdrop-blur-sm transition-colors duration-300 lg:col-span-7 ${ACCENT[projects[0].accent].hover}`}
           delay={0.05}
         >
           <ProjectVisual large project={projects[0]} />
@@ -95,7 +95,7 @@ export default function Projects() {
         </FadeOnView>
 
         <FadeOnView
-          className={`group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.07] bg-white/[0.025] backdrop-blur-sm transition-colors duration-300 lg:col-span-5 ${ACCENT[projects[1].accent].hover}`}
+          className={`group relative flex flex-col overflow-hidden rounded-3xl border border-line-2 bg-surface-1 backdrop-blur-sm transition-colors duration-300 lg:col-span-5 ${ACCENT[projects[1].accent].hover}`}
           delay={0.15}
         >
           <ProjectVisual project={projects[1]} />
@@ -120,7 +120,7 @@ function ProjectVisual({
       className={`relative ${large ? 'h-56' : 'h-44'} overflow-hidden bg-gradient-to-br ${accent.gradient}`}
     >
       <div className={`absolute -left-12 -top-12 h-56 w-56 rounded-full blur-3xl ${accent.glow}`} />
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0e082e] to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent" />
 
       <div className="absolute left-5 top-5">
         <span className={`rounded-full border px-3 py-1 text-xs font-medium backdrop-blur-sm ${status.cls}`}>
@@ -149,7 +149,7 @@ function ProjectBody({ project }: { project: FeaturedProject }) {
           <span className="text-gray-300">{project.context}</span>
         </p>
         <p>
-          <span className="mr-1 inline-block text-[11px] font-semibold uppercase tracking-[0.14em] text-indigo-400">
+          <span className="mr-1 inline-block text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-accent">
             Ce que j&apos;ai fait
           </span>
           <span className="text-gray-300">{project.what}</span>
@@ -160,7 +160,7 @@ function ProjectBody({ project }: { project: FeaturedProject }) {
         {project.stack.map((tech) => (
           <span
             key={tech}
-            className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2 py-1 text-[11px] font-medium text-gray-300"
+            className="rounded-md border border-line-2 bg-surface-2 px-2 py-1 text-[11px] font-medium text-gray-300"
           >
             {tech}
           </span>
@@ -168,7 +168,7 @@ function ProjectBody({ project }: { project: FeaturedProject }) {
       </div>
 
       <a
-        className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-white/[0.08] hover:gap-3 focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:outline-none"
+        className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-surface-3 px-5 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-surface-5 hover:gap-3 focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
         href={project.url}
         rel="noopener noreferrer"
         target="_blank"
