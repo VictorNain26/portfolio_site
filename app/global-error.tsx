@@ -32,7 +32,7 @@ export default function GlobalError({
       </head>
       <body className="bg-background font-sans antialiased">
         <main className="grid min-h-screen place-content-center justify-items-center gap-8 px-4 text-center">
-          <h1 className="bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] bg-clip-text text-5xl leading-snug font-extrabold tracking-tight text-transparent sm:text-6xl">
+          <h1 className="bg-gradient-to-br from-[#818cf8] via-[#6366f1] to-[#4f46e5] bg-clip-text text-5xl leading-snug font-extrabold tracking-tight text-transparent sm:text-6xl">
             Erreur technique
           </h1>
 
@@ -43,7 +43,7 @@ export default function GlobalError({
 
           <div className="flex gap-4">
             <button
-              className="rounded-md bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] px-8 py-3 font-semibold text-white shadow-lg ring-1 ring-white/10 ring-inset hover:brightness-110 focus-visible:ring-2 focus-visible:ring-brand-light focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="rounded-md bg-gradient-to-br from-[#818cf8] via-[#6366f1] to-[#4f46e5] px-8 py-3 font-semibold text-white shadow-lg ring-1 ring-white/10 ring-inset hover:brightness-110 focus-visible:ring-2 focus-visible:ring-brand-light focus-visible:ring-offset-2 focus-visible:outline-none"
               type="button"
               onClick={() => reset()}
             >

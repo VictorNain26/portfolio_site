@@ -12,7 +12,7 @@ type FeaturedProject = {
   url: string;
   ctaLabel: string;
   status: 'live' | 'development';
-  accent: 'indigo' | 'rose';
+  accent: 'indigo' | 'warm';
 };
 
 const projects: [FeaturedProject, FeaturedProject] = [
@@ -40,7 +40,7 @@ const projects: [FeaturedProject, FeaturedProject] = [
     url: 'https://www.tomia.fr/',
     ctaLabel: 'Voir la landing',
     status: 'development',
-    accent: 'rose',
+    accent: 'warm',
   },
 ];
 
@@ -61,10 +61,10 @@ const ACCENT = {
     glow: 'bg-indigo-500/[0.08]',
     hover: 'hover:border-indigo-400/30',
   },
-  rose: {
-    gradient: 'from-rose-500/20 via-amber-500/15 to-transparent',
-    glow: 'bg-rose-500/[0.06]',
-    hover: 'hover:border-rose-400/30',
+  warm: {
+    gradient: 'from-amber-500/20 via-orange-500/12 to-transparent',
+    glow: 'bg-amber-500/[0.07]',
+    hover: 'hover:border-amber-400/30',
   },
 } as const;
 
@@ -141,7 +141,7 @@ function ProjectBody({ project }: { project: FeaturedProject }) {
     <div className="flex flex-1 flex-col gap-6 p-6 sm:p-8">
       <div className="space-y-3 text-sm leading-relaxed">
         <p>
-          <span className="label-mono mr-2 inline-block text-amber-400/80">
+          <span className="label-mono mr-2 inline-block text-warm/80">
             Contexte
           </span>
           <span className="text-gray-300">{project.context}</span>

@@ -13,7 +13,7 @@ y génère automatiquement les utilities correspondantes (`bg-*`, `text-*`,
 
 | Token | Utility | Rôle |
 | --- | --- | --- |
-| `--color-background` | `bg-background` | Fond du site (`#0e082e`) |
+| `--color-background` | `bg-background` | Fond du site — encre indigo (`#0B0B1C`) |
 | `--color-foreground` | `text-foreground` | Texte par défaut |
 | `--color-primary` / `-foreground` | `bg-primary` … | Surface claire / texte dessus |
 | `--color-muted` / `-foreground` | `text-muted-foreground` | Texte secondaire |
@@ -33,6 +33,22 @@ y génère automatiquement les utilities correspondantes (`bg-*`, `text-*`,
 
 Utilities : `bg-brand`, `hover:bg-brand-hover`, `text-brand-accent`,
 `focus-visible:ring-brand-accent`, `bg-brand/90`…
+
+## Signal chaud (ambre) — co-accent
+
+Système **« Encre & Signal »** : duotone froid (indigo) / chaud (ambre) sur
+encre indigo. Le chaud est employé **chirurgicalement** (durées, labels
+secondaires type *Contexte*, projet chaud) pour la chaleur et la
+différenciation — la plupart des sites dev restent 100 % froids.
+
+| Token | Hex | = Tailwind | Usage |
+| --- | --- | --- | --- |
+| `--color-warm` | `#fbbf24` | amber-400 | Accent chaud (`text-warm`, `bg-warm/80`) |
+| `--color-warm-strong` | `#f59e0b` | amber-500 | Variante appuyée |
+
+> **Hiérarchie des teintes** : indigo = primaire · ambre = co-accent ·
+> emerald = sémantique (disponible / en production) uniquement. Une seule
+> identité de gradient (indigo → periwinkle), partout.
 
 ## Surfaces « glass » (voiles blancs translucides)
 

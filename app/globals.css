@@ -8,14 +8,14 @@
    * (Auparavant des triplets HSL nus → `bg-background` rendait une couleur
    *  invalide, d'où le recours au hardcodé `#0e082e`/`text-white` partout.)
    * --------------------------------------------------------------------- */
-  --color-background: #0e082e;
+  --color-background: #0B0B1C;
   --color-foreground: hsl(210 20% 98%);
-  --color-card: #0e082e;
+  --color-card: #0B0B1C;
   --color-card-foreground: hsl(210 20% 98%);
-  --color-popover: #0e082e;
+  --color-popover: #0B0B1C;
   --color-popover-foreground: hsl(210 20% 98%);
   --color-primary: hsl(210 20% 98%);
-  --color-primary-foreground: #0e082e;
+  --color-primary-foreground: #0B0B1C;
   --color-secondary: hsl(215 25% 12%);
   --color-secondary-foreground: hsl(210 20% 98%);
   --color-muted: hsl(215 25% 12%);
@@ -40,6 +40,14 @@
   --color-brand-light: #a5b4fc;
   --color-brand-lighter: #c7d2fe;
   --color-brand-foreground: #ffffff;
+
+  /* --------------------------------------------------------------------- *
+   * Signal chaud (ambre) — co-accent du duotone « Encre & Signal ».
+   * Contrepoint chaud de l'indigo, employé chirurgicalement : durées,
+   * labels secondaires (Contexte), projet chaud. amber-400.
+   * --------------------------------------------------------------------- */
+  --color-warm: #fbbf24;
+  --color-warm-strong: #f59e0b;
 
   /* --------------------------------------------------------------------- *
    * Surfaces "glass" — voiles blancs translucides sur fond sombre.
@@ -232,8 +240,9 @@
     text-wrap: pretty;
   }
 
+  /* Gradient de marque unifié (indigo → periwinkle), une seule identité. */
   .gradient-brand-text {
-    background-image: linear-gradient(135deg, #6bb4d8 0%, #4288b7 50%, #2d5e81 100%);
+    background-image: linear-gradient(135deg, #818cf8 0%, #6366f1 50%, #4f46e5 100%);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
@@ -322,7 +331,7 @@
 }
 
 .hero-gradient-text {
-  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 25%, #c084fc 50%, #818cf8 75%, #6366f1 100%);
+  background: linear-gradient(135deg, #a5b4fc 0%, #818cf8 30%, #6366f1 60%, #818cf8 85%, #c7d2fe 100%);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   background-clip: text;

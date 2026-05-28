@@ -57,7 +57,7 @@ export default function Services() {
                     >
                       <span
                         aria-hidden="true"
-                        className="h-1 w-1 shrink-0 rounded-full bg-amber-400/80"
+                        className="h-1 w-1 shrink-0 rounded-full bg-warm/80"
                       />
                       {point}
                     </li>

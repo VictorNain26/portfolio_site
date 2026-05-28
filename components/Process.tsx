@@ -84,7 +84,7 @@ export default function Process() {
 
               <div className="flex items-baseline gap-3">
                 <span className="label-mono text-brand-accent">{step.number}</span>
-                <span className="label-mono text-amber-400/80">{step.duration}</span>
+                <span className="label-mono text-warm/80">{step.duration}</span>
               </div>
 
               <h3 className="mt-2 text-lg font-semibold text-white">{step.title}</h3>

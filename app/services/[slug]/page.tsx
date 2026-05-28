@@ -142,7 +142,7 @@ export default async function ServicePage({
         <Section className="pb-16">
           <div className="grid gap-10 lg:grid-cols-2">
             <FadeOnView delay={0.05}>
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-amber-400/80">
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-warm/80">
                 Le contexte
               </p>
               <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
