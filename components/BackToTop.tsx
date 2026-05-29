@@ -12,24 +12,15 @@ export default function BackToTop() {
 
   /* ----------- Observer / Listener ----------- */
   useEffect(() => {
-    const viewport = document.getElementById('scroll-viewport');
-    if (!viewport) {
-      return;
-    }
+    const canScroll = () =>
+      document.documentElement.scrollHeight > document.documentElement.clientHeight;
 
     const hero = document.getElementById('accueil');
 
-    const canScroll = () => viewport.scrollHeight > viewport.clientHeight;
-
     if (hero && pathname === '/') {
-      const io = new IntersectionObserver(
-        ([e]) => {
-          setVisible(canScroll() && !e?.isIntersecting);
-        },
-        {
-          root: viewport,
-        },
-      );
+      const io = new IntersectionObserver(([e]) => {
+        setVisible(canScroll() && !e?.isIntersecting);
+      });
       io.observe(hero);
       return () => {
         io.disconnect();
@@ -38,35 +29,21 @@ export default function BackToTop() {
 
     const SCROLL_THRESHOLD = 120;
     const onScroll = () => {
-      setVisible(canScroll() && viewport.scrollTop > SCROLL_THRESHOLD);
+      setVisible(canScroll() && window.scrollY > SCROLL_THRESHOLD);
     };
-    viewport.addEventListener('scroll', onScroll, { passive: true });
-    viewport.addEventListener('resize', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
     onScroll();
     return () => {
-      viewport.removeEventListener('scroll', onScroll);
-      viewport.removeEventListener('resize', onScroll);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, [pathname]);
 
   /* ----------- Handler « remonter » ----------- */
   const scrollToTop = (e: React.MouseEvent) => {
     e.preventDefault();
-
-    const behavior = getScrollBehavior();
-
-    const hero = document.getElementById('accueil');
-    if (hero) {
-      hero.scrollIntoView({ behavior, block: 'start' });
-      return;
-    }
-
-    const viewport = document.getElementById('scroll-viewport');
-    if (viewport) {
-      viewport.scrollTo({ top: 0, behavior });
-    } else {
-      window.scrollTo({ top: 0, behavior });
-    }
+    window.scrollTo({ top: 0, behavior: getScrollBehavior() });
   };
 
   /* ----------- Render ----------- */

@@ -49,23 +49,19 @@ export default function HeaderBar() {
   const [scrolled, setScrolled] = useState(false);
 
   /* État "elevated" du header dès qu'on quitte le tout-haut. Listener passif
-   * sur le scroll-viewport (Radix ScrollArea), peu coûteux et plus précis
-   * qu'un IO pour ce binaire. */
+   * sur le scroll natif du document, peu coûteux et plus précis qu'un IO pour
+   * ce binaire. */
   useEffect(() => {
-    const viewport = document.getElementById('scroll-viewport');
-    if (!viewport) return;
     const onScroll = () => {
-      setScrolled(viewport.scrollTop > 8);
+      setScrolled(window.scrollY > 8);
     };
     onScroll();
-    viewport.addEventListener('scroll', onScroll, { passive: true });
-    return () => viewport.removeEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
     if (!onHomepage) return;
-
-    const root = (document.getElementById('scroll-viewport') as Element | null) ?? null;
 
     const visibleSections = new Map<string, number>();
 
@@ -95,7 +91,6 @@ export default function HeaderBar() {
         setActiveSection(chosen);
       },
       {
-        root,
         rootMargin: '-120px 0px -55% 0px',
         threshold: [0, 0.25, 0.5, 0.75, 1],
       },
@@ -119,9 +114,7 @@ export default function HeaderBar() {
     (e: React.MouseEvent) => {
       if (!onHomepage) return;
       e.preventDefault();
-      document
-        .getElementById('scroll-viewport')
-        ?.scrollTo({ top: 0, behavior: getScrollBehavior() });
+      window.scrollTo({ top: 0, behavior: getScrollBehavior() });
     },
     [onHomepage],
   );
