@@ -18,7 +18,7 @@ export default function Services() {
       <SectionHeading
         index="01"
         label="Services"
-        lead="Vous tournez sur Django, Rails, Next, Node ou FastAPI. J'ajoute la couche IA dessus sans refonte et je mesure ce qui sort. Trois prestations IA, trois prestations web, le même code applicatif derrière."
+        lead="J'ajoute l'IA à votre application existante, sans la réécrire — et je mesure ce qu'elle vous rapporte vraiment. Trois prestations IA, trois prestations web, le même code applicatif soigné derrière."
         title="Je code la couche IA dans votre stack existante."
       />
 

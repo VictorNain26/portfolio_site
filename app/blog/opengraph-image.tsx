@@ -9,7 +9,7 @@ export default function OGImage() {
   return new ImageResponse(
     <div
       style={{
-        background: 'linear-gradient(135deg, #0e082e 0%, #1a0f4a 50%, #0e082e 100%)',
+        background: 'linear-gradient(135deg, #0B0B1C 0%, #15153a 50%, #0B0B1C 100%)',
         width: '100%',
         height: '100%',
         display: 'flex',
