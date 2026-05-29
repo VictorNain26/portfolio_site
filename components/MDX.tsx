@@ -139,9 +139,9 @@ const components: MDXComponents = {
  * MDX renderer using @content-collections/mdx
  * The useMDXComponent hook returns a memoized component internally
  */
-/* eslint-disable react-hooks/static-components -- library pattern for MDX */
+/* eslint-disable @eslint-react/static-components, react-hooks/static-components -- useMDXComponent returns a memoized component (library pattern), not a per-render component */
 export default function MDX({ code }: { code: string }) {
   const Component = useMDXComponent(code);
   return <Component components={components} />;
 }
-/* eslint-enable react-hooks/static-components */
+/* eslint-enable @eslint-react/static-components, react-hooks/static-components */

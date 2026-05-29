@@ -1,7 +1,6 @@
-import { ImageResponse } from '@vercel/og';
+import { ImageResponse } from 'next/og';
 import { allPosts } from 'content-collections';
 
-export const runtime = 'edge';
 export const alt = 'Victor Lenain - Blog';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';

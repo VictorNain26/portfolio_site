@@ -9,8 +9,10 @@ Instructions pour Claude Code lors du travail sur ce repository.
 - `bun install` - Installer les dépendances
 - `bun run dev` - Serveur de développement
 - `bun run build` - Build production
-- `bun run lint` - Vérification ESLint
-- `bun run lint:fix` - Correction automatique ESLint
+- `bun run lint` - Lint complet : Oxlint (rapide) puis ESLint
+- `bun run lint:fix` - Correction automatique Oxlint + ESLint
+- `bun run lint:oxlint` - Oxlint seul (passe rapide)
+- `bun run lint:eslint` - ESLint seul
 - `bun run type-check` - Vérification TypeScript
 - `bun run format` - Formatage Prettier
 
@@ -75,10 +77,20 @@ lib/                # Utilitaires
 - **Accessibilité** : Labels ARIA, support reduced motion
 - **SEO** : Metadata dans layout, sitemap dynamique
 
-### Configuration ESLint
+### Configuration Lint (dual-linter)
 
-Le projet utilise ESLint flat config (`eslint.config.mjs`) avec :
+Setup en duo recommandé en 2026 — Oxlint pour la vitesse, ESLint pour la
+couverture :
 
-- `next/core-web-vitals`
-- `next/typescript`
-- Règles personnalisées pour TypeScript et React
+- **Oxlint** (`.oxlintrc.json`) : passe rapide (Rust, catégorie `correctness`),
+  exécutée en premier.
+- **ESLint 10** flat config (`eslint.config.mjs`) pour ce qu'Oxlint ne couvre
+  pas encore :
+  - `@next/eslint-plugin-next` (core-web-vitals)
+  - `eslint-plugin-react-hooks` (`exhaustive-deps`)
+  - `@eslint-react/eslint-plugin` (successeur de `eslint-plugin-react`,
+    type-aware, React 19) en preset `recommended-typescript`
+  - règles TypeScript/qualité personnalisées
+- **`eslint-plugin-oxlint`** (dernier de la chaîne) éteint côté ESLint les
+  règles déjà couvertes par Oxlint (zéro double rapport).
+- **Prettier** reste le formateur (avec `prettier-plugin-tailwindcss`).
