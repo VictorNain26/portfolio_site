@@ -24,7 +24,7 @@ const proofs: { stat: string; label: string; detail: string }[] = [
   {
     stat: 'Open source',
     label: 'briques vérifiables avant signature',
-    detail: 'Serveur MCP, démo RAG, pipeline d’eval — lisibles publiquement.',
+    detail: "Serveur MCP, démo RAG, pipeline d'eval. Lisibles publiquement.",
   },
   {
     stat: '< 24 h',
@@ -40,8 +40,8 @@ export default function Testimonials() {
         <p className="label-mono mb-3 text-brand-accent">Preuve</p>
         <h2 className="heading-2 text-white">Ce qui tourne déjà, pour de vrai.</h2>
         <p className="mt-5 text-base leading-relaxed text-gray-400">
-          Pas de logo client ni de témoignage inventé. Juste des faits vérifiables — du code en
-          production et lisible avant qu&apos;on signe quoi que ce soit.
+          Pas de logo client ni de témoignage inventé. Juste des faits vérifiables : du code en
+          production, lisible avant qu&apos;on signe quoi que ce soit.
         </p>
       </FadeOnView>
 
@@ -66,8 +66,8 @@ export default function Testimonials() {
         delay={0.25}
       >
         <p className="text-sm leading-relaxed text-gray-400">
-          On a déjà travaillé ensemble ? Un retour court aide les prochains clients à se décider —
-          anonyme si vous préférez.
+          On a déjà travaillé ensemble ? Un retour court aide les prochains clients à se décider.
+          Anonyme si vous préférez.
         </p>
         <a
           className="inline-flex w-fit shrink-0 items-center gap-1.5 text-sm font-medium text-brand-light transition-colors hover:text-brand-lighter"
