@@ -94,9 +94,9 @@ export const websiteJsonLd = {
       },
       {
         '@type': 'SiteNavigationElement',
-        name: 'À propos',
-        description: 'Expérience et compétences techniques',
-        url: 'https://victorlenain.fr#a-propos',
+        name: 'Services',
+        description: 'Intégration IA, applications web, refonte et audit',
+        url: 'https://victorlenain.fr/services',
       },
       {
         '@type': 'SiteNavigationElement',

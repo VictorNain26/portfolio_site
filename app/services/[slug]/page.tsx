@@ -249,6 +249,47 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           </Section>
         )}
 
+        {/* Maillage inter-services : si ce service n'est pas le bon fit, le
+         * visiteur garde un chemin vers les autres prestations sans repasser
+         * par l'index. */}
+        <Section className="pb-16">
+          <FadeOnView className="mb-8 flex items-center gap-3">
+            <span aria-hidden="true" className="h-px w-8 bg-gray-600/60" />
+            <p className="text-xs font-medium tracking-[0.18em] text-gray-500 uppercase">
+              Autres prestations
+            </p>
+          </FadeOnView>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {services
+              .filter(s => s.slug !== service.slug)
+              .map((s, i) => {
+                const a = ACCENT_CLASSES[s.accent];
+                const SIcon = s.icon;
+                return (
+                  <FadeOnView key={s.slug} delay={0.04 * i}>
+                    <Link
+                      className={`group flex h-full gap-4 rounded-xl border border-line-1 bg-surface-1 p-5 transition-colors duration-300 ${a.hoverBorder} hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none`}
+                      data-umami-event={`xlink-${service.slug}-to-${s.slug}`}
+                      href={`/services/${s.slug}`}
+                    >
+                      <div
+                        className={`shrink-0 ${a.text} transition-transform group-hover:-translate-y-0.5`}
+                      >
+                        <SIcon aria-hidden="true" className="h-5 w-5" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <h3 className="text-sm font-semibold text-gray-200">{s.shortTitle}</h3>
+                        <p className="line-clamp-2 text-xs leading-relaxed text-gray-500">
+                          {s.tagline}
+                        </p>
+                      </div>
+                    </Link>
+                  </FadeOnView>
+                );
+              })}
+          </div>
+        </Section>
+
         {/* CTA bottom */}
         <Section className="pb-24">
           <FadeOnView className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-line-2 bg-surface-1 px-6 py-14 text-center backdrop-blur-sm sm:px-12">

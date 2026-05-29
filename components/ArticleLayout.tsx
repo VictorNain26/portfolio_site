@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import ShareButton from '@/components/ShareButton';
-import { ArrowLeft } from 'lucide-react';
+import CalPopupButton from '@/components/CalPopupButton';
+import { ArrowLeft, ArrowRight, Calendar } from 'lucide-react';
 
 type Post = {
   title: string;
@@ -118,6 +119,45 @@ export default function ArticleLayout({
           >
             GitHub
           </a>
+        </div>
+      </aside>
+
+      {/* ---------- PONT VERS LA CONVERSION ----------
+       * Le blog est une porte d'entrée SEO majeure ; sans relance, le lecteur
+       * repart sans étape suivante. Cet encart le ramène vers l'échange ou les
+       * services, au moment où le sujet est encore frais. */}
+      <aside className="relative mt-8 overflow-hidden rounded-2xl border border-brand-hover/25 bg-surface-1 p-6 text-center backdrop-blur-sm sm:p-8">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-hover/50 to-transparent"
+        />
+        <h2 className="font-display text-xl font-bold text-white sm:text-2xl">
+          Un projet derrière cette lecture&nbsp;?
+        </h2>
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-400">
+          Si la question se pose pour votre produit, autant en parler. 15&nbsp;min pour cadrer le
+          besoin — je vous dis franchement si c&apos;est pertinent, et sinon je vous oriente.
+        </p>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <CalPopupButton
+            className="group inline-flex items-center gap-2.5 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
+            data-umami-event="cta-article-cal"
+          >
+            <Calendar aria-hidden="true" className="h-4 w-4" />
+            Réserver un échange de 15&nbsp;min
+            <ArrowRight
+              aria-hidden="true"
+              className="h-4 w-4 transition-transform group-hover:translate-x-1"
+            />
+          </CalPopupButton>
+          <Link
+            className="inline-flex items-center gap-2 rounded-full border border-line-2 bg-surface-2 px-5 py-2.5 text-sm font-medium text-gray-300 transition-colors hover:border-line-5 hover:text-white focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
+            data-umami-event="cta-article-services"
+            href="/services"
+          >
+            Voir les services
+            <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+          </Link>
         </div>
       </aside>
 
