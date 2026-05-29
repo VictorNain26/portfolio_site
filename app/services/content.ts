@@ -79,7 +79,7 @@ export const services: Service[] = [
     ],
     problem: [
       "Un assistant conversationnel répond à une question. Un agent prend une décision, appelle un outil, écrit dans une base. La plupart des équipes veulent automatiser le tri de leads entrants, la qualification d'emails ou la première réponse support, et finissent avec un wrapper LLM qui invente ou un workflow no-code qui craque dès que le volume monte.",
-      "Du coup la vraie question n'est pas \"quel modèle\". C'est : qu'est-ce qui se passe quand un appel d'outil échoue, quand le contexte dépasse la fenêtre, quand l'utilisateur sort du scope prévu. Si vous n'avez pas de réponse écrite à ces trois cas, l'agent ne tiendra pas en prod.",
+      "La vraie question n'est donc pas \"quel modèle\". C'est : qu'est-ce qui se passe quand un appel d'outil échoue, quand le contexte dépasse la fenêtre, quand l'utilisateur sort du scope prévu. Si vous n'avez pas de réponse écrite à ces trois cas, l'agent ne tiendra pas en prod.",
     ],
     approach: [
       "Je borne l'agent sur trois workflows précis avec un schéma d'entrée et de sortie typés. Chaque appel d'outil passe par votre API existante, jamais par une réécriture de votre back-office. L'agent ne sait pas faire autre chose que ces trois choses, et c'est ce qui le rend fiable.",
@@ -90,7 +90,7 @@ export const services: Service[] = [
       {
         title: 'Tri et qualification de leads entrants',
         description:
-          "L'agent lit les formulaires entrants, extrait les champs structurés, score selon votre ICP écrit noir sur blanc, route vers le bon commercial avec un commentaire justifié. Les cas hors ICP ou ambigus partent en file d'attente humaine au lieu de générer une réponse hasardeuse.",
+          "L'agent lit les formulaires entrants, extrait les champs structurés, score selon votre ICP défini à l'avance, route vers le bon commercial avec un commentaire justifié. Les cas hors ICP ou ambigus partent en file d'attente humaine au lieu de générer une réponse hasardeuse.",
       },
       {
         title: 'Assistant interne sur documentation technique',
@@ -107,7 +107,7 @@ export const services: Service[] = [
       {
         question: 'Combien coûte un agent IA en production par mois ?',
         answer:
-          'Ça dépend du volume et du modèle. Un agent qui traite environ 1 000 requêtes par mois sur un modèle milieu de gamme tourne entre 30 et 200 € de tokens. Je vous chiffre au cadrage avec vos hypothèses de volume écrites, pour que vous puissiez challenger ligne par ligne.',
+          'Ça dépend du volume et du modèle. Un agent qui traite environ 1 000 requêtes par mois sur un modèle milieu de gamme tourne entre 30 et 200 € de tokens. Je vous chiffre au cadrage avec vos hypothèses de volume écrites, pour que vous puissiez vérifier chaque ligne.',
       },
       {
         question: 'Comment éviter les hallucinations ?',
@@ -218,16 +218,16 @@ export const services: Service[] = [
     accent: 'cyan',
     highlights: [
       'Code Python ou Node.js avec tests, retry et batch, pas un empilement no-code',
-      'Sortie typée et validée par schéma, jamais du texte libre balancé en aval',
+      'Sortie typée et validée par schéma, jamais du texte libre envoyé en aval',
       'Coûts tokens estimés au cadrage et suivis en prod via dashboard',
     ],
     problem: [
-      "Vous avez un process répétitif qui coûte du temps humain : classifier 500 emails par jour, extraire les champs structurés de 50 factures, générer des descriptions produits à partir de specs techniques, scorer un lead à partir de signaux multiples. C'est du travail à la chaîne sur du langage, c'est exactement ce qu'un LLM fait bien quand on l'encadre.",
+      "Vous avez un process répétitif qui coûte du temps humain : classifier 500 emails par jour, extraire les champs de 50 factures, générer des descriptions produits à partir de specs techniques, scorer un lead à partir de signaux multiples. C'est du travail à la chaîne sur du langage. Un LLM fait ça bien quand on l'encadre.",
       "Le piège, c'est d'empiler les briques no-code jusqu'à ce que la facture mensuelle dépasse le coût d'un dev. Les vrais workflows demandent du code pour le retry, le batch, le monitoring et un coût maîtrisé à long terme.",
     ],
     approach: [
       'Pipeline codée en Python ou Node.js comme du vrai code : sortie typée et validée par schéma (Pydantic, Zod), tests sur les cas connus, retry avec backoff, batch quand le volume le justifie. Coûts tokens estimés au cadrage avec hypothèses écrites, puis trackés en prod sur un dashboard que vous lisez sans moi.',
-      'Eval automatique sur un dataset de référence : si la qualité baisse après un changement de modèle ou un ajustement de prompt, vous le voyez avant la prod. Chaque choix (modèle, prompt, batch size) est justifié par des chiffres mesurés sur votre corpus, pas par mode.',
+      'Eval automatique sur un dataset de référence : si la qualité baisse après un changement de modèle ou un ajustement de prompt, vous le voyez avant la prod. Chaque choix (modèle, prompt, batch size) est justifié par des chiffres mesurés sur votre corpus, pas par habitude.',
     ],
     stack: ['Python', 'Node.js', 'Pydantic', 'Anthropic Claude', 'OpenAI', 'Langfuse'],
     useCases: [
@@ -293,7 +293,7 @@ export const services: Service[] = [
     ],
     problem: [
       'Vous avez un produit, un service, ou une équipe interne qui galère sur un outil maison vieillissant. Vous cherchez un dev qui prend le projet en main du cadrage à la mise en ligne, qui code lisible, et qui sait quand il faut rester simple.',
-      "La plupart des prestas vous vendent un template WordPress maquillé ou une SPA React de 4 Mo pour un site vitrine. Les deux sont à côté de la plaque. Une application web sur mesure, c'est du code lu plus souvent qu'il n'est écrit, et déployé sans drame.",
+      "La plupart des prestas vous vendent un template WordPress maquillé ou une SPA React de 4 Mo pour un site vitrine. Aucun des deux ne convient. Une application sur mesure, c'est du code lu plus souvent qu'il n'est écrit, et déployé sans drame.",
     ],
     approach: [
       'Je prends le projet du cadrage au déploiement. Stack selon le contexte : Next.js 15 + TypeScript pour un produit moderne, Rails 7 + PostgreSQL si vous avez besoin de monter vite sur du métier, Node.js pour les APIs. Tests sur les parties qui le méritent, pas sur le CRUD trivial.',
@@ -418,7 +418,7 @@ export const services: Service[] = [
     accent: 'emerald',
     highlights: [
       'Avis tranché et écrit, livré en note signée',
-      "Si l'IA n'est pas la bonne réponse, je vous l'écris noir sur blanc",
+      "Si l'IA n'est pas la bonne réponse, je vous le dis clairement",
       'Note de synthèse signée, lisible par un comité de direction',
     ],
     problem: [
