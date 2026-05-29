@@ -21,10 +21,6 @@ export default function BackToTop() {
 
     const canScroll = () => viewport.scrollHeight > viewport.clientHeight;
 
-    let cleanup = () => {
-      // Cleanup function for event listeners
-    };
-
     if (hero && pathname === '/') {
       const io = new IntersectionObserver(
         ([e]) => {
@@ -35,24 +31,22 @@ export default function BackToTop() {
         },
       );
       io.observe(hero);
-      cleanup = () => {
+      return () => {
         io.disconnect();
-      };
-    } else {
-      const SCROLL_THRESHOLD = 120;
-      const onScroll = () => {
-        setVisible(canScroll() && viewport.scrollTop > SCROLL_THRESHOLD);
-      };
-      viewport.addEventListener('scroll', onScroll, { passive: true });
-      viewport.addEventListener('resize', onScroll);
-      onScroll();
-      cleanup = () => {
-        viewport.removeEventListener('scroll', onScroll);
-        viewport.removeEventListener('resize', onScroll);
       };
     }
 
-    return cleanup;
+    const SCROLL_THRESHOLD = 120;
+    const onScroll = () => {
+      setVisible(canScroll() && viewport.scrollTop > SCROLL_THRESHOLD);
+    };
+    viewport.addEventListener('scroll', onScroll, { passive: true });
+    viewport.addEventListener('resize', onScroll);
+    onScroll();
+    return () => {
+      viewport.removeEventListener('scroll', onScroll);
+      viewport.removeEventListener('resize', onScroll);
+    };
   }, [pathname]);
 
   /* ----------- Handler « remonter » ----------- */

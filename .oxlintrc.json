@@ -1,0 +1,46 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "unicorn", "import", "jsx-a11y", "oxc"],
+  "env": {
+    "browser": true,
+    "es2024": true,
+    "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "19.2"
+    }
+  },
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "no-console": ["error", { "allow": ["error", "warn"] }],
+    "no-debugger": "error",
+    "eqeqeq": ["error", "always"],
+    "no-var": "error",
+    "prefer-const": "error",
+    "object-shorthand": "error",
+    "react/react-in-jsx-scope": "off",
+    "import/no-unassigned-import": "off",
+    "jsx-a11y/prefer-tag-over-role": "off"
+  },
+  "ignorePatterns": [
+    ".next/**",
+    "out/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "node_modules/**",
+    ".content-collections/**",
+    "next-env.d.ts"
+  ],
+  "overrides": [
+    {
+      "files": ["**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
+}
