@@ -3,13 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * Reveals an element with a CSS fade-up when it enters the scroll viewport.
+ * Reveals an element with a CSS fade-up when it enters the viewport.
  * Replaces the repeated Framer Motion `fadeUp` pattern with a lighter
  * IntersectionObserver-based approach. Honors `prefers-reduced-motion`
  * (handled in CSS).
  *
- * Bound to `#scroll-viewport` (the Radix ScrollArea viewport used by the
- * layout). Falls back to the document viewport if missing.
+ * Observes against the document viewport (native scroll).
  */
 export function useFadeOnView<T extends HTMLElement = HTMLDivElement>() {
   const ref = useRef<T | null>(null);
@@ -18,8 +17,6 @@ export function useFadeOnView<T extends HTMLElement = HTMLDivElement>() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    const root = (document.getElementById('scroll-viewport') as Element | null) ?? null;
 
     const io = new IntersectionObserver(
       entries => {
@@ -32,7 +29,6 @@ export function useFadeOnView<T extends HTMLElement = HTMLDivElement>() {
         }
       },
       {
-        root,
         rootMargin: '0px 0px -8% 0px',
         threshold: 0.05,
       },

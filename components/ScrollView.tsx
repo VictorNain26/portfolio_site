@@ -1,57 +1,25 @@
-'use client';
-
-import { useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
-import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
-import { cn } from '@/lib/utils';
+import { type ReactNode } from 'react';
 
 /**
- * Plein-écran scroll wrapper.
+ * Wrapper de contenu.
  *
- * Décisions UI :
- *  - `type="scroll"` : la scrollbar n'apparaît qu'au moment du scroll, puis
- *    s'estompe. Pattern dominant 2026 (Linear, Vercel, Stripe). Zéro
- *    distraction visuelle pendant la lecture.
- *  - Scrollbar scopée SOUS le header (h-14 mobile, h-16 desktop). Elle ne
- *    traverse plus la zone du header translucide, qui restait illisible
- *    derrière la barre dégradée.
+ * Historiquement, le site scrollait dans un conteneur Radix ScrollArea
+ * (`#scroll-viewport`) en `height: 100dvh; overflow: hidden`. Ça donnait une
+ * jolie scrollbar custom, mais au prix de régressions réelles sur mobile :
+ *  - la barre d'URL du navigateur ne se repliait plus au scroll (≈ 60-100px
+ *    de hauteur utile perdus en permanence) ;
+ *  - pas de restauration de scroll native entre les navigations ;
+ *  - momentum iOS, Ctrl+F « scroll-into-view » et ancres externes fragilisés.
+ *
+ * On revient donc au scroll natif du document. La scrollbar est stylée en CSS
+ * (cf. globals.css, desktop uniquement) pour conserver l'esthétique sans aucun
+ * de ces coûts. Next.js gère lui-même le reset de scroll à la navigation, et
+ * les consommateurs (`HeaderBar`, `BackToTop`, `useFadeOnView`) observent
+ * désormais le viewport du document.
+ *
+ * Composant conservé comme point d'extension et pour ne pas toucher au graphe
+ * d'imports du layout.
  */
-export default function ScrollView({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
-
-  useEffect(() => {
-    viewportRef.current?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, [pathname]);
-
-  return (
-    <ScrollAreaPrimitive.Root
-      className={cn('relative h-[100dvh] w-full overflow-hidden', className)}
-      scrollHideDelay={600}
-      type="scroll"
-      {...props}
-    >
-      <ScrollAreaPrimitive.Viewport
-        ref={viewportRef}
-        className="h-full w-full rounded-[inherit]"
-        id="scroll-viewport"
-      >
-        {children}
-      </ScrollAreaPrimitive.Viewport>
-
-      {/* Rail vertical : commence sous le header pour ne pas le traverser */}
-      <ScrollAreaPrimitive.Scrollbar
-        className="absolute top-14 right-0 h-[calc(100%-3.5rem)] w-2 p-px transition-opacity data-[state=hidden]:opacity-0 lg:top-16 lg:h-[calc(100%-4rem)]"
-        orientation="vertical"
-      >
-        <ScrollAreaPrimitive.Thumb className="flex-1 rounded-full bg-gradient-to-b from-brand-hover/80 to-violet-400/80" />
-      </ScrollAreaPrimitive.Scrollbar>
-
-      <ScrollAreaPrimitive.Corner />
-    </ScrollAreaPrimitive.Root>
-  );
+export default function ScrollView({ children }: { children: ReactNode }) {
+  return <>{children}</>;
 }
