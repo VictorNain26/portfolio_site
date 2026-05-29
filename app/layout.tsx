@@ -8,6 +8,7 @@ import ScrollView from '@/components/ScrollView';
 import BackToTop from '@/components/BackToTop';
 import HeaderBar from '@/components/HeaderBar';
 import Footer from '@/components/Footer';
+import CalEmbedScript from '@/components/CalEmbedScript';
 import MetaTags from './components/MetaTags';
 import JsonLdScripts from './components/JsonLdScripts';
 
@@ -145,6 +146,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Suspense fallback={null}>
           <BackToTop />
         </Suspense>
+
+        {/* Cal.com embed — réservation en modale inline (cf. CalPopupButton) */}
+        <CalEmbedScript />
 
         {/* Umami Analytics - privacy-friendly, no cookies */}
         <Script
