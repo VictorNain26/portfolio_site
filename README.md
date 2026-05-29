@@ -1,16 +1,16 @@
 # Victor Lenain - Portfolio Développeur Freelance
 
-> Site portfolio minimaliste et orienté conversion pour le démarchage de missions freelance.
-> Démo : <https://victorlenain.fr>
+> Site portfolio minimaliste et orienté conversion pour le démarchage de
+> missions freelance. Démo : <https://victorlenain.fr>
 
 ## Stack technique
 
-| Catégorie | Technologies |
-|-----------|-------------|
+| Catégorie     | Technologies                                  |
+| ------------- | --------------------------------------------- |
 | **Framework** | Next.js 15 (App Router), React 19, TypeScript |
-| **Styling** | Tailwind CSS 4, Framer Motion |
-| **Content** | MDX via Content Collections |
-| **Qualité** | ESLint strict, Vitest, Prettier |
+| **Styling**   | Tailwind CSS 4, Framer Motion                 |
+| **Content**   | MDX via Content Collections                   |
+| **Qualité**   | ESLint strict, Vitest, Prettier               |
 
 ## Structure du site
 
@@ -39,24 +39,26 @@ bun run build
 
 ## Scripts disponibles
 
-| Commande | Description |
-|----------|-------------|
-| `bun run dev` | Serveur de développement |
-| `bun run build` | Build production |
-| `bun run lint` | Vérification ESLint |
-| `bun run test` | Tests Vitest |
-| `bun run format` | Formatage Prettier |
+| Commande         | Description              |
+| ---------------- | ------------------------ |
+| `bun run dev`    | Serveur de développement |
+| `bun run build`  | Build production         |
+| `bun run lint`   | Vérification ESLint      |
+| `bun run test`   | Tests Vitest             |
+| `bun run format` | Formatage Prettier       |
 
 ## Personnalisation
 
 ### Modifier les informations de contact
 
 Éditer `components/Hero.tsx` :
+
 - Email, WhatsApp, liens sociaux
 
 ### Ajouter des services
 
 Éditer `components/Services.tsx` :
+
 - Modifier le tableau `services` avec titre, description, résultats
 
 ### Ajouter des projets
@@ -70,9 +72,9 @@ Créer un fichier `.mdx` dans `content/posts/` avec le frontmatter :
 ```yaml
 ---
 title: "Titre de l'article"
-summary: "Résumé court"
-coverImage: "/images/posts/cover.jpg"
-publishedAt: "2025-01-01"
-tags: ["tag1", "tag2"]
+summary: 'Résumé court'
+coverImage: '/images/posts/cover.jpg'
+publishedAt: '2025-01-01'
+tags: ['tag1', 'tag2']
 ---
 ```

@@ -38,7 +38,7 @@ async function main() {
   }
 
   console.warn(`Notifying search engines about ${urls.length} URL(s):`);
-  urls.forEach((u) => console.warn(`  ${u}`));
+  urls.forEach(u => console.warn(`  ${u}`));
 
   await notifyIndexNow(urls);
 

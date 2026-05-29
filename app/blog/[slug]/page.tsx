@@ -15,9 +15,7 @@ const BASE_URL = 'https://victorlenain.fr';
 // quand on accède à son URL, sans créer de 404 persistant.
 export function generateStaticParams() {
   const now = new Date();
-  return allPosts
-    .filter((p) => new Date(p.publishedAt) <= now)
-    .map((p) => ({ slug: p.slug }));
+  return allPosts.filter(p => new Date(p.publishedAt) <= now).map(p => ({ slug: p.slug }));
 }
 
 /* ---------------- SEO / OG ------------------------ */
@@ -71,9 +69,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   // Navigation entre tous les articles publiés (exclut les futurs de la nav)
   const now = new Date();
   const published = allPosts
-    .filter((p) => new Date(p.publishedAt) <= now)
+    .filter(p => new Date(p.publishedAt) <= now)
     .sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
-  const idx = published.findIndex((p) => p.slug === post.slug);
+  const idx = published.findIndex(p => p.slug === post.slug);
   const prev = idx > 0 ? (published[idx - 1] ?? null) : null;
   const next = idx >= 0 && idx < published.length - 1 ? (published[idx + 1] ?? null) : null;
 

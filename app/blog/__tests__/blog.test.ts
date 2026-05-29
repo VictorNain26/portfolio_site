@@ -36,24 +36,19 @@ const mockPosts = [
 
 // Replicate the filtering logic from generateStaticParams
 function getPublishedParams(allPosts: typeof mockPosts, now: Date) {
-  return allPosts
-    .filter((p) => new Date(p.publishedAt) <= now)
-    .map((p) => ({ slug: p.slug }));
+  return allPosts.filter(p => new Date(p.publishedAt) <= now).map(p => ({ slug: p.slug }));
 }
 
 // Replicate the filtering logic from blog listing
 function getPublishedPosts(allPosts: typeof mockPosts, now: Date) {
   return allPosts
-    .filter((post) => new Date(post.publishedAt) <= now)
-    .sort(
-      (a, b) =>
-        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-    );
+    .filter(post => new Date(post.publishedAt) <= now)
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 }
 
 // Replicate the lookup logic from PostPage (no date filter)
 function findPost(allPosts: typeof mockPosts, slug: string) {
-  return allPosts.find((p) => p.slug === slug) ?? null;
+  return allPosts.find(p => p.slug === slug) ?? null;
 }
 
 describe('Blog post filtering logic', () => {
@@ -69,19 +64,19 @@ describe('Blog post filtering logic', () => {
   describe('generateStaticParams logic', () => {
     it('includes past posts', () => {
       const params = getPublishedParams(mockPosts, new Date());
-      const slugs = params.map((p) => p.slug);
+      const slugs = params.map(p => p.slug);
       expect(slugs).toContain('2025-01-12-article-passe');
     });
 
     it('includes posts published today', () => {
       const params = getPublishedParams(mockPosts, new Date());
-      const slugs = params.map((p) => p.slug);
+      const slugs = params.map(p => p.slug);
       expect(slugs).toContain('2026-03-05-article-aujourdhui');
     });
 
     it('excludes future posts', () => {
       const params = getPublishedParams(mockPosts, new Date());
-      const slugs = params.map((p) => p.slug);
+      const slugs = params.map(p => p.slug);
       expect(slugs).not.toContain('2099-12-31-article-futur');
     });
 
@@ -95,7 +90,7 @@ describe('Blog post filtering logic', () => {
     it('only returns published posts', () => {
       const published = getPublishedPosts(mockPosts, new Date());
       expect(published).toHaveLength(2);
-      expect(published.every((p) => new Date(p.publishedAt) <= new Date())).toBe(true);
+      expect(published.every(p => new Date(p.publishedAt) <= new Date())).toBe(true);
     });
 
     it('sorts newest first', () => {

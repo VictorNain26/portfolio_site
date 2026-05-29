@@ -8,7 +8,7 @@ export const personJsonLd = {
   alternateName: 'Victor Lenain Dev',
   jobTitle: 'Développeur full-stack · Intégration IA',
   description:
-    "Développeur full-stack freelance à Paris. Je greffe la couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Stack Next.js, Django, Rails, FastAPI, pgvector.",
+    'Développeur full-stack freelance à Paris. Je greffe la couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Stack Next.js, Django, Rails, FastAPI, pgvector.',
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   sameAs: [
@@ -253,7 +253,7 @@ export const professionalServiceJsonLd = {
           '@type': 'Service',
           name: 'Automatisations LLM sur mesure',
           description:
-            "Pipelines LLM qui tournent en prod : classification, extraction, scoring, génération. Coûts tokens suivis, eval en place.",
+            'Pipelines LLM qui tournent en prod : classification, extraction, scoring, génération. Coûts tokens suivis, eval en place.',
         },
       },
       {
@@ -262,7 +262,7 @@ export const professionalServiceJsonLd = {
           '@type': 'Service',
           name: 'Applications web sur mesure',
           description:
-            "Sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js. IA embarquée si elle apporte de la valeur.",
+            'Sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js. IA embarquée si elle apporte de la valeur.',
         },
       },
       {

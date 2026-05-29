@@ -1,59 +1,94 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-background: 220 26% 5%;
-  --color-foreground: 210 20% 98%;
-  --color-card: 220 26% 5%;
-  --color-card-foreground: 210 20% 98%;
-  --color-popover: 220 26% 5%;
-  --color-popover-foreground: 210 20% 98%;
-  --color-primary: 210 20% 98%;
-  --color-primary-foreground: 220 26% 5%;
-  --color-secondary: 215 25% 12%;
-  --color-secondary-foreground: 210 20% 98%;
-  --color-muted: 215 25% 12%;
-  --color-muted-foreground: 217 10% 65%;
-  --color-accent: 215 25% 12%;
-  --color-accent-foreground: 210 20% 98%;
-  --color-destructive: 0 62% 30%;
-  --color-destructive-foreground: 210 20% 98%;
-  --color-border: 215 25% 12%;
-  --color-input: 215 25% 12%;
-  --color-ring: 216 12% 84%;
+  /* --------------------------------------------------------------------- *
+   * Palette de base — Source unique de vérité.
+   * Les valeurs sont des couleurs COMPLÈTES (hsl()/hex) pour que les
+   * utilities Tailwind v4 (bg-*, text-*, border-*) produisent du CSS valide.
+   * (Auparavant des triplets HSL nus → `bg-background` rendait une couleur
+   *  invalide, d'où le recours au hardcodé `#0e082e`/`text-white` partout.)
+   * --------------------------------------------------------------------- */
+  --color-background: #0b0b1c;
+  --color-foreground: hsl(210 20% 98%);
+  --color-card: #0b0b1c;
+  --color-card-foreground: hsl(210 20% 98%);
+  --color-popover: #0b0b1c;
+  --color-popover-foreground: hsl(210 20% 98%);
+  --color-primary: hsl(210 20% 98%);
+  --color-primary-foreground: #0b0b1c;
+  --color-secondary: hsl(215 25% 12%);
+  --color-secondary-foreground: hsl(210 20% 98%);
+  --color-muted: hsl(215 25% 12%);
+  --color-muted-foreground: hsl(217 10% 65%);
+  --color-accent: hsl(215 25% 12%);
+  --color-accent-foreground: hsl(210 20% 98%);
+  --color-destructive: hsl(0 62% 30%);
+  --color-destructive-foreground: hsl(210 20% 98%);
+  --color-border: hsl(215 25% 12%);
+  --color-input: hsl(215 25% 12%);
+  --color-ring: hsl(216 12% 84%);
+
+  /* --------------------------------------------------------------------- *
+   * Marque (indigo) — couleur d'action principale du site.
+   * Valeurs alignées sur l'échelle Tailwind `indigo` déjà employée afin de
+   * ne RIEN changer au rendu, tout en centralisant la décision.
+   *   brand=indigo-600, brand-hover=indigo-500, brand-accent=indigo-400…
+   * --------------------------------------------------------------------- */
+  --color-brand: #4f46e5;
+  --color-brand-hover: #6366f1;
+  --color-brand-accent: #818cf8;
+  --color-brand-light: #a5b4fc;
+  --color-brand-lighter: #c7d2fe;
+  --color-brand-foreground: #ffffff;
+
+  /* --------------------------------------------------------------------- *
+   * Signal chaud (ambre) — co-accent du duotone « Encre & Signal ».
+   * Contrepoint chaud de l'indigo, employé chirurgicalement : durées,
+   * labels secondaires (Contexte), projet chaud. amber-400.
+   * --------------------------------------------------------------------- */
+  --color-warm: #fbbf24;
+  --color-warm-strong: #f59e0b;
+
+  /* --------------------------------------------------------------------- *
+   * Surfaces "glass" — voiles blancs translucides sur fond sombre.
+   * Échelle d'élévation unique (alpha pré-calculé = rendu exact, pas de
+   * color-mix). `surface-*` = fonds, `line-*` = bordures.
+   *   surface-1 fonds de carte par défaut … surface-5 éléments appuyés.
+   *   line-1 filet discret … line-5 bordure marquée.
+   * --------------------------------------------------------------------- */
+  --color-surface-1: rgb(255 255 255 / 0.02);
+  --color-surface-2: rgb(255 255 255 / 0.03);
+  --color-surface-3: rgb(255 255 255 / 0.04);
+  --color-surface-4: rgb(255 255 255 / 0.06);
+  --color-surface-5: rgb(255 255 255 / 0.08);
+
+  --color-line-1: rgb(255 255 255 / 0.04);
+  --color-line-2: rgb(255 255 255 / 0.06);
+  --color-line-3: rgb(255 255 255 / 0.08);
+  --color-line-4: rgb(255 255 255 / 0.1);
+  --color-line-5: rgb(255 255 255 / 0.12);
+
+  /* --------------------------------------------------------------------- *
+   * Ombres — halo indigo signature (était inliné/dupliqué ~8×).
+   * Génère les utilities `shadow-glow-xs|glow-sm|glow|glow-lg`.
+   * --------------------------------------------------------------------- */
+  --shadow-glow-xs: 0 0 24px -6px rgb(99 102 241 / 0.4);
+  --shadow-glow-sm: 0 0 24px -8px rgb(99 102 241 / 0.5);
+  --shadow-glow: 0 0 32px -8px rgb(99 102 241 / 0.5);
+  --shadow-glow-lg: 0 0 48px -8px rgb(99 102 241 / 0.6);
+
   --radius: 0.5rem;
-  --font-family-sans: var(--font-inter), system-ui, sans-serif;
-  --font-family-display: var(--font-geist), system-ui, sans-serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-display: var(--font-geist), system-ui, sans-serif;
-}
+  --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, monospace;
 
-@layer base {
-  :root {
-    --background: var(--color-background);
-    --foreground: var(--color-foreground);
-    --card: var(--color-card);
-    --card-foreground: var(--color-card-foreground);
-    --popover: var(--color-popover);
-    --popover-foreground: var(--color-popover-foreground);
-    --primary: var(--color-primary);
-    --primary-foreground: var(--color-primary-foreground);
-    --secondary: var(--color-secondary);
-    --secondary-foreground: var(--color-secondary-foreground);
-    --muted: var(--color-muted);
-    --muted-foreground: var(--color-muted-foreground);
-    --accent: var(--color-accent);
-    --accent-foreground: var(--color-accent-foreground);
-    --destructive: var(--color-destructive);
-    --destructive-foreground: var(--color-destructive-foreground);
-    --border: var(--color-border);
-    --input: var(--color-input);
-    --ring: var(--color-ring);
-  }
+  /* Breakpoint custom (était dans tailwind.config.js, inerte en v4). */
+  --breakpoint-xs: 475px;
 }
 
 @layer base {
   * {
-    border-color: hsl(var(--color-border));
+    border-color: var(--color-border);
   }
 
   body {
@@ -90,14 +125,14 @@
 
   /* Focus styles */
   *:focus {
-    outline: 2px solid hsl(var(--ring));
+    outline: 2px solid var(--color-ring);
     outline-offset: 2px;
   }
 
   /* Selection styles */
   ::selection {
-    background-color: hsl(var(--primary) / 0.2);
-    color: hsl(var(--primary-foreground));
+    background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    color: var(--color-primary-foreground);
   }
 
   /* Prevent horizontal overflow and layout shifts */
@@ -123,7 +158,7 @@
       * {
         -webkit-tap-highlight-color: transparent;
       }
-      
+
       button,
       a {
         -webkit-touch-callout: none;
@@ -151,10 +186,43 @@
   /* High contrast mode */
   @media (prefers-contrast: high) {
     :root {
-      --background: 0 0% 0%;
-      --foreground: 0 0% 100%;
-      --border: 0 0% 100%;
+      --color-background: #000000;
+      --color-foreground: #ffffff;
+      --color-border: #ffffff;
     }
+  }
+}
+
+/* -------------------------------------------------------------------------- *
+ * Échelle typographique & conteneur — primitives réutilisables.
+ * Encapsulent les combinaisons responsive dupliquées section après section
+ * (rendu identique, une seule source à faire évoluer lors de la refonte).
+ * -------------------------------------------------------------------------- */
+@layer components {
+  /* Conteneur de contenu standard (largeur max + gouttières du site). */
+  .container-site {
+    @apply mx-auto max-w-7xl px-4 sm:px-8 lg:px-20;
+  }
+
+  /* Label technique en monospace (signature éditoriale-technique) :
+   * numéros de section, métadonnées, tags stack. */
+  .label-mono {
+    @apply font-mono text-xs font-medium tracking-[0.2em] uppercase;
+  }
+
+  /* Titre hero (h1). */
+  .heading-1 {
+    @apply font-display text-[2.5rem] leading-[1.04] font-bold tracking-[-0.025em] sm:text-[3.5rem] md:text-6xl lg:text-[4.75rem];
+  }
+
+  /* Titre de section (h2). */
+  .heading-2 {
+    @apply font-display text-3xl leading-[1.1] font-bold sm:text-4xl lg:text-5xl;
+  }
+
+  /* Texte d'accroche / chapô. */
+  .text-lead {
+    @apply text-lg leading-relaxed;
   }
 }
 
@@ -165,15 +233,6 @@
 
   .text-pretty {
     text-wrap: pretty;
-  }
-
-  .gradient-brand-text {
-    background-image: linear-gradient(135deg, #6bb4d8 0%, #4288b7 50%, #2d5e81 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    background-size: 200% 200%;
-    animation: gradient-shift 3s ease infinite;
   }
 
   /* Fade-up reveal driven by IntersectionObserver (see useFadeOnView). */
@@ -227,18 +286,32 @@
 
 /* Hero gradient text */
 @keyframes hero-gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes scroll-dot {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
 }
 
 .animate-fade-in {
@@ -257,7 +330,14 @@
 }
 
 .hero-gradient-text {
-  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 25%, #c084fc 50%, #818cf8 75%, #6366f1 100%);
+  background: linear-gradient(
+    135deg,
+    #a5b4fc 0%,
+    #818cf8 30%,
+    #6366f1 60%,
+    #818cf8 85%,
+    #c7d2fe 100%
+  );
   background-size: 300% 300%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -271,11 +351,11 @@
 }
 
 .prose :where(code):not(:where([class~='not-prose'] *)) {
-  @apply bg-muted rounded px-1.5 py-0.5 font-mono text-sm;
+  @apply rounded bg-muted px-1.5 py-0.5 font-mono text-sm;
 }
 
 .prose pre {
-  @apply bg-muted rounded-xl p-4 text-sm;
+  @apply rounded-xl bg-muted p-4 text-sm;
 }
 
 .prose pre code {
@@ -284,7 +364,7 @@
 
 .prose blockquote {
   @apply border-l-4 pl-4 italic;
-  border-left-color: hsl(var(--color-border));
+  border-left-color: var(--color-border);
 }
 
 .prose h1,
@@ -293,7 +373,7 @@
 .prose h4,
 .prose h5,
 .prose h6 {
-  @apply font-display text-foreground font-semibold;
+  @apply font-display font-semibold text-foreground;
 }
 
 .prose a {
@@ -302,13 +382,13 @@
 
 .prose table {
   @apply border-collapse border;
-  border-color: hsl(var(--color-border));
+  border-color: var(--color-border);
 }
 
 .prose th,
 .prose td {
   @apply border px-4 py-2;
-  border-color: hsl(var(--color-border));
+  border-color: var(--color-border);
 }
 
 .prose th {

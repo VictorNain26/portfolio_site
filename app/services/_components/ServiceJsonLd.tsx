@@ -68,7 +68,7 @@ export default function ServiceJsonLd({ service }: { service: Service }) {
       ? {
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
-          mainEntity: service.faq.map((f) => ({
+          mainEntity: service.faq.map(f => ({
             '@type': 'Question',
             name: f.question,
             acceptedAnswer: { '@type': 'Answer', text: f.answer },

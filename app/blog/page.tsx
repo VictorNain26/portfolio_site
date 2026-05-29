@@ -47,7 +47,7 @@ const BASE_URL = 'https://victorlenain.fr';
 export default function BlogIndex() {
   const now = new Date();
   const publishedPosts = allPosts
-    .filter((post) => new Date(post.publishedAt) <= now)
+    .filter(post => new Date(post.publishedAt) <= now)
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
   const itemListJsonLd = {
@@ -87,15 +87,13 @@ export default function BlogIndex() {
 
       {/* Articles */}
       <div className="space-y-6">
-        {publishedPosts.map((post) => {
-          const readingTime = Math.ceil(
-            post.content.split(/\s+/).length / WORDS_PER_MINUTE
-          );
+        {publishedPosts.map(post => {
+          const readingTime = Math.ceil(post.content.split(/\s+/).length / WORDS_PER_MINUTE);
 
           return (
             <article key={post.slug}>
               <Link
-                className="group block rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-300 hover:border-indigo-500/30 hover:bg-white/[0.04] sm:p-8"
+                className="group block rounded-2xl border border-line-2 bg-surface-1 p-6 backdrop-blur-sm transition-all duration-300 hover:border-brand-hover/30 hover:bg-surface-3 sm:p-8"
                 href={`/blog/${post.slug}`}
               >
                 {/* Meta row */}
@@ -114,22 +112,20 @@ export default function BlogIndex() {
                 </div>
 
                 {/* Title */}
-                <h2 className="mt-3 text-xl font-semibold leading-snug text-white transition-colors group-hover:text-indigo-400 sm:text-2xl">
+                <h2 className="mt-3 text-xl leading-snug font-semibold text-white transition-colors group-hover:text-brand-accent sm:text-2xl">
                   {post.title}
                 </h2>
 
                 {/* Summary */}
-                <p className="mt-3 line-clamp-2 leading-relaxed text-gray-400">
-                  {post.summary}
-                </p>
+                <p className="mt-3 line-clamp-2 leading-relaxed text-gray-400">{post.summary}</p>
 
                 {/* Tags */}
                 {post.tags.length > 0 && (
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {post.tags.slice(0, 4).map((tag) => (
+                    {post.tags.slice(0, 4).map(tag => (
                       <span
                         key={tag}
-                        className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-medium text-gray-400"
+                        className="rounded-full border border-line-3 bg-surface-3 px-3 py-1 text-xs font-medium text-gray-400"
                       >
                         {tag}
                       </span>
@@ -138,7 +134,7 @@ export default function BlogIndex() {
                 )}
 
                 {/* CTA */}
-                <span className="mt-5 inline-flex items-center text-sm font-medium text-indigo-400 transition-colors group-hover:text-indigo-300">
+                <span className="mt-5 inline-flex items-center text-sm font-medium text-brand-accent transition-colors group-hover:text-brand-light">
                   Lire l&apos;article
                   <svg
                     aria-hidden="true"

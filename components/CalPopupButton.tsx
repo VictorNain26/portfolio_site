@@ -9,19 +9,9 @@ type CalPopupButtonProps = {
   'data-umami-event'?: string;
 };
 
-export default function CalPopupButton({
-  children,
-  className,
-  ...rest
-}: CalPopupButtonProps) {
+export default function CalPopupButton({ children, className, ...rest }: CalPopupButtonProps) {
   return (
-    <a
-      {...rest}
-      className={className}
-      href={CAL_URL}
-      rel="noopener noreferrer"
-      target="_blank"
-    >
+    <a {...rest} className={className} href={CAL_URL} rel="noopener noreferrer" target="_blank">
       {children}
     </a>
   );

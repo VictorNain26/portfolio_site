@@ -42,7 +42,7 @@ describe('cn utility function', () => {
       { 'object-class': true, 'false-class': false },
       undefined,
       null,
-      'final-class'
+      'final-class',
     );
     expect(result).toBe('base array-class object-class final-class');
   });

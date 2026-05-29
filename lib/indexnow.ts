@@ -13,13 +13,10 @@ export async function notifyIndexNow(urls: string[]) {
     urlList: urls,
   };
 
-  const endpoints = [
-    'https://api.indexnow.org/indexnow',
-    'https://www.bing.com/indexnow',
-  ];
+  const endpoints = ['https://api.indexnow.org/indexnow', 'https://www.bing.com/indexnow'];
 
   const results = await Promise.allSettled(
-    endpoints.map(async (endpoint) => {
+    endpoints.map(async endpoint => {
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json; charset=utf-8' },

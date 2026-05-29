@@ -8,7 +8,7 @@ const iconButtonVariants = cva(
   'group rounded-full border border-black/10 bg-black/5 shadow-sm \
    transition-colors duration-200 hover:bg-black/20 hover:border-black/20 \
    dark:bg-white/10 dark:border-white/20 dark:hover:bg-white/30 dark:hover:border-white/30 \
-   text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 \
+   text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-hover/60 \
    [&_svg]:pointer-events-none',
   {
     variants: {

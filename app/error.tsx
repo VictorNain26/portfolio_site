@@ -24,18 +24,17 @@ export default function Error({
 
   return (
     <main className="grid min-h-screen place-content-center justify-items-center gap-8 px-4 text-center">
-      <h1 className="font-display bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] bg-clip-text text-5xl leading-snug font-extrabold tracking-tight text-transparent sm:text-6xl">
+      <h1 className="bg-gradient-to-br from-[#818cf8] via-[#6366f1] to-[#4f46e5] bg-clip-text font-display text-5xl leading-snug font-extrabold tracking-tight text-transparent sm:text-6xl">
         Erreur technique
       </h1>
 
       <p className="max-w-xl text-base leading-relaxed text-gray-300 sm:text-lg">
-        Une erreur inattendue s&apos;est produite. Veuillez réessayer ou revenir
-        à l&apos;accueil.
+        Une erreur inattendue s&apos;est produite. Veuillez réessayer ou revenir à l&apos;accueil.
       </p>
 
       <div className="flex gap-4">
         <Button
-          className="rounded-md bg-gradient-to-br from-[#6bb4d8] via-[#4288b7] to-[#2d5e81] px-8 py-3 font-semibold text-white shadow-lg ring-1 ring-white/10 ring-inset hover:brightness-110 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="rounded-md bg-gradient-to-br from-[#818cf8] via-[#6366f1] to-[#4f46e5] px-8 py-3 font-semibold text-white shadow-lg ring-1 ring-white/10 ring-inset hover:brightness-110 focus-visible:ring-2 focus-visible:ring-brand-light focus-visible:ring-offset-2 focus-visible:outline-none"
           size="lg"
           type="button"
           onClick={() => reset()}
@@ -44,7 +43,7 @@ export default function Error({
         </Button>
         <Button
           asChild
-          className="rounded-md border border-gray-600 bg-transparent px-8 py-3 font-semibold text-gray-300 hover:bg-gray-800 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="rounded-md border border-gray-600 bg-transparent px-8 py-3 font-semibold text-gray-300 hover:bg-gray-800 focus-visible:ring-2 focus-visible:ring-brand-light focus-visible:ring-offset-2 focus-visible:outline-none"
           size="lg"
           variant="outline"
         >

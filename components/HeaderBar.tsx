@@ -6,11 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Calendar, Menu, X } from 'lucide-react';
-import {
-  GitHubIcon,
-  LinkedInIcon,
-  WhatsAppIcon,
-} from '@/components/icons/SocialIcons';
+import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from '@/components/icons/SocialIcons';
 import CalPopupButton from '@/components/CalPopupButton';
 
 /** Header nav. Routes (Services, Blog) + ancres homepage (Projets, Contact).
@@ -68,13 +64,12 @@ export default function HeaderBar() {
   useEffect(() => {
     if (!onHomepage) return;
 
-    const root =
-      (document.getElementById('scroll-viewport') as Element | null) ?? null;
+    const root = (document.getElementById('scroll-viewport') as Element | null) ?? null;
 
     const visibleSections = new Map<string, number>();
 
     const io = new IntersectionObserver(
-      (entries) => {
+      entries => {
         for (const entry of entries) {
           const id = entry.target.id;
           if (entry.isIntersecting) {
@@ -113,14 +108,11 @@ export default function HeaderBar() {
     return () => io.disconnect();
   }, [onHomepage]);
 
-  const scrollToSection = useCallback(
-    (e: React.MouseEvent, id: string) => {
-      e.preventDefault();
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-      setMobileMenuOpen(false);
-    },
-    [],
-  );
+  const scrollToSection = useCallback((e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setMobileMenuOpen(false);
+  }, []);
 
   const scrollToTop = useCallback(
     (e: React.MouseEvent) => {
@@ -140,7 +132,7 @@ export default function HeaderBar() {
         isActive ? 'text-white' : 'text-gray-400 hover:text-white'
       }`;
       const mobileClasses = `rounded-full px-6 py-3 text-lg font-medium transition-colors focus:outline-none ${
-        isActive ? 'bg-white/[0.08] text-white' : 'text-gray-400 hover:text-white'
+        isActive ? 'bg-surface-5 text-white' : 'text-gray-400 hover:text-white'
       }`;
       return (
         <Link
@@ -153,7 +145,7 @@ export default function HeaderBar() {
         >
           {!isMobile && isActive && (
             <motion.span
-              className="absolute inset-0 rounded-full bg-white/[0.08]"
+              className="absolute inset-0 rounded-full bg-surface-5"
               layoutId="nav-pill"
               transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
             />
@@ -190,7 +182,7 @@ export default function HeaderBar() {
       isActive ? 'text-white' : 'text-gray-400 hover:text-white'
     }`;
     const mobileClasses = `rounded-full px-6 py-3 text-lg font-medium transition-colors focus:outline-none ${
-      isActive ? 'bg-white/[0.08] text-white' : 'text-gray-400 hover:text-white'
+      isActive ? 'bg-surface-5 text-white' : 'text-gray-400 hover:text-white'
     }`;
 
     return (
@@ -198,13 +190,13 @@ export default function HeaderBar() {
         key={link.label}
         className={isMobile ? mobileClasses : desktopClasses}
         href={href}
-        onClick={(e) => {
+        onClick={e => {
           scrollToSection(e, link.id);
         }}
       >
         {!isMobile && isActive && (
           <motion.span
-            className="absolute inset-0 rounded-full bg-white/[0.08]"
+            className="absolute inset-0 rounded-full bg-surface-5"
             layoutId="nav-pill"
             transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
           />
@@ -219,8 +211,8 @@ export default function HeaderBar() {
       <header
         className={`fixed inset-x-0 top-0 z-50 px-4 text-white backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300 sm:px-8 lg:px-20 xl:px-28 2xl:px-36 ${
           scrolled
-            ? 'border-b border-white/[0.08] bg-[#0e082e]/85 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.5)]'
-            : 'border-b border-transparent bg-[#0e082e]/40'
+            ? 'border-b border-line-3 bg-background/85 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.5)]'
+            : 'border-b border-transparent bg-background/40'
         }`}
       >
         <div className="mx-auto flex h-14 max-w-7xl items-center lg:h-16">
@@ -247,7 +239,7 @@ export default function HeaderBar() {
 
           {/* Desktop nav (centered absolute) */}
           <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
-            {NAV_LINKS.map((link) => renderNavLink(link, 'desktop'))}
+            {NAV_LINKS.map(link => renderNavLink(link, 'desktop'))}
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
@@ -256,7 +248,7 @@ export default function HeaderBar() {
                 <a
                   key={label}
                   aria-label={label}
-                  className="rounded-full p-2 text-gray-500 transition-colors hover:bg-white/[0.06] hover:text-gray-300"
+                  className="rounded-full p-2 text-gray-500 transition-colors hover:bg-surface-4 hover:text-gray-300"
                   href={href}
                   rel="noopener noreferrer"
                   target="_blank"
@@ -266,11 +258,11 @@ export default function HeaderBar() {
               ))}
             </div>
 
-            <div className="hidden h-5 w-px bg-white/[0.08] lg:block" />
+            <div className="hidden h-5 w-px bg-surface-5 lg:block" />
 
             {/* CTA permanent — Cal.com en popup */}
             <CalPopupButton
-              className="hidden items-center gap-2 rounded-full bg-indigo-600 px-4 py-1.5 text-sm font-medium text-white shadow-[0_0_24px_-8px_rgba(99,102,241,0.5)] transition-all hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 sm:inline-flex"
+              className="hidden items-center gap-2 rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white shadow-glow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none sm:inline-flex"
               data-umami-event="cta-header-cal"
             >
               <Calendar className="h-3.5 w-3.5" />
@@ -279,10 +271,10 @@ export default function HeaderBar() {
 
             <button
               aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-              className="rounded-full p-2 text-gray-400 transition-colors hover:bg-white/[0.06] hover:text-white lg:hidden"
+              className="rounded-full p-2 text-gray-400 transition-colors hover:bg-surface-4 hover:text-white lg:hidden"
               type="button"
               onClick={() => {
-                setMobileMenuOpen((v) => !v);
+                setMobileMenuOpen(v => !v);
               }}
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -295,7 +287,7 @@ export default function HeaderBar() {
         {mobileMenuOpen && (
           <motion.div
             animate={{ opacity: 1 }}
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#0e082e]/95 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-background/95 backdrop-blur-2xl lg:hidden"
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
@@ -321,7 +313,7 @@ export default function HeaderBar() {
                 transition={{ duration: 0.3, delay: NAV_LINKS.length * 0.05 }}
               >
                 <CalPopupButton
-                  className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-6 py-3 text-lg font-medium text-white shadow-[0_0_32px_-8px_rgba(99,102,241,0.5)] transition-all hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                  className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-lg font-medium text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
                   data-umami-event="cta-mobile-menu-cal"
                 >
                   <Calendar className="h-5 w-5" />
@@ -341,7 +333,7 @@ export default function HeaderBar() {
                 <a
                   key={label}
                   aria-label={label}
-                  className="rounded-full border border-white/[0.06] bg-white/[0.03] p-3 text-gray-400 transition-colors hover:bg-white/[0.08] hover:text-white"
+                  className="rounded-full border border-line-2 bg-surface-2 p-3 text-gray-400 transition-colors hover:bg-surface-5 hover:text-white"
                   href={href}
                   rel="noopener noreferrer"
                   target="_blank"

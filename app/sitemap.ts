@@ -28,7 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // Pages services individuelles
-  const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
+  const servicePages: MetadataRoute.Sitemap = services.map(service => ({
     url: `${baseUrl}/services/${service.slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
@@ -37,12 +37,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Articles de blog publiés (exclure les articles programmés dans le futur)
   const now = new Date();
-  const blogPosts: MetadataRoute.Sitemap = allPosts.filter((post) => new Date(post.publishedAt) <= now).map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.publishedAt),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
-  }));
+  const blogPosts: MetadataRoute.Sitemap = allPosts
+    .filter(post => new Date(post.publishedAt) <= now)
+    .map(post => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: new Date(post.publishedAt),
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    }));
 
   return [...staticPages, ...servicePages, ...blogPosts];
 }

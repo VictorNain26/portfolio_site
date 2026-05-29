@@ -34,8 +34,9 @@ const prettierConfig = {
   // Plugins
   plugins: ['prettier-plugin-tailwindcss'],
 
-  // Plugin options
-  tailwindConfig: './tailwind.config.js',
+  // Plugin options — Tailwind v4 : on pointe l'entrée CSS (@theme),
+  // il n'y a plus de tailwind.config.js.
+  tailwindStylesheet: './app/globals.css',
   tailwindFunctions: ['clsx', 'cn', 'tw'],
 
   // File overrides

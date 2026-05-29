@@ -45,10 +45,10 @@ export default function ScrollView({
 
       {/* Rail vertical : commence sous le header pour ne pas le traverser */}
       <ScrollAreaPrimitive.Scrollbar
-        className="absolute right-0 top-14 h-[calc(100%-3.5rem)] w-2 p-px transition-opacity data-[state=hidden]:opacity-0 lg:top-16 lg:h-[calc(100%-4rem)]"
+        className="absolute top-14 right-0 h-[calc(100%-3.5rem)] w-2 p-px transition-opacity data-[state=hidden]:opacity-0 lg:top-16 lg:h-[calc(100%-4rem)]"
         orientation="vertical"
       >
-        <ScrollAreaPrimitive.Thumb className="flex-1 rounded-full bg-gradient-to-b from-indigo-500/80 to-violet-400/80" />
+        <ScrollAreaPrimitive.Thumb className="flex-1 rounded-full bg-gradient-to-b from-brand-hover/80 to-violet-400/80" />
       </ScrollAreaPrimitive.Scrollbar>
 
       <ScrollAreaPrimitive.Corner />

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import Section from '@/components/Section';
+import SectionHeading from '@/components/SectionHeading';
 import FadeOnView from '@/components/FadeOnView';
 import { cn } from '@/lib/utils';
 
@@ -30,10 +31,11 @@ const faqItems = [
   {
     question: 'Combien de temps dure un projet type ?',
     answer:
-      "Un site vitrine prend 2 à 4 semaines. Une application métier, 1 à 3 mois selon le périmètre. Je privilégie les livraisons itératives pour que vous ayez de la visibilité rapidement.",
+      'Un site vitrine prend 2 à 4 semaines. Une application métier, 1 à 3 mois selon le périmètre. Je privilégie les livraisons itératives pour que vous ayez de la visibilité rapidement.',
   },
   {
-    question: 'Faites-vous des interventions courtes (correction de bug, refonte, ajout de fonctionnalité) ?',
+    question:
+      'Faites-vous des interventions courtes (correction de bug, refonte, ajout de fonctionnalité) ?',
     answer:
       "Oui : bug urgent, refonte ciblée, ajout de fonctionnalité, optimisation de perf, audit de stack. Intervention à partir d'une demi-journée, devis fixe sur les périmètres bornés.",
   },
@@ -48,14 +50,11 @@ export default function FAQ() {
 
   return (
     <Section className="scroll-mt-28" id="faq">
-      <FadeOnView className="mb-14 max-w-2xl">
-        <p className="font-display mb-3 text-sm font-medium uppercase tracking-[0.18em] text-indigo-400">
-          Questions fréquentes
-        </p>
-        <h2 className="font-display text-3xl font-bold leading-[1.1] text-white sm:text-4xl lg:text-5xl">
-          Les réponses aux questions que vous vous posez probablement.
-        </h2>
-      </FadeOnView>
+      <SectionHeading
+        index="04"
+        label="FAQ"
+        title="Les réponses aux questions que vous vous posez probablement."
+      />
 
       <div className="mx-auto max-w-3xl space-y-3">
         {faqItems.map((item, index) => {
@@ -63,7 +62,7 @@ export default function FAQ() {
           return (
             <FadeOnView
               key={item.question}
-              className="rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm transition-colors hover:border-indigo-500/20"
+              className="rounded-xl border border-line-2 bg-surface-1 backdrop-blur-sm transition-colors hover:border-brand-hover/20"
               delay={0.05 + index * 0.04}
             >
               <button
@@ -82,7 +81,7 @@ export default function FAQ() {
                 <ChevronDown
                   aria-hidden="true"
                   className={cn(
-                    'h-5 w-5 shrink-0 text-indigo-400 transition-transform duration-200',
+                    'h-5 w-5 shrink-0 text-brand-accent transition-transform duration-200',
                     isOpen && 'rotate-180',
                   )}
                 />
@@ -95,9 +94,7 @@ export default function FAQ() {
                 style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
               >
                 <div className="overflow-hidden">
-                  <p className="px-6 pb-4 text-sm leading-relaxed text-gray-400">
-                    {item.answer}
-                  </p>
+                  <p className="px-6 pb-4 text-sm leading-relaxed text-gray-400">{item.answer}</p>
                 </div>
               </div>
             </FadeOnView>

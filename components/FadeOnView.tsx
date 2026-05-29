@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  type CSSProperties,
-  type ElementType,
-  type ReactNode,
-  type Ref,
-} from 'react';
+import { type CSSProperties, type ElementType, type ReactNode, type Ref } from 'react';
 import { useFadeOnView } from '@/hooks/useFadeOnView';
 import { cn } from '@/lib/utils';
 

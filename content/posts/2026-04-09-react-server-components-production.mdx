@@ -1,6 +1,6 @@
 ---
 title: "React Server Components en production : ce que j'ai appris"
-summary: "Les Server Components promettent moins de JavaScript côté client et de meilleures performances. Après plusieurs projets en production, voici ce qui fonctionne, et les pièges à éviter."
+summary: 'Les Server Components promettent moins de JavaScript côté client et de meilleures performances. Après plusieurs projets en production, voici ce qui fonctionne, et les pièges à éviter.'
 publishedAt: '2026-04-09'
 tags:
   - React
@@ -34,8 +34,8 @@ Et le data fetching, enfin simplifié. Plus besoin du trio infernal `useEffect` 
 
 // Après : Server Component
 async function ProductPage({ id }) {
-  const product = await db.product.findUnique({ where: { id } })
-  return <ProductDisplay product={product} />
+  const product = await db.product.findUnique({ where: { id } });
+  return <ProductDisplay product={product} />;
 }
 ```
 

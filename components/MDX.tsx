@@ -25,14 +25,18 @@ const components: MDXComponents = {
       height?: number | string;
     };
 
-    const w = typeof width === 'number' || typeof width === 'string' ? Number(width) : DEFAULT_IMAGE_WIDTH;
-    const h = typeof height === 'number' || typeof height === 'string' ? Number(height) : DEFAULT_IMAGE_HEIGHT;
+    const w =
+      typeof width === 'number' || typeof width === 'string' ? Number(width) : DEFAULT_IMAGE_WIDTH;
+    const h =
+      typeof height === 'number' || typeof height === 'string'
+        ? Number(height)
+        : DEFAULT_IMAGE_HEIGHT;
 
     return (
       <figure className="my-8">
         <Image
           alt={alt}
-          className={cn('rounded-lg border border-white/[0.06]', className)}
+          className={cn('rounded-lg border border-line-2', className)}
           height={h}
           src={src}
           width={w}
@@ -47,30 +51,24 @@ const components: MDXComponents = {
 
   /* -------- tableaux responsive -------- */
   table: ({ children }) => (
-    <div className="my-8 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-      <table className="w-full min-w-[480px] border-collapse overflow-hidden rounded-xl border border-white/[0.08] text-sm">
+    <div className="-mx-4 my-8 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+      <table className="w-full min-w-[480px] border-collapse overflow-hidden rounded-xl border border-line-3 text-sm">
         {children}
       </table>
     </div>
   ),
-  thead: ({ children }) => (
-    <thead className="bg-white/[0.04]">{children}</thead>
-  ),
-  tr: ({ children }) => (
-    <tr className="border-b border-white/[0.06] last:border-b-0">{children}</tr>
-  ),
+  thead: ({ children }) => <thead className="bg-surface-3">{children}</thead>,
+  tr: ({ children }) => <tr className="border-b border-line-2 last:border-b-0">{children}</tr>,
   th: ({ children }) => (
-    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 sm:px-6">
+    <th className="px-4 py-3 text-left text-xs font-semibold tracking-wider text-gray-400 uppercase sm:px-6">
       {children}
     </th>
   ),
-  td: ({ children }) => (
-    <td className="px-4 py-3.5 text-sm text-gray-300 sm:px-6">{children}</td>
-  ),
+  td: ({ children }) => <td className="px-4 py-3.5 text-sm text-gray-300 sm:px-6">{children}</td>,
 
   /* -------- citations -------- */
   blockquote: ({ children }) => (
-    <blockquote className="my-8 rounded-r-xl border-l-4 border-indigo-500/60 bg-white/[0.02] py-4 pl-6 pr-4">
+    <blockquote className="my-8 rounded-r-xl border-l-4 border-brand-hover/60 bg-surface-1 py-4 pr-4 pl-6">
       <div className="text-gray-300 italic">{children}</div>
     </blockquote>
   ),
@@ -78,7 +76,7 @@ const components: MDXComponents = {
   /* -------- listes -------- */
   ul: ({ children }) => <ul className="my-6 space-y-2 pl-6">{children}</ul>,
   ol: ({ children }) => <ol className="my-6 space-y-2 pl-6">{children}</ol>,
-  li: ({ children }) => <li className="text-gray-300 marker:text-indigo-400">{children}</li>,
+  li: ({ children }) => <li className="text-gray-300 marker:text-brand-accent">{children}</li>,
 
   /* -------- séparateurs -------- */
   hr: () => (
@@ -91,7 +89,7 @@ const components: MDXComponents = {
   /* -------- titres ancrables -------- */
   h2: ({ children }) => (
     <h2
-      className="font-display mt-16 mb-6 scroll-mt-28 text-2xl font-bold tracking-tight text-white"
+      className="mt-16 mb-6 scroll-mt-28 font-display text-2xl font-bold tracking-tight text-white"
       id={String(children).toLowerCase().replace(/\s+/g, '-')}
     >
       {children}
@@ -111,7 +109,7 @@ const components: MDXComponents = {
   /* -------- liens personnalisés -------- */
   a: ({ href, children }: { href?: string; children: React.ReactNode }) => (
     <NextLink
-      className="text-indigo-300 underline decoration-indigo-400/60 decoration-1 underline-offset-4 transition-colors hover:text-indigo-200 hover:decoration-indigo-300"
+      className="text-brand-light underline decoration-brand-accent/60 decoration-1 underline-offset-4 transition-colors hover:text-brand-lighter hover:decoration-brand-light"
       href={href ?? '#'}
     >
       {children}
@@ -120,7 +118,7 @@ const components: MDXComponents = {
 
   /* -------- code blocks -------- */
   pre: ({ children }) => (
-    <pre className="my-8 overflow-x-auto rounded-xl border border-white/[0.06] bg-gray-900/60 p-6 text-sm">
+    <pre className="my-8 overflow-x-auto rounded-xl border border-line-2 bg-gray-900/60 p-6 text-sm">
       {children}
     </pre>
   ),
@@ -128,7 +126,7 @@ const components: MDXComponents = {
     const isInline = className === undefined;
     if (isInline) {
       return (
-        <code className="rounded bg-gray-800/60 px-1.5 py-0.5 text-sm text-indigo-300">
+        <code className="rounded bg-gray-800/60 px-1.5 py-0.5 text-sm text-brand-light">
           {children}
         </code>
       );

@@ -19,11 +19,10 @@ export function useFadeOnView<T extends HTMLElement = HTMLDivElement>() {
     const el = ref.current;
     if (!el) return;
 
-    const root =
-      (document.getElementById('scroll-viewport') as Element | null) ?? null;
+    const root = (document.getElementById('scroll-viewport') as Element | null) ?? null;
 
     const io = new IntersectionObserver(
-      (entries) => {
+      entries => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
             setVisible(true);
