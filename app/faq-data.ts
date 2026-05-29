@@ -28,7 +28,7 @@ export const faqItems: FaqItem[] = [
   {
     question: "Qu'avez-vous déjà livré côté IA ?",
     answer:
-      "Deux produits IA livrés en solo : AubeSonore en production depuis 2025 (pipeline audio quotidien), TomIA en pré-prod pour 2026 (RAG sur programmes Éduscol, eval continue). Les briques que je propose en mission — serveur MCP, démo RAG, pipeline d'eval — sont publiées en open-source, lisibles avant signature. 4 ans à coder du web, dont 2 en Rails chez Capsens (fintech, 2022-2024) sur le code applicatif derrière.",
+      "Deux produits IA livrés en solo : AubeSonore en production depuis 2025 (pipeline audio quotidien), TomIA en pré-prod pour 2026 (RAG sur programmes Éduscol, eval continue). Les briques que je propose en mission (serveur MCP, démo RAG, pipeline d'eval) sont publiées en open-source, lisibles avant signature. 4 ans à coder du web, dont 2 en Rails chez Capsens (fintech, 2022-2024) sur le code applicatif derrière.",
   },
   {
     question: 'Combien de temps dure un projet type ?',

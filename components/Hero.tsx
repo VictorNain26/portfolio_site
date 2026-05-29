@@ -37,7 +37,7 @@ export default function Hero() {
           <span aria-hidden="true" className="text-gray-700">
             /
           </span>
-          <span>Paris — Remote France</span>
+          <span>Paris · Remote France</span>
         </FadeOnView>
 
         <FadeOnView as="h1" className="heading-1 max-w-4xl text-balance text-white" delay={0.05}>
@@ -50,7 +50,8 @@ export default function Hero() {
           className="text-lead mt-6 max-w-2xl text-pretty text-gray-300 sm:text-xl"
           delay={0.1}
         >
-          Développeur full-stack freelance à Paris, 4 ans en production. Sans refonte de votre stack.
+          Développeur full-stack freelance à Paris, 4 ans en production. Sans refonte de votre
+          stack.
         </FadeOnView>
 
         <FadeOnView className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3" delay={0.15}>
