@@ -18,7 +18,7 @@ export default function Services() {
       <SectionHeading
         index="01"
         label="Services"
-        lead="J'ajoute l'IA à votre application existante, sans la réécrire — et je mesure ce qu'elle vous rapporte vraiment. Trois prestations IA, trois prestations web, le même code applicatif soigné derrière."
+        lead="J'ajoute l'IA à une app qui tourne déjà, sans la réécrire. Je branche, je mesure ce que ça change — et si ça n'apporte rien, je le dis. Trois prestations IA, trois prestations web, le même code derrière."
         title="Je code la couche IA dans votre stack existante."
       />
 
