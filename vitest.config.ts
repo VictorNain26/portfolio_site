@@ -19,6 +19,11 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      // Report on the whole source tree, not just files a test happens to
+      // import. Without this, coverage % is computed over a handful of files
+      // and the thresholds below guard almost nothing.
+      all: true,
+      include: ['app/**', 'components/**', 'hooks/**', 'lib/**'],
       exclude: [
         'node_modules/',
         '.next/',
@@ -28,14 +33,25 @@ export default defineConfig({
         '*.d.ts',
         'coverage/',
         'public/',
+        'test/**',
+        '**/__tests__/**',
+        // Presentational/layout shells and static assets: no logic to unit test.
+        'app/**/layout.tsx',
+        'app/**/page.tsx',
+        'app/**/opengraph-image.tsx',
+        'app/**/icon*.{ts,tsx}',
+        'app/**/manifest.json',
+        'app/globals.css',
       ],
+      // Realistic floor that the current suite clears. Ratchet upward as more
+      // logic gets covered — do not lower it. NB: Vitest expects these keys at
+      // the top level of `thresholds`; nesting them under `global` (the old
+      // nyc/istanbul style) silently disables the gate.
       thresholds: {
-        global: {
-          branches: 80,
-          functions: 80,
-          lines: 80,
-          statements: 80,
-        },
+        branches: 14,
+        functions: 15,
+        lines: 17,
+        statements: 17,
       },
     },
 
@@ -67,6 +83,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, './'),
+      // `content-collections` is generated at build time and absent in tests.
+      // Alias to a stub so modules importing it (e.g. sitemap) can be tested;
+      // tests that need real posts override it via `vi.mock`.
+      'content-collections': resolve(__dirname, './test/stubs/content-collections.ts'),
     },
   },
 
