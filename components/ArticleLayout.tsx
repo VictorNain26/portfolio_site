@@ -136,7 +136,7 @@ export default function ArticleLayout({
         </h2>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-400">
           Si la question se pose pour votre produit, autant en parler. 15&nbsp;min pour cadrer le
-          besoin — je vous dis franchement si c&apos;est pertinent, et sinon je vous oriente.
+          besoin. Je vous dis franchement si c&apos;est pertinent, et sinon je vous oriente.
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <CalPopupButton

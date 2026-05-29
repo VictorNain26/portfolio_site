@@ -59,7 +59,7 @@ export const services: Service[] = [
     tagline:
       'Un agent qui exécute trois workflows précis dans votre produit, pas un chatbot vitrine de plus.',
     outcome:
-      "Vos équipes arrêtent de trier, qualifier et répondre à la main sur les tâches répétitives. Un agent prend en charge trois actions précises de votre quotidien et passe la main à un humain dès qu'il sort de son périmètre — pas de réponse inventée, pas de dérapage.",
+      "Vos équipes arrêtent de trier, qualifier et répondre à la main sur les tâches répétitives. L'agent prend en charge trois actions précises de votre quotidien. Dès qu'il sort de son périmètre, il passe la main à un humain. Pas de réponse inventée, pas de dérapage.",
     metaDescription:
       "Intégration d'agents conversationnels dans votre stack web : appels d'outils internes, garde-fous, eval continue. Développeur full-stack freelance, Paris.",
     keywords: [
@@ -130,7 +130,7 @@ export const services: Service[] = [
     tagline:
       'Vos documents internes interrogeables en langage naturel, avec citation obligatoire vers la source.',
     outcome:
-      "Vos équipes retrouvent en quelques secondes la bonne information noyée dans des années de documents, avec la source à l'appui pour vérifier. Fini le « demande à Untel » qui ne passe pas à l'échelle, et fini les réponses qui ressemblent à la vérité sans en être.",
+      "Vos équipes retrouvent en quelques secondes une information noyée dans des années de documents, avec la source pour vérifier. Plus besoin de demander à la seule personne qui sait. Et pas de réponse qui a l'air juste sans l'être.",
     metaDescription:
       'Recherche sémantique sur vos documents internes : pgvector ou Qdrant, embeddings adaptés à votre langue, citations vérifiables, eval continue. Freelance Paris.',
     keywords: [
@@ -203,7 +203,7 @@ export const services: Service[] = [
     tagline:
       'Pipelines en prod pour vos process répétitifs : classification, extraction, scoring, génération encadrée.',
     outcome:
-      "Une tâche répétitive sur du texte — classer, extraire, rédiger, scorer — passe de plusieurs heures humaines par jour à un traitement automatique, à un coût connu d'avance et suivi mois après mois. Votre équipe récupère ce temps pour ce qui compte vraiment.",
+      "Une tâche répétitive sur du texte (classer, extraire, rédiger, scorer) passe de plusieurs heures par jour à un traitement automatique. Le coût est connu d'avance et suivi mois après mois. Votre équipe récupère ce temps pour le reste.",
     metaDescription:
       'Pipelines LLM en production sur vos process métier : classification, extraction structurée, scoring, génération. Coûts tokens trackés, eval automatique, retry.',
     keywords: [
@@ -274,7 +274,7 @@ export const services: Service[] = [
     tagline:
       'Sites vitrines, applications métier, plateformes SaaS. Du cadrage au déploiement, par un dev qui code en Next.js et Rails depuis 4 ans.',
     outcome:
-      'Vous obtenez une application qui sort, qui tourne et que vos utilisateurs utilisent vraiment — du cadrage à la mise en ligne, en livraisons régulières, sans tunnel de plusieurs mois où vous ne voyez rien avancer.',
+      'Vous obtenez une application qui sort, qui tourne et que vos utilisateurs utilisent vraiment. Du cadrage à la mise en ligne, en livraisons régulières. Pas de tunnel de plusieurs mois où vous ne voyez rien avancer.',
     metaDescription:
       "Développeur full-stack freelance à Paris. Applications web sur mesure en Next.js, TypeScript, Node.js, Ruby on Rails et PostgreSQL. 4 ans d'expérience, dont 2 sur du Rails métier.",
     keywords: [
@@ -339,7 +339,7 @@ export const services: Service[] = [
     tagline:
       "Site lent, framework abandonné, bug en prod qui revient. Vous n'avez pas besoin d'un projet de 3 mois, juste de quelqu'un qui ouvre le capot et répare.",
     outcome:
-      'Votre site existant redevient rapide, stable et maintenable — sans tout réécrire ni casser votre référencement. Vous payez du temps d’intervention ciblé, facturé à la demi-journée, pas un forfait de refonte que vous ne vouliez pas.',
+      "Votre site existant redevient rapide, stable et maintenable, sans tout réécrire ni casser votre référencement. Vous payez du temps d'intervention ciblé, facturé à la demi-journée. Pas un forfait de refonte que vous ne vouliez pas.",
     metaDescription:
       'Interventions ponctuelles sur site existant : migration de framework, optimisation Core Web Vitals, fix de bug en prod, ajout de fonctionnalité. Demi-journée minimum, devis avant intervention.',
     keywords: [
@@ -404,7 +404,7 @@ export const services: Service[] = [
     tagline:
       "Avant de coder, on regarde si l'IA est vraiment le bon outil. Audit indépendant pour PME et scale-ups, livré en note synthétique signée.",
     outcome:
-      'Vous prenez votre décision IA en connaissance de cause : ce que ça coûte, ce que ça rapporte, et si ça vaut le coup. Le tout dans une note écrite et signée, lisible en comité de direction — pas un argumentaire déguisé pour vous vendre la mission qui suit.',
+      'Vous prenez votre décision IA en connaissance de cause : ce que ça coûte, ce que ça rapporte, et si ça vaut le coup. Le tout dans une note écrite et signée, lisible en comité de direction. Pas un argumentaire déguisé pour vous vendre la mission qui suit.',
     metaDescription:
       "Audit IA et cadrage de prototype LLM pour PME et scale-ups. Arbitrage de stack, estimation coûts tokens, revue d'architecture. Note synthétique remise sous 1 à 5 jours.",
     keywords: [
