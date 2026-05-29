@@ -134,6 +134,17 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           </FadeOnView>
         </Section>
 
+        {/* Le résultat (étage « dirigeant ») — placé avant la profondeur
+         * technique pour répondre d'abord au « ça m'apporte quoi ? ». */}
+        <Section className="pb-16">
+          <FadeOnView className="max-w-3xl">
+            <p className={`label-mono mb-4 ${accent.text}`}>Le résultat pour vous</p>
+            <p className="text-xl leading-relaxed text-balance text-gray-200 sm:text-2xl sm:leading-relaxed">
+              {service.outcome}
+            </p>
+          </FadeOnView>
+        </Section>
+
         {/* Problem + Approach split */}
         <Section className="pb-16">
           <div className="grid gap-10 lg:grid-cols-2">
