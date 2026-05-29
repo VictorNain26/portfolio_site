@@ -62,7 +62,7 @@ export default function OGImage() {
           textAlign: 'center',
         }}
       >
-        Votre projet web, <span style={{ color: '#818cf8' }}>avec ou sans IA</span>
+        La couche IA sur votre <span style={{ color: '#818cf8' }}>stack existante</span>
       </h1>
 
       {/* Sous-titre */}

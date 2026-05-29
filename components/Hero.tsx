@@ -50,7 +50,7 @@ export default function Hero() {
           className="text-lead mt-6 max-w-2xl text-pretty text-gray-300 sm:text-xl"
           delay={0.1}
         >
-          Développeur fullstack freelance à Paris, 4 ans en production. Sans refonte de votre stack.
+          Développeur full-stack freelance à Paris, 4 ans en production. Sans refonte de votre stack.
         </FadeOnView>
 
         <FadeOnView className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3" delay={0.15}>
@@ -83,7 +83,7 @@ export default function Hero() {
           delay={0.2}
         >
           <p className="label-mono flex flex-wrap items-center gap-x-3 gap-y-1.5 text-gray-500">
-            <span>Fullstack + IA</span>
+            <span>Full-stack + IA</span>
             <span aria-hidden="true" className="text-gray-700">
               ·
             </span>

@@ -23,16 +23,16 @@ const blogBreadcrumbJsonLd = {
 export const metadata = {
   title: 'Blog',
   description:
-    'Articles sur le développement web, React, Next.js et les bonnes pratiques du code moderne.',
+    "Articles sur le développement web, l'intégration d'IA (agents, RAG, LLM) dans les produits et le métier de développeur freelance.",
   openGraph: {
     title: 'Blog | Victor Lenain',
-    description: 'Articles sur le développement web et les bonnes pratiques.',
+    description: "Développement web, intégration d'IA dans les produits et freelancing.",
     type: 'website',
     url: 'https://victorlenain.fr/blog',
   },
   twitter: {
     title: 'Blog | Victor Lenain',
-    description: 'Articles sur le développement web et les bonnes pratiques.',
+    description: "Développement web, intégration d'IA dans les produits et freelancing.",
   },
   alternates: {
     canonical: 'https://victorlenain.fr/blog',
@@ -54,7 +54,7 @@ export default function BlogIndex() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Blog Victor Lenain',
-    description: 'Articles sur le développement web et les bonnes pratiques.',
+    description: "Développement web, intégration d'IA dans les produits et freelancing.",
     numberOfItems: publishedPosts.length,
     itemListElement: publishedPosts.map((post, index) => ({
       '@type': 'ListItem',
@@ -81,7 +81,8 @@ export default function BlogIndex() {
           Blog
         </h1>
         <p className="mt-4 max-w-lg text-lg leading-relaxed text-gray-400">
-          Réflexions sur le développement web, le freelancing et les bonnes pratiques du code.
+          Réflexions sur le développement web, l&apos;intégration d&apos;IA dans les produits et le
+          freelancing.
         </p>
       </header>
 
