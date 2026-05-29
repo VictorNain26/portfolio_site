@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { cn } from '../utils';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { cn, getScrollBehavior } from '../utils';
 
 describe('cn utility function', () => {
   it('merges class names correctly', () => {
@@ -72,5 +72,41 @@ describe('cn utility function', () => {
     // twMerge should keep the last conflicting class
     const result = cn('bg-red-500', 'bg-blue-500', 'text-white');
     expect(result).toBe('bg-blue-500 text-white');
+  });
+});
+
+describe('getScrollBehavior', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  function stubMatchMedia(matches: boolean) {
+    const matchMedia = vi.fn((query: string) => ({
+      matches,
+      media: query,
+    }));
+    vi.stubGlobal('window', { matchMedia });
+    return matchMedia;
+  }
+
+  it("returns 'auto' when the user prefers reduced motion", () => {
+    const matchMedia = stubMatchMedia(true);
+    expect(getScrollBehavior()).toBe('auto');
+    expect(matchMedia).toHaveBeenCalledWith('(prefers-reduced-motion: reduce)');
+  });
+
+  it("returns 'smooth' when the user does not prefer reduced motion", () => {
+    stubMatchMedia(false);
+    expect(getScrollBehavior()).toBe('smooth');
+  });
+
+  it("falls back to 'smooth' when window is undefined (SSR)", () => {
+    vi.stubGlobal('window', undefined);
+    expect(getScrollBehavior()).toBe('smooth');
+  });
+
+  it("falls back to 'smooth' when matchMedia is unavailable", () => {
+    vi.stubGlobal('window', {});
+    expect(getScrollBehavior()).toBe('smooth');
   });
 });

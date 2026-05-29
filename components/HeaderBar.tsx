@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { Calendar, Menu, X } from 'lucide-react';
 import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from '@/components/icons/SocialIcons';
 import CalPopupButton from '@/components/CalPopupButton';
+import { getScrollBehavior } from '@/lib/utils';
 
 /** Header nav. Routes (Services, Blog) + ancres homepage (Projets, Contact).
  * Quand on n'est pas sur la homepage, les ancres pointent vers `/#id` pour
@@ -110,7 +111,7 @@ export default function HeaderBar() {
 
   const scrollToSection = useCallback((e: React.MouseEvent, id: string) => {
     e.preventDefault();
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(id)?.scrollIntoView({ behavior: getScrollBehavior() });
     setMobileMenuOpen(false);
   }, []);
 
@@ -118,7 +119,9 @@ export default function HeaderBar() {
     (e: React.MouseEvent) => {
       if (!onHomepage) return;
       e.preventDefault();
-      document.getElementById('scroll-viewport')?.scrollTo({ top: 0, behavior: 'smooth' });
+      document
+        .getElementById('scroll-viewport')
+        ?.scrollTo({ top: 0, behavior: getScrollBehavior() });
     },
     [onHomepage],
   );

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronUp } from 'lucide-react';
+import { getScrollBehavior } from '@/lib/utils';
 
 export default function BackToTop() {
   const pathname = usePathname();
@@ -58,17 +59,19 @@ export default function BackToTop() {
   const scrollToTop = (e: React.MouseEvent) => {
     e.preventDefault();
 
+    const behavior = getScrollBehavior();
+
     const hero = document.getElementById('accueil');
     if (hero) {
-      hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      hero.scrollIntoView({ behavior, block: 'start' });
       return;
     }
 
     const viewport = document.getElementById('scroll-viewport');
     if (viewport) {
-      viewport.scrollTo({ top: 0, behavior: 'smooth' });
+      viewport.scrollTo({ top: 0, behavior });
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior });
     }
   };
 
