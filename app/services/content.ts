@@ -80,18 +80,7 @@ export const services: Service[] = [
       "Je borne l'agent sur trois workflows précis avec un schéma d'entrée et de sortie typés. Chaque appel d'outil passe par votre API existante, jamais par une réécriture de votre back-office. L'agent ne sait pas faire autre chose que ces trois choses, et c'est ce qui le rend fiable.",
       "Eval en place dès le premier sprint sur un dataset de cas réels que vous validez. Coûts tokens estimés au cadrage et trackés en prod avec un dashboard. Retry et fallback prévus si l'API du modèle tombe. Logs structurés pour rejouer une session à l'identique en cas de comportement étrange.",
     ],
-    stack: [
-      'TypeScript',
-      'Python',
-      'Node.js',
-      'FastAPI',
-      'Anthropic Claude',
-      'OpenAI',
-      'Mistral',
-      'PostgreSQL',
-      'Langfuse',
-      'Docker',
-    ],
+    stack: ['TypeScript', 'Python', 'FastAPI', 'Anthropic Claude', 'OpenAI', 'Langfuse'],
     useCases: [
       {
         title: 'Tri et qualification de leads entrants',
@@ -162,18 +151,7 @@ export const services: Service[] = [
       "Pipeline complète d'ingestion depuis vos sources (Drive, Notion, Confluence, PDF, base interne) avec découpage qui respecte la structure du document. Embeddings choisis selon la langue principale de votre corpus. Stockage dans pgvector si vous êtes déjà sur PostgreSQL, Qdrant si on dépasse le million de chunks ou s'il faut du filtrage multi-tenant.",
       "Recherche sémantique avec reranking, génération sous contrainte de citation, vérification post-génération que chaque citation existe dans les sources retournées. Pipeline d'indexation incrémentale pour ne pas tout rebâtir à chaque mise à jour. Eval recall@k et faithfulness mesurés sur un dataset golden que vous validez au cadrage.",
     ],
-    stack: [
-      'pgvector',
-      'Qdrant',
-      'Mistral Embed',
-      'OpenAI Embeddings',
-      'Anthropic Claude',
-      'Ragas',
-      'Langfuse',
-      'Python',
-      'PostgreSQL',
-      'Docker',
-    ],
+    stack: ['pgvector', 'Qdrant', 'Mistral Embed', 'Anthropic Claude', 'Ragas', 'Python'],
     useCases: [
       {
         title: 'Assistant sur jurisprudence ou contrats internes',
@@ -242,19 +220,7 @@ export const services: Service[] = [
       'Pipeline codée en Python ou Node.js comme du vrai code : sortie typée et validée par schéma (Pydantic, Zod), tests sur les cas connus, retry avec backoff, batch quand le volume le justifie. Coûts tokens estimés au cadrage avec hypothèses écrites, puis trackés en prod sur un dashboard que vous lisez sans moi.',
       'Eval automatique sur un dataset de référence : si la qualité baisse après un changement de modèle ou un ajustement de prompt, vous le voyez avant la prod. Chaque choix (modèle, prompt, batch size) est justifié par des chiffres mesurés sur votre corpus, pas par mode.',
     ],
-    stack: [
-      'Python',
-      'Node.js',
-      'Pydantic',
-      'Zod',
-      'OpenAI',
-      'Anthropic Claude',
-      'Mistral',
-      'Ragas',
-      'Langfuse',
-      'PostgreSQL',
-      'Docker',
-    ],
+    stack: ['Python', 'Node.js', 'Pydantic', 'Anthropic Claude', 'OpenAI', 'Langfuse'],
     useCases: [
       {
         title: 'Extraction structurée depuis factures et PDF',
@@ -276,7 +242,7 @@ export const services: Service[] = [
       {
         question: "Quel est le coût typique d'une pipeline LLM en production ?",
         answer:
-          "De quelques euros par mois sur des volumes faibles avec un petit modèle, à plusieurs milliers sur des millions de requêtes mensuelles. J'estime au cadrage à partir de votre volume cible, avec un buffer explicite pour les pics. Vous repartez avec un fichier que vous pouvez challenger ligne par ligne.",
+          "De quelques euros par mois sur des volumes faibles avec un petit modèle, à plusieurs milliers sur des millions de requêtes mensuelles. J'estime au cadrage à partir de votre volume cible, avec un buffer explicite pour les pics. Vous repartez avec un fichier chiffré, vérifiable poste par poste.",
       },
       {
         question: 'Vous utilisez quel modèle par défaut ?',
@@ -322,17 +288,7 @@ export const services: Service[] = [
       'Je prends le projet du cadrage au déploiement. Stack selon le contexte : Next.js 15 + TypeScript pour un produit moderne, Rails 7 + PostgreSQL si vous avez besoin de monter vite sur du métier, Node.js pour les APIs. Tests sur les parties qui le méritent, pas sur le CRUD trivial.',
       "Si vous voulez greffer du LLM sur l'app (résumé automatique, classification d'inputs, recherche sémantique sur vos contenus), on en parle au cadrage et on chiffre. Sinon, je livre l'app web sans pousser de l'IA partout. Le but, c'est que le projet sorte et tourne.",
     ],
-    stack: [
-      'Next.js 15',
-      'TypeScript',
-      'React 19',
-      'Ruby on Rails',
-      'Node.js',
-      'PostgreSQL',
-      'Tailwind',
-      'Vercel',
-      'Docker',
-    ],
+    stack: ['Next.js 15', 'TypeScript', 'React 19', 'Ruby on Rails', 'Node.js', 'PostgreSQL'],
     useCases: [
       {
         title: 'Plateforme SaaS B2B (auth, paiement, dashboard)',
@@ -395,16 +351,7 @@ export const services: Service[] = [
       "Demi-journée minimum. D'abord 1 à 2 heures d'audit pour lire le code, comprendre l'historique et identifier la cause racine. Ensuite un plan chiffré : ce qu'on touche, ce qu'on laisse, le risque associé. Vous validez, j'exécute. Pas de surprise sur la facture.",
       'Je préfère réparer que réécrire. Une migration de framework se fait en branches, par modules, avec rollback possible à chaque étape. Une optimisation Core Web Vitals se mesure avant et après, avec des chiffres. Un fix en prod se livre avec un test qui empêche la régression.',
     ],
-    stack: [
-      'Next.js',
-      'React',
-      'Vue',
-      'Ruby on Rails',
-      'Node.js',
-      'WordPress',
-      'Python',
-      'PostgreSQL',
-    ],
+    stack: ['Next.js', 'React', 'Vue', 'Ruby on Rails', 'Node.js', 'WordPress'],
     useCases: [
       {
         title: 'Migration React 17 → 19 ou Next.js majeur',
@@ -467,17 +414,7 @@ export const services: Service[] = [
       "Je lis votre code, vos prompts, votre architecture, vos coûts actuels. Je liste les choix qui vont vous coûter cher s'ils sont mal pris : modèle, structure de prompt, infra de retrieval, évaluation, fournisseur. Puis je vous remets une note de 4 à 10 pages, signée, avec recommandations classées par priorité.",
       "Si après audit ma conclusion c'est que l'IA n'apporte rien à votre cas et qu'une règle métier ou un script Python suffit, je l'écris dans la note. Vous me payez l'audit, pas un argumentaire pour vendre la mission qui suit.",
     ],
-    stack: [
-      'Anthropic',
-      'OpenAI',
-      'Mistral',
-      'Llama auto-hébergé',
-      'pgvector',
-      'Qdrant',
-      'LangChain',
-      'Ragas',
-      'Langfuse',
-    ],
+    stack: ['Anthropic', 'OpenAI', 'Mistral', 'pgvector', 'Ragas', 'Langfuse'],
     useCases: [
       {
         title: "Cadrage d'un prototype IA",

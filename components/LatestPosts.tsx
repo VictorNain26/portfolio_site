@@ -18,7 +18,7 @@ export default function LatestPosts({ posts }: { posts: Post[] }) {
     <Section className="scroll-mt-28 pb-12">
       <SectionHeading
         index="05"
-        label="Journal"
+        label="Blog"
         title="Je partage ce que j'apprends."
         aside={
           <Link

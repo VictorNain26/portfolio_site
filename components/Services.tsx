@@ -79,7 +79,7 @@ export default function Services() {
 
       {/* Secondaires : plus discret, plus dense */}
       <FadeOnView className="mt-12" delay={0.2}>
-        <p className="label-mono mb-5 text-gray-500">Aussi disponible pour</p>
+        <p className="label-mono mb-5 text-gray-500">Au-delà de l'IA</p>
         <div className="grid gap-4 sm:grid-cols-3">
           {secondary.map(service => {
             const Icon = service.icon;

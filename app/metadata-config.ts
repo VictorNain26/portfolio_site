@@ -1,5 +1,7 @@
 // Configuration des métadonnées pour améliorer la lisibilité du layout
 
+import { faqItems } from './faq-data';
+
 export const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -118,51 +120,19 @@ export const websiteJsonLd = {
   },
 };
 
+/* Généré depuis la source unique `faqItems` pour rester strictement aligné
+ * sur la FAQ affichée (exigence des FAQ rich results de Google). */
 export const faqJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'Quel est votre tarif journalier (TJM) ?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Mon TJM démarre à 500\u00a0€ selon la complexité du projet, la durée de la mission et les technologies impliquées. Je propose toujours un devis détaillé après notre premier échange.',
-      },
+  mainEntity: faqItems.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: answer,
     },
-    {
-      '@type': 'Question',
-      name: 'Êtes-vous disponible pour une mission ?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Je réponds sous 24\u00a0h et le démarrage peut être très rapide, parfois quelques jours seulement, selon ma disponibilité du moment. Contactez-moi pour en discuter.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Travaillez-vous en remote ?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Oui, je travaille principalement en remote. Je suis basé en région parisienne et peux me déplacer ponctuellement pour des réunions, ateliers ou phases de lancement.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Combien de temps dure un projet type ?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Un site vitrine prend 2 à 4 semaines. Une application métier, 1 à 3 mois selon le périmètre. Je privilégie les livraisons itératives pour que vous ayez de la visibilité rapidement.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Faites-vous des interventions courtes (fix, refonte, ajout de feature) ?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Oui. Je ne fais pas que des projets depuis zéro. Correction de bugs urgents, refonte d'un site existant, ajout d'une fonctionnalité, optimisation de performances. J'interviens ponctuellement à partir d'une demi-journée.",
-      },
-    },
-  ],
+  })),
 };
 
 export const professionalServiceJsonLd = {
@@ -171,7 +141,7 @@ export const professionalServiceJsonLd = {
   '@id': 'https://victorlenain.fr/#service',
   name: 'Victor Lenain · Développeur full-stack · Intégration IA',
   description:
-    "Greffe d'une couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Développement fullstack Next.js, Django, Rails, FastAPI. Freelance à Paris.",
+    "Greffe d'une couche IA (agents, RAG, automatisations LLM) sur votre stack web existante, sans refonte. Développement full-stack Next.js, Django, Rails, FastAPI. Freelance à Paris.",
   url: 'https://victorlenain.fr',
   image: 'https://victorlenain.fr/og-image.png',
   priceRange: '€€',
@@ -223,7 +193,7 @@ export const professionalServiceJsonLd = {
       ],
     },
     name: 'Prendre rendez-vous',
-    description: 'Réserver un appel découverte gratuit de 30 minutes',
+    description: 'Réserver un échange découverte gratuit de 15 minutes',
   },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',

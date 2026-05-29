@@ -5,6 +5,7 @@ import Process from '@/components/Process';
 import Projects from '@/components/Projects';
 import FAQ from '@/components/FAQ';
 import LatestPosts from '@/components/LatestPosts';
+import Testimonials from '@/components/Testimonials';
 import Contact from '@/components/Contact';
 
 export default function Home() {
@@ -28,6 +29,7 @@ export default function Home() {
       <Process />
       <FAQ />
       <LatestPosts posts={latestPosts} />
+      <Testimonials />
       <Contact />
     </main>
   );

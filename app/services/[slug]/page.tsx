@@ -185,6 +185,10 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                 </span>
               ))}
             </div>
+            <p className="mt-4 text-sm leading-relaxed text-gray-500">
+              Repères, pas une liste de prérequis. Je m&apos;adapte à votre stack et à vos outils en
+              place.
+            </p>
           </FadeOnView>
         </Section>
 

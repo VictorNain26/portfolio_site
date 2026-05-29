@@ -27,7 +27,7 @@ const NAV_LINKS: NavLink[] = [
 const TRACKED_SECTION_IDS = ['projets', 'contact'] as const;
 
 const socials = [
-  { href: 'https://github.com/victornain26', Icon: GitHubIcon, label: 'GitHub' },
+  { href: 'https://github.com/VictorNain26', Icon: GitHubIcon, label: 'GitHub' },
   {
     href: 'https://www.linkedin.com/in/victorlenain/',
     Icon: LinkedInIcon,

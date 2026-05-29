@@ -30,7 +30,7 @@ export default function Contact() {
             data-umami-event="cta-contact-cal"
           >
             <Calendar aria-hidden className="h-5 w-5" />
-            Réserver un call de 15&nbsp;min
+            Réserver un échange de 15&nbsp;min
             <ArrowRight
               aria-hidden
               className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"

@@ -67,11 +67,11 @@ export default function ServicesIndexPage() {
               Services
             </p>
             <h1 className="font-display text-4xl leading-[1.05] font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Je code la couche IA dans votre produit existant.
+              Je code la couche IA dans votre stack existante.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-gray-300 sm:text-xl">
-              Développeur fullstack freelance à Paris. Je greffe la couche IA sur votre stack web
-              (Next, Django, FastAPI, Postgres) sans refonte. Trois prestations pour
+              Développeur full-stack freelance à Paris. Je greffe la couche IA sur votre stack web
+              (Next, Django, Rails, FastAPI) sans refonte. Trois prestations pour
               l&apos;intégration, trois autres pour le reste du produit web.
             </p>
           </FadeOnView>
