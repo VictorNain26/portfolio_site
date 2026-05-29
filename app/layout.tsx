@@ -1,4 +1,5 @@
 import './globals.css';
+import { type Metadata, type Viewport } from 'next';
 import { Inter, Geist, Geist_Mono } from 'next/font/google';
 import { type ReactNode, Suspense } from 'react';
 import Script from 'next/script';
@@ -36,7 +37,7 @@ const geistMono = Geist_Mono({
 /* -------------------------------------------------------------------------- */
 /* Métadonnées                                                                */
 /* -------------------------------------------------------------------------- */
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL('https://victorlenain.fr'),
   title: {
     default: 'Victor Lenain | Développeur full-stack · Intégration IA · Paris',
@@ -103,6 +104,13 @@ export const metadata = {
   },
   category: 'Technology',
   classification: 'Business',
+};
+
+/* Next.js distingue les métadonnées « viewport » (themeColor, color-scheme)
+ * du reste depuis Next 14 → export dédié plutôt que <meta> manuels. */
+export const viewport: Viewport = {
+  themeColor: '#6366f1',
+  colorScheme: 'dark',
 };
 
 /* -------------------------------------------------------------------------- */

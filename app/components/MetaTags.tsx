@@ -8,16 +8,14 @@ export default function MetaTags() {
       <link href="/icon0.svg" rel="icon" type="image/svg+xml" />
       <link href="/apple-icon.png" rel="apple-touch-icon" />
       <link href="/manifest.json" rel="manifest" />
-      <meta content="#6366f1" name="theme-color" />
+      {/* theme-color / color-scheme sont gérés par l'export `viewport` du layout. */}
       <meta content="#6366f1" name="msapplication-TileColor" />
 
       {/* ---- GEO : fichier llms.txt pour les moteurs IA ---- */}
       <link href="/llms.txt" rel="alternate" title="LLMs.txt" type="text/plain" />
 
       {/* ---- SEO et performance ---- */}
-      {/* viewport already set by Next.js — only override here */}
       <meta content="telephone=no" name="format-detection" />
-      <meta content="dark" name="color-scheme" />
 
       {/* ---- Préchargement de ressources critiques ---- */}
       <link as="image" href="/images/hero-bg.webp" rel="preload" type="image/webp" />
