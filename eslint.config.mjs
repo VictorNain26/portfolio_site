@@ -100,6 +100,12 @@ export default defineConfig([
       'object-shorthand': 'error',
       eqeqeq: ['error', 'always'],
       curly: ['error', 'all'],
+
+      // dangerouslySetInnerHTML n'est utilisé que pour injecter du JSON-LD /
+      // des données structurées sérialisées par nos soins (jamais d'entrée
+      // externe) → la règle est un faux positif systématique ici.
+      '@eslint-react/dom-no-dangerously-set-innerhtml': 'off',
+      '@eslint-react/dom-no-dangerously-set-innerhtml-with-children': 'off',
     },
   },
 
@@ -109,15 +115,6 @@ export default defineConfig([
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       'no-console': 'off',
-    },
-  },
-
-  // Scripts JSON-LD : dangerouslySetInnerHTML est volontaire et sûr ici
-  // (données structurées sérialisées par nos soins, jamais d'entrée externe).
-  {
-    files: ['**/*JsonLd*.tsx', '**/JsonLdScripts.tsx'],
-    rules: {
-      '@eslint-react/dom-no-dangerously-set-innerhtml': 'off',
     },
   },
 
