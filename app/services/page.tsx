@@ -63,9 +63,7 @@ export default function ServicesIndexPage() {
         {/* Hero + premier bloc collés visuellement */}
         <Section className="pb-10">
           <FadeOnView className="max-w-3xl">
-            <p className="mb-3 font-display text-sm font-medium tracking-[0.18em] text-brand-accent uppercase">
-              Services
-            </p>
+            <p className="label-mono text-brand-accent">Services</p>
             <h1 className="font-display text-4xl leading-[1.05] font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
               Je code la couche IA dans votre stack existante.
             </h1>
@@ -81,9 +79,7 @@ export default function ServicesIndexPage() {
         <Section className="pb-14">
           <FadeOnView className="mb-6 flex items-center gap-3">
             <span aria-hidden="true" className="h-px w-8 bg-brand-accent/60" />
-            <p className="text-xs font-medium tracking-[0.18em] text-brand-accent uppercase">
-              Intégration IA
-            </p>
+            <p className="label-mono text-brand-accent">Intégration IA</p>
           </FadeOnView>
 
           <div className="grid gap-5 lg:grid-cols-3">
@@ -127,9 +123,7 @@ export default function ServicesIndexPage() {
         <Section className="pb-16">
           <FadeOnView className="mb-6 flex items-center gap-3">
             <span aria-hidden="true" className="h-px w-8 bg-gray-600/60" />
-            <p className="text-xs font-medium tracking-[0.18em] text-gray-500 uppercase">
-              Au-delà de l&apos;IA
-            </p>
+            <p className="label-mono text-gray-500">Au-delà de l&apos;IA</p>
           </FadeOnView>
 
           <div className="grid gap-4 sm:grid-cols-3">
