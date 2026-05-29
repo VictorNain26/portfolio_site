@@ -1,6 +1,5 @@
-import { ImageResponse } from '@vercel/og';
+import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge';
 export const alt = 'Victor Lenain - Blog Développement Web';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';

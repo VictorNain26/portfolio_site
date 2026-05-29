@@ -24,7 +24,6 @@
   "dependencies": {
     "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-slot": "^1.2.4",
-    "@vercel/og": "^0.11",
     "baseline-browser-mapping": "^2.10.32",
     "caniuse-lite": "^1.0.30001793",
     "class-variance-authority": "^0.7.1",
