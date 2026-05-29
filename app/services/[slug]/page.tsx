@@ -91,9 +91,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
               className={`mb-6 inline-flex items-center gap-3 rounded-full border px-4 py-2 ${accent.border} ${accent.bg}`}
             >
               <Icon aria-hidden="true" className={`h-4 w-4 ${accent.text}`} />
-              <span className={`text-xs font-medium tracking-[0.18em] uppercase ${accent.text}`}>
-                {service.shortTitle}
-              </span>
+              <span className={`label-mono ${accent.text}`}>{service.shortTitle}</span>
             </div>
             <h1 className="font-display text-4xl leading-[1.05] font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
               {service.title}
@@ -140,9 +138,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         <Section className="pb-16">
           <div className="grid gap-10 lg:grid-cols-2">
             <FadeOnView delay={0.05}>
-              <p className="mb-3 text-xs font-medium tracking-[0.18em] text-warm/80 uppercase">
-                Le contexte
-              </p>
+              <p className="label-mono mb-3 text-warm/80">Le contexte</p>
               <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
                 Pourquoi c&apos;est dur à bien faire
               </h2>
@@ -154,9 +150,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             </FadeOnView>
 
             <FadeOnView delay={0.1}>
-              <p className={`mb-3 text-xs font-medium tracking-[0.18em] uppercase ${accent.text}`}>
-                Mon approche
-              </p>
+              <p className={`label-mono mb-3 ${accent.text}`}>Mon approche</p>
               <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
                 Comment je le fais
               </h2>
@@ -172,9 +166,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         {/* Stack */}
         <Section className="pb-16">
           <FadeOnView className="max-w-3xl">
-            <p className="mb-3 text-xs font-medium tracking-[0.18em] text-gray-500 uppercase">
-              Stack & outils
-            </p>
+            <p className="label-mono mb-3 text-gray-500">Stack & outils</p>
             <div className="flex flex-wrap gap-2">
               {service.stack.map(t => (
                 <span
@@ -195,12 +187,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         {/* Use cases */}
         <Section className="pb-16">
           <FadeOnView className="mb-10 max-w-2xl">
-            <p className={`mb-3 text-xs font-medium tracking-[0.18em] uppercase ${accent.text}`}>
-              Cas d&apos;usage
-            </p>
-            <h2 className="font-display text-3xl leading-[1.1] font-bold text-white sm:text-4xl">
-              Ce que ça donne en vrai
-            </h2>
+            <p className={`label-mono mb-3 ${accent.text}`}>Cas d&apos;usage</p>
+            <h2 className="heading-2 text-white">Ce que ça donne en vrai</h2>
           </FadeOnView>
 
           <div className="grid gap-6 lg:grid-cols-3">
@@ -226,12 +214,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         {service.faq.length > 0 && (
           <Section className="pb-16">
             <FadeOnView className="mb-10 max-w-2xl">
-              <p className="mb-3 text-xs font-medium tracking-[0.18em] text-brand-accent uppercase">
-                Questions fréquentes
-              </p>
-              <h2 className="font-display text-3xl leading-[1.1] font-bold text-white sm:text-4xl">
-                Ce qu&apos;on me demande sur ce sujet
-              </h2>
+              <p className="label-mono mb-3 text-brand-accent">Questions fréquentes</p>
+              <h2 className="heading-2 text-white">Ce qu&apos;on me demande sur ce sujet</h2>
             </FadeOnView>
 
             <div className="mx-auto max-w-3xl space-y-3">
@@ -255,9 +239,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         <Section className="pb-16">
           <FadeOnView className="mb-8 flex items-center gap-3">
             <span aria-hidden="true" className="h-px w-8 bg-gray-600/60" />
-            <p className="text-xs font-medium tracking-[0.18em] text-gray-500 uppercase">
-              Autres prestations
-            </p>
+            <p className="label-mono text-gray-500">Autres prestations</p>
           </FadeOnView>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {services
