@@ -26,10 +26,10 @@ export default function Home() {
       <Hero />
       <Services />
       <Projects />
+      <Testimonials />
       <Process />
       <FAQ />
       <LatestPosts posts={latestPosts} />
-      <Testimonials />
       <Contact />
     </main>
   );
