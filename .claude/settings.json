@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:tailwindcss.com)",
+      "WebFetch(domain:motion.dev)",
+      "WebFetch(domain:www.content-collections.dev)",
+      "WebFetch(domain:vitest.dev)",
+      "WebFetch(domain:testing-library.com)",
+      "WebFetch(domain:oxc.rs)",
+      "WebFetch(domain:prettier.io)",
+      "WebFetch(domain:cal.com)",
+      "WebFetch(domain:schema.org)",
+      "WebFetch(domain:developers.google.com)"
+    ]
+  },
+
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/format-edited-file.sh\"",
+            "timeout": 20,
+            "statusMessage": "Prettier"
+          }
+        ]
+      }
+    ]
+  }
+}
