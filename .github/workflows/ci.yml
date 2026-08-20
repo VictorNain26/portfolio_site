@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Type-check, lint, tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Sans version explicite, l'action lit `packageManager` dans package.json.
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run type-check
+
+      - run: bun run lint
+
+      - run: bun run format:check
+
+      - run: bun run test
+
+      # En dernier : le build génère les types Content Collections et valide le
+      # frontmatter de tous les articles.
+      - run: bun run build

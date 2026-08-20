@@ -50,10 +50,7 @@ describe('getGitHubProjects', () => {
     fetchMock
       // repos list
       .mockResolvedValueOnce(
-        jsonResponse([
-          baseRepo,
-          { ...baseRepo, id: 2, name: 'not-a-demo', topics: ['library'] },
-        ]),
+        jsonResponse([baseRepo, { ...baseRepo, id: 2, name: 'not-a-demo', topics: ['library'] }]),
       )
       // languages for the demo repo
       .mockResolvedValueOnce(jsonResponse({ TypeScript: 1000, CSS: 200 }));
@@ -83,9 +80,7 @@ describe('getGitHubProjects', () => {
 
   it('falls back to a default description and null demoUrl when fields are missing', async () => {
     fetchMock
-      .mockResolvedValueOnce(
-        jsonResponse([{ ...baseRepo, description: null, homepage: null }]),
-      )
+      .mockResolvedValueOnce(jsonResponse([{ ...baseRepo, description: null, homepage: null }]))
       .mockResolvedValueOnce(jsonResponse({}));
 
     const [project] = await getGitHubProjects();
