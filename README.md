@@ -7,10 +7,10 @@
 
 | Catégorie     | Technologies                                  |
 | ------------- | --------------------------------------------- |
-| **Framework** | Next.js 15 (App Router), React 19, TypeScript |
+| **Framework** | Next.js 16 (App Router), React 19, TypeScript |
 | **Styling**   | Tailwind CSS 4, Framer Motion                 |
 | **Content**   | MDX via Content Collections                   |
-| **Qualité**   | ESLint strict, Vitest, Prettier               |
+| **Qualité**   | Oxlint + ESLint, Vitest, Prettier             |
 
 ## Structure du site
 
@@ -43,7 +43,7 @@ bun run build
 | ---------------- | ------------------------ |
 | `bun run dev`    | Serveur de développement |
 | `bun run build`  | Build production         |
-| `bun run lint`   | Vérification ESLint      |
+| `bun run lint`   | Oxlint puis ESLint       |
 | `bun run test`   | Tests Vitest             |
 | `bun run format` | Formatage Prettier       |
 
@@ -73,7 +73,6 @@ Créer un fichier `.mdx` dans `content/posts/` avec le frontmatter :
 ---
 title: "Titre de l'article"
 summary: 'Résumé court'
-coverImage: '/images/posts/cover.jpg'
 publishedAt: '2025-01-01'
 tags: ['tag1', 'tag2']
 ---
