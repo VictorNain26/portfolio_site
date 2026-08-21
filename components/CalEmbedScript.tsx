@@ -1,6 +1,6 @@
 import Script from 'next/script';
 
-import { CAL_ORIGIN } from '@/lib/cal';
+import { CAL_ORIGIN, CAL_UI_CONFIG } from '@/lib/cal';
 
 /**
  * Loader d'embed Cal.com, copié depuis le générateur de snippets de l'instance
@@ -18,8 +18,8 @@ export default function CalEmbedScript() {
   return (
     <Script id="cal-embed" strategy="afterInteractive">
       {`(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-Cal("init", { origin: "${CAL_ORIGIN}" });
-Cal("ui", { theme: "dark", layout: "month_view", hideEventTypeDetails: false, cssVarsPerTheme: { dark: { "cal-brand": "#6366f1" }, light: { "cal-brand": "#4f46e5" } } });`}
+Cal("init", ${JSON.stringify({ origin: CAL_ORIGIN })});
+Cal("ui", ${JSON.stringify(CAL_UI_CONFIG)});`}
     </Script>
   );
 }
