@@ -1,5 +1,5 @@
 import { Calendar, ArrowRight } from 'lucide-react';
-import CalPopupButton from '@/components/CalPopupButton';
+import BookingLink from '@/components/BookingLink';
 import FadeOnView from '@/components/FadeOnView';
 
 export default function Hero() {
@@ -55,7 +55,7 @@ export default function Hero() {
         </FadeOnView>
 
         <FadeOnView className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3" delay={0.15}>
-          <CalPopupButton
+          <BookingLink
             className="group inline-flex items-center gap-2.5 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
             data-umami-event="cta-hero-cal"
           >
@@ -65,7 +65,7 @@ export default function Hero() {
               aria-hidden="true"
               className="h-4 w-4 transition-transform group-hover:translate-x-1"
             />
-          </CalPopupButton>
+          </BookingLink>
 
           <a
             className="text-sm font-medium text-gray-400 transition-colors hover:text-white"

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import ShareButton from '@/components/ShareButton';
-import CalPopupButton from '@/components/CalPopupButton';
+import BookingLink from '@/components/BookingLink';
 import { ArrowLeft, ArrowRight, Calendar } from 'lucide-react';
 
 type Post = {
@@ -139,7 +139,7 @@ export default function ArticleLayout({
           besoin. Je vous dis franchement si c&apos;est pertinent, et sinon je vous oriente.
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <CalPopupButton
+          <BookingLink
             className="group inline-flex items-center gap-2.5 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
             data-umami-event="cta-article-cal"
           >
@@ -149,7 +149,7 @@ export default function ArticleLayout({
               aria-hidden="true"
               className="h-4 w-4 transition-transform group-hover:translate-x-1"
             />
-          </CalPopupButton>
+          </BookingLink>
           <Link
             className="inline-flex items-center gap-2 rounded-full border border-line-2 bg-surface-2 px-5 py-2.5 text-sm font-medium text-gray-300 transition-colors hover:border-line-5 hover:text-white focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
             data-umami-event="cta-article-services"

@@ -1,6 +1,6 @@
 import { Mail, MessageCircle, Calendar, ArrowRight } from 'lucide-react';
 import Section from '@/components/Section';
-import CalPopupButton from '@/components/CalPopupButton';
+import BookingLink from '@/components/BookingLink';
 import FadeOnView from '@/components/FadeOnView';
 
 export default function Contact() {
@@ -25,7 +25,7 @@ export default function Contact() {
             le dis et je vous oriente.
           </p>
 
-          <CalPopupButton
+          <BookingLink
             className="group inline-flex items-center gap-3 rounded-full bg-brand px-8 py-4 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
             data-umami-event="cta-contact-cal"
           >
@@ -35,7 +35,7 @@ export default function Contact() {
               aria-hidden
               className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
             />
-          </CalPopupButton>
+          </BookingLink>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
             <a

@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Calendar, Menu, X } from 'lucide-react';
 import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from '@/components/icons/SocialIcons';
-import CalPopupButton from '@/components/CalPopupButton';
+import BookingLink from '@/components/BookingLink';
 import { getScrollBehavior } from '@/lib/utils';
 
 /** Header nav. Routes (Services, Blog) + ancres homepage (Projets, Contact).
@@ -257,13 +257,13 @@ export default function HeaderBar() {
             <div className="hidden h-5 w-px bg-surface-5 lg:block" />
 
             {/* CTA permanent — Cal.com en popup */}
-            <CalPopupButton
+            <BookingLink
               className="hidden items-center gap-2 rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white shadow-glow-sm transition-all hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none sm:inline-flex"
               data-umami-event="cta-header-cal"
             >
               <Calendar className="h-3.5 w-3.5" />
               Réserver
-            </CalPopupButton>
+            </BookingLink>
 
             <button
               aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
@@ -308,13 +308,13 @@ export default function HeaderBar() {
                 initial={{ opacity: 0, y: 16 }}
                 transition={{ duration: 0.3, delay: NAV_LINKS.length * 0.05 }}
               >
-                <CalPopupButton
+                <BookingLink
                   className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-lg font-medium text-white shadow-glow transition-all hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
                   data-umami-event="cta-mobile-menu-cal"
                 >
                   <Calendar className="h-5 w-5" />
                   Réserver un échange
-                </CalPopupButton>
+                </BookingLink>
               </motion.div>
             </nav>
 

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Calendar, Check, ChevronRight } from 'lucide-react';
 import FadeOnView from '@/components/FadeOnView';
-import CalPopupButton from '@/components/CalPopupButton';
+import BookingLink from '@/components/BookingLink';
 import Section from '@/components/Section';
 import { ACCENT_CLASSES, getService, services } from '../content';
 import ServiceJsonLd from '../_components/ServiceJsonLd';
@@ -113,7 +113,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             </ul>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <CalPopupButton
+              <BookingLink
                 className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-glow-lg focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
                 data-umami-event={`cta-service-${service.slug}-cal`}
               >
@@ -123,7 +123,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                   aria-hidden="true"
                   className="h-4 w-4 transition-transform group-hover:translate-x-1"
                 />
-              </CalPopupButton>
+              </BookingLink>
               <Link
                 className="text-sm font-medium text-gray-400 transition-colors hover:text-white"
                 href="/services"
@@ -298,13 +298,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
               pour votre besoin.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <CalPopupButton
+              <BookingLink
                 className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-hover focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:outline-none"
                 data-umami-event={`cta-service-${service.slug}-cal-bottom`}
               >
                 <Calendar aria-hidden="true" className="h-4 w-4" />
                 Réserver 15 min
-              </CalPopupButton>
+              </BookingLink>
               <Link
                 className="inline-flex items-center gap-2 rounded-full border border-line-2 bg-surface-2 px-5 py-3 text-sm font-medium text-gray-300 transition-colors hover:border-line-5 hover:text-white"
                 href="/services"

@@ -4,6 +4,10 @@ export const CAL_LINK = 'victor-lenain-ejsjfb/echange-decouverte';
 export const CAL_ORIGIN = 'https://cal.com';
 export const CAL_URL = `${CAL_ORIGIN}/${CAL_LINK}?theme=dark&layout=month_view`;
 
+/* Page du site qui porte le Booker. Les CTA y mènent plutôt que d'ouvrir une
+ * modale : le visiteur reste sur le domaine, dans la mise en page du site. */
+export const BOOKING_PATH = '/reserver';
+
 /* Le Booker vit dans une iframe cross-origin : la seule prise de style est le
  * jeu de variables CSS documenté, transmis via `Cal("ui", { cssVarsPerTheme })`.
  * Les valeurs reprennent les tokens de `app/globals.css` — les surfaces et les
@@ -45,16 +49,18 @@ export const CAL_UI_CONFIG = {
       'cal-text-muted': DIM_FOREGROUND,
       'cal-text-inverted': INK,
 
-      'cal-bg': INK,
+      'cal-bg': SURFACE_1,
       'cal-bg-subtle': SURFACE_2,
       'cal-bg-emphasis': SURFACE_4,
-      'cal-bg-muted': SURFACE_1,
+      'cal-bg-muted': INK, // recule sous la carte : jours indisponibles
       'cal-bg-inverted': FOREGROUND,
 
       'cal-border': LINE_3,
       'cal-border-subtle': LINE_2,
       'cal-border-muted': '#151525',
       'cal-border-emphasis': BRAND_ACCENT, // anneau de focus, comme ring-brand-accent
+      // Un seul cadre, porté par le Booker : la page ne pose pas de bordure
+      // par-dessus, sinon l'espacement interne de l'iframe la dédouble.
       'cal-border-booker': LINE_3,
       'cal-border-booker-width': '1px',
 
