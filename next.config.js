@@ -32,11 +32,18 @@ const nextConfig = {
           key: 'Content-Security-Policy',
           value: [
             "default-src 'self'",
-            `script-src 'self' 'unsafe-inline'${devOnlyScriptSrcExtras} https://cloud.umami.is`,
+            `script-src 'self' 'unsafe-inline'${devOnlyScriptSrcExtras} https://cloud.umami.is https://app.cal.com`,
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "font-src 'self' https://fonts.gstatic.com",
             "img-src 'self' data:",
             "connect-src 'self' https://api.github.com https://cloud.umami.is",
+            // L'embed Cal.com charge embed.js depuis app.cal.com et ouvre la
+            // réservation dans une iframe. Les deux origines sont nécessaires :
+            // l'iframe part sur cal.com (`calOrigin`) puis redirige vers
+            // app.cal.com, et une redirection est réévaluée contre frame-src.
+            // Les sous-ressources de l'iframe relèvent de la CSP de Cal.com et
+            // non de celle-ci : script-src et frame-src suffisent ici.
+            'frame-src https://cal.com https://app.cal.com',
             "frame-ancestors 'none'",
             "base-uri 'self'",
             "form-action 'self'",

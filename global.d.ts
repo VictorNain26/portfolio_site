@@ -19,3 +19,16 @@ declare module 'content-collections' {
   
   export const allPosts: Post[];
 }
+
+/* Embed Cal.com : le loader officiel (cf. components/CalEmbedScript.tsx) pose
+ * `window.Cal`. Typage réduit aux instructions réellement utilisées ici. */
+interface Window {
+  Cal?: ((
+    instruction: 'modal',
+    args: {
+      calLink: string;
+      calOrigin?: string;
+      config?: { layout?: 'month_view' | 'week_view' | 'column_view'; theme?: 'dark' | 'light' };
+    },
+  ) => void) & { instance?: unknown };
+}
