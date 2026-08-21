@@ -18,7 +18,11 @@ jobs:
     name: Type-check, lint, tests, build
     runs-on: ubuntu-latest
     steps:
+      # Le job ne lance aucune commande git authentifiée : ne pas laisser le
+      # token exploitable par les scripts postinstall de `bun install`.
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       # Sans version explicite, l'action lit `packageManager` dans package.json.
       - uses: oven-sh/setup-bun@v2

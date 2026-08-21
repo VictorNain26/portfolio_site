@@ -3,16 +3,18 @@ import { compileMDX } from '@content-collections/mdx';
 import { z } from 'zod';
 
 /* ---------------- Collection posts ---------------- */
+export const postsSchema = z.object({
+  title: z.string(),
+  summary: z.string(),
+  publishedAt: z.iso.date(),
+  tags: z.array(z.string()).default([]),
+});
+
 const posts = defineCollection({
   name: 'posts',
   directory: 'content/posts',
   include: '**/*.mdx',
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    publishedAt: z.string(),
-    tags: z.array(z.string()).default([]),
-  }),
+  schema: postsSchema,
 
   /* -----  transform : slug + compilation MDX  ----- */
   transform: async (doc, ctx) => {
