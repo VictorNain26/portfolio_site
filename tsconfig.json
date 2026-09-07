@@ -6,9 +6,7 @@
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "incremental": true,
     "module": "ESNext",
@@ -17,48 +15,21 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
-    /* Strict Type-Checking Options */
+    /* Strict-Type Checking beyond `strict` */
     "exactOptionalPropertyTypes": true,
-    "noImplicitAny": true,
     "noImplicitReturns": true,
-    "noImplicitThis": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "useUnknownInCatchVariables": true,
-    /* Additional Checks */
-    "noImplicitUseStrict": false,
-    "noStrictGenericChecks": false,
-    "suppressExcessPropertyErrors": false,
-    "suppressImplicitAnyIndexErrors": false,
     /* Module Resolution (paths résolus relativement au tsconfig — plus de
      * baseUrl, déprécié en TS 6+). */
     "paths": {
       "@/*": ["./*"],
       "content-collections": ["./.content-collections/generated"]
     },
-    /* Interop Constraints */
-    "allowUmdGlobalAccess": false,
-    /* Language and Environment */
-    "experimentalDecorators": false,
-    "emitDecoratorMetadata": false,
-    "useDefineForClassFields": true,
-    /* Completeness */
-    "skipDefaultLibCheck": false,
-    /* Projects */
-    "composite": false,
-    "disableReferencedProjectLoad": false,
-    "disableSolutionSearching": false,
-    "disableSourceOfProjectReferenceRedirect": false,
-    /* Output Formatting */
-    "noErrorTruncation": false,
-    "preserveWatchOutput": false,
-    "pretty": true,
-    /* Watch Options */
-    "assumeChangesOnlyAffectDirectDependencies": false,
     /* Next.js */
     "plugins": [
       {
@@ -67,8 +38,5 @@
     ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".next/dev/types/**/*.ts"],
-  "exclude": ["node_modules", ".next", "out", "dist", "build", "vitest.config.ts"],
-  "ts-node": {
-    "esm": true
-  }
+  "exclude": ["node_modules", ".next", "out", "dist", "build", "vitest.config.ts"]
 }
