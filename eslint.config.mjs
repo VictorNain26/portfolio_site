@@ -6,7 +6,7 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import eslintReact from '@eslint-react/eslint-plugin';
 import tseslint from 'typescript-eslint';
 import oxlint from 'eslint-plugin-oxlint';
-import prettierConfig from 'eslint-config-prettier';
+import prettierConfig from 'eslint-config-prettier/flat';
 
 /**
  * ESLint flat config — Next.js 16 + React 19 + TypeScript (ESLint 10).
