@@ -19,10 +19,9 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      // Report on the whole source tree, not just files a test happens to
-      // import. Without this, coverage % is computed over a handful of files
-      // and the thresholds below guard almost nothing.
-      all: true,
+      // `include` alone reports on the whole source tree, not just the files a
+      // test happens to import. Without it, coverage % would be computed over a
+      // handful of files and the thresholds below would guard almost nothing.
       include: ['app/**', 'components/**', 'hooks/**', 'lib/**'],
       exclude: [
         'node_modules/',
@@ -62,9 +61,6 @@ export default defineConfig({
     // Timeout
     testTimeout: 10000,
 
-    // Watch options
-    watch: true,
-
     // Pool options
     pool: 'threads',
     poolOptions: {
@@ -73,8 +69,9 @@ export default defineConfig({
       },
     },
 
-    // Reporter
-    reporters: process.env['CI'] ? ['json'] : ['verbose'],
+    // Reporter. `github-actions` annotates failures inline on the pull request
+    // diff; `default` keeps the run readable in the job log.
+    reporters: process.env['CI'] ? ['default', 'github-actions'] : ['verbose'],
 
     // Logging
     logHeapUsage: true,
@@ -88,9 +85,5 @@ export default defineConfig({
       // tests that need real posts override it via `vi.mock`.
       'content-collections': resolve(__dirname, './test/stubs/content-collections.ts'),
     },
-  },
-
-  define: {
-    __APP_VERSION__: JSON.stringify(process.env['npm_package_version']),
   },
 });
