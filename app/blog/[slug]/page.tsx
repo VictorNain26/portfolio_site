@@ -61,7 +61,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     notFound();
   }
 
-  const code = post.mdx as unknown as string;
+  const code = post.mdx;
   if (code.length === 0) {
     notFound();
   }
