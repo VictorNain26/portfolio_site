@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+# Résumé lisible par les LLM : https://www.victorlenain.fr/llms.txt
 Sitemap: https://www.victorlenain.fr/sitemap-index.xml
