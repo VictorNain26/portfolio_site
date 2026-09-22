@@ -16,7 +16,8 @@ Instructions pour Claude Code sur ce repository.
 ## Architecture
 
 Site statique Astro 7 déployé sur Vercel (`vercel.json` : framework, URLs sans
-`.html` ni slash final, 301 des anciennes pages `/services`).
+`.html` ni slash final, 301 des anciennes pages `/services` et des anciens
+articles vers `/blog`).
 
 - `src/pages/` — `/`, `/projets`, `/blog`, `/blog/[slug]`, 404
 - `src/layouts/Base.astro` — `<head>`, SEO, JSON-LD, header, footer
@@ -31,6 +32,8 @@ Site statique Astro 7 déployé sur Vercel (`vercel.json` : framework, URLs sans
 - Aucun JS client hors Umami et le script inline du thème (sombre de 20 h à 7 h,
   heure locale du visiteur, dans `Base.astro`). Les animations sont en CSS et
   respectent `prefers-reduced-motion`.
-- Le vermillon `--accent` ne colore jamais du texte courant (contraste 3.59:1).
-- Wording orienté valeur client, pas liste de technos.
+- L'accent bleu profond `--accent` passe AA sur les deux papiers (8.30:1 en
+  clair, 6.64:1 en sombre) : toute nouvelle teinte reste au-dessus de 4.5:1.
+- Site perso de bidouille : projets perso uniquement, pas de missions client ;
+  ton personnel, pas commercial. Chaque affirmation se vérifie sur GitHub.
 - `public/og.png` se régénère avec `scripts/og.mjs` (voir l'en-tête du script).

@@ -5,7 +5,7 @@ import { formatDate, publishedPosts } from '../../lib/posts';
 import { personJsonLd, site } from '../../site';
 
 const description =
-  "Articles sur le développement web, l'intégration IA et le métier de freelance.";
+  'Ce que je retiens de mes projets perso : agents, RAG, serveurs MCP et développement web.';
 const posts = publishedPosts(await getCollection('posts'), new Date());
 
 const blog = {
@@ -28,6 +28,7 @@ const blog = {
 <Base title="Blog" description={description} jsonLd={[blog]}>
   <section class="wrap">
     <h1 class="page-title">Blog</h1>
+    {posts.length === 0 && <p class="summary">Rien pour l'instant, mais ça arrive !</p>}
     <ol class="posts">
       {posts.map(post => (
         <li>
@@ -35,7 +36,7 @@ const blog = {
             <time class="meta" datetime={post.data.publishedAt.toISOString()}>
               {formatDate(post.data.publishedAt)}
             </time>
-            <h2>{post.data.title}</h2>
+            <h2 class="ink">{post.data.title}</h2>
             <p class="summary">{post.data.summary}</p>
           </a>
         </li>
@@ -68,17 +69,8 @@ const blog = {
   }
 
   .posts h2 {
+    justify-self: start;
     font-size: clamp(1.6rem, 3.2vw, 2.25rem);
-    transition:
-      color 0.3s var(--ease-out),
-      transform 0.5s var(--ease-out);
-  }
-
-  .posts a:hover h2,
-  .posts a:focus-visible h2 {
-    font-style: italic;
-    color: var(--accent);
-    transform: translateX(0.35rem);
   }
 
   .summary {

@@ -3,8 +3,9 @@
   --ink: #16140f;
   --ink-soft: #5e594f;
   --rule: #d9d3c7;
-  --accent: #e4412b;
+  --accent: #1f3f95;
   --ease-out: cubic-bezier(0.2, 0.7, 0, 1);
+  --ease-pen: cubic-bezier(0.65, 0, 0.35, 1);
   --gutter: clamp(1.25rem, 5vw, 4rem);
   --measure: 65ch;
   color-scheme: light;
@@ -15,7 +16,7 @@
   --ink: #ece6da;
   --ink-soft: #a8a193;
   --rule: #38342c;
-  --accent: #ef5a40;
+  --accent: #7b9cf0;
   color-scheme: dark;
 }
 
@@ -29,6 +30,29 @@
 
 @view-transition {
   navigation: auto;
+}
+
+/* Page change: the old page lifts off, the new one settles like ink drying. */
+::view-transition-old(root) {
+  animation: lift 0.25s ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: dry 0.5s var(--ease-out) both;
+}
+
+@keyframes lift {
+  to {
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
+
+@keyframes dry {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
 }
 
 *,
@@ -124,6 +148,29 @@ a {
   background-size:
     100% 1px,
     100% 1px;
+}
+
+/* Hovering a title lets the accent ink spread through it, left to right. The soft
+   band between the two colours keeps the edge from reading as a hard wipe. */
+.ink {
+  background-image: linear-gradient(90deg, var(--accent) 45%, var(--ink) 55%);
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  background-clip: text;
+  color: transparent;
+  transition: background-position 0.8s var(--ease-out);
+}
+
+a:hover .ink,
+a:focus-visible .ink {
+  background-position: 0 0;
+}
+
+@media (forced-colors: active) {
+  .ink {
+    background: none;
+    color: inherit;
+  }
 }
 
 .skip {

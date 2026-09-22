@@ -31,7 +31,7 @@ const svg = await satori(
       },
       children: [
         text(150, '#16140F', 'Victor Lenain'),
-        text(44, '#E4412B', 'Développeur full-stack · Intégration IA · Paris', { marginTop: 24 }),
+        text(44, '#1F3F95', 'Développeur full-stack · Systèmes IA · Paris', { marginTop: 24 }),
       ],
     },
   },

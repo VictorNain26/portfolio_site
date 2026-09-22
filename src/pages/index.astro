@@ -2,46 +2,48 @@
 import Base from '../layouts/Base.astro';
 import { site } from '../site';
 
-const words = site.name.split(' ');
+let letterIndex = 0;
+const words = site.name
+  .split(' ')
+  .map(word => [...word].map(letter => ({ letter, i: letterIndex++ })));
 const entries = [
   { label: 'Projets', href: '/projets', arrow: '→' },
   { label: 'Blog', href: '/blog', arrow: '→' },
-  { label: 'Prendre rendez-vous', href: site.calUrl, arrow: '↗', external: true },
   { label: 'Écrire', href: `mailto:${site.email}`, arrow: '↗' },
 ];
 ---
 
 <Base header={false}>
-  <section class="wrap hero">
-    <h1 class="name">
-      {words.map((word, i) => (
-        <>
-          {i > 0 && ' '}
-          <span class="mask">
-            <span class="word" style={`--i: ${i}`}>
-              {word}
+  <section class="wrap hero" style={`--letters: ${letterIndex}`}>
+    <div class="signature">
+      <h1 class="name" aria-label={site.name}>
+        {words.map((letters, w) => (
+          <>
+            {w > 0 && ' '}
+            <span class="word">
+              {letters.map(({ letter, i }) => (
+                <span class="letter" style={`--i: ${i}`}>
+                  {letter}
+                </span>
+              ))}
             </span>
-          </span>
-        </>
-      ))}
-    </h1>
+          </>
+        ))}
+      </h1>
+      <svg class="stroke" viewBox="0 0 600 24" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M4 15 C 110 5, 250 21, 370 12 S 540 7, 596 13" pathLength="1" />
+      </svg>
+    </div>
     <p class="pitch">
-      Développeur full-stack freelance à Paris. J'ajoute la couche IA (agents, RAG, automatisations)
-      à votre produit existant, sans tout refaire.
+      Développeur full-stack, et bidouilleur le reste du temps. Ici, je montre ce que je construis
+      pour le plaisir, surtout autour de l'IA, et ce que ça m'apprend.
     </p>
     <nav class="index" aria-label="Sommaire">
       <ul>
         {entries.map((entry, i) => (
           <li style={`--i: ${i}`}>
-            <a
-              href={entry.href}
-              target={entry.external ? '_blank' : undefined}
-              rel={entry.external ? 'noopener' : undefined}
-            >
-              <span class="label">
-                {entry.label}
-                {entry.external && <span class="sr-only"> (nouvel onglet)</span>}
-              </span>
+            <a href={entry.href}>
+              <span class="label ink">{entry.label}</span>
               <span class="arrow" aria-hidden="true">
                 {entry.arrow}
               </span>
@@ -54,12 +56,21 @@ const entries = [
 </Base>
 
 <style>
+  /* One sequence: the name inks in letter by letter, the pen underlines it,
+     then the rest settles. --letters lets later steps wait for the last letter. */
   .hero {
+    --ink-step: 0.045s;
+    --after-name: calc(0.35s + var(--letters) * var(--ink-step));
     flex: 1;
     display: grid;
     align-content: center;
     gap: clamp(1.5rem, 4vh, 2.75rem);
     padding-block: clamp(1rem, 3vh, 2rem);
+  }
+
+  .signature {
+    width: fit-content;
+    max-width: 100%;
   }
 
   .name {
@@ -70,19 +81,36 @@ const entries = [
     column-gap: 0.25em;
   }
 
-  /* Clip only the bottom edge: the word rises from below, while glyph overhangs
-     (the r's terminal) stay visible on the sides. */
-  .mask {
-    display: inline-block;
-    clip-path: inset(-0.5em -0.5em 0 -0.5em);
-    padding-bottom: 0.08em;
+  .word {
+    white-space: nowrap;
   }
 
-  .word {
+  .letter {
     display: inline-block;
-    transform: translateY(105%);
-    animation: rise 0.9s var(--ease-out) forwards;
-    animation-delay: calc(0.1s + var(--i) * 0.09s);
+    opacity: 0;
+    filter: blur(0.12em);
+    animation: soak 1.1s var(--ease-out) forwards;
+    animation-delay: calc(0.1s + var(--i) * var(--ink-step));
+  }
+
+  .stroke {
+    display: block;
+    width: 100%;
+    height: clamp(0.6rem, 1.6vw, 1.1rem);
+    margin-top: 0.1em;
+    overflow: visible;
+  }
+
+  .stroke path {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1 2;
+    stroke-dashoffset: 1;
+    animation: draw 0.9s var(--ease-pen) forwards;
+    animation-delay: var(--after-name);
   }
 
   .pitch {
@@ -90,7 +118,8 @@ const entries = [
     font-size: clamp(1.1rem, 2vw, 1.35rem);
     color: var(--ink-soft);
     opacity: 0;
-    animation: fade 0.8s var(--ease-out) 0.45s forwards;
+    animation: settle 0.9s var(--ease-out) forwards;
+    animation-delay: calc(var(--after-name) + 0.35s);
   }
 
   .index ul {
@@ -104,8 +133,8 @@ const entries = [
   .index li {
     border-bottom: 1px solid var(--rule);
     opacity: 0;
-    animation: fade 0.7s var(--ease-out) forwards;
-    animation-delay: calc(0.6s + var(--i) * 0.07s);
+    animation: settle 0.8s var(--ease-out) forwards;
+    animation-delay: calc(var(--after-name) + 0.5s + var(--i) * 0.08s);
   }
 
   .index a {
@@ -118,47 +147,38 @@ const entries = [
     line-height: 1.2;
   }
 
-  .label,
   .arrow {
     display: inline-block;
     transition:
-      color 0.3s var(--ease-out),
-      transform 0.5s var(--ease-out),
-      background-size 0.5s var(--ease-out);
-  }
-
-  .label {
-    background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 1px no-repeat;
-  }
-
-  .index a:hover .label,
-  .index a:focus-visible .label {
-    background-size: 100% 1px;
-    font-style: italic;
-    color: var(--accent);
-    transform: translateX(0.4rem);
+      color 0.4s var(--ease-out),
+      transform 0.6s var(--ease-out);
   }
 
   .index a:hover .arrow,
   .index a:focus-visible .arrow {
     color: var(--accent);
-    transform: translateX(0.4rem);
+    transform: translateX(0.3rem);
   }
 
-  @keyframes rise {
-    to {
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fade {
-    from {
-      opacity: 0;
-      transform: translateY(0.5rem);
+  @keyframes soak {
+    60% {
+      opacity: 1;
     }
     to {
       opacity: 1;
-      transform: none;
+      filter: blur(0);
+    }
+  }
+
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes settle {
+    to {
+      opacity: 1;
     }
   }
 </style>

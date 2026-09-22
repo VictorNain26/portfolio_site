@@ -5,6 +5,86 @@
   "trailingSlash": false,
   "redirects": [
     { "source": "/services", "destination": "/", "statusCode": 301 },
-    { "source": "/services/:path*", "destination": "/", "statusCode": 301 }
+    { "source": "/services/:path*", "destination": "/", "statusCode": 301 },
+    {
+      "source": "/blog/2025-01-12-developpeur-freelance-paris",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-02-18-pourquoi-travailler-avec-un-freelance-fullstack",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-02-24-tomia-tuteur-ia-soutien-scolaire",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-02-26-communication-cle-projet-web-reussi",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-03-03-aubesonore-web-radio-automatisee-ia",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-03-05-site-vitrine-vs-application-web",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-03-10-parcours-atypique-developpeur-freelance",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-03-12-integration-ia-pme-cout-reel",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-03-17-erreurs-externalisation-developpement-web",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-03-19-pourquoi-audit-technique-startup",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-03-24-workflow-claude-code-freelance",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-03-26-seo-moteurs-recherche-ia",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-03-31-nextjs-16-turbopack-retour-experience",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-04-02-bilan-deux-ans-freelance-cdi",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-04-07-passkeys-authentification-sans-mot-de-passe",
+      "destination": "/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/2026-04-09-react-server-components-production",
+      "destination": "/blog",
+      "statusCode": 301
+    }
   ]
 }
