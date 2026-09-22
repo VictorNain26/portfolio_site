@@ -6,7 +6,7 @@ const words = site.name.split(' ');
 const entries = [
   { label: 'Projets', href: '/projets', arrow: '→' },
   { label: 'Blog', href: '/blog', arrow: '→' },
-  { label: 'Prendre rendez-vous', href: site.calUrl, arrow: '↗' },
+  { label: 'Prendre rendez-vous', href: site.calUrl, arrow: '↗', external: true },
   { label: 'Écrire', href: `mailto:${site.email}`, arrow: '↗' },
 ];
 ---
@@ -33,8 +33,15 @@ const entries = [
       <ul>
         {entries.map((entry, i) => (
           <li style={`--i: ${i}`}>
-            <a href={entry.href}>
-              <span class="label">{entry.label}</span>
+            <a
+              href={entry.href}
+              target={entry.external ? '_blank' : undefined}
+              rel={entry.external ? 'noopener' : undefined}
+            >
+              <span class="label">
+                {entry.label}
+                {entry.external && <span class="sr-only"> (nouvel onglet)</span>}
+              </span>
               <span class="arrow" aria-hidden="true">
                 {entry.arrow}
               </span>
@@ -63,9 +70,11 @@ const entries = [
     column-gap: 0.25em;
   }
 
+  /* Clip only the bottom edge: the word rises from below, while glyph overhangs
+     (the r's terminal) stay visible on the sides. */
   .mask {
     display: inline-block;
-    overflow: clip;
+    clip-path: inset(-0.5em -0.5em 0 -0.5em);
     padding-bottom: 0.08em;
   }
 
