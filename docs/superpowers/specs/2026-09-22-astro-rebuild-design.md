@@ -15,7 +15,7 @@ Critères de succès :
 - Les 16 URLs `/blog/<slug>` existantes répondent à l'identique.
 - `/services` et `/services/<slug>` redirigent en 301 vers `/`.
 - Build Vercel vert, sans Bun dans la chaîne.
-- Aucun JS client hors analytics et deux micro-scripts d'animation optionnels.
+- Aucun JS client hors analytics (Umami).
 
 ## Stack
 
@@ -24,12 +24,12 @@ Critères de succès :
 | Framework       | Astro 7 (7.3.4 au 2026-09-22), statique | https://docs.astro.build/en/concepts/why-astro/                                    |
 | Contenu         | Content collections, `glob` loader      | https://docs.astro.build/en/guides/content-collections/                            |
 | MDX             | `@astrojs/mdx`                          | idem                                                                               |
-| Sitemap         | `@astrojs/sitemap`                      | à confirmer dans le plan                                                           |
+| Sitemap         | `@astrojs/sitemap` 3.7.4                | build vérifié sur prototype le 2026-09-22 |
 | Polices         | Fonts API Astro, provider Google        | https://docs.astro.build/en/guides/fonts/                                          |
 | Styles          | CSS natif (custom properties), pas de Tailwind | —                                                                           |
 | Déploiement     | Vercel, statique, sans adapter          | https://docs.astro.build/en/guides/deploy/vercel/                                  |
 | Redirections    | `vercel.json` `redirects`, `statusCode: 301` | https://vercel.com/docs/project-configuration/vercel-json#redirects           |
-| Gestionnaire    | pnpm + Node (Bun retiré du repo)        | support pnpm 12 par Vercel à vérifier dans le plan                                 |
+| Gestionnaire    | npm + Node ≥ 22.12 (Bun retiré)          | https://vercel.com/docs/package-managers (pnpm supporté jusqu'à 10 seulement) |
 | Qualité         | `astro check`, Prettier + `prettier-plugin-astro`, Vitest pour `src/lib` | —                               |
 
 Pas de React, pas de Framer Motion, pas d'ESLint/Oxlint : il n'y a quasiment
@@ -147,13 +147,19 @@ Aucun JS d'animation.
 - Slug = nom de fichier sans extension, comme aujourd'hui.
 - Un article dont `publishedAt` est dans le futur n'est pas généré. En statique,
   la publication différée demande un redéploiement : on publie en mergeant.
-- Les composants MDX spécifiques à Next (`next/image`, `next/link`, `Badge`)
-  sont remplacés par du HTML standard ; la migration vérifie que chaque article
-  se rend sans composant manquant.
+- Aucun article n'utilise de composant MDX : les 16 fichiers compilent tels
+  quels avec `@astrojs/mdx` 8.0.2 (vérifié sur prototype le 2026-09-22).
 
 ## SEO
 
-- `site: 'https://victorlenain.fr'` dans `astro.config`.
+- `site: 'https://www.victorlenain.fr'` dans `astro.config`. Le domaine nu
+  redirige aujourd'hui en 307 vers `www` alors que les canonicals pointent sur
+  le domaine nu : la refonte aligne tout sur `www`, l'hôte réellement servi.
+- URLs sans slash final, comme aujourd'hui : Astro `trailingSlash: 'never'` et
+  `build.format: 'file'`, Vercel `cleanUrls: true` et `trailingSlash: false`
+  (https://vercel.com/docs/project-configuration/vercel-json#cleanurls).
+  Le canonical retire l'extension `.html` que `Astro.url.pathname` porte en
+  format `file` (constaté sur prototype).
 - Title, description, canonical, Open Graph et Twitter via `Base.astro`.
   Textes repris de `app/layout.tsx`.
 - JSON-LD : `Person` (repris de `metadata-config.ts`, `sameAs` inclus) sur
@@ -161,7 +167,8 @@ Aucun JS d'animation.
   disparaît avec la FAQ.
 - Sitemap généré, `robots.txt` statique qui le référence.
 - Image Open Graph : **une seule image statique** `og.png` aux couleurs de la
-  charte. Les images OG par article générées dynamiquement ne sont pas reprises.
+  charte, générée une fois par `scripts/og.mjs` (satori + resvg, police
+  Instrument Serif TTF) et commitée. Les images OG par article générées dynamiquement ne sont pas reprises.
 - `llms.txt` mis à jour (plus de services).
 - Redirections 301 dans `vercel.json` :
   `/services` → `/` et `/services/:path*` → `/`.
