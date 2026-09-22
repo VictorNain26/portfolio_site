@@ -1,5 +1,150 @@
 ---
 import Base from '../layouts/Base.astro';
+import { site } from '../site';
+
+const words = site.name.split(' ');
+const entries = [
+  { label: 'Projets', href: '/projets', arrow: '→' },
+  { label: 'Blog', href: '/blog', arrow: '→' },
+  { label: 'Prendre rendez-vous', href: site.calUrl, arrow: '↗' },
+  { label: 'Écrire', href: `mailto:${site.email}`, arrow: '↗' },
+];
 ---
 
-<Base><p class="wrap">Victor Lenain</p></Base>
+<Base header={false}>
+  <section class="wrap hero">
+    <h1 class="name" aria-label={site.name}>
+      {
+        words.map((word, i) => (
+          <span class="mask" aria-hidden="true">
+            <span class="word" style={`--i: ${i}`}>
+              {word}
+            </span>
+          </span>
+        ))
+      }
+    </h1>
+    <p class="pitch">
+      Développeur full-stack freelance à Paris. J'ajoute la couche IA (agents, RAG,
+      automatisations) à votre produit existant, sans tout refaire.
+    </p>
+    <nav class="index" aria-label="Sommaire">
+      <ul>
+        {
+          entries.map((entry, i) => (
+            <li style={`--i: ${i}`}>
+              <a href={entry.href}>
+                <span class="label">{entry.label}</span>
+                <span class="arrow" aria-hidden="true">
+                  {entry.arrow}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    min-height: calc(100dvh - 6rem);
+    display: grid;
+    align-content: center;
+    gap: clamp(1.5rem, 4vh, 2.75rem);
+    padding-block: 3rem;
+  }
+
+  .name {
+    font-size: clamp(3.5rem, 13vw, 9.5rem);
+    line-height: 0.95;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.25em;
+  }
+
+  .mask {
+    display: inline-block;
+    overflow: clip;
+    padding-bottom: 0.08em;
+  }
+
+  .word {
+    display: inline-block;
+    transform: translateY(105%);
+    animation: rise 0.9s var(--ease-out) forwards;
+    animation-delay: calc(0.1s + var(--i) * 0.09s);
+  }
+
+  .pitch {
+    max-width: 38ch;
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    color: var(--ink-soft);
+    opacity: 0;
+    animation: fade 0.8s var(--ease-out) 0.45s forwards;
+  }
+
+  .index ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+    max-width: 40rem;
+  }
+
+  .index li {
+    border-bottom: 1px solid var(--rule);
+    opacity: 0;
+    animation: fade 0.7s var(--ease-out) forwards;
+    animation-delay: calc(0.6s + var(--i) * 0.07s);
+  }
+
+  .index a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-block: 0.7rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    line-height: 1.2;
+  }
+
+  .label,
+  .arrow {
+    display: inline-block;
+    transition:
+      color 0.3s var(--ease-out),
+      transform 0.5s var(--ease-out);
+  }
+
+  .index a:hover .label,
+  .index a:focus-visible .label {
+    font-style: italic;
+    color: var(--accent);
+    transform: translateX(0.4rem);
+  }
+
+  .index a:hover .arrow,
+  .index a:focus-visible .arrow {
+    color: var(--accent);
+    transform: translateX(0.4rem);
+  }
+
+  @keyframes rise {
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
