@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "astro",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/services", "destination": "/", "statusCode": 301 },
+    { "source": "/services/:path*", "destination": "/", "statusCode": 301 }
+  ]
+}
