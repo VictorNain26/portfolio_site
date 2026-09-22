@@ -28,8 +28,9 @@ Site statique Astro 7 déployé sur Vercel (`vercel.json` : framework, URLs sans
 
 ## Règles
 
-- Aucun JS client hors Umami. Les animations sont en CSS et respectent
-  `prefers-reduced-motion`.
+- Aucun JS client hors Umami et le script inline du thème (sombre de 20 h à 7 h,
+  heure locale du visiteur, dans `Base.astro`). Les animations sont en CSS et
+  respectent `prefers-reduced-motion`.
 - Le vermillon `--accent` ne colore jamais du texte courant (contraste 3.59:1).
 - Wording orienté valeur client, pas liste de technos.
 - `public/og.png` se régénère avec `scripts/og.mjs` (voir l'en-tête du script).

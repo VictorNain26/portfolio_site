@@ -5,18 +5,25 @@ import { unified } from '@astrojs/markdown-remark';
 import rehypeExternalLinks from 'rehype-external-links';
 import { readdirSync, readFileSync } from 'node:fs';
 
-// github-light tokens that fall under 4.5:1 on the #F2EFE8 paper, darkened to pass AA.
+// Shiki tokens that fall under 4.5:1 on their paper, adjusted to pass AA.
 const tokenColors = {
-  '#6A737D': '#5E594F',
-  '#D73A49': '#B8323D',
-  '#E36209': '#A84B06',
-  '#22863A': '#1A7532',
+  color: {
+    '#6A737D': '#5E594F',
+    '#D73A49': '#B8323D',
+    '#E36209': '#A84B06',
+    '#22863A': '#1A7532',
+  },
+  '--shiki-dark': { '#6A737D': '#A8A193' },
 };
 const recolor = style =>
-  Object.entries(tokenColors).reduce(
-    (out, [from, to]) => out.replaceAll(new RegExp(from, 'gi'), to),
-    String(style ?? ''),
-  );
+  String(style ?? '')
+    .split(';')
+    .map(declaration => {
+      const [property, value] = declaration.split(':');
+      const to = tokenColors[property]?.[value?.toUpperCase()];
+      return to ? `${property}:${to}` : declaration;
+    })
+    .join(';');
 
 const postsDir = './src/content/posts';
 const publishedAt = new Map(
@@ -56,13 +63,13 @@ export default defineConfig({
       ],
     }),
     shikiConfig: {
-      theme: 'github-light',
+      themes: { light: 'github-light', dark: 'github-dark' },
       transformers: [
         {
           // Let code blocks sit on the paper instead of github-light's white box.
           pre(node) {
             node.properties.style = String(node.properties.style ?? '').replace(
-              /background-color:[^;]+;?/,
+              /(background-color|--shiki-dark-bg):[^;]+;?/g,
               '',
             );
           },

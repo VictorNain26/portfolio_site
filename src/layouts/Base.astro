@@ -51,6 +51,13 @@ const nav = [
     <meta name="author" content={site.name} />
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <meta name="theme-color" content="#F2EFE8" />
+    <script is:inline>
+      const hour = new Date().getHours();
+      if (hour >= 20 || hour < 7) {
+        document.documentElement.dataset.theme = 'dark';
+        document.querySelector('meta[name="theme-color"]').content = '#1A1813';
+      }
+    </script>
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
