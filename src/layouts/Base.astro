@@ -1,0 +1,135 @@
+---
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+import { canonicalUrl } from '../lib/url';
+import { personJsonLd, site } from '../site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown>[];
+  header?: boolean;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  type = 'website',
+  jsonLd = [],
+  header = true,
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = title ? `${title} | ${site.name}` : site.title;
+const canonical = canonicalUrl(Astro.url.pathname, Astro.site!);
+const ogImage = new URL('/og.png', Astro.site).href;
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    <meta name="theme-color" content="#F2EFE8" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <Font cssVariable="--font-display" preload={[{ style: 'normal' }]} />
+    <Font cssVariable="--font-text" preload={[{ weight: 400 }]} />
+    {[personJsonLd, ...jsonLd].map(data => (
+      <script type="application/ld+json" set:html={JSON.stringify(data)}></script>
+    ))}
+    <script
+      is:inline
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="cddff34c-b72b-4f84-b155-b327edd3d634"
+    ></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Aller au contenu
+    </a>
+    {header && (
+      <header class="wrap site-header">
+        <a class="display home" href="/">
+          {site.name}
+        </a>
+        <nav aria-label="Principale">
+          <a class="link" href="/projets">
+            Projets
+          </a>
+          <a class="link" href="/blog">
+            Blog
+          </a>
+        </nav>
+      </header>
+    )}
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="wrap site-footer meta">
+      <span>
+        © {year} {site.name}
+      </span>
+      <nav aria-label="Réseaux">
+        <a class="link" href={site.links.linkedin}>
+          LinkedIn
+        </a>
+        <a class="link" href={site.links.github}>
+          GitHub
+        </a>
+        <a class="link" href={site.links.malt}>
+          Malt
+        </a>
+      </nav>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 1.75rem;
+  }
+
+  .home {
+    font-size: 1.5rem;
+  }
+
+  .site-header nav,
+  .site-footer nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 2rem;
+    border-top: 1px solid var(--rule);
+    margin-top: clamp(1.5rem, 5vh, 4rem);
+  }
+</style>

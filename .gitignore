@@ -1,26 +1,11 @@
-# Dépendances
 node_modules/
-
-# Next.js
-.next/
-out/
-
-# Logs & env
+dist/
+.astro/
 *.log
-.env.local
 .env*
 .vscode/
-.content-collections
-
-# Temp
-.tmp/
-
-# Test coverage
-coverage/
-
-# TS build info
-tsconfig.tsbuildinfo
 .claude/
+coverage/
 
 # Docs stratégie/prospection
 docs/

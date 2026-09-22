@@ -4,7 +4,7 @@
 
 ## À propos
 
-- Site officiel : https://victorlenain.fr
+- Site officiel : https://www.victorlenain.fr
 - Localisation : Paris, Île-de-France, France
 - Statut : Auto-entrepreneur, freelance depuis avril 2024
 - Parcours : 2 ans en agence sur projets fintech (Capsens, Ruby on Rails / React) puis freelance fullstack avec spécialisation intégration IA
@@ -13,21 +13,12 @@
 - TJM affiché : 500 €
 - Réponse : sous 24 h ouvrées
 
-## Services
-
-- [Agents IA et assistants conversationnels](https://victorlenain.fr/#services) : conception et déploiement d'agents Claude / OpenAI (tri de mails, qualification de leads, exécution d'actions). Stack Claude Agent SDK ou LangChain
-- [RAG et recherche sur documents](https://victorlenain.fr/#services) : ingestion, embeddings, recherche sémantique, réponses sourcées. pgvector pour rester sur PostgreSQL, Qdrant si volume
-- [Automatisations LLM sur mesure](https://victorlenain.fr/#services) : pipelines LLM en production, classification, extraction structurée, génération de contenu. Suivi des coûts tokens, eval dès le démarrage
-- [Applications web sur mesure](https://victorlenain.fr/#services) : sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js
-- [Refonte et interventions ponctuelles](https://victorlenain.fr/#services) : refonte visuelle, migration technique, fix urgent, ajout de fonctionnalité. À partir d'une demi-journée
-- [Conseil et audit IA](https://victorlenain.fr/#services) : cadrage prototype, choix de stack et coûts, audit d'un projet existant
-
 ## Stack technique
 
 - LLM APIs : Anthropic Claude (Sonnet, Haiku, Opus), OpenAI (GPT-4o, GPT-4.1)
 - Agents : Claude Agent SDK (primaire), LangChain (secondaire)
 - RAG et embeddings : pgvector sur PostgreSQL, Qdrant si volume, Mistral embeddings
-- Web : Next.js 15, TypeScript, React, React Native, Tailwind CSS
+- Web : Next.js, Astro, TypeScript, React, React Native, Tailwind CSS
 - Backend : Node.js, PostgreSQL, APIs REST
 - Infra : Vercel, Docker, GitHub Actions, systemd timers (Ubuntu)
 
@@ -44,19 +35,29 @@
 
 ## Blog
 
-- [Accueil blog](https://victorlenain.fr/blog) : articles sur le développement web, l'intégration IA et le freelance
-- [Pourquoi travailler avec un freelance full-stack](https://victorlenain.fr/blog/2026-02-18-pourquoi-travailler-avec-un-freelance-fullstack)
-- [TomIA : tuteur IA pour le soutien scolaire](https://victorlenain.fr/blog/2026-02-24-tomia-tuteur-ia-soutien-scolaire)
-- [La communication, clé d'un projet web réussi](https://victorlenain.fr/blog/2026-02-26-communication-cle-projet-web-reussi)
-- [AubeSonore : web radio automatisée avec IA](https://victorlenain.fr/blog/2026-03-03-aubesonore-web-radio-automatisee-ia)
-- [Site vitrine ou application web : comment choisir](https://victorlenain.fr/blog/2026-03-05-site-vitrine-vs-application-web)
+- [Accueil blog](https://www.victorlenain.fr/blog) : articles sur le développement web, l'intégration IA et le freelance
+- [React Server Components en production : ce que j'ai appris](https://www.victorlenain.fr/blog/2026-04-09-react-server-components-production)
+- [Passkeys : en finir avec les mots de passe dans vos apps web](https://www.victorlenain.fr/blog/2026-04-07-passkeys-authentification-sans-mot-de-passe)
+- [CDI ou freelance dev en 2026 : mon bilan après 2 ans d'indépendance](https://www.victorlenain.fr/blog/2026-04-02-bilan-deux-ans-freelance-cdi)
+- [Next.js 16 + Turbopack : retour d'expérience sur un vrai projet](https://www.victorlenain.fr/blog/2026-03-31-nextjs-16-turbopack-retour-experience)
+- [SEO en 2026 : votre site est-il prêt pour les moteurs de recherche IA ?](https://www.victorlenain.fr/blog/2026-03-26-seo-moteurs-recherche-ia)
+- [Mon workflow avec Claude Code : comment je livre plus vite en 2026](https://www.victorlenain.fr/blog/2026-03-24-workflow-claude-code-freelance)
+- [Pourquoi votre startup a besoin d'un audit technique](https://www.victorlenain.fr/blog/2026-03-19-pourquoi-audit-technique-startup)
+- [5 erreurs courantes quand on externalise le développement web](https://www.victorlenain.fr/blog/2026-03-17-erreurs-externalisation-developpement-web)
+- [L'intégration IA coûte moins cher que vous ne le pensez](https://www.victorlenain.fr/blog/2026-03-12-integration-ia-pme-cout-reel)
+- [Pas d'école d'ingénieur, et alors ? Mon parcours vers le freelance](https://www.victorlenain.fr/blog/2026-03-10-parcours-atypique-developpeur-freelance)
+- [Site vitrine ou application web : comment choisir (et combien ça coûte)](https://www.victorlenain.fr/blog/2026-03-05-site-vitrine-vs-application-web)
+- [AubeSonore : j'ai construit une web radio complète de zéro](https://www.victorlenain.fr/blog/2026-03-03-aubesonore-web-radio-automatisee-ia)
+- [Pourquoi la communication fait souvent la différence dans un projet web](https://www.victorlenain.fr/blog/2026-02-26-communication-cle-projet-web-reussi)
+- [TomIA : le tuteur IA qui rend le soutien scolaire accessible à tous](https://www.victorlenain.fr/blog/2026-02-24-tomia-tuteur-ia-soutien-scolaire)
+- [Pourquoi travailler avec un développeur freelance Full-Stack en 2026](https://www.victorlenain.fr/blog/2026-02-18-pourquoi-travailler-avec-un-freelance-fullstack)
+- [Victor Lenain - Développeur Freelance à Paris](https://www.victorlenain.fr/blog/2025-01-12-developpeur-freelance-paris)
 
 ## Contact
 
-- Site : https://victorlenain.fr
+- Site : https://www.victorlenain.fr
 - Email : victor.lenain26@gmail.com
 - Réserver un appel : https://cal.com/victor-lenain-ejsjfb/echange-decouverte
 - LinkedIn : https://www.linkedin.com/in/victorlenain/
 - Malt : https://www.malt.fr/profile/victorlenain
 - GitHub : https://github.com/VictorNain26
-- WhatsApp : https://wa.me/33664422529

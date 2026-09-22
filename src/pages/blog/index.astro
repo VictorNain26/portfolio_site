@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDate, publishedPosts } from '../../lib/posts';
+
+const posts = publishedPosts(await getCollection('posts'), new Date());
+---
+
+<Base
+  title="Blog"
+  description="Articles sur le développement web, l'intégration IA et le métier de freelance."
+>
+  <section class="wrap">
+    <h1 class="page-title">Blog</h1>
+    <ol class="posts">
+      {posts.map(post => (
+        <li>
+          <a href={`/blog/${post.id}`}>
+            <time class="meta" datetime={post.data.publishedAt.toISOString()}>
+              {formatDate(post.data.publishedAt)}
+            </time>
+            <h2>{post.data.title}</h2>
+            <p class="summary">{post.data.summary}</p>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+</Base>
+
+<style>
+  .page-title {
+    font-size: clamp(3rem, 9vw, 6rem);
+    margin-block: 2rem 3rem;
+  }
+
+  .posts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .posts li {
+    border-top: 1px solid var(--rule);
+  }
+
+  .posts a {
+    display: grid;
+    gap: 0.4rem;
+    padding-block: 1.75rem;
+    max-width: var(--measure);
+  }
+
+  .posts h2 {
+    font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+    transition:
+      color 0.3s var(--ease-out),
+      transform 0.5s var(--ease-out);
+  }
+
+  .posts a:hover h2,
+  .posts a:focus-visible h2 {
+    font-style: italic;
+    color: var(--accent);
+    transform: translateX(0.35rem);
+  }
+
+  .summary {
+    color: var(--ink-soft);
+  }
+</style>

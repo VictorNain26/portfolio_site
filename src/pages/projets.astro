@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import { projects } from '../data/projects';
+---
+
+<Base title="Projets" description="Produits que je conçois et fais tourner en production.">
+  <section class="wrap">
+    <h1 class="page-title">Projets</h1>
+    <ul class="projects">
+      {projects.map(project => (
+        <li>
+          <a href={project.url}>
+            <h2>
+              {project.name}
+              <span class="arrow" aria-hidden="true">
+                ↗
+              </span>
+            </h2>
+            <p>{project.tagline}</p>
+            <p class="meta">
+              {project.status} · {project.stack.join(' · ')}
+            </p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .page-title {
+    font-size: clamp(3rem, 9vw, 6rem);
+    margin-block: 2rem 3rem;
+  }
+
+  .projects {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .projects li {
+    border-top: 1px solid var(--rule);
+  }
+
+  .projects a {
+    display: grid;
+    gap: 0.5rem;
+    padding-block: 2rem;
+    max-width: var(--measure);
+  }
+
+  h2 {
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    transition:
+      color 0.3s var(--ease-out),
+      transform 0.5s var(--ease-out);
+  }
+
+  .arrow {
+    font-size: 0.5em;
+    vertical-align: super;
+  }
+
+  .projects a:hover h2,
+  .projects a:focus-visible h2 {
+    font-style: italic;
+    color: var(--accent);
+    transform: translateX(0.4rem);
+  }
+</style>
