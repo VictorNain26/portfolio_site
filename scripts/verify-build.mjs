@@ -4,7 +4,7 @@ import { access, readdir, readFile } from 'node:fs/promises';
 const ORIGIN = 'https://www.victorlenain.fr';
 const PAPER = 'F2EFE8';
 
-// URLs indexed before the Astro rebuild: they must keep answering even if a post is renamed.
+// URLs indexed before the Astro rebuild: each must keep answering, as a page or a vercel.json redirect.
 const LEGACY_SLUGS = [
   '2025-01-12-developpeur-freelance-paris',
   '2026-02-18-pourquoi-travailler-avec-un-freelance-fullstack',
@@ -54,10 +54,18 @@ for (const file of await readdir('src/content/posts')) {
 }
 
 const sitemap = await readFile('dist/sitemap-0.xml', 'utf8');
-for (const slug of new Set([...LEGACY_SLUGS, ...published])) {
+const redirected = new Set(
+  JSON.parse(await readFile('vercel.json', 'utf8')).redirects.map(({ source }) => source),
+);
+for (const slug of LEGACY_SLUGS) {
+  if (!published.includes(slug) && !redirected.has(`/blog/${slug}`))
+    failures.push(`legacy /blog/${slug} is neither published nor redirected`);
+}
+for (const slug of published) {
   if (!(await exists(`dist/blog/${slug}.html`))) failures.push(`missing dist/blog/${slug}.html`);
   if (!sitemap.includes(`<loc>${ORIGIN}/blog/${slug}</loc>`))
     failures.push(`sitemap lacks ${slug}`);
+  if (redirected.has(`/blog/${slug}`)) failures.push(`published /blog/${slug} is redirected away`);
 }
 
 for (const page of ['index', 'blog', 'projets', '404']) {
@@ -69,11 +77,6 @@ if (sitemap.includes(`<loc>${ORIGIN}/services`)) failures.push('sitemap still li
 if (sitemap.includes(`<loc>${ORIGIN}/404`)) failures.push('sitemap lists /404');
 if (/<loc>[^<]+\/<\/loc>/.test(sitemap.replace(`<loc>${ORIGIN}/</loc>`, '')))
   failures.push('sitemap has trailing-slash URLs');
-
-const slug = LEGACY_SLUGS.at(-1);
-const article = await readFile(`dist/blog/${slug}.html`, 'utf8');
-if (!article.includes(`<link rel="canonical" href="${ORIGIN}/blog/${slug}">`))
-  failures.push('article canonical is wrong');
 
 const notFound = await readFile('dist/404.html', 'utf8');
 if (!notFound.includes('<meta name="robots" content="noindex">'))
@@ -88,8 +91,9 @@ const h1 = home
   .trim();
 if (h1 !== 'Victor Lenain') failures.push(`home h1 text is "${h1}"`);
 
-for (const file of await readdir('dist/blog')) {
-  const html = await readFile(`dist/blog/${file}`, 'utf8');
+const articles = published.map(slug => `blog/${slug}.html`);
+for (const file of articles) {
+  const html = await readFile(`dist/${file}`, 'utf8');
   for (const [, hex] of html.matchAll(/<span style="color:#([0-9A-Fa-f]{6})/g)) {
     const ratio = contrast(hex, PAPER);
     if (ratio < 4.5)
@@ -102,13 +106,7 @@ const jsonLdTypes = html =>
     ([, json]) => JSON.parse(json)['@type'],
   );
 
-const pages = [
-  'index.html',
-  'blog.html',
-  'projets.html',
-  '404.html',
-  ...(await readdir('dist/blog')).map(file => `blog/${file}`),
-];
+const pages = ['index.html', 'blog.html', 'projets.html', '404.html', ...articles];
 for (const file of pages) {
   const html = await readFile(`dist/${file}`, 'utf8');
   for (const [tag] of html.matchAll(/<a\b[^>]*href="https?:\/\/[^"]*"[^>]*>/g)) {
@@ -121,12 +119,21 @@ for (const file of pages) {
     failures.push(`${file}: no RSS autodiscovery link`);
 }
 
-for (const property of ['article:published_time', 'article:author', 'og:image:alt']) {
-  if (!article.includes(`property="${property}"`)) failures.push(`article lacks ${property}`);
+const [slug] = published;
+if (slug) {
+  const article = await readFile(`dist/blog/${slug}.html`, 'utf8');
+  if (!article.includes(`<link rel="canonical" href="${ORIGIN}/blog/${slug}">`))
+    failures.push('article canonical is wrong');
+  for (const property of ['article:published_time', 'article:author', 'og:image:alt']) {
+    if (!article.includes(`property="${property}"`)) failures.push(`article lacks ${property}`);
+  }
+  if (!jsonLdTypes(article).includes('BreadcrumbList'))
+    failures.push('article lacks BreadcrumbList');
+  if (!/"publisher":\{/.test(article)) failures.push('BlogPosting lacks publisher');
+  if (!article.includes('class="contact"')) failures.push('article lacks the contact block');
+  if (!new RegExp(`<loc>${ORIGIN}/blog/${slug}</loc><lastmod>`).test(sitemap))
+    failures.push('sitemap blog entries lack lastmod');
 }
-if (!jsonLdTypes(article).includes('BreadcrumbList')) failures.push('article lacks BreadcrumbList');
-if (!/"publisher":\{/.test(article)) failures.push('BlogPosting lacks publisher');
-if (!article.includes('class="contact"')) failures.push('article lacks the contact block');
 
 const blogIndex = await readFile('dist/blog.html', 'utf8');
 if (!jsonLdTypes(blogIndex).includes('Blog')) failures.push('/blog lacks Blog JSON-LD');
@@ -136,9 +143,6 @@ if (
   )
 )
   failures.push('/blog nav link is not aria-current');
-
-if (!new RegExp(`<loc>${ORIGIN}/blog/${slug}</loc><lastmod>`).test(sitemap))
-  failures.push('sitemap blog entries lack lastmod');
 
 if (!(await exists('dist/rss.xml'))) failures.push('missing dist/rss.xml');
 else {
