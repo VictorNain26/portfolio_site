@@ -1,80 +1,26 @@
-# Victor Lenain - Portfolio Développeur Freelance
+# victorlenain.fr
 
-> Site portfolio minimaliste et orienté conversion pour le démarchage de
-> missions freelance. Démo : <https://victorlenain.fr>
+Site de Victor Lenain, développeur full-stack freelance à Paris :
+<https://www.victorlenain.fr>
 
-## Stack technique
+Site statique [Astro](https://astro.build) déployé sur Vercel. Une page
+d'accueil, une page projets et un blog en MDX.
 
-| Catégorie     | Technologies                                  |
-| ------------- | --------------------------------------------- |
-| **Framework** | Next.js 15 (App Router), React 19, TypeScript |
-| **Styling**   | Tailwind CSS 4, Framer Motion                 |
-| **Content**   | MDX via Content Collections                   |
-| **Qualité**   | ESLint strict, Vitest, Prettier               |
-
-## Structure du site
-
-```
-Hero         → Présentation + CTA contact
-Services     → Ce que je peux faire pour vous
-Projets      → Portfolio GitHub (filtrés par topic "demo")
-Contact      → Appel à l'action final
-Blog         → Articles techniques (route /blog)
-```
-
-## Démarrage rapide
+## Démarrer
 
 ```bash
-# Cloner et installer
-git clone https://github.com/victornain26/portfolio_site.git
-cd portfolio_site
-bun install
-
-# Développement
-bun run dev
-
-# Build production
-bun run build
+npm install
+npm run dev
 ```
 
-## Scripts disponibles
+## Publier un article
 
-| Commande         | Description              |
-| ---------------- | ------------------------ |
-| `bun run dev`    | Serveur de développement |
-| `bun run build`  | Build production         |
-| `bun run lint`   | Vérification ESLint      |
-| `bun run test`   | Tests Vitest             |
-| `bun run format` | Formatage Prettier       |
+Ajouter `src/content/posts/<AAAA-MM-JJ>-<slug>.mdx` avec `title`, `summary`,
+`publishedAt` et `tags` en frontmatter, puis merger sur `master`. Un article
+daté dans le futur n'est publié qu'au premier déploiement suivant sa date.
 
-## Personnalisation
+## Valider
 
-### Modifier les informations de contact
-
-Éditer `components/Hero.tsx` :
-
-- Email, WhatsApp, liens sociaux
-
-### Ajouter des services
-
-Éditer `components/Services.tsx` :
-
-- Modifier le tableau `services` avec titre, description, résultats
-
-### Ajouter des projets
-
-Sur GitHub, ajouter le topic `demo` aux repos à afficher.
-
-### Ajouter un article de blog
-
-Créer un fichier `.mdx` dans `content/posts/` avec le frontmatter :
-
-```yaml
----
-title: "Titre de l'article"
-summary: 'Résumé court'
-coverImage: '/images/posts/cover.jpg'
-publishedAt: '2025-01-01'
-tags: ['tag1', 'tag2']
----
+```bash
+npm run format:check && npm run check && npm test && npm run build && npm run verify:build
 ```
