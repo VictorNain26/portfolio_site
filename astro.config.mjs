@@ -3,7 +3,12 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 // github-light tokens that fall under 4.5:1 on the #F2EFE8 paper, darkened to pass AA.
-const tokenColors = { '#6A737D': '#5E594F', '#D73A49': '#B8323D', '#E36209': '#A84B06' };
+const tokenColors = {
+  '#6A737D': '#5E594F',
+  '#D73A49': '#B8323D',
+  '#E36209': '#A84B06',
+  '#22863A': '#1A7532',
+};
 const recolor = style =>
   Object.entries(tokenColors).reduce(
     (out, [from, to]) => out.replaceAll(new RegExp(from, 'gi'), to),

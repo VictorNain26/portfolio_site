@@ -94,7 +94,8 @@ const blogPosting = {
     transition: background-size 0.5s var(--ease-out);
   }
 
-  .prose :global(a:hover) {
+  .prose :global(a:hover),
+  .prose :global(a:focus-visible) {
     background-size:
       100% 1px,
       100% 1px;
