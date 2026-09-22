@@ -1,6 +1,9 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import { unified } from '@astrojs/markdown-remark';
+import rehypeExternalLinks from 'rehype-external-links';
+import { readdirSync, readFileSync } from 'node:fs';
 
 // github-light tokens that fall under 4.5:1 on the #F2EFE8 paper, darkened to pass AA.
 const tokenColors = {
@@ -15,12 +18,43 @@ const recolor = style =>
     String(style ?? ''),
   );
 
+const postsDir = './src/content/posts';
+const publishedAt = new Map(
+  readdirSync(postsDir)
+    .filter(file => file.endsWith('.mdx'))
+    .map(file => [
+      `/blog/${file.replace(/\.mdx$/, '')}`,
+      readFileSync(`${postsDir}/${file}`, 'utf8').match(/^publishedAt:\s*['"]?([^'"\n]+)/m)?.[1],
+    ]),
+);
+
 export default defineConfig({
   site: 'https://www.victorlenain.fr',
   trailingSlash: 'never',
   build: { format: 'file' },
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      serialize(item) {
+        const date = publishedAt.get(new URL(item.url).pathname);
+        return date ? { ...item, lastmod: new Date(date).toISOString() } : item;
+      },
+    }),
+  ],
   markdown: {
+    processor: unified({
+      rehypePlugins: [
+        [
+          rehypeExternalLinks,
+          {
+            target: '_blank',
+            rel: ['noopener'],
+            content: { type: 'text', value: ' (nouvel onglet)' },
+            contentProperties: { className: ['sr-only'] },
+          },
+        ],
+      ],
+    }),
     shikiConfig: {
       theme: 'github-light',
       transformers: [

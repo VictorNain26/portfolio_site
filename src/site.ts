@@ -1,6 +1,7 @@
 export const site = {
   name: 'Victor Lenain',
   title: 'Victor Lenain · Développeur full-stack · Intégration IA · Paris',
+  tagline: 'Développeur full-stack · Intégration IA · Paris',
   description:
     "Développeur full-stack freelance à Paris. J'ajoute la couche IA (agents, RAG, automatisations) à votre produit existant, sans tout refaire.",
   email: 'victor.lenain26@gmail.com',
@@ -43,4 +44,14 @@ export const personJsonLd = {
     'Astro',
     'PostgreSQL',
   ],
+};
+
+export const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://www.victorlenain.fr/#website',
+  name: site.name,
+  url: 'https://www.victorlenain.fr',
+  inLanguage: 'fr-FR',
+  publisher: { '@id': personJsonLd['@id'] },
 };

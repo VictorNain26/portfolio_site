@@ -97,6 +97,57 @@ for (const file of await readdir('dist/blog')) {
   }
 }
 
+const jsonLdTypes = html =>
+  [...html.matchAll(/<script type="application\/ld\+json">([^<]*)<\/script>/g)].map(
+    ([, json]) => JSON.parse(json)['@type'],
+  );
+
+const pages = [
+  'index.html',
+  'blog.html',
+  'projets.html',
+  '404.html',
+  ...(await readdir('dist/blog')).map(file => `blog/${file}`),
+];
+for (const file of pages) {
+  const html = await readFile(`dist/${file}`, 'utf8');
+  for (const [tag] of html.matchAll(/<a\b[^>]*href="https?:\/\/[^"]*"[^>]*>/g)) {
+    if (tag.includes(`href="${ORIGIN}`)) continue;
+    if (!tag.includes('target="_blank"') || !/rel="[^"]*noopener/.test(tag))
+      failures.push(`${file}: external link without target/noopener: ${tag}`);
+  }
+  if (!jsonLdTypes(html).includes('WebSite')) failures.push(`${file}: no WebSite JSON-LD`);
+  if (!html.includes('rel="alternate" type="application/rss+xml"'))
+    failures.push(`${file}: no RSS autodiscovery link`);
+}
+
+for (const property of ['article:published_time', 'article:author', 'og:image:alt']) {
+  if (!article.includes(`property="${property}"`)) failures.push(`article lacks ${property}`);
+}
+if (!jsonLdTypes(article).includes('BreadcrumbList')) failures.push('article lacks BreadcrumbList');
+if (!/"publisher":\{/.test(article)) failures.push('BlogPosting lacks publisher');
+if (!article.includes('class="contact"')) failures.push('article lacks the contact block');
+
+const blogIndex = await readFile('dist/blog.html', 'utf8');
+if (!jsonLdTypes(blogIndex).includes('Blog')) failures.push('/blog lacks Blog JSON-LD');
+if (
+  !/<a[^>]*href="\/blog"[^>]*aria-current="page"|<a[^>]*aria-current="page"[^>]*href="\/blog"/.test(
+    blogIndex,
+  )
+)
+  failures.push('/blog nav link is not aria-current');
+
+if (!new RegExp(`<loc>${ORIGIN}/blog/${slug}</loc><lastmod>`).test(sitemap))
+  failures.push('sitemap blog entries lack lastmod');
+
+if (!(await exists('dist/rss.xml'))) failures.push('missing dist/rss.xml');
+else {
+  const rssXml = await readFile('dist/rss.xml', 'utf8');
+  for (const post of published) {
+    if (!rssXml.includes(`${ORIGIN}/blog/${post}<`)) failures.push(`rss lacks ${post}`);
+  }
+}
+
 if (failures.length) {
   console.error([...new Set(failures)].join('\n'));
   process.exit(1);
