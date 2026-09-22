@@ -1,63 +1,48 @@
-# Victor Lenain · Développeur full-stack · Intégration IA
+# Victor Lenain · Développeur full-stack · Systèmes IA
 
-> Développeur full-stack freelance basé à Paris, je conçois des applications web et j'y intègre de l'IA (agents, RAG, automatisations LLM) quand elle apporte une valeur réelle. Stack Next.js, TypeScript, Anthropic Claude, OpenAI, pgvector. Je travaille avec des startups et des PME, en remote ou sur Paris. TJM 500 €. Réponse sous 24 h.
+> Site personnel de Victor Lenain, développeur full-stack indépendant à Paris, certifié Claude Certified Architect – Foundations (Anthropic, 2026). J'y montre mes projets perso autour des agents IA, du RAG et des serveurs MCP, et j'y écris ce que j'en retiens.
 
 ## À propos
 
 - Site officiel : https://www.victorlenain.fr
 - Localisation : Paris, Île-de-France, France
-- Statut : Auto-entrepreneur, freelance depuis avril 2024
-- Parcours : 2 ans en agence sur projets fintech (Capsens, Ruby on Rails / React) puis freelance fullstack avec spécialisation intégration IA
-- Formations : Bootcamp Le Wagon (2021), Développeur concepteur logiciel OpenClassrooms (2023). Pas de diplôme d'ingénieur ni master IA, d'où le label "développeur" plutôt qu'"ingénieur"
-- Disponibilité : missions 4 à 16 semaines, remote ou Paris
-- TJM affiché : 500 €
-- Réponse : sous 24 h ouvrées
+- Statut : indépendant depuis avril 2024
+- Parcours : développeur web de formation. Deux ans chez CapSens, agence fintech (alternance puis CDI, 2022-2024) : Ruby on Rails et React sur des plateformes d'investissement réglementées (La Première Brique, Blast Club). Puis indépendant, avec une spécialisation en IA appliquée apprise en autodidacte et prouvée par du code public
+- Formations : Le Wagon, concepteur développeur d'application web (RNCP niveau 6, 2021) ; OpenClassrooms, développeur concepteur logiciel (2022-2023)
+- Certification : Claude Certified Architect – Foundations, Anthropic (septembre 2026)
+- Collectif : membre de Growth Wave — AI Crew, spécialistes Claude
+- Langues : français, anglais professionnel
+
+## Ce qui m'intéresse
+
+- Les agents IA qui tiennent en production : garde-fous, validation humaine, coût maîtrisé
+- Le RAG mesuré : jeu d'évaluation dès le départ (recall@k, MRR)
+- Les serveurs MCP qui connectent Claude à des données et des API
+- Le full-stack autour : applications web, API, bases de données
 
 ## Stack technique
 
-- LLM APIs : Anthropic Claude (Sonnet, Haiku, Opus), OpenAI (GPT-4o, GPT-4.1)
-- Agents : Claude Agent SDK (primaire), LangChain (secondaire)
-- RAG et embeddings : pgvector sur PostgreSQL, Qdrant si volume, Mistral embeddings
-- Web : Next.js, Astro, TypeScript, React, React Native, Tailwind CSS
-- Backend : Node.js, PostgreSQL, APIs REST
-- Infra : Vercel, Docker, GitHub Actions, systemd timers (Ubuntu)
+- IA : Anthropic Claude, Claude Agent SDK, Claude Code, MCP, LangGraph, Langfuse, Mistral
+- RAG : PostgreSQL et pgvector, Qdrant, BGE-M3
+- Web : TypeScript, Next.js, React, React Native, Astro, Node.js, Bun
+- Backend et données : Python, PostgreSQL, Ruby on Rails, API REST
+- Infra : Docker, GitHub Actions, Vercel
 
 ## Projets
 
-- [AubeSonore](https://aubesonore.fr) : web radio indépendante avec programmation musicale automatisée. Streaming live 24/7. Pipeline découverte HypeMachine, analyse audio, diffusion AzuraCast. Déployée et fonctionnelle
-- [TomIA](https://tomia.fr) : tuteur scolaire IA basé sur la méthode socratique, aligné sur les programmes Éduscol. Stack Next.js, React Native, Claude / OpenAI, RAG avec Qdrant. En cours de développement, landing page de pré-lancement publique
-- Agent freelance personnel : système IA en production sur serveur Ubuntu, triage Gmail toutes les 15 min (Claude Haiku), génération de drafts de réponses (Claude Sonnet), rapport hebdomadaire avec feedback loop. Stack Claude Code + Claude Agent SDK + Python
-
-## Missions client référençables
-
-- [Jerikho IM](https://jerikho-im.com) : refonte du front WordPress d'une société de gestion en Private Equity, conformité AMF
-- Une dizaine d'autres projets pour startups et PME depuis avril 2024 (MVP SaaS, applications métier, automatisations, intégrations IA ponctuelles)
+- [AubeSonore](https://www.aubesonore.fr) : web radio diffusée 24 h/24. Un pipeline Python quotidien découvre des morceaux, filtre leur genre, analyse l'audio et alimente AzuraCast sans intervention. En ligne
+- [Serveur MCP Pexels](https://github.com/VictorNain26/pexels-mcp-server) : serveur MCP open source (tools, resources, prompts) qui donne aux agents l'accès aux photos et vidéos Pexels. Sorties structurées, OAuth 2.1 pour le transport HTTP, CI
+- [La fabrique](https://github.com/VictorNain26/fabrique-cours-agents) : cours interactif open source pour construire un agent qui tient en production. Garde-fous, validation humaine (LangGraph), repli entre fournisseurs, budget par requête, traces Langfuse, non-régression en CI
+- [Index RAG Éduscol](https://github.com/VictorNain26/tomai-curriculum) : index des programmes du collège évalué sur 189 questions. Recall@5 de 0,81 à 0,89 et MRR de 0,58 à 0,74 en passant à BGE-M3 dense et sparse. Retiré avant mise en service, conservé comme trace de la mesure
+- [TomIA](https://www.tomia.fr) : tuteur socratique pour collégiens avec supervision parentale. Modèles Mistral, hébergement européen. Pré-lancement, sans utilisateurs en production
 
 ## Blog
 
-- [Accueil blog](https://www.victorlenain.fr/blog) : articles sur le développement web, l'intégration IA et le freelance
-- [React Server Components en production : ce que j'ai appris](https://www.victorlenain.fr/blog/2026-04-09-react-server-components-production)
-- [Passkeys : en finir avec les mots de passe dans vos apps web](https://www.victorlenain.fr/blog/2026-04-07-passkeys-authentification-sans-mot-de-passe)
-- [CDI ou freelance dev en 2026 : mon bilan après 2 ans d'indépendance](https://www.victorlenain.fr/blog/2026-04-02-bilan-deux-ans-freelance-cdi)
-- [Next.js 16 + Turbopack : retour d'expérience sur un vrai projet](https://www.victorlenain.fr/blog/2026-03-31-nextjs-16-turbopack-retour-experience)
-- [SEO en 2026 : votre site est-il prêt pour les moteurs de recherche IA ?](https://www.victorlenain.fr/blog/2026-03-26-seo-moteurs-recherche-ia)
-- [Mon workflow avec Claude Code : comment je livre plus vite en 2026](https://www.victorlenain.fr/blog/2026-03-24-workflow-claude-code-freelance)
-- [Pourquoi votre startup a besoin d'un audit technique](https://www.victorlenain.fr/blog/2026-03-19-pourquoi-audit-technique-startup)
-- [5 erreurs courantes quand on externalise le développement web](https://www.victorlenain.fr/blog/2026-03-17-erreurs-externalisation-developpement-web)
-- [L'intégration IA coûte moins cher que vous ne le pensez](https://www.victorlenain.fr/blog/2026-03-12-integration-ia-pme-cout-reel)
-- [Pas d'école d'ingénieur, et alors ? Mon parcours vers le freelance](https://www.victorlenain.fr/blog/2026-03-10-parcours-atypique-developpeur-freelance)
-- [Site vitrine ou application web : comment choisir (et combien ça coûte)](https://www.victorlenain.fr/blog/2026-03-05-site-vitrine-vs-application-web)
-- [AubeSonore : j'ai construit une web radio complète de zéro](https://www.victorlenain.fr/blog/2026-03-03-aubesonore-web-radio-automatisee-ia)
-- [Pourquoi la communication fait souvent la différence dans un projet web](https://www.victorlenain.fr/blog/2026-02-26-communication-cle-projet-web-reussi)
-- [TomIA : le tuteur IA qui rend le soutien scolaire accessible à tous](https://www.victorlenain.fr/blog/2026-02-24-tomia-tuteur-ia-soutien-scolaire)
-- [Pourquoi travailler avec un développeur freelance Full-Stack en 2026](https://www.victorlenain.fr/blog/2026-02-18-pourquoi-travailler-avec-un-freelance-fullstack)
-- [Victor Lenain - Développeur Freelance à Paris](https://www.victorlenain.fr/blog/2025-01-12-developpeur-freelance-paris)
+- [Accueil blog](https://www.victorlenain.fr/blog) : ce que je retiens de mes projets perso. Aucun article publié pour l'instant
 
 ## Contact
 
 - Site : https://www.victorlenain.fr
 - Email : victor.lenain26@gmail.com
-- Réserver un appel : https://cal.com/victor-lenain-ejsjfb/echange-decouverte
 - LinkedIn : https://www.linkedin.com/in/victorlenain/
-- Malt : https://www.malt.fr/profile/victorlenain
 - GitHub : https://github.com/VictorNain26

@@ -2,7 +2,6 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { formatDate, publishedPosts } from '../../lib/posts';
-import External from '../../components/External.astro';
 import { personJsonLd, site } from '../../site';
 
 export async function getStaticPaths() {
@@ -59,14 +58,10 @@ const breadcrumb = {
       <Content />
     </div>
     <aside class="contact" aria-label="Contact">
-      <p class="display">Un projet en tête ?</p>
+      <p class="display">Une question, une remarque ?</p>
       <p>
-        <External class="link" href={site.calUrl}>
-          Prendre rendez-vous
-        </External>
-        <span aria-hidden="true"> · </span>
         <a class="link" href={`mailto:${site.email}`}>
-          Écrire
+          Écris-moi, ça me fait toujours plaisir
         </a>
       </p>
     </aside>
