@@ -13,13 +13,16 @@ const entries = [
 
 <Base header={false}>
   <section class="wrap hero">
-    <h1 class="name" aria-label={site.name}>
+    <h1 class="name">
       {words.map((word, i) => (
-        <span class="mask" aria-hidden="true">
-          <span class="word" style={`--i: ${i}`}>
-            {word}
+        <>
+          {i > 0 && ' '}
+          <span class="mask">
+            <span class="word" style={`--i: ${i}`}>
+              {word}
+            </span>
           </span>
-        </span>
+        </>
       ))}
     </h1>
     <p class="pitch">
@@ -45,15 +48,15 @@ const entries = [
 
 <style>
   .hero {
-    min-height: calc(100dvh - 6rem);
+    flex: 1;
     display: grid;
     align-content: center;
     gap: clamp(1.5rem, 4vh, 2.75rem);
-    padding-block: 3rem;
+    padding-block: clamp(1rem, 3vh, 2rem);
   }
 
   .name {
-    font-size: clamp(3.5rem, 13vw, 9.5rem);
+    font-size: clamp(3.5rem, min(13vw, 17vh), 9.5rem);
     line-height: 0.95;
     display: flex;
     flex-wrap: wrap;
@@ -100,7 +103,7 @@ const entries = [
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    padding-block: 0.7rem;
+    padding-block: clamp(0.5rem, 1.2vh, 0.7rem);
     font-family: var(--font-display);
     font-size: clamp(1.6rem, 3.4vw, 2.2rem);
     line-height: 1.2;
@@ -111,11 +114,17 @@ const entries = [
     display: inline-block;
     transition:
       color 0.3s var(--ease-out),
-      transform 0.5s var(--ease-out);
+      transform 0.5s var(--ease-out),
+      background-size 0.5s var(--ease-out);
+  }
+
+  .label {
+    background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 1px no-repeat;
   }
 
   .index a:hover .label,
   .index a:focus-visible .label {
+    background-size: 100% 1px;
     font-style: italic;
     color: var(--accent);
     transform: translateX(0.4rem);
