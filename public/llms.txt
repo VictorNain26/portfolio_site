@@ -13,15 +13,6 @@
 - TJM affiché : 500 €
 - Réponse : sous 24 h ouvrées
 
-## Services
-
-- Agents IA et assistants conversationnels : conception et déploiement d'agents Claude / OpenAI (tri de mails, qualification de leads, exécution d'actions). Stack Claude Agent SDK ou LangChain
-- RAG et recherche sur documents : ingestion, embeddings, recherche sémantique, réponses sourcées. pgvector pour rester sur PostgreSQL, Qdrant si volume
-- Automatisations LLM sur mesure : pipelines LLM en production, classification, extraction structurée, génération de contenu. Suivi des coûts tokens, eval dès le démarrage
-- Applications web sur mesure : sites vitrines, applications métier, plateformes SaaS. Stack Next.js / TypeScript / Node.js
-- Refonte et interventions ponctuelles : refonte visuelle, migration technique, fix urgent, ajout de fonctionnalité. À partir d'une demi-journée
-- Conseil et audit IA : cadrage prototype, choix de stack et coûts, audit d'un projet existant
-
 ## Stack technique
 
 - LLM APIs : Anthropic Claude (Sonnet, Haiku, Opus), OpenAI (GPT-4o, GPT-4.1)
@@ -70,4 +61,3 @@
 - LinkedIn : https://www.linkedin.com/in/victorlenain/
 - Malt : https://www.malt.fr/profile/victorlenain
 - GitHub : https://github.com/VictorNain26
-- WhatsApp : https://wa.me/33664422529
