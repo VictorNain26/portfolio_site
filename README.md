@@ -21,6 +21,9 @@ daté dans le futur n'est publié qu'au premier déploiement suivant sa date.
 
 ## Valider
 
+La CI (`.github/workflows/ci.yml`) lance ces étapes sur chaque PR et sur
+`master` :
+
 ```bash
 npm run format:check && npm run check && npm test && npm run build && npm run verify:build
 ```
