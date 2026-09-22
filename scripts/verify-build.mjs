@@ -22,7 +22,8 @@ for (const file of await readdir('src/content/posts')) {
 const sitemap = await readFile('dist/sitemap-0.xml', 'utf8');
 for (const slug of slugs) {
   if (!(await exists(`dist/blog/${slug}.html`))) failures.push(`missing dist/blog/${slug}.html`);
-  if (!sitemap.includes(`<loc>${ORIGIN}/blog/${slug}</loc>`)) failures.push(`sitemap lacks ${slug}`);
+  if (!sitemap.includes(`<loc>${ORIGIN}/blog/${slug}</loc>`))
+    failures.push(`sitemap lacks ${slug}`);
 }
 
 for (const page of ['index', 'blog', 'projets', '404']) {

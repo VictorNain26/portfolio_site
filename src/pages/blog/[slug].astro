@@ -28,12 +28,7 @@ const blogPosting = {
 };
 ---
 
-<Base
-  title={post.data.title}
-  description={post.data.summary}
-  type="article"
-  jsonLd={[blogPosting]}
->
+<Base title={post.data.title} description={post.data.summary} type="article" jsonLd={[blogPosting]}>
   <article class="wrap article">
     <header>
       <time class="meta" datetime={post.data.publishedAt.toISOString()}>
@@ -44,7 +39,11 @@ const blogPosting = {
     <div class="prose">
       <Content />
     </div>
-    <p class="back"><a class="link" href="/blog">← Tous les articles</a></p>
+    <p class="back">
+      <a class="link" href="/blog">
+        ← Tous les articles
+      </a>
+    </p>
   </article>
 </Base>
 
@@ -83,7 +82,8 @@ const blogPosting = {
 
   .prose :global(a) {
     background-image:
-      linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--ink-soft), var(--ink-soft));
+      linear-gradient(var(--accent), var(--accent)),
+      linear-gradient(var(--ink-soft), var(--ink-soft));
     background-position:
       0 100%,
       0 100%;

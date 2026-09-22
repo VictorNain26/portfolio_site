@@ -13,19 +13,17 @@ const posts = publishedPosts(await getCollection('posts'), new Date());
   <section class="wrap">
     <h1 class="page-title">Blog</h1>
     <ol class="posts">
-      {
-        posts.map(post => (
-          <li>
-            <a href={`/blog/${post.id}`}>
-              <time class="meta" datetime={post.data.publishedAt.toISOString()}>
-                {formatDate(post.data.publishedAt)}
-              </time>
-              <h2>{post.data.title}</h2>
-              <p class="summary">{post.data.summary}</p>
-            </a>
-          </li>
-        ))
-      }
+      {posts.map(post => (
+        <li>
+          <a href={`/blog/${post.id}`}>
+            <time class="meta" datetime={post.data.publishedAt.toISOString()}>
+              {formatDate(post.data.publishedAt)}
+            </time>
+            <h2>{post.data.title}</h2>
+            <p class="summary">{post.data.summary}</p>
+          </a>
+        </li>
+      ))}
     </ol>
   </section>
 </Base>

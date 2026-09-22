@@ -14,34 +14,30 @@ const entries = [
 <Base header={false}>
   <section class="wrap hero">
     <h1 class="name" aria-label={site.name}>
-      {
-        words.map((word, i) => (
-          <span class="mask" aria-hidden="true">
-            <span class="word" style={`--i: ${i}`}>
-              {word}
-            </span>
+      {words.map((word, i) => (
+        <span class="mask" aria-hidden="true">
+          <span class="word" style={`--i: ${i}`}>
+            {word}
           </span>
-        ))
-      }
+        </span>
+      ))}
     </h1>
     <p class="pitch">
-      Développeur full-stack freelance à Paris. J'ajoute la couche IA (agents, RAG,
-      automatisations) à votre produit existant, sans tout refaire.
+      Développeur full-stack freelance à Paris. J'ajoute la couche IA (agents, RAG, automatisations)
+      à votre produit existant, sans tout refaire.
     </p>
     <nav class="index" aria-label="Sommaire">
       <ul>
-        {
-          entries.map((entry, i) => (
-            <li style={`--i: ${i}`}>
-              <a href={entry.href}>
-                <span class="label">{entry.label}</span>
-                <span class="arrow" aria-hidden="true">
-                  {entry.arrow}
-                </span>
-              </a>
-            </li>
-          ))
-        }
+        {entries.map((entry, i) => (
+          <li style={`--i: ${i}`}>
+            <a href={entry.href}>
+              <span class="label">{entry.label}</span>
+              <span class="arrow" aria-hidden="true">
+                {entry.arrow}
+              </span>
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   </section>

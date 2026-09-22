@@ -7,24 +7,22 @@ import { projects } from '../data/projects';
   <section class="wrap">
     <h1 class="page-title">Projets</h1>
     <ul class="projects">
-      {
-        projects.map(project => (
-          <li>
-            <a href={project.url}>
-              <h2>
-                {project.name}
-                <span class="arrow" aria-hidden="true">
-                  ↗
-                </span>
-              </h2>
-              <p>{project.tagline}</p>
-              <p class="meta">
-                {project.status} · {project.stack.join(' · ')}
-              </p>
-            </a>
-          </li>
-        ))
-      }
+      {projects.map(project => (
+        <li>
+          <a href={project.url}>
+            <h2>
+              {project.name}
+              <span class="arrow" aria-hidden="true">
+                ↗
+              </span>
+            </h2>
+            <p>{project.tagline}</p>
+            <p class="meta">
+              {project.status} · {project.stack.join(' · ')}
+            </p>
+          </a>
+        </li>
+      ))}
     </ul>
   </section>
 </Base>
