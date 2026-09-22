@@ -1,0 +1,143 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDate, publishedPosts } from '../../lib/posts';
+import { site } from '../../site';
+
+export async function getStaticPaths() {
+  const posts = publishedPosts(await getCollection('posts'), new Date());
+  return posts.map(post => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const url = new URL(`/blog/${post.id}`, Astro.site).href;
+
+const blogPosting = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.summary,
+  datePublished: post.data.publishedAt.toISOString(),
+  inLanguage: 'fr-FR',
+  url,
+  mainEntityOfPage: url,
+  image: new URL('/og.png', Astro.site).href,
+  author: { '@id': 'https://www.victorlenain.fr/#person', name: site.name },
+  keywords: post.data.tags.join(', '),
+};
+---
+
+<Base
+  title={post.data.title}
+  description={post.data.summary}
+  type="article"
+  jsonLd={[blogPosting]}
+>
+  <article class="wrap article">
+    <header>
+      <time class="meta" datetime={post.data.publishedAt.toISOString()}>
+        {formatDate(post.data.publishedAt)}
+      </time>
+      <h1>{post.data.title}</h1>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+    <p class="back"><a class="link" href="/blog">← Tous les articles</a></p>
+  </article>
+</Base>
+
+<style>
+  .article {
+    max-width: calc(var(--measure) + 2 * var(--gutter));
+  }
+
+  .article header {
+    display: grid;
+    gap: 1rem;
+    margin-block: 2rem 3rem;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+  }
+
+  .prose :global(h2) {
+    font-size: 2rem;
+    margin-block: 2.5rem 1rem;
+  }
+
+  .prose :global(h3) {
+    font-size: 1.5rem;
+    margin-block: 2rem 0.75rem;
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol),
+  .prose :global(blockquote),
+  .prose :global(pre) {
+    margin-block: 0 1.25rem;
+  }
+
+  .prose :global(a) {
+    background-image:
+      linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--ink-soft), var(--ink-soft));
+    background-position:
+      0 100%,
+      0 100%;
+    background-repeat: no-repeat;
+    background-size:
+      0 1px,
+      100% 1px;
+    transition: background-size 0.5s var(--ease-out);
+  }
+
+  .prose :global(a:hover) {
+    background-size:
+      100% 1px,
+      100% 1px;
+  }
+
+  .prose :global(blockquote) {
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--accent);
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    line-height: 1.35;
+  }
+
+  .prose :global(code) {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.875em;
+  }
+
+  .prose :global(:not(pre) > code) {
+    padding: 0.1em 0.3em;
+    background: rgb(22 20 15 / 0.06);
+  }
+
+  .prose :global(pre) {
+    padding: 1.25rem;
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .prose :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin-block: 2.5rem;
+  }
+
+  .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .back {
+    margin-top: 3rem;
+  }
+</style>
