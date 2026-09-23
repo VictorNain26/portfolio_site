@@ -132,6 +132,11 @@ describe.each(['index.html', 'blog.html', 'projets.html', '404.html', ...article
       }
     });
 
+    // The font subsets carry no arrows: Safari would draw them from the emoji font.
+    it('draws arrows as icons, not text glyphs', () => {
+      expect($('body').text()).not.toMatch(/[←-⇿]/);
+    });
+
     it('has WebSite JSON-LD and RSS autodiscovery', () => {
       expect(types($)).toContain('WebSite');
       expect($('link[rel="alternate"][type="application/rss+xml"]').length).toBe(1);

@@ -1,4 +1,5 @@
 ---
+import ArrowLeft from '@lucide/astro/icons/arrow-left';
 import { getCollection, render } from 'astro:content';
 import Stroke from '../../components/Stroke.astro';
 import Base from '../../layouts/Base.astro';
@@ -71,7 +72,8 @@ const breadcrumb = {
     </aside>
     <p class="back">
       <a class="link" href="/blog">
-        ← Tous les articles
+        <ArrowLeft size="0.9em" />
+        Tous les articles
       </a>
     </p>
   </article>
@@ -188,5 +190,9 @@ const breadcrumb = {
 
   .back {
     margin-top: 2.5rem;
+  }
+
+  .back .lucide {
+    margin-inline-end: 0.3em;
   }
 </style>

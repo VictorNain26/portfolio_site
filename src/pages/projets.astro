@@ -1,4 +1,5 @@
 ---
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
 import Stroke from '../components/Stroke.astro';
 import Base from '../layouts/Base.astro';
 import { projects } from '../data/projects';
@@ -19,8 +20,8 @@ import { projects } from '../data/projects';
           <a href={project.url} target="_blank" rel="noopener">
             <h2>
               <span class="ink">{project.name}</span>
-              <span class="arrow" aria-hidden="true">
-                ↗
+              <span class="arrow">
+                <ArrowUpRight size="1em" stroke-width={2} />
               </span>
               <span class="sr-only"> (nouvel onglet)</span>
             </h2>

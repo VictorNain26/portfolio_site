@@ -1,4 +1,6 @@
 ---
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
 import Stroke from '../components/Stroke.astro';
 import Base from '../layouts/Base.astro';
 import { site } from '../site';
@@ -8,9 +10,9 @@ const words = site.name
   .split(' ')
   .map(word => [...word].map(letter => ({ letter, i: letterIndex++ })));
 const entries = [
-  { label: 'Projets', href: '/projets', arrow: '→', transition: 'title-projets' },
-  { label: 'Blog', href: '/blog', arrow: '→', transition: 'title-blog' },
-  { label: 'Écrire', href: `mailto:${site.email}`, arrow: '↗' },
+  { label: 'Projets', href: '/projets', arrow: ArrowRight, transition: 'title-projets' },
+  { label: 'Blog', href: '/blog', arrow: ArrowRight, transition: 'title-blog' },
+  { label: 'Écrire', href: `mailto:${site.email}`, arrow: ArrowUpRight },
 ];
 ---
 
@@ -48,8 +50,8 @@ const entries = [
               >
                 {entry.label}
               </span>
-              <span class="arrow" aria-hidden="true">
-                {entry.arrow}
+              <span class="arrow">
+                <entry.arrow size="0.8em" stroke-width={1.5} />
               </span>
             </a>
           </li>
