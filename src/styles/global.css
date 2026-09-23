@@ -286,3 +286,8 @@ a:focus-visible .ink {
   white-space: nowrap;
   border: 0;
 }
+
+/* Arrows are Lucide SVGs: the fonts ship no arrow glyphs and Safari falls back to emoji. */
+.lucide {
+  vertical-align: -0.125em;
+}
