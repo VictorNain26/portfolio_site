@@ -28,34 +28,42 @@
   text-decoration: var(--shiki-dark-text-decoration) !important;
 }
 
-@view-transition {
-  navigation: auto;
-}
-
 ::view-transition-group(*) {
   animation-duration: 0.55s;
   animation-timing-function: var(--ease-out);
 }
 
-/* Page change: the new page spreads over the old one like the title hover wash.
-   Replacing the UA animations also drops their plus-lighter blend. */
-::view-transition-old(root) {
-  animation: none;
-}
-
-::view-transition-new(root) {
-  animation: wash 0.7s var(--ease-out) both;
-  mask-image: linear-gradient(90deg, #000 45%, transparent 55%);
-  mask-size: 250% 100%;
-  mask-repeat: no-repeat;
-}
-
-@keyframes wash {
+/* Page change, applied by transition:animate in Base.astro: the new page spreads
+   over the old one like the title hover wash, from the left going forwards and
+   from the right going back. The mask sits in the keyframes so that Astro's
+   fallback animation, which only sets animation properties, carries it too. */
+@keyframes wash-forwards {
   from {
+    mask-image: linear-gradient(90deg, #000 45%, transparent 55%);
+    mask-size: 250% 100%;
+    mask-repeat: no-repeat;
     mask-position: 100% 0;
   }
   to {
+    mask-image: linear-gradient(90deg, #000 45%, transparent 55%);
+    mask-size: 250% 100%;
+    mask-repeat: no-repeat;
     mask-position: 0 0;
+  }
+}
+
+@keyframes wash-backwards {
+  from {
+    mask-image: linear-gradient(270deg, #000 45%, transparent 55%);
+    mask-size: 250% 100%;
+    mask-repeat: no-repeat;
+    mask-position: 0 0;
+  }
+  to {
+    mask-image: linear-gradient(270deg, #000 45%, transparent 55%);
+    mask-size: 250% 100%;
+    mask-repeat: no-repeat;
+    mask-position: 100% 0;
   }
 }
 
@@ -256,10 +264,6 @@ a:focus-visible .ink {
     animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  @view-transition {
-    navigation: none;
   }
 }
 
