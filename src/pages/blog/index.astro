@@ -38,7 +38,10 @@ const blog = {
             <time class="meta" datetime={post.data.publishedAt.toISOString()}>
               {formatDate(post.data.publishedAt)}
             </time>
-            <h2 class="ink" style={`view-transition-name: post-${post.id}`}>
+            <h2
+              class="ink"
+              style={`view-transition-name: post-${post.id}; view-transition-class: title`}
+            >
               {post.data.title}
             </h2>
             <p class="summary">{post.data.summary}</p>
@@ -52,6 +55,7 @@ const blog = {
 <style>
   .page-title {
     view-transition-name: title-blog;
+    view-transition-class: title;
   }
 
   .posts {

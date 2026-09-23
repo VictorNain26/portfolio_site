@@ -53,7 +53,7 @@ const breadcrumb = {
       <time class="meta" datetime={post.data.publishedAt.toISOString()}>
         {formatDate(post.data.publishedAt)}
       </time>
-      <h1 style={`view-transition-name: post-${post.id}`}>
+      <h1 style={`view-transition-name: post-${post.id}; view-transition-class: title`}>
         {post.data.title}
         <Stroke />
       </h1>
