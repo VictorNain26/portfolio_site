@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import Stroke from '../../components/Stroke.astro';
 import Base from '../../layouts/Base.astro';
 import { formatDate, publishedPosts } from '../../lib/posts';
 import { personJsonLd, site } from '../../site';
@@ -25,7 +26,10 @@ const blog = {
 
 <Base title="Blog" description={site.blog.description} jsonLd={[blog]}>
   <section class="wrap">
-    <h1 class="page-title">Blog</h1>
+    <h1 class="page-title">
+      Blog
+      <Stroke />
+    </h1>
     {posts.length === 0 && <p class="summary">Rien pour l'instant, mais ça arrive !</p>}
     <ol class="posts">
       {posts.map(post => (
@@ -34,7 +38,9 @@ const blog = {
             <time class="meta" datetime={post.data.publishedAt.toISOString()}>
               {formatDate(post.data.publishedAt)}
             </time>
-            <h2 class="ink">{post.data.title}</h2>
+            <h2 class="ink" style={`view-transition-name: post-${post.id}`}>
+              {post.data.title}
+            </h2>
             <p class="summary">{post.data.summary}</p>
           </a>
         </li>
@@ -44,6 +50,10 @@ const blog = {
 </Base>
 
 <style>
+  .page-title {
+    view-transition-name: title-blog;
+  }
+
   .posts {
     list-style: none;
     margin: 0;

@@ -32,26 +32,30 @@
   navigation: auto;
 }
 
-/* Page change: the old page lifts off, the new one settles like ink drying. */
+::view-transition-group(*) {
+  animation-duration: 0.55s;
+  animation-timing-function: var(--ease-out);
+}
+
+/* Page change: the new page spreads over the old one like the title hover wash.
+   Replacing the UA animations also drops their plus-lighter blend. */
 ::view-transition-old(root) {
-  animation: lift 0.25s ease-in both;
+  animation: none;
 }
 
 ::view-transition-new(root) {
-  animation: dry 0.5s var(--ease-out) both;
+  animation: wash 0.7s var(--ease-out) both;
+  mask-image: linear-gradient(90deg, #000 45%, transparent 55%);
+  mask-size: 250% 100%;
+  mask-repeat: no-repeat;
 }
 
-@keyframes lift {
-  to {
-    opacity: 0;
-    filter: blur(4px);
-  }
-}
-
-@keyframes dry {
+@keyframes wash {
   from {
-    opacity: 0;
-    filter: blur(4px);
+    mask-position: 100% 0;
+  }
+  to {
+    mask-position: 0 0;
   }
 }
 
@@ -129,14 +133,18 @@ a {
 }
 
 .page-title {
+  width: fit-content;
+  max-width: 100%;
   font-size: clamp(3rem, 9vw, 6rem);
   margin-block: 2rem 3rem;
 }
 
-/* Drawn underline: a resting rule line, the accent line grows over it. */
+/* Drawn underline: a resting line, the accent line grows over it. Links inside
+   content set --link-rest to --ink-soft so they read as links without hovering. */
 .link {
   background-image:
-    linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--rule), var(--rule));
+    linear-gradient(var(--accent), var(--accent)),
+    linear-gradient(var(--link-rest, var(--rule)), var(--link-rest, var(--rule)));
   background-position:
     0 100%,
     0 100%;
@@ -153,6 +161,51 @@ a {
   background-size:
     100% 1px,
     100% 1px;
+}
+
+/* The pen stroke from the home page, drawn under titles once the page has arrived. */
+.stroke {
+  display: block;
+  width: 100%;
+  height: var(--stroke-height, 0.16em);
+  margin-top: 0.08em;
+  overflow: visible;
+  /* Without it the viewBox ratio gives the SVG an intrinsic width that widens fit-content titles. */
+  contain: inline-size;
+}
+
+.stroke path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1;
+  animation: draw var(--stroke-duration, 0.7s) var(--ease-pen) var(--stroke-delay, 0.45s) forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Marks the current section; its shared name slides it between nav links. */
+.nav-pen {
+  position: absolute;
+  left: -0.15em;
+  top: 100%;
+  width: calc(100% + 0.3em);
+  height: 0.4em;
+  margin: 0;
+  view-transition-name: nav-pen;
+}
+
+.nav-pen path {
+  stroke-width: 1.75;
+  stroke-dashoffset: 0;
+  animation: none;
 }
 
 /* Hovering a title lets the accent ink spread through it, left to right. The soft
@@ -175,6 +228,10 @@ a:focus-visible .ink {
   .ink {
     background: none;
     color: inherit;
+  }
+
+  .stroke path {
+    stroke: CanvasText;
   }
 }
 
