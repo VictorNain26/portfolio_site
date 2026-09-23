@@ -7,8 +7,8 @@ Instructions pour Claude Code sur ce repository.
 - `npm install` — dépendances (Node ≥ 22.12)
 - `npm run dev` — serveur de développement
 - `npm run build` — build statique dans `dist/`
-- `npm run verify:build` — assertions sur `dist/` (articles, sitemap,
-  canonicals)
+- `npm run verify:build` — Vitest sur `dist/` (`tests/`) : articles, sitemap,
+  canonicals, JSON-LD, contraste du code
 - `npm run check` — `astro check` (types `.astro` et TS)
 - `npm test` — Vitest sur `src/lib`
 - `npm run format` / `npm run format:check` — Prettier
@@ -25,6 +25,7 @@ articles vers `/blog`).
   publié
 - `src/data/projects.ts` — projets affichés
 - `src/lib/` — seule logique du site, testée
+- `tests/` — assertions sur le build, lancées après `npm run build`
 - `src/styles/global.css` — tokens de la charte « Papier & encre »
 
 ## Règles

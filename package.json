@@ -10,8 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "vitest run",
-    "verify:build": "node scripts/verify-build.mjs",
+    "test": "vitest run --dir src",
+    "verify:build": "vitest run --dir tests",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "cheerio": "^1.2.0",
     "prettier": "^3.9.8",
     "prettier-plugin-astro": "^1.0.1",
     "typescript": "^6.0.3",
