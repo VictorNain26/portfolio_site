@@ -1,29 +1,11 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { unified } from '@astrojs/markdown-remark';
+import { parseFrontmatter, unified } from '@astrojs/markdown-remark';
+import githubDark from '@shikijs/themes/github-dark';
+import githubLight from '@shikijs/themes/github-light';
 import rehypeExternalLinks from 'rehype-external-links';
 import { readdirSync, readFileSync } from 'node:fs';
-
-// Shiki tokens that fall under 4.5:1 on their paper, adjusted to pass AA.
-const tokenColors = {
-  color: {
-    '#6A737D': '#5E594F',
-    '#D73A49': '#B8323D',
-    '#E36209': '#A84B06',
-    '#22863A': '#1A7532',
-  },
-  '--shiki-dark': { '#6A737D': '#A8A193' },
-};
-const recolor = style =>
-  String(style ?? '')
-    .split(';')
-    .map(declaration => {
-      const [property, value] = declaration.split(':');
-      const to = tokenColors[property]?.[value?.toUpperCase()];
-      return to ? `${property}:${to}` : declaration;
-    })
-    .join(';');
 
 const postsDir = './src/content/posts';
 const publishedAt = new Map(
@@ -31,7 +13,7 @@ const publishedAt = new Map(
     .filter(file => file.endsWith('.mdx'))
     .map(file => [
       `/blog/${file.replace(/\.mdx$/, '')}`,
-      readFileSync(`${postsDir}/${file}`, 'utf8').match(/^publishedAt:\s*['"]?([^'"\n]+)/m)?.[1],
+      parseFrontmatter(readFileSync(`${postsDir}/${file}`, 'utf8')).frontmatter.publishedAt,
     ]),
 );
 
@@ -63,7 +45,19 @@ export default defineConfig({
       ],
     }),
     shikiConfig: {
-      themes: { light: 'github-light', dark: 'github-dark' },
+      // Shiki tokens that fall under 4.5:1 on their paper, adjusted to pass AA.
+      themes: {
+        light: {
+          ...githubLight,
+          colorReplacements: {
+            '#6a737d': '#5e594f',
+            '#d73a49': '#b8323d',
+            '#e36209': '#a84b06',
+            '#22863a': '#1a7532',
+          },
+        },
+        dark: { ...githubDark, colorReplacements: { '#6a737d': '#a8a193' } },
+      },
       transformers: [
         {
           // Let code blocks sit on the paper instead of github-light's white box.
@@ -72,9 +66,6 @@ export default defineConfig({
               /(background-color|--shiki-dark-bg):[^;]+;?/g,
               '',
             );
-          },
-          span(node) {
-            node.properties.style = recolor(node.properties.style);
           },
         },
       ],

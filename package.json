@@ -20,6 +20,7 @@
     "@astrojs/mdx": "^8.0.2",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
+    "@shikijs/themes": "^4.4.3",
     "astro": "^7.3.4",
     "rehype-external-links": "^3.0.0"
   },
