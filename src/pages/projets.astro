@@ -1,4 +1,5 @@
 ---
+import Stroke from '../components/Stroke.astro';
 import Base from '../layouts/Base.astro';
 import { projects } from '../data/projects';
 ---
@@ -8,7 +9,10 @@ import { projects } from '../data/projects';
   description="Ce que je bricole pour le plaisir, avec son état réel : en ligne, en pré-lancement ou rangé au placard."
 >
   <section class="wrap">
-    <h1 class="page-title">Projets</h1>
+    <h1 class="page-title">
+      Projets
+      <Stroke />
+    </h1>
     <ul class="projects">
       {projects.map(project => (
         <li>
@@ -32,6 +36,10 @@ import { projects } from '../data/projects';
 </Base>
 
 <style>
+  .page-title {
+    view-transition-name: title-projets;
+  }
+
   .projects {
     list-style: none;
     margin: 0;

@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import Stroke from '../../components/Stroke.astro';
 import Base from '../../layouts/Base.astro';
 import { formatDate, publishedPosts } from '../../lib/posts';
 import { personJsonLd, site } from '../../site';
@@ -52,7 +53,10 @@ const breadcrumb = {
       <time class="meta" datetime={post.data.publishedAt.toISOString()}>
         {formatDate(post.data.publishedAt)}
       </time>
-      <h1>{post.data.title}</h1>
+      <h1 style={`view-transition-name: post-${post.id}`}>
+        {post.data.title}
+        <Stroke />
+      </h1>
     </header>
     <div class="prose">
       <Content />
@@ -85,6 +89,7 @@ const breadcrumb = {
   }
 
   h1 {
+    width: fit-content;
     font-size: clamp(2.4rem, 6vw, 4rem);
   }
 
@@ -162,6 +167,11 @@ const breadcrumb = {
   .prose :global(img) {
     max-width: 100%;
     height: auto;
+  }
+
+  .contact,
+  .back {
+    --link-rest: var(--ink-soft);
   }
 
   .contact {

@@ -1,4 +1,5 @@
 ---
+import Stroke from '../components/Stroke.astro';
 import Base from '../layouts/Base.astro';
 import { site } from '../site';
 
@@ -7,8 +8,8 @@ const words = site.name
   .split(' ')
   .map(word => [...word].map(letter => ({ letter, i: letterIndex++ })));
 const entries = [
-  { label: 'Projets', href: '/projets', arrow: '→' },
-  { label: 'Blog', href: '/blog', arrow: '→' },
+  { label: 'Projets', href: '/projets', arrow: '→', transition: 'title-projets' },
+  { label: 'Blog', href: '/blog', arrow: '→', transition: 'title-blog' },
   { label: 'Écrire', href: `mailto:${site.email}`, arrow: '↗' },
 ];
 ---
@@ -30,9 +31,7 @@ const entries = [
           </>
         ))}
       </h1>
-      <svg class="stroke" viewBox="0 0 600 24" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M4 15 C 110 5, 250 21, 370 12 S 540 7, 596 13" pathLength="1" />
-      </svg>
+      <Stroke />
     </div>
     <p class="pitch">
       Développeur full-stack, et bidouilleur le reste du temps. Ici, je montre ce que je construis
@@ -43,7 +42,12 @@ const entries = [
         {entries.map((entry, i) => (
           <li style={`--i: ${i}`}>
             <a href={entry.href}>
-              <span class="label ink">{entry.label}</span>
+              <span
+                class="label ink"
+                style={entry.transition && `view-transition-name: ${entry.transition}`}
+              >
+                {entry.label}
+              </span>
               <span class="arrow" aria-hidden="true">
                 {entry.arrow}
               </span>
@@ -61,6 +65,9 @@ const entries = [
   .hero {
     --ink-step: 0.045s;
     --after-name: calc(0.35s + var(--letters) * var(--ink-step));
+    --stroke-delay: var(--after-name);
+    --stroke-duration: 0.9s;
+    --stroke-height: clamp(0.6rem, 1.6vw, 1.1rem);
     flex: 1;
     display: grid;
     align-content: center;
@@ -76,6 +83,7 @@ const entries = [
   .name {
     font-size: clamp(3.5rem, min(13vw, 17vh), 9.5rem);
     line-height: 0.95;
+    view-transition-name: site-name;
     display: flex;
     flex-wrap: wrap;
     column-gap: 0.25em;
@@ -91,26 +99,6 @@ const entries = [
     filter: blur(0.12em);
     animation: soak 1.1s var(--ease-out) forwards;
     animation-delay: calc(0.1s + var(--i) * var(--ink-step));
-  }
-
-  .stroke {
-    display: block;
-    width: 100%;
-    height: clamp(0.6rem, 1.6vw, 1.1rem);
-    margin-top: 0.1em;
-    overflow: visible;
-  }
-
-  .stroke path {
-    fill: none;
-    stroke: var(--accent);
-    stroke-width: 2.5;
-    stroke-linecap: round;
-    vector-effect: non-scaling-stroke;
-    stroke-dasharray: 1 2;
-    stroke-dashoffset: 1;
-    animation: draw 0.9s var(--ease-pen) forwards;
-    animation-delay: var(--after-name);
   }
 
   .pitch {
@@ -135,6 +123,10 @@ const entries = [
     opacity: 0;
     animation: settle 0.8s var(--ease-out) forwards;
     animation-delay: calc(var(--after-name) + 0.5s + var(--i) * 0.08s);
+  }
+
+  .label {
+    display: inline-block;
   }
 
   .index a {
@@ -167,12 +159,6 @@ const entries = [
     to {
       opacity: 1;
       filter: blur(0);
-    }
-  }
-
-  @keyframes draw {
-    to {
-      stroke-dashoffset: 0;
     }
   }
 
