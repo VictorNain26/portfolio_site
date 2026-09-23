@@ -1,5 +1,8 @@
+const name = 'Victor Lenain';
+const url = (path: string) => new URL(path, import.meta.env.SITE).href;
+
 export const site = {
-  name: 'Victor Lenain',
+  name,
   title: 'Victor Lenain · Développeur full-stack · Systèmes IA · Paris',
   tagline: 'Développeur full-stack · Systèmes IA · Paris',
   description:
@@ -9,17 +12,22 @@ export const site = {
     linkedin: 'https://www.linkedin.com/in/victorlenain/',
     github: 'https://github.com/VictorNain26',
   },
+  blog: {
+    title: `Blog de ${name}`,
+    description:
+      'Ce que je retiens de mes projets perso : agents, RAG, serveurs MCP et développement web.',
+  },
 } as const;
 
 export const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  '@id': 'https://www.victorlenain.fr/#person',
+  '@id': url('/#person'),
   name: site.name,
   jobTitle: 'Développeur full-stack · Systèmes IA',
   description: site.description,
-  url: 'https://www.victorlenain.fr',
-  image: 'https://www.victorlenain.fr/og.png',
+  url: url('/'),
+  image: url('/og.png'),
   email: `mailto:${site.email}`,
   sameAs: Object.values(site.links),
   address: {
@@ -61,9 +69,9 @@ export const personJsonLd = {
 export const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  '@id': 'https://www.victorlenain.fr/#website',
+  '@id': url('/#website'),
   name: site.name,
-  url: 'https://www.victorlenain.fr',
+  url: url('/'),
   inLanguage: 'fr-FR',
   publisher: { '@id': personJsonLd['@id'] },
 };

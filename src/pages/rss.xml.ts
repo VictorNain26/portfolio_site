@@ -7,9 +7,8 @@ import { site } from '../site';
 export async function GET(context: APIContext) {
   const posts = publishedPosts(await getCollection('posts'), new Date());
   return rss({
-    title: `Blog de ${site.name}`,
-    description:
-      'Ce que je retiens de mes projets perso : agents, RAG, serveurs MCP et développement web.',
+    title: site.blog.title,
+    description: site.blog.description,
     site: context.site!,
     customData: '<language>fr-FR</language>',
     trailingSlash: false,

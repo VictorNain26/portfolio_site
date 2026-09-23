@@ -1,4 +1,5 @@
 // Post-build assertions on dist/. Run after `npm run build`.
+import { parseFrontmatter } from '@astrojs/markdown-remark';
 import { access, readdir, readFile } from 'node:fs/promises';
 
 const ORIGIN = 'https://www.victorlenain.fr';
@@ -48,9 +49,9 @@ const published = [];
 for (const file of await readdir('src/content/posts')) {
   if (!file.endsWith('.mdx')) continue;
   const source = await readFile(`src/content/posts/${file}`, 'utf8');
-  const raw = source.match(/^publishedAt:\s*['"]?([^'"\n]+)/m)?.[1]?.trim();
-  if (!raw || Number.isNaN(new Date(raw).getTime())) failures.push(`${file}: bad publishedAt`);
-  else if (new Date(raw) <= now) published.push(file.replace(/\.mdx$/, ''));
+  const date = new Date(parseFrontmatter(source).frontmatter.publishedAt);
+  if (Number.isNaN(date.getTime())) failures.push(`${file}: bad publishedAt`);
+  else if (date <= now) published.push(file.replace(/\.mdx$/, ''));
 }
 
 const sitemap = await readFile('dist/sitemap-0.xml', 'utf8');
