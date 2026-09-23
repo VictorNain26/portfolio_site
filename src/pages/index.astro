@@ -44,7 +44,10 @@ const entries = [
             <a href={entry.href}>
               <span
                 class="label ink"
-                style={entry.transition && `view-transition-name: ${entry.transition}`}
+                style={
+                  entry.transition &&
+                  `view-transition-name: ${entry.transition}; view-transition-class: title`
+                }
               >
                 {entry.label}
               </span>
@@ -84,6 +87,7 @@ const entries = [
     font-size: clamp(3.5rem, min(13vw, 17vh), 9.5rem);
     line-height: 0.95;
     view-transition-name: site-name;
+    view-transition-class: title;
     display: flex;
     flex-wrap: wrap;
     column-gap: 0.25em;
@@ -95,9 +99,7 @@ const entries = [
 
   .letter {
     display: inline-block;
-    opacity: 0;
-    filter: blur(0.12em);
-    animation: soak 1.1s var(--ease-out) forwards;
+    animation: soak 1.1s var(--ease-out) backwards;
     animation-delay: calc(0.1s + var(--i) * var(--ink-step));
   }
 
@@ -105,8 +107,7 @@ const entries = [
     max-width: 38ch;
     font-size: clamp(1.1rem, 2vw, 1.35rem);
     color: var(--ink-soft);
-    opacity: 0;
-    animation: settle 0.9s var(--ease-out) forwards;
+    animation: settle 0.9s var(--ease-out) backwards;
     animation-delay: calc(var(--after-name) + 0.35s);
   }
 
@@ -120,8 +121,7 @@ const entries = [
 
   .index li {
     border-bottom: 1px solid var(--rule);
-    opacity: 0;
-    animation: settle 0.8s var(--ease-out) forwards;
+    animation: settle 0.8s var(--ease-out) backwards;
     animation-delay: calc(var(--after-name) + 0.5s + var(--i) * 0.08s);
   }
 
@@ -152,19 +152,30 @@ const entries = [
     transform: translateX(0.3rem);
   }
 
+  /* Coming back from another page, the name has already glided in: only the pen writes. */
+  :global(:root[data-navigated]) .hero {
+    --stroke-delay: 0.45s;
+  }
+
+  :global(:root[data-navigated]) .letter,
+  :global(:root[data-navigated]) .pitch,
+  :global(:root[data-navigated]) .index li {
+    animation: none;
+  }
+
   @keyframes soak {
+    from {
+      opacity: 0;
+      filter: blur(0.12em);
+    }
     60% {
       opacity: 1;
-    }
-    to {
-      opacity: 1;
-      filter: blur(0);
     }
   }
 
   @keyframes settle {
-    to {
-      opacity: 1;
+    from {
+      opacity: 0;
     }
   }
 </style>

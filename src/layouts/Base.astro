@@ -1,5 +1,7 @@
 ---
+import type { TransitionDirectionalAnimations } from 'astro';
 import { Font } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import External from '../components/External.astro';
 import Stroke from '../components/Stroke.astro';
@@ -32,6 +34,17 @@ const path = new URL(canonical).pathname;
 const ogImage = new URL('/og.png', Astro.site).href;
 const year = new Date().getFullYear();
 
+// The old page stays put (animation-name: none also drops the UA plus-lighter blend)
+// while the new one washes over it.
+const wash = (name: string) => ({
+  old: { name: 'none' },
+  new: { name, duration: '0.7s', easing: 'var(--ease-out)', fillMode: 'both' },
+});
+const pageTransition: TransitionDirectionalAnimations = {
+  forwards: wash('wash-forwards'),
+  backwards: wash('wash-backwards'),
+};
+
 const nav = [
   { label: 'Projets', href: '/projets' },
   { label: 'Blog', href: '/blog' },
@@ -43,7 +56,7 @@ const nav = [
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang="fr" transition:name="root" transition:animate={pageTransition}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -53,10 +66,22 @@ const nav = [
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <meta name="theme-color" content="#F2EFE8" />
     <script is:inline>
-      const hour = new Date().getHours();
-      if (hour >= 20 || hour < 7) {
-        document.documentElement.dataset.theme = 'dark';
-        document.querySelector('meta[name="theme-color"]').content = '#1A1813';
+      {
+        // The client router swaps <html> attributes and <head> on each navigation.
+        const applyTheme = () => {
+          const hour = new Date().getHours();
+          if (hour >= 20 || hour < 7) {
+            document.documentElement.dataset.theme = 'dark';
+            document.querySelector('meta[name="theme-color"]').content = '#1A1813';
+          }
+        };
+        applyTheme();
+        // data-navigated lets the home page skip its intro when reached from another page;
+        // the router's own data-astro-transition is removed once the transition ends.
+        document.addEventListener('astro:after-swap', () => {
+          applyTheme();
+          document.documentElement.dataset.navigated = '';
+        });
       }
     </script>
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
@@ -87,6 +112,7 @@ const nav = [
       </>
     )}
     <meta name="twitter:card" content="summary_large_image" />
+    <ClientRouter />
     <Font cssVariable="--font-display" preload={[{ style: 'normal' }]} />
     <Font cssVariable="--font-text" preload={[{ weight: 400 }]} />
     {[personJsonLd, websiteJsonLd, ...jsonLd].map(data => (
@@ -154,6 +180,7 @@ const nav = [
     display: inline-block;
     font-size: 1.5rem;
     view-transition-name: site-name;
+    view-transition-class: title;
   }
 
   .site-header nav,

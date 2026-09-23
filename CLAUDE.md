@@ -30,9 +30,13 @@ articles vers `/blog`).
 
 ## Règles
 
-- Aucun JS client hors Umami et le script inline du thème (sombre de 20 h à 7 h,
-  heure locale du visiteur, dans `Base.astro`). Les animations sont en CSS et
-  respectent `prefers-reduced-motion`.
+- Le JS client est permis. Pas de code maison quand une solution robuste existe
+  déjà (API du navigateur, fonctionnalité d'Astro, lib maintenue) : on l'utilise
+  et on cite sa source. En place : Umami, le `<ClientRouter />` d'Astro
+  (transitions entre pages dans les deux sens, repli animé pour les navigateurs
+  sans View Transitions) et le script inline du thème (sombre de 20 h à 7 h,
+  heure locale du visiteur, dans `Base.astro`, réappliqué à `astro:after-swap`).
+  Toute animation respecte `prefers-reduced-motion`.
 - L'accent bleu profond `--accent` passe AA sur les deux papiers (8.30:1 en
   clair, 6.64:1 en sombre) : toute nouvelle teinte reste au-dessus de 4.5:1.
 - Site perso de bidouille : projets perso uniquement, pas de missions client ;
