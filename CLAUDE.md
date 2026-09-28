@@ -1,7 +1,5 @@
 # CLAUDE.md
 
-Instructions pour Claude Code sur ce repository.
-
 ## Commandes
 
 - `npm install` — dépendances (Node ≥ 22.12)
@@ -26,13 +24,13 @@ articles vers `/blog`).
 - `src/data/projects.ts` — projets affichés
 - `src/lib/` — seule logique du site, testée
 - `tests/` — assertions sur le build, lancées après `npm run build`
-- `src/styles/global.css` — tokens de la charte « Papier & encre »
+- `src/styles/global.css` — tokens de la charte « Papier & encre » (papier
+  crème, Instrument Serif, filets) : direction visuelle arrêtée, pas un défaut
+  générique à corriger
 
 ## Règles
 
-- Le JS client est permis. Pas de code maison quand une solution robuste existe
-  déjà (API du navigateur, fonctionnalité d'Astro, lib maintenue) : on l'utilise
-  et on cite sa source. En place : Umami, le `<ClientRouter />` d'Astro
+- Le JS client est permis. En place : Umami, le `<ClientRouter />` d'Astro
   (transitions entre pages dans les deux sens, repli animé pour les navigateurs
   sans View Transitions) et le script inline du thème (sombre de 20 h à 7 h,
   heure locale du visiteur, dans `Base.astro`, réappliqué à `astro:after-swap`).
