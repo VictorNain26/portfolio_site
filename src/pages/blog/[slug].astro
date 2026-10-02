@@ -49,18 +49,16 @@ const breadcrumb = {
   jsonLd={[blogPosting, breadcrumb]}
 >
   <article class="wrap article">
-    <header>
+    <header class="enter">
       <time class="meta" datetime={post.data.publishedAt.toISOString()}>
         {formatDate(post.data.publishedAt)}
       </time>
-      <h1 style={`view-transition-name: post-${post.id}; view-transition-class: title`}>
-        {post.data.title}
-      </h1>
+      <h1>{post.data.title}</h1>
     </header>
-    <div class="prose">
+    <div class="prose enter" style="--i: 1">
       <Content />
     </div>
-    <aside class="contact" aria-label="Contact">
+    <aside class="contact enter" style="--i: 2" aria-label="Contact">
       <p>
         Une question, une remarque ? Écris-moi à{' '}
         <a class="link" href={`mailto:${site.email}`}>
@@ -69,7 +67,7 @@ const breadcrumb = {
         .
       </p>
     </aside>
-    <p class="back">
+    <p class="back enter" style="--i: 3">
       <a class="link" href="/blog">
         <ArrowLeft size="0.9em" />
         Tous les articles

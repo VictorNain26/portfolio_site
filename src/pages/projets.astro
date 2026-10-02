@@ -9,10 +9,10 @@ import { projects } from '../data/projects';
   description="Ce que je bricole pour le plaisir, avec son état réel : en ligne, en pré-lancement ou rangé au placard."
 >
   <section class="wrap">
-    <h1 class="page-title">Projets</h1>
+    <h1 class="page-title enter">Projets</h1>
     <ul class="rows">
-      {projects.map(project => (
-        <li>
+      {projects.map((project, i) => (
+        <li class="enter" style={`--i: ${i + 1}`}>
           <a href={project.url} target="_blank" rel="noopener">
             <h2>
               <span class="title-text">{project.name}</span>
@@ -31,11 +31,6 @@ import { projects } from '../data/projects';
 </Base>
 
 <style>
-  .page-title {
-    view-transition-name: title-projets;
-    view-transition-class: title;
-  }
-
   .rows a {
     display: grid;
     gap: 0.4rem;

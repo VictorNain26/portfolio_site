@@ -1,4 +1,5 @@
 ---
+import type { TransitionDirectionalAnimations } from 'astro';
 import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
@@ -32,6 +33,19 @@ const path = new URL(canonical).pathname;
 const ogImage = new URL('/og.png', Astro.site).href;
 const year = new Date().getFullYear();
 
+// The old page leaves first; the new one shows at once but its blocks wait for the exit
+// (.enter in global.css), so the two pages never overlap. Same both ways.
+const leave = {
+  old: {
+    name: 'page-out',
+    duration: '180ms',
+    easing: 'cubic-bezier(0.55, 0, 0.75, 0.2)',
+    fillMode: 'both',
+  },
+  new: { name: 'none' },
+};
+const pageTransition: TransitionDirectionalAnimations = { forwards: leave, backwards: leave };
+
 const nav = [
   { label: 'Projets', href: '/projets' },
   { label: 'Blog', href: '/blog' },
@@ -43,7 +57,7 @@ const nav = [
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang="fr" transition:animate={pageTransition}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -160,8 +174,6 @@ const nav = [
 
   .home {
     font-weight: 500;
-    view-transition-name: site-name;
-    view-transition-class: title;
   }
 
   .site-header nav,
