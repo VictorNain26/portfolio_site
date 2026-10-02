@@ -3,7 +3,7 @@ export type Project = {
   tagline: string;
   stack: string[];
   url: string;
-  status: 'En ligne' | 'Pré-lancement' | 'Open source' | 'Archivé';
+  status: 'En ligne' | 'Pré-lancement' | 'Open source';
 };
 
 export const projects: Project[] = [
@@ -30,14 +30,6 @@ export const projects: Project[] = [
     stack: ['Python', 'LangGraph', 'MCP', 'Langfuse'],
     url: 'https://github.com/VictorNain26/fabrique-cours-agents',
     status: 'Open source',
-  },
-  {
-    name: 'Index RAG Éduscol',
-    tagline:
-      "Index des programmes du collège, évalué sur 189 questions : le rappel au top 5 est passé de 0,81 à 0,89 en changeant de modèle d'embedding. Retiré avant mise en service, le dépôt garde la mesure.",
-    stack: ['Python', 'Qdrant', 'BGE-M3'],
-    url: 'https://github.com/VictorNain26/tomai-curriculum',
-    status: 'Archivé',
   },
   {
     name: 'TomIA',
