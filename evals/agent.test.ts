@@ -7,6 +7,8 @@ import { describe, expect, it } from 'vitest';
 import { createActivityFetcher } from '../src/lib/agent/activity';
 import { createAgent, MODEL, type Reasoning, type ToolOutput } from '../src/lib/agent/agent';
 import { knowledge } from '../src/lib/agent/corpus';
+import allowlist from '../src/data/github-allowlist.json';
+import { createGitHub } from '../src/lib/agent/github';
 import { documentsOf } from '../src/lib/agent/knowledge';
 import { startTelemetry } from '../src/lib/agent/telemetry';
 import type { Source } from '../src/lib/agent/sources';
@@ -61,7 +63,14 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
     const answer = createAgent({
       model: mistral(MODEL),
       knowledge,
-      documents,
+      github: createGitHub({
+        user: 'VictorNain26',
+        token: process.env.GITHUB_TOKEN,
+        allowlist,
+        snapshot: knowledge.repos,
+      }),
+      publishedBy: now,
+      siteUrl: 'https://www.victorlenain.fr',
       activity: createActivityFetcher({ user: 'VictorNain26', token: process.env.GITHUB_TOKEN }),
       reasoning: REASONING,
     });
