@@ -15,14 +15,23 @@ export type AskDeps = {
   conversations: Conversations;
   moderate(question: string, signal: AbortSignal): Promise<boolean>;
   answer(input: { question: string; history: Turn[]; signal: AbortSignal; now: Date }): Answer;
-  // Runs the answer inside the trace of this conversation.
-  trace<T>(conversation: string, run: () => Promise<T>): Promise<T>;
+  trace: Tracer;
   // Keeps the function alive after the response for work that must not delay it.
   defer(task: Promise<unknown>): void;
   newId(): string;
   timeoutMs: number;
   visitorSecret: string;
 };
+
+// One trace per question: the guardrail and the model calls nest under it.
+export type TraceSpan = {
+  guard(check: () => Promise<boolean>): Promise<boolean>;
+  end(result: { answer: string; sources: Source[] } | { error: string }): void;
+};
+export type Tracer = <T>(
+  context: { conversation: string; question: string; turn: number },
+  run: (span: TraceSpan) => Promise<T>,
+) => Promise<T>;
 
 export type AskEvent =
   | { type: 'text'; text: string }
@@ -102,24 +111,32 @@ export async function handleAsk(
       const done = () => send({ type: 'done', remaining: visitor.remaining, conversation });
       let text = '';
       try {
-        await deps.trace(conversation, async () => {
-          if (await deps.moderate(question, signal)) {
-            send({ type: 'text', text: BLOCKED_ANSWER });
-            send({ type: 'sources', sources: [] });
+        await deps.trace({ conversation, question, turn: history.length + 1 }, async span => {
+          try {
+            if (await span.guard(() => deps.moderate(question, signal))) {
+              send({ type: 'text', text: BLOCKED_ANSWER });
+              send({ type: 'sources', sources: [] });
+              span.end({ answer: BLOCKED_ANSWER, sources: [] });
+              done();
+              return;
+            }
+            const answer = deps.answer({ question, history, signal, now: new Date() });
+            for await (const chunk of answer.text) {
+              text += chunk;
+              send({ type: 'text', text: chunk });
+            }
+            if (!text.trim()) throw new Error('empty answer');
+            const sources = answer.sources(text);
+            send({ type: 'sources', sources });
+            span.end({ answer: text.trim(), sources });
+            await deps.conversations
+              .save(conversation, [...history, { question, answer: text.trim() }])
+              .catch(() => undefined);
             done();
-            return;
+          } catch (error) {
+            span.end({ error: error instanceof Error ? error.message : String(error) });
+            throw error;
           }
-          const answer = deps.answer({ question, history, signal, now: new Date() });
-          for await (const chunk of answer.text) {
-            text += chunk;
-            send({ type: 'text', text: chunk });
-          }
-          if (!text.trim()) throw new Error('empty answer');
-          send({ type: 'sources', sources: answer.sources(text) });
-          await deps.conversations
-            .save(conversation, [...history, { question, answer: text.trim() }])
-            .catch(() => undefined);
-          done();
         });
       } catch {
         // A visitor who stops an answer has spent it. Text already shown is spent too:

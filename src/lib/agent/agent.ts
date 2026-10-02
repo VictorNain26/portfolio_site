@@ -77,7 +77,7 @@ export function createAgent({
           reasoningEffort: reasoning,
         } satisfies MistralLanguageModelChatOptions,
       },
-      telemetry: { functionId: 'ask' },
+      telemetry: { functionId: 'generate-answer' },
     });
 
     const toolOutputs: ToolOutput[] = [];

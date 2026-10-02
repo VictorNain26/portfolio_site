@@ -1,5 +1,4 @@
 import { createMistral } from '@ai-sdk/mistral';
-import { propagateAttributes } from '@langfuse/tracing';
 import { Mistral } from '@mistralai/mistralai';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
@@ -22,7 +21,8 @@ import { knowledge } from '../../lib/agent/corpus';
 import { handleAsk } from '../../lib/agent/handler';
 import { documentsOf } from '../../lib/agent/knowledge';
 import { createModeration } from '../../lib/agent/moderation';
-import { startTelemetry } from '../../lib/agent/telemetry';
+import { PROMPT_VERSION } from '../../lib/agent/prompt';
+import { langfuseTracer, noTracer, startTelemetry } from '../../lib/agent/telemetry';
 import { site } from '../../site';
 
 export const prerender = false;
@@ -68,8 +68,7 @@ export const POST: APIRoute = async context => {
     conversations: redisConversations(redis),
     moderate: createModeration(new Mistral({ apiKey: MISTRAL_API_KEY })),
     answer,
-    trace: (conversation, run) =>
-      propagateAttributes({ traceName: 'ask', sessionId: conversation }, run),
+    trace: telemetry ? langfuseTracer(PROMPT_VERSION) : noTracer,
     defer: task => waitUntil(task.then(() => telemetry?.forceFlush())),
     newId: () => crypto.randomUUID(),
     timeoutMs: 50_000,

@@ -77,7 +77,7 @@ function setup(overrides: Partial<AskDeps> = {}) {
     conversations,
     moderate: async () => false,
     answer,
-    trace: (_id, run) => run(),
+    trace: (_context, run) => run({ guard: check => check(), end: () => undefined }),
     defer: () => undefined,
     newId: () => ID,
     timeoutMs: 5_000,
