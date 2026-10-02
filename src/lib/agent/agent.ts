@@ -31,7 +31,7 @@ export function createAgent({
   model: LanguageModel;
   knowledge: Knowledge;
   documents: Document[];
-  activity: () => Promise<Activity[]>;
+  activity: (signal: AbortSignal) => Promise<Activity[]>;
   reasoning: Reasoning;
 }) {
   return function answer({
@@ -89,6 +89,9 @@ export function createAgent({
         else if (part.type === 'tool-result')
           toolOutputs.push({ tool: part.toolName, output: part.output });
         else if (part.type === 'error') throw part.error;
+        // streamText ends an aborted stream quietly: a cut answer must not pass for a full one.
+        else if (part.type === 'abort')
+          throw new Error(`answer aborted: ${part.reason ?? 'no reason'}`);
       }
     }
 

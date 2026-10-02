@@ -61,7 +61,7 @@ const knowledge: Knowledge = {
 };
 const documents = documentsOf(knowledge, new Date('2026-10-01'), 'https://example.com');
 
-const run = async (model: MockLanguageModelV4) => {
+const run = async (model: MockLanguageModelV4, signal = new AbortController().signal) => {
   const answer = createAgent({
     model,
     knowledge,
@@ -71,7 +71,7 @@ const run = async (model: MockLanguageModelV4) => {
   })({
     question: 'Ta radio ?',
     history: [],
-    signal: new AbortController().signal,
+    signal,
     now: new Date(),
   });
   let text = '';
@@ -114,6 +114,14 @@ describe('createAgent', () => {
     });
     expect((await run(model)).text).toBe('Fini.');
     expect(model.doStreamCalls[2]!.toolChoice).toEqual({ type: 'none' });
+  });
+
+  it('throws when the answer is aborted, instead of ending as if complete', async () => {
+    const stop = new AbortController();
+    stop.abort(new Error('deadline'));
+    await expect(
+      run(new MockLanguageModelV4({ doStream: says('Une réponse ', 'coupée.') }), stop.signal),
+    ).rejects.toThrow('answer aborted');
   });
 
   it('throws when the provider fails mid-stream', async () => {
