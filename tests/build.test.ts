@@ -53,6 +53,8 @@ const posts = readdirSync('src/content/posts')
   }));
 const now = new Date();
 const published = posts.filter(post => post.publishedAt <= now).map(post => post.slug);
+const scheduled = posts.filter(post => post.publishedAt > now).map(post => post.slug);
+const llms = read(`${client}/llms.txt`);
 const articles = published.map(slug => `blog/${slug}/index.html`);
 
 const redirected = new Set<string>(
@@ -103,6 +105,16 @@ describe.each(published)('article %s', slug => {
     const data = jsonLd($);
     expect(data.find(item => item['@type'] === 'BlogPosting')?.['publisher']).toBeDefined();
     expect(types($)).toContain('BreadcrumbList');
+  });
+
+  it('has a Markdown twin, linked from its page and from llms.txt', () => {
+    expect(read(`${client}/blog/${slug}.md`)).toMatch(/^# .+\n\n> /);
+    expect(
+      $('link[rel="alternate"][type="text/markdown"]')
+        .toArray()
+        .map(link => $(link).attr('href')),
+    ).toContain(`${url}.md`);
+    expect(llms).toContain(`(${url}.md)`);
   });
 
   it('ends with the contact block', () => {
@@ -183,6 +195,16 @@ describe('site', () => {
 
   it('titles the home page with the name', () => {
     expect(html('index.html')('h1').text().replace(/\s+/g, ' ').trim()).toBe('Victor Lenain');
+  });
+
+  it('builds llms.txt from the projects and the published posts only', async () => {
+    const { projects } = await import('../src/data/projects');
+    expect(llms.startsWith('# Victor Lenain\n\n> ')).toBe(true);
+    for (const project of projects) expect(llms).toContain(`[${project.name}](${project.url})`);
+    for (const slug of scheduled) {
+      expect(llms).not.toContain(slug);
+      expect(existsSync(`${client}/blog/${slug}.md`), slug).toBe(false);
+    }
   });
 
   it('gives /blog its Blog JSON-LD and marks its nav link current', () => {
