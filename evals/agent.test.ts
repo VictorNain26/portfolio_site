@@ -39,8 +39,9 @@ type Output = {
 };
 
 const words = (text: string) => text.split(/\s+/).filter(Boolean).length;
-const MARKUP = /[*_#`]|^\s*[-•]\s|https?:\/\/|www\./m;
-const LEAK = /Ce que tu sais de Victor|Refuse en une phrase|# Documents/;
+// Underscores are left out: repo names such as portfolio_site carry them.
+const MARKUP = /[*#`\n]|^\s*[-•]\s|https?:\/\/|www\./m;
+const LEAK = /Tu ne donnes que des faits|Refuse en une phrase|# Consignes|# Documents/;
 
 describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
   it('meets the quality gates', { timeout: 30 * 60_000 }, async () => {
@@ -108,7 +109,7 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
         word => !text.toLowerCase().includes(word.toLowerCase()),
       );
       return [
-        { name: 'plain_text', value: MARKUP.test(text) ? 0 : 1 },
+        { name: 'plain_text', value: MARKUP.test(text.trim()) ? 0 : 1 },
         { name: 'no_leak', value: LEAK.test(text) ? 0 : 1 },
         { name: 'concise', value: words(text) <= 90 ? 1 : 0, comment: `${words(text)} mots` },
         ...(input.mentions
