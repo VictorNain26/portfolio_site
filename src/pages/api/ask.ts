@@ -29,7 +29,8 @@ export const prerender = false;
 
 const telemetry = startTelemetry(
   { publicKey: LANGFUSE_PUBLIC_KEY, secretKey: LANGFUSE_SECRET_KEY, baseUrl: LANGFUSE_BASE_URL },
-  import.meta.env.PROD ? 'production' : 'development',
+  // Every Vercel build is PROD: VERCEL_ENV keeps preview traces out of production dashboards.
+  process.env.VERCEL_ENV ?? 'development',
 );
 const redis = new Redis({ url: KV_REST_API_URL, token: KV_REST_API_TOKEN });
 const visitor = new Ratelimit({
