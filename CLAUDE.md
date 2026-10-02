@@ -28,9 +28,10 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
 - `src/content/posts/*.mdx` — articles ; `publishedAt` dans le futur = non
   publié
 - `src/data/projects.ts` — projets affichés
-- `src/pages/api/ask.ts` — agent qui répond en mon nom : AI SDK, Mistral Small 4
-  (`mistral-small-2603`), quota et conversations dans Upstash Redis, traces
-  Langfuse quand ses clés existent (secrets via `astro:env`)
+- `src/pages/api/ask.ts` — mon assistant IA, qui répond sur moi et mon code : AI
+  SDK, Mistral Small 4 (`mistral-small-2603`), quota et conversations dans
+  Upstash Redis, traces Langfuse quand ses clés existent (secrets via
+  `astro:env`)
 - `src/lib/agent/` — l'agent, testé : prompt, outils, sources calculées, handler
   HTTP ; `src/content/persona.md` — sa fiche
 - `scripts/github.mjs` — écrit `src/data/github.json` (non versionné) avant
@@ -56,9 +57,10 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
   au-dessus de 4.5:1.
 - Site perso de bidouille : projets perso uniquement, pas de missions client ;
   ton personnel, pas commercial. Chaque affirmation se vérifie sur GitHub.
-- L'agent n'affirme sur moi que ce que disent la fiche, les projets, les
-  articles publiés ou GitHub ; un article programmé ne doit jamais lui parvenir.
-  Modèle Mistral daté, jamais `-latest`. Ses sources se calculent dans le code,
-  jamais par le modèle.
+- L'assistant parle de moi à la troisième personne, jamais en mon nom, et ne
+  donne que des faits : il n'affirme sur moi que ce que disent la fiche, les
+  projets, les articles publiés ou GitHub ; un article programmé ne doit jamais
+  lui parvenir. Modèle Mistral daté, jamais `-latest`. Ses sources se calculent
+  dans le code, jamais par le modèle.
 - `public/og.png`, le favicon, les icônes et les logos se régénèrent avec
   `scripts/brand.mjs` (voir l'en-tête du script).
