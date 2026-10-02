@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import Ask from '../components/Ask.astro';
 import { projects } from '../data/projects';
 import Base from '../layouts/Base.astro';
 import { publishedPosts } from '../lib/posts';
@@ -41,6 +42,7 @@ const entries = [
         </li>
       </ul>
     </nav>
+    <Ask />
   </section>
 </Base>
 

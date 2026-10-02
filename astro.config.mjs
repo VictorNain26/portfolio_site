@@ -1,6 +1,7 @@
-import { defineConfig, fontProviders } from 'astro/config';
+import { defineConfig, envField, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 import { parseFrontmatter, unified } from '@astrojs/markdown-remark';
 import githubDark from '@shikijs/themes/github-dark';
 import githubLight from '@shikijs/themes/github-light';
@@ -20,7 +21,20 @@ const publishedAt = new Map(
 export default defineConfig({
   site: 'https://www.victorlenain.fr',
   trailingSlash: 'never',
-  build: { format: 'file' },
+  adapter: vercel({ maxDuration: 60 }),
+  vite: { define: { __BUILD_TIME__: JSON.stringify(new Date().toISOString()) } },
+  env: {
+    schema: {
+      MISTRAL_API_KEY: envField.string({ context: 'server', access: 'secret' }),
+      VISITOR_SECRET: envField.string({ context: 'server', access: 'secret' }),
+      KV_REST_API_URL: envField.string({ context: 'server', access: 'secret' }),
+      KV_REST_API_TOKEN: envField.string({ context: 'server', access: 'secret' }),
+      GITHUB_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
+      LANGFUSE_PUBLIC_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      LANGFUSE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      LANGFUSE_BASE_URL: envField.string({ context: 'server', access: 'secret', optional: true }),
+    },
+  },
   integrations: [
     mdx(),
     sitemap({
