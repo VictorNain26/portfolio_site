@@ -30,7 +30,11 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
 - `src/layouts/Base.astro` — `<head>`, SEO, JSON-LD, header, footer
 - `src/content/posts/*.mdx` — articles ; `publishedAt` dans le futur = non
   publié
-- `src/data/projects.ts` — projets affichés
+- `src/data/projects.ts` — projets affichés, lus dans `github.json`
+  (`src/lib/projects.ts`) : les dépôts de l'allowlist qui ont le topic
+  `portfolio`. La description GitHub s'écrit « Nom — accroche », les autres
+  topics font la stack, `pre-launch` ou une homepage donnent le statut. Un
+  workflow planifié (`refresh.yml`) relance le déploiement toutes les heures
 - `src/pages/api/ask.ts` — mon assistant IA, qui répond sur moi et mon code : AI
   SDK, Mistral Small 4 (`mistral-small-2603`), quota et conversations dans
   Upstash Redis, traces Langfuse quand ses clés existent (secrets via

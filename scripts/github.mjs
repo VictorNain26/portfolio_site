@@ -41,6 +41,7 @@ const repos = await Promise.all(
         name: repo.name,
         description: repo.description,
         url: repo.html_url,
+        homepage: repo.homepage || null,
         language: repo.language,
         stars: repo.stargazers_count,
         pushedAt: repo.pushed_at,
