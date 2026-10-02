@@ -1,7 +1,6 @@
 import { tool } from 'ai';
 import { z } from 'astro/zod';
-import type { Activity } from './activity';
-import type { CodeHit } from './github';
+import type { Activity, CodeHit } from './github';
 import type { Repo } from './repos';
 
 const fallbackSignal = () => AbortSignal.timeout(50_000);
