@@ -64,6 +64,7 @@ const github = {
   repos: async () => knowledge.repos,
   readme: async (name: string) => knowledge.repos.find(repo => repo.name === name)?.readme ?? null,
   search: undefined,
+  activity: async () => [],
 };
 
 const searches = (query: string) => ({
@@ -85,7 +86,6 @@ const run = async (model: MockLanguageModelV4, signal = new AbortController().si
     github,
     publishedBy: new Date('2026-10-01'),
     siteUrl: 'https://example.com',
-    activity: async () => [],
     reasoning: 'none',
   })({
     question: 'Ta radio ?',
@@ -147,7 +147,6 @@ describe('createAgent', () => {
       },
       publishedBy: new Date('2026-10-01'),
       siteUrl: 'https://example.com',
-      activity: async () => [],
       reasoning: 'none',
     })({ question: 'Où ?', history: [], signal: new AbortController().signal, now: new Date() });
     let text = '';

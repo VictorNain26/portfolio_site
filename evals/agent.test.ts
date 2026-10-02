@@ -5,7 +5,6 @@ import { LangfuseClient, type Evaluator } from '@langfuse/client';
 import pThrottle from 'p-throttle';
 import { appendFileSync, existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { createActivityFetcher } from '../src/lib/agent/activity';
 import { createAgent, MODEL, type Reasoning, type ToolOutput } from '../src/lib/agent/agent';
 import { knowledge } from '../src/lib/agent/corpus';
 import allowlist from '../src/data/github-allowlist.json';
@@ -72,11 +71,6 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       }),
       publishedBy: now,
       siteUrl: 'https://www.victorlenain.fr',
-      activity: createActivityFetcher({
-        user: 'VictorNain26',
-        token: process.env.GITHUB_TOKEN,
-        allowlist,
-      }),
       reasoning: REASONING,
     });
     // Mistral allows mistral-large-2512 0.25 requests a second on this plan (console > Limits):

@@ -1,11 +1,11 @@
 import { z } from 'astro/zod';
-import type { Fetcher } from './activity';
 import type { Repo } from './repos';
 
 // What the build wrote (src/data/github.json) is the fallback when GitHub does not answer.
 const MAX_README = 6000;
 const TIMEOUT_MS = 5_000;
 const MAX_HITS = 5;
+const MAX_ACTIVE_REPOS = 3;
 
 const reposSchema = z.array(
   z.object({
@@ -31,7 +31,17 @@ const searchSchema = z.object({
   ),
 });
 
+const eventsSchema = z.array(
+  z.object({ type: z.string(), repo: z.object({ name: z.string() }), created_at: z.string() }),
+);
+const commitsSchema = z.array(z.object({ commit: z.object({ message: z.string() }) }));
+
+export type Fetcher = (
+  url: string,
+  init: { headers: Record<string, string>; signal: AbortSignal },
+) => Promise<Response>;
 export type CodeHit = { repo: string; path: string; url: string; fragments: string[] };
+export type Activity = { repo: string; type: string; date: string; commits: string[] };
 
 // The model writes the query: qualifiers are dropped so it cannot widen the search beyond
 // the allowlisted repos (results are filtered against it too).
@@ -85,6 +95,7 @@ export function createGitHub({
   const allowed = new Set(allowlist);
   const cached = { repos: cache<Repo[]>(ttlMs, now), readme: cache<string | null>(ttlMs, now) };
   const searches = cache<CodeHit[]>(ttlMs, now);
+  const activities = cache<Activity[]>(ttlMs, now);
 
   async function loadRepos(signal: AbortSignal): Promise<Repo[]> {
     const res = await call(`/users/${user}/repos?per_page=100&type=owner&sort=pushed`, signal);
@@ -144,6 +155,34 @@ export function createGitHub({
       }));
   }
 
+  async function loadActivity(signal: AbortSignal): Promise<Activity[]> {
+    const res = await call(`/users/${user}/events/public?per_page=30`, signal);
+    if (!res.ok) throw new Error(`GitHub events: ${res.status}`);
+    const byRepo = new Map<string, Activity>();
+    for (const event of eventsSchema.parse(await res.json())) {
+      const [owner, name = ''] = event.repo.name.split('/');
+      // Filtered before the cut to MAX_ACTIVE_REPOS: another repo's push must not take a slot.
+      if (owner !== user || !allowed.has(name) || byRepo.has(event.repo.name)) continue;
+      byRepo.set(event.repo.name, {
+        repo: event.repo.name,
+        type: event.type,
+        date: event.created_at,
+        commits: [],
+      });
+    }
+    const recent = [...byRepo.values()].slice(0, MAX_ACTIVE_REPOS);
+    await Promise.allSettled(
+      recent.map(async activity => {
+        const commits = await call(`/repos/${activity.repo}/commits?per_page=3`, signal);
+        if (commits.ok)
+          activity.commits = commitsSchema
+            .parse(await commits.json())
+            .map(({ commit }) => commit.message.split('\n')[0]!);
+      }),
+    );
+    return recent;
+  }
+
   return {
     // Live list, so a new repo or a fresh push reaches the agent without a redeploy.
     repos: (signal: AbortSignal) =>
@@ -164,6 +203,7 @@ export function createGitHub({
             : Promise.resolve([]);
         }
       : undefined,
+    activity: (signal: AbortSignal) => activities('activity', () => loadActivity(signal)),
   };
 }
 

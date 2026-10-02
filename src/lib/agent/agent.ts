@@ -1,7 +1,6 @@
 import type { MistralLanguageModelChatOptions } from '@ai-sdk/mistral';
 import { isStepCount, streamText, type LanguageModel, type ModelMessage } from 'ai';
 import { createHash } from 'node:crypto';
-import type { Activity } from './activity';
 import type { GitHub } from './github';
 import { documentsOf, type Document, type Knowledge } from './knowledge';
 import { buildSystemPrompt } from './prompt';
@@ -29,16 +28,14 @@ export function createAgent({
   github,
   publishedBy,
   siteUrl,
-  activity,
   reasoning,
 }: {
   model: LanguageModel;
   knowledge: Knowledge;
-  github: Pick<GitHub, 'repos' | 'readme' | 'search'>;
+  github: Pick<GitHub, 'repos' | 'readme' | 'search' | 'activity'>;
   // Posts scheduled after this date have no page yet: the agent must not know them.
   publishedBy: Date;
   siteUrl: string;
-  activity: (signal: AbortSignal) => Promise<Activity[]>;
   reasoning: Reasoning;
 }) {
   return function answer({
@@ -79,7 +76,7 @@ export function createAgent({
         messages,
         tools: createTools({
           repos: live.repos,
-          activity,
+          activity: github.activity,
           readme: github.readme,
           search: github.search,
           read,

@@ -14,7 +14,6 @@ import {
   MISTRAL_API_KEY,
   VISITOR_SECRET,
 } from 'astro:env/server';
-import { createActivityFetcher } from '../../lib/agent/activity';
 import { createAgent, MODEL } from '../../lib/agent/agent';
 import { redisConversations } from '../../lib/agent/conversations';
 import { knowledge } from '../../lib/agent/corpus';
@@ -57,7 +56,6 @@ const answer = createAgent({
   // Posts scheduled after the build have no page yet: the agent must not know them.
   publishedBy: new Date(__BUILD_TIME__),
   siteUrl: import.meta.env.SITE,
-  activity: createActivityFetcher({ user, token: GITHUB_TOKEN, allowlist }),
   reasoning: 'none',
 });
 
