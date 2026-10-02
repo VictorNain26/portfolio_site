@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { readEvents } from './ask';
+import { linkSources, readEvents } from './ask';
 
 const stream = (...chunks: string[]) => {
   const encoder = new TextEncoder();
@@ -45,5 +45,37 @@ describe('readEvents', () => {
     expect(await collect(stream('{"type":"error","code":"failed"}'))).toEqual([
       { type: 'error', code: 'failed' },
     ]);
+  });
+});
+
+describe('linkSources', () => {
+  const aube = { title: 'AubeSonore', url: 'https://www.aubesonore.fr/' };
+  const repo = { title: 'radio-pipeline sur GitHub', url: 'https://github.com/x/radio-pipeline' };
+  const post = { title: 'Salut, moi c’est Victor', url: 'https://example.com/blog/qui' };
+
+  it('links the first mention of a source, whatever its case', () => {
+    expect(linkSources('Sur aubesonore, puis AubeSonore.', [aube])).toEqual([
+      { text: 'Sur ' },
+      { text: 'aubesonore', url: aube.url },
+      { text: ', puis AubeSonore.' },
+    ]);
+  });
+
+  it('names a repo without its "sur GitHub" suffix', () => {
+    expect(linkSources('Le dépôt radio-pipeline tourne.', [repo])).toEqual([
+      { text: 'Le dépôt ' },
+      { text: 'radio-pipeline', url: repo.url },
+      { text: ' tourne.' },
+    ]);
+  });
+
+  it('keeps the answer whole when no source is named in it', () => {
+    expect(linkSources('Une web radio.', [post])).toEqual([{ text: 'Une web radio.' }]);
+  });
+
+  it('orders links by position and never overlaps them', () => {
+    const segments = linkSources('radio-pipeline alimente AubeSonore.', [aube, repo]);
+    expect(segments.map(s => s.text).join('')).toBe('radio-pipeline alimente AubeSonore.');
+    expect(segments.filter(s => s.url).map(s => s.text)).toEqual(['radio-pipeline', 'AubeSonore']);
   });
 });

@@ -1,82 +1,93 @@
-<section class="ask" aria-labelledby="ask-label">
-  <form id="ask-form">
-    <label id="ask-label" for="ask-input">
-      Une question sur mon travail ? Mon assistant IA y répond, jusqu'à dix par jour.
-    </label>
-    <div class="field">
-      <input
-        id="ask-input"
-        name="question"
-        type="text"
-        maxlength="280"
-        required
-        autocomplete="off"
-        enterkeyhint="send"
-        placeholder="Sur quoi Victor travaille en ce moment ?"
-      />
-      <button type="submit">Demander</button>
+<li class="ask-row">
+  <button
+    class="toggle"
+    type="button"
+    id="ask-toggle"
+    aria-expanded="false"
+    aria-controls="ask-panel"
+  >
+    <span class="title-text">Une question sur mon travail ?</span>
+    <span class="count" id="ask-toggle-state">
+      Demander
+    </span>
+  </button>
+  <div class="unfold" id="ask-panel">
+    <div class="panel" inert>
+      <p class="hint">Mon assistant IA y répond, jusqu'à dix par jour.</p>
+      <ol class="thread" aria-live="polite"></ol>
+      <form id="ask-form" class="field">
+        <label class="sr-only" for="ask-input">
+          Ta question pour mon assistant
+        </label>
+        <input
+          id="ask-input"
+          name="question"
+          type="text"
+          maxlength="280"
+          required
+          autocomplete="off"
+          enterkeyhint="send"
+          placeholder="Sur quoi Victor travaille en ce moment ?"
+        />
+        <button type="submit">Envoyer</button>
+      </form>
+      <div class="meta-line">
+        <p class="status" role="status"></p>
+        <button type="button" class="reset" hidden>
+          Nouvelle conversation
+        </button>
+      </div>
     </div>
-  </form>
-  <div class="reply" hidden>
-    <p class="question"></p>
-    <p class="answer" aria-live="polite"></p>
-    <p class="sources" hidden></p>
   </div>
-  <p class="status" role="status"></p>
-</section>
+</li>
 
 <script>
   import type { Source } from '../lib/agent/sources';
-  import { readEvents } from '../lib/ask';
+  import { linkSources, readEvents } from '../lib/ask';
+
+  type Turn = { question: string; answer: string; sources: Source[] };
+  type State = { conversation?: string; turns: Turn[]; status?: string; exhausted?: boolean };
+
+  // The thread lives in this tab only, so it survives a visit to another page and back.
+  const STORE = 'ask-thread';
+  const load = (): State => {
+    try {
+      return JSON.parse(sessionStorage.getItem(STORE) ?? '') as State;
+    } catch {
+      return { turns: [] };
+    }
+  };
+  const save = (state: State) => {
+    try {
+      sessionStorage.setItem(STORE, JSON.stringify(state));
+    } catch {
+      // Storage refused (private window): the thread just won't outlive the page.
+    }
+  };
 
   const errors: Record<string, string> = {
     limit: 'Tu as posé tes dix questions du jour. Reviens demain, ou écris-moi.',
     global_limit: "L'assistant a assez parlé pour aujourd'hui. Reviens demain, ou écris-moi.",
     failed: "L'assistant n'a pas pu répondre. Réessaie dans un moment.",
   };
+  const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function init() {
-    const form = document.querySelector<HTMLFormElement>('#ask-form');
-    if (!form) return;
-    const section = form.closest('.ask')!;
-    const input = form.querySelector('input')!;
-    const button = form.querySelector('button')!;
-    const reply = section.querySelector<HTMLElement>('.reply')!;
-    const question = section.querySelector<HTMLElement>('.question')!;
-    const answer = section.querySelector<HTMLElement>('.answer')!;
-    const sources = section.querySelector<HTMLElement>('.sources')!;
-    const status = section.querySelector<HTMLElement>('.status')!;
+  function para(className: string, text = '') {
+    const p = document.createElement('p');
+    p.className = className;
+    p.textContent = text;
+    return p;
+  }
 
-    let conversation: string | undefined;
-    let controller: AbortController | undefined;
-    // Set once the quota is used up: the end of an answer must not re-enable the field.
-    let exhausted = false;
-    document.addEventListener('astro:before-swap', () => controller?.abort(), { once: true });
-
-    const setBusy = (busy: boolean) => {
-      input.disabled = busy || exhausted;
-      button.textContent = busy ? 'Arrêter' : 'Demander';
-      answer.setAttribute('aria-busy', String(busy));
-    };
-
-    const disable = () => {
-      exhausted = true;
-      input.disabled = true;
-      button.disabled = true;
-    };
-
-    const showSources = (list: Source[]) => {
-      sources.replaceChildren();
-      sources.hidden = list.length === 0;
-      if (sources.hidden) return;
-      sources.append('Sources : ');
-      list.forEach((source, i) => {
-        if (i > 0) sources.append(' · ');
+  function fillAnswer(target: HTMLElement, text: string, sources: Source[]) {
+    target.replaceChildren(
+      ...linkSources(text, sources).map(segment => {
+        if (!segment.url) return document.createTextNode(segment.text);
         const link = document.createElement('a');
         link.className = 'link';
-        link.href = source.url;
-        link.textContent = source.title;
-        if (new URL(source.url, location.href).origin !== location.origin) {
+        link.href = segment.url;
+        link.textContent = segment.text;
+        if (new URL(segment.url, location.href).origin !== location.origin) {
           link.target = '_blank';
           link.rel = 'noopener';
           const hint = document.createElement('span');
@@ -84,18 +95,87 @@
           hint.textContent = ' (nouvel onglet)';
           link.append(hint);
         }
-        sources.append(link);
-      });
+        return link;
+      }),
+    );
+  }
+
+  function turnElement(question: string, animate: boolean) {
+    const li = document.createElement('li');
+    li.className = animate ? 'turn arrive' : 'turn';
+    const answer = para('answer');
+    li.append(para('who', 'Toi'), para('question', question), para('who', "L'assistant"), answer);
+    return { li, answer };
+  }
+
+  function init() {
+    const toggle = document.querySelector<HTMLButtonElement>('#ask-toggle');
+    if (!toggle) return;
+    const row = toggle.closest('.ask-row')!;
+    const unfold = row.querySelector<HTMLElement>('.unfold')!;
+    const panel = row.querySelector<HTMLElement>('.panel')!;
+    const toggleState = row.querySelector<HTMLElement>('#ask-toggle-state')!;
+    const thread = row.querySelector<HTMLOListElement>('.thread')!;
+    const form = row.querySelector<HTMLFormElement>('#ask-form')!;
+    const input = form.querySelector('input')!;
+    const send = form.querySelector('button')!;
+    const status = row.querySelector<HTMLElement>('.status')!;
+    const reset = row.querySelector<HTMLButtonElement>('.reset')!;
+
+    let state = load();
+    let controller: AbortController | undefined;
+    document.addEventListener('astro:before-swap', () => controller?.abort(), { once: true });
+
+    const persist = () => save(state);
+    const setOpen = (open: boolean) => {
+      unfold.classList.toggle('open', open);
+      panel.inert = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggleState.textContent = open ? 'Fermer' : 'Demander';
+    };
+    const lock = () => {
+      input.disabled = state.exhausted === true;
+      send.disabled = state.exhausted === true;
+    };
+    const setBusy = (busy: boolean) => {
+      input.disabled = busy || state.exhausted === true;
+      send.textContent = busy ? 'Arrêter' : 'Envoyer';
+      thread.setAttribute('aria-busy', String(busy));
+    };
+    const setStatus = (text: string) => {
+      status.textContent = text;
+      state.status = text;
+      persist();
     };
 
-    const showRemaining = (remaining: number) => {
-      if (remaining === 0) {
-        status.textContent = "C'était ta dernière question pour aujourd'hui.";
-        disable();
-      } else {
-        status.textContent = `Encore ${remaining} question${remaining > 1 ? 's' : ''} aujourd'hui.`;
+    for (const turn of state.turns) {
+      const { li, answer } = turnElement(turn.question, false);
+      fillAnswer(answer, turn.answer, turn.sources);
+      thread.append(li);
+    }
+    status.textContent = state.status ?? '';
+    reset.hidden = state.turns.length === 0;
+    lock();
+    if (state.turns.length > 0) setOpen(true);
+
+    toggle.addEventListener('click', () => {
+      const open = !unfold.classList.contains('open');
+      setOpen(open);
+      // Wait for the panel to unfold before moving focus into it.
+      if (open && !input.disabled) setTimeout(() => input.focus({ preventScroll: true }), 250);
+    });
+
+    reset.addEventListener('click', () => {
+      controller?.abort();
+      thread.replaceChildren();
+      state = { turns: [], ...(state.exhausted && { exhausted: true, status: state.status }) };
+      persist();
+      reset.hidden = true;
+      if (!state.exhausted) {
+        status.textContent = '';
+        input.focus({ preventScroll: true });
       }
-    };
+    });
 
     form.addEventListener('submit', async event => {
       event.preventDefault();
@@ -103,53 +183,81 @@
         controller.abort();
         return;
       }
-      const text = input.value.trim();
-      if (!text) return;
+      const question = input.value.trim();
+      if (!question) return;
 
-      // Disabling the focused input drops keyboard focus: give it back once the answer ends.
       const refocus = form.contains(document.activeElement);
       controller = new AbortController();
+      const { li, answer } = turnElement(question, !reduce());
+      const dots = document.createElement('span');
+      dots.className = 'dots';
+      dots.setAttribute('aria-label', "L'assistant réfléchit");
+      dots.append(...Array.from({ length: 3 }, () => document.createElement('i')));
+      answer.append(dots);
+      thread.append(li);
+      input.value = '';
+      reset.hidden = false;
       setBusy(true);
-      reply.hidden = false;
-      question.textContent = text;
-      answer.textContent = '';
-      showSources([]);
-      status.textContent = 'Réponse en cours…';
+      setStatus('');
+
+      let text = '';
+      let sources: Source[] = [];
+      const fail = (message: string) => {
+        dots.remove();
+        li.append(para('note', message));
+        // Nothing was answered: give the question back so it can be sent again.
+        if (!text && !state.exhausted) input.value = question;
+      };
 
       try {
         const response = await fetch('/api/ask', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ question: text, conversation }),
+          body: JSON.stringify({ question, conversation: state.conversation }),
           signal: controller.signal,
         });
         if (!response.ok || !response.body) {
           const { code } = await response.json().catch(() => ({ code: 'failed' }));
-          if (code === 'limit' || code === 'global_limit') disable();
-          reply.hidden = true;
-          status.textContent = errors[code] ?? errors.failed!;
+          if (code === 'limit' || code === 'global_limit') {
+            state.exhausted = true;
+            lock();
+          }
+          fail(errors[code] ?? errors.failed!);
           return;
         }
         for await (const event of readEvents(response.body)) {
           if (event.type === 'text') {
-            if (!answer.textContent) status.textContent = '';
-            answer.append(event.text);
+            if (!text) dots.remove();
+            text += event.text;
+            const word = document.createElement('span');
+            word.className = 'ink';
+            word.textContent = event.text;
+            answer.append(word);
           } else if (event.type === 'sources') {
-            showSources(event.sources);
+            sources = event.sources;
           } else if (event.type === 'done') {
-            conversation = event.conversation;
-            input.value = '';
-            showRemaining(event.remaining);
+            fillAnswer(answer, text, sources);
+            state.conversation = event.conversation;
+            state.turns.push({ question, answer: text, sources });
+            if (event.remaining === 0) {
+              state.exhausted = true;
+              lock();
+              setStatus("C'était ta dernière question pour aujourd'hui.");
+            } else {
+              setStatus(
+                `Encore ${event.remaining} question${event.remaining > 1 ? 's' : ''} aujourd'hui.`,
+              );
+            }
           } else {
-            status.textContent = errors.failed!;
+            fail(errors.failed!);
           }
         }
       } catch {
-        status.textContent = controller.signal.aborted ? 'Réponse arrêtée.' : errors.failed!;
+        fail(controller.signal.aborted ? 'Réponse arrêtée.' : errors.failed!);
       } finally {
         controller = undefined;
         setBusy(false);
-        if (refocus && !exhausted) input.focus();
+        if (refocus && !state.exhausted) input.focus({ preventScroll: true });
       }
     });
   }
@@ -158,25 +266,171 @@
 </script>
 
 <style>
-  .ask {
+  .toggle {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    font: inherit;
+    font-size: 1.25rem;
+    text-align: start;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .toggle .count {
+    font-size: 1rem;
+  }
+
+  /* Unfolds to its content's height: grid rows animate where height: auto cannot. */
+  .unfold {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s var(--ease-out);
+  }
+
+  .unfold.open {
+    grid-template-rows: 1fr;
+  }
+
+  .panel {
+    overflow: hidden;
     display: grid;
     gap: 0.75rem;
-    margin-top: 1rem;
+    padding-bottom: 0;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+      opacity 0.3s var(--ease-out),
+      transform 0.45s var(--ease-out),
+      padding-bottom 0.5s var(--ease-out);
   }
 
-  form {
+  .open .panel {
+    padding-bottom: 1.1rem;
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.12s, 0.12s, 0s;
+  }
+
+  .hint,
+  .status,
+  .reset {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--muted);
+  }
+
+  .thread {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    gap: 0.5rem;
   }
 
-  label {
-    font-size: 1.25rem;
+  .thread:empty {
+    display: none;
+  }
+
+  .thread :global(.turn) {
+    display: grid;
+    gap: 0.25rem;
+    padding-block: 0.9rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .thread :global(.turn:first-child) {
+    border-top: 0;
+    padding-top: 0.2rem;
+  }
+
+  .thread :global(.arrive) {
+    animation: arrive 0.45s var(--ease-out) both;
+  }
+
+  @keyframes arrive {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  .thread :global(.who) {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .thread :global(.question) {
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+
+  .thread :global(.answer),
+  .thread :global(.note) {
+    margin: 0;
+  }
+
+  .thread :global(.note) {
+    margin-top: 0.35rem;
+    font-size: 1rem;
+    color: var(--muted);
+  }
+
+  .thread :global(.ink) {
+    animation: ink 0.28s var(--ease-out) both;
+  }
+
+  @keyframes ink {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .thread :global(.dots) {
+    display: inline-flex;
+    gap: 0.3rem;
+    padding-block: 0.5rem;
+  }
+
+  .thread :global(.dots i) {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+
+  .thread :global(.dots i:nth-child(2)) {
+    animation-delay: 0.15s;
+  }
+
+  .thread :global(.dots i:nth-child(3)) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes pulse {
+    0%,
+    80%,
+    100% {
+      opacity: 0.25;
+    }
+    40% {
+      opacity: 1;
+    }
   }
 
   .field {
     display: flex;
     align-items: stretch;
     border-bottom: 1px solid var(--muted);
+    transition:
+      border-color 0.3s var(--ease-out),
+      box-shadow 0.3s var(--ease-out);
   }
 
   /* Focus thickens the underline to 2px instead of drawing an outline around the bare input. */
@@ -185,8 +439,8 @@
     box-shadow: 0 1px 0 var(--fg);
   }
 
-  input,
-  button {
+  .field input,
+  .field button {
     font: inherit;
     color: inherit;
     background: none;
@@ -194,62 +448,68 @@
     min-height: 2.75rem;
   }
 
-  input {
+  .field input {
     flex: 1;
     min-width: 0;
     padding: 0;
   }
 
-  input::placeholder {
+  .field input::placeholder {
     color: var(--muted);
     opacity: 1;
   }
 
-  input:focus-visible {
+  .field input:focus-visible {
     outline: none;
   }
 
-  button {
+  .field button {
     padding-inline: 0.75rem 0;
+    cursor: pointer;
+    background: linear-gradient(currentColor, currentColor) 100% 85% / 0 1px no-repeat;
+    transition: background-size 0.4s var(--ease-out);
+  }
+
+  .field button:hover {
+    background-size: calc(100% - 0.75rem) 1px;
+  }
+
+  .field input:disabled,
+  .field button:disabled {
+    cursor: not-allowed;
+    color: var(--muted);
+  }
+
+  .meta-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    flex-wrap: wrap;
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  .reset {
+    padding: 0;
+    font: inherit;
+    font-size: 1rem;
+    background: none;
+    border: 0;
     cursor: pointer;
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
     text-decoration-color: var(--rule);
+    transition:
+      color 0.3s var(--ease-out),
+      text-decoration-color 0.3s var(--ease-out);
   }
 
-  button:hover {
+  .reset:hover {
+    color: var(--fg);
     text-decoration-color: currentColor;
-  }
-
-  input:disabled,
-  button:disabled {
-    cursor: not-allowed;
-    color: var(--muted);
-  }
-
-  .status,
-  .question,
-  .sources {
-    color: var(--muted);
-    font-size: 1rem;
-  }
-
-  .reply:not([hidden]) {
-    display: grid;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-  }
-
-  .question {
-    font-style: italic;
-  }
-
-  .answer {
-    font-size: 1.2rem;
-  }
-
-  .status:empty {
-    display: none;
   }
 </style>

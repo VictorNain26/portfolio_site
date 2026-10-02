@@ -8,33 +8,31 @@ import { site } from '../site';
 
 const posts = publishedPosts(await getCollection('posts'), new Date());
 const entries = [
-  { label: 'Projets', href: '/projets', count: projects.length, transition: 'title-projets' },
-  { label: 'Blog', href: '/blog', count: posts.length, transition: 'title-blog' },
+  { label: 'Projets', href: '/projets', count: projects.length },
+  { label: 'Blog', href: '/blog', count: posts.length },
 ];
 ---
 
 <Base header={false}>
   <section class="wrap hero">
-    <h1 class="name">{site.name}</h1>
-    <p class="pitch">
+    <h1 class="name enter" style="--i: 0">
+      {site.name}
+    </h1>
+    <p class="pitch enter" style="--i: 1">
       Développeur à Paris. Je partage ici ce que je construis sur mon temps libre, surtout autour de
       l'IA, et ce que ça m'apprend.
     </p>
-    <nav aria-label="Sommaire">
+    <nav class="enter" style="--i: 2" aria-label="Sommaire">
       <ul class="rows">
         {entries.map(entry => (
           <li>
             <a href={entry.href}>
-              <span
-                class="title-text"
-                style={`view-transition-name: ${entry.transition}; view-transition-class: title`}
-              >
-                {entry.label}
-              </span>
+              <span class="title-text">{entry.label}</span>
               <span class="count">{entry.count}</span>
             </a>
           </li>
         ))}
+        <Ask />
         <li>
           <a href={`mailto:${site.email}`}>
             <span class="title-text">{site.email}</span>
@@ -42,7 +40,6 @@ const entries = [
         </li>
       </ul>
     </nav>
-    <Ask />
   </section>
 </Base>
 
@@ -59,8 +56,6 @@ const entries = [
     font-size: clamp(2.75rem, 9vw, 4.25rem);
     line-height: 1;
     letter-spacing: -0.015em;
-    view-transition-name: site-name;
-    view-transition-class: title;
   }
 
   .pitch {

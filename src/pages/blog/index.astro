@@ -25,16 +25,20 @@ const blog = {
 
 <Base title="Blog" description={site.blog.description} jsonLd={[blog]}>
   <section class="wrap">
-    <h1 class="page-title">Blog</h1>
-    {posts.length === 0 && <p class="summary">Rien pour l'instant, mais ça arrive !</p>}
+    <h1 class="page-title enter">Blog</h1>
+    {posts.length === 0 && (
+      <p class="summary enter" style="--i: 1">
+        Rien pour l'instant, mais ça arrive !
+      </p>
+    )}
     <ol class="rows">
-      {posts.map(post => (
-        <li>
+      {posts.map((post, i) => (
+        <li class="enter" style={`--i: ${i + 1}`}>
           <a href={`/blog/${post.id}`}>
             <time class="meta" datetime={post.data.publishedAt.toISOString()}>
               {formatDate(post.data.publishedAt)}
             </time>
-            <h2 style={`view-transition-name: post-${post.id}; view-transition-class: title`}>
+            <h2>
               <span class="title-text">{post.data.title}</span>
             </h2>
             <p class="summary">{post.data.summary}</p>
@@ -46,11 +50,6 @@ const blog = {
 </Base>
 
 <style>
-  .page-title {
-    view-transition-name: title-blog;
-    view-transition-class: title;
-  }
-
   .rows a {
     display: grid;
     gap: 0.4rem;

@@ -24,19 +24,33 @@
   text-decoration: var(--shiki-dark-text-decoration) !important;
 }
 
-::view-transition-group(*) {
-  animation-duration: 0.4s;
-  animation-timing-function: cubic-bezier(0.2, 0.7, 0, 1);
+/* Page changes run in order: the old page leaves (Base.astro), then each block of the new
+   page enters in reading order. --enter-after waits for the exit, so nothing overlaps. */
+:root {
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-in: cubic-bezier(0.55, 0, 0.75, 0.2);
+  --exit: 180ms;
+  --enter-after: 200ms;
+  --enter-step: 70ms;
 }
 
-/* A shared title glides as one piece of text: cross-fading its two sizes doubles the letters. */
-::view-transition-old(.title) {
-  animation: none;
-  opacity: 0;
+@keyframes page-out {
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 }
 
-::view-transition-new(.title) {
-  animation: none;
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.enter {
+  animation: enter 520ms var(--ease-out) backwards;
+  animation-delay: calc(var(--enter-after) + var(--i, 0) * var(--enter-step));
 }
 
 *,
@@ -121,7 +135,9 @@ a {
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
   text-decoration-color: var(--rule);
-  transition: text-decoration-color 0.2s;
+  transition:
+    text-decoration-color 0.35s var(--ease-out),
+    color 0.35s var(--ease-out);
 }
 
 .link:hover,
@@ -141,11 +157,32 @@ a {
   border-bottom: 1px solid var(--rule);
 }
 
+/* Hovering a row draws its underline from the left and lifts its count. */
+.rows .title-text {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  padding-bottom: 2px;
+  transition: background-size 0.45s var(--ease-out);
+}
+
+.rows .count {
+  transition:
+    color 0.35s var(--ease-out),
+    transform 0.45s var(--ease-out);
+}
+
 .rows a:hover .title-text,
-.rows a:focus-visible .title-text {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
+.rows a:focus-visible .title-text,
+.rows button:hover .title-text,
+.rows button:focus-visible .title-text {
+  background-size: 100% 1px;
+}
+
+.rows a:hover .count,
+.rows a:focus-visible .count,
+.rows button:hover .count,
+.rows button:focus-visible .count {
+  color: var(--fg);
+  transform: translateX(-3px);
 }
 
 .skip {
@@ -165,7 +202,10 @@ a {
   *,
   *::before,
   *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
   }
 }
 
