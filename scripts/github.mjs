@@ -1,23 +1,15 @@
 // Writes src/data/github.json: public repos and their READMEs, read by the agent.
 // Fails loudly rather than shipping an agent that knows nothing about GitHub.
-import { existsSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 
 const user = 'VictorNain26';
 const out = new URL('../src/data/github.json', import.meta.url);
 
-// Personal repos only: client work must never reach the agent (CLAUDE.md).
-const ALLOWLIST = [
-  'portfolio_site',
-  'tomai-monorepo',
-  'pexels-mcp-server',
-  'tomai-curriculum',
-  'fabrique-cours-agents',
-  'AubeSonore',
-  'VictorNain26',
-  'musilogy',
-  'cca-f-revision',
-  'radio-pipeline',
-];
+// Personal repos only: client work must never reach the agent (CLAUDE.md). The live agent
+// reads the same list (src/lib/agent/github.ts).
+const ALLOWLIST = JSON.parse(
+  readFileSync(new URL('../src/data/github-allowlist.json', import.meta.url), 'utf8'),
+);
 
 if (process.argv.includes('--if-missing') && existsSync(out)) process.exit(0);
 
