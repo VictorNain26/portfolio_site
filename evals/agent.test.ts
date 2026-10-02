@@ -2,6 +2,7 @@
 // Runs as a Langfuse experiment: results print here, and land in Langfuse when its keys are set.
 import { createMistral } from '@ai-sdk/mistral';
 import { LangfuseClient, type Evaluator } from '@langfuse/client';
+import pThrottle from 'p-throttle';
 import { appendFileSync, existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createActivityFetcher } from '../src/lib/agent/activity';
@@ -74,9 +75,13 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       activity: createActivityFetcher({ user: 'VictorNain26', token: process.env.GITHUB_TOKEN }),
       reasoning: REASONING,
     });
-    const judge = createJudge(
-      mistral(JUDGE_MODEL),
-      [knowledge.persona, ...documents.map(doc => doc.text)].join('\n\n'),
+    // Mistral allows mistral-large-2512 0.25 requests a second on this plan (console > Limits):
+    // one judge call every 4 s, whatever the experiment's concurrency.
+    const judge = pThrottle({ limit: 1, interval: 4_000, strict: true })(
+      createJudge(
+        mistral(JUDGE_MODEL),
+        [knowledge.persona, ...documents.map(doc => doc.text)].join('\n\n'),
+      ),
     );
 
     const judged: Evaluator<Case, Case['behaviour']> = async ({
