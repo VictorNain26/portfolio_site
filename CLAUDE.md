@@ -35,7 +35,10 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
 - `src/lib/agent/` — l'agent, testé : prompt, outils, sources calculées, handler
   HTTP ; `src/content/persona.md` — sa fiche
 - `scripts/github.mjs` — écrit `src/data/github.json` (non versionné) avant
-  `dev`, `check` et `build`
+  `dev`, `check` et `build` ; l'assistant relit dépôts et README en direct
+  (`src/lib/agent/github.ts`, cache 10 min) et cherche dans le code si
+  `GITHUB_TOKEN` existe. `src/data/github-allowlist.json` liste les seuls dépôts
+  qu'il voit : jamais un projet client
 - `evals/` — cas, juge et expérience de l'agent (`npm run eval`)
 - `src/lib/` — seule logique du site, testée
 - `tests/` — assertions sur le build, lancées après `npm run build`
