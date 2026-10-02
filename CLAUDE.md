@@ -6,8 +6,8 @@
 - `npm run dev` — serveur de développement
 - `npm run build` — build dans `dist/client/` et `.vercel/output/`
 - `npm run verify:build` — Vitest sur `dist/client/` et `.vercel/output/`
-  (`tests/`) : articles, sitemap, canonicals, JSON-LD, contraste du code, config
-  de la fonction
+  (`tests/`) : articles, sitemap, canonicals, JSON-LD, llms.txt, contraste du
+  code, config de la fonction
 - `npm run check` — `astro check` (types `.astro` et TS)
 - `npm test` — Vitest sur `src/`
 - `npm run format` / `npm run format:check` — Prettier
@@ -24,6 +24,9 @@ Vercel (`vercel.json` : framework, URLs sans `.html` ni slash final, 301 des
 anciennes pages `/services` et des anciens articles vers `/blog`).
 
 - `src/pages/` — `/`, `/projets`, `/blog`, `/blog/[slug]`, 404
+- `src/pages/llms.txt.ts`, `src/pages/blog/[slug].md.ts` — `/llms.txt` et la
+  version Markdown de chaque article, générés (`src/lib/llms.ts`) depuis la
+  section « Qui je suis » de la fiche, les projets et les articles publiés
 - `src/layouts/Base.astro` — `<head>`, SEO, JSON-LD, header, footer
 - `src/content/posts/*.mdx` — articles ; `publishedAt` dans le futur = non
   publié
