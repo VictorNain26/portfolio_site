@@ -2,7 +2,7 @@
 // Runs as a Langfuse experiment: results print here, and land in Langfuse when its keys are set.
 import { createMistral } from '@ai-sdk/mistral';
 import { LangfuseClient, type Evaluator } from '@langfuse/client';
-import { existsSync } from 'node:fs';
+import { appendFileSync, existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createActivityFetcher } from '../src/lib/agent/activity';
 import { createAgent, MODEL, type Reasoning, type ToolOutput } from '../src/lib/agent/agent';
@@ -130,7 +130,7 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
     const langfuse = new LangfuseClient();
     const result = await langfuse.experiment.run<Case, Case['behaviour'], { run: number }>({
       name: 'ask agent',
-      description: `${MODEL}, reasoning ${REASONING}, judge ${JUDGE_MODEL}`,
+      description: `${MODEL}, reasoning ${REASONING}, judge ${JUDGE_MODEL}, commit ${process.env.GITHUB_SHA?.slice(0, 7) ?? 'local'}`,
       data: Array.from({ length: RUNS }, (_, run) =>
         cases.map(input => ({ input, expectedOutput: input.behaviour, metadata: { run } })),
       ).flat(),
@@ -185,19 +185,24 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
         values.reduce((a, b) => a + b, 0) / values.length,
       ]),
     );
-    // Vitest swallows console output of passing tests: the summary goes straight to stdout.
-    process.stdout.write(
-      `${[
-        `${MODEL}, reasoning ${REASONING}, ${RUNS} runs × ${cases.length} questions`,
-        ...lines,
-        '',
-        latency,
-        ...Object.entries(GATES).map(
-          ([name, gate]) =>
-            `${name}: ${((means[name] ?? 0) * 100).toFixed(0)} % (gate ${gate * 100} %)`,
-        ),
-      ].join('\n')}\n`,
-    );
+    const summary = [
+      `${MODEL}, reasoning ${REASONING}, ${RUNS} runs × ${cases.length} questions`,
+      ...lines,
+      '',
+      latency,
+      ...Object.entries(GATES).map(
+        ([name, gate]) =>
+          `${name}: ${((means[name] ?? 0) * 100).toFixed(0)} % (gate ${gate * 100} %)`,
+      ),
+    ].join('\n');
+    // Vitest swallows console output of passing tests: the summary goes straight to stdout,
+    // and onto the run page in GitHub Actions.
+    process.stdout.write(`${summary}\n`);
+    if (process.env.GITHUB_STEP_SUMMARY)
+      appendFileSync(
+        process.env.GITHUB_STEP_SUMMARY,
+        `## Agent evaluation\n\n\`\`\`\n${summary}\n\`\`\`\n`,
+      );
     for (const [name, gate] of Object.entries(GATES))
       expect.soft(means[name] ?? 0, name).toBeGreaterThanOrEqual(gate);
   });
