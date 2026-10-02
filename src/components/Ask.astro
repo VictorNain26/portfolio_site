@@ -1,0 +1,254 @@
+<section class="ask" aria-labelledby="ask-label">
+  <form id="ask-form">
+    <label id="ask-label" for="ask-input">
+      Pose-moi une question
+    </label>
+    <div class="field">
+      <input
+        id="ask-input"
+        name="question"
+        type="text"
+        maxlength="280"
+        required
+        autocomplete="off"
+        enterkeyhint="send"
+        placeholder="Sur quoi tu travailles en ce moment ?"
+      />
+      <button type="submit">Demander</button>
+    </div>
+  </form>
+  <p class="note">
+    Une IA répond à ma place, à partir de ce qui est sur ce site et sur mon GitHub. Trois questions
+    par jour.
+  </p>
+  <div class="reply" hidden>
+    <p class="question"></p>
+    <p class="answer" aria-live="polite"></p>
+    <p class="sources" hidden></p>
+  </div>
+  <p class="status" role="status"></p>
+</section>
+
+<script>
+  import type { Source } from '../lib/agent/sources';
+  import { readEvents } from '../lib/ask';
+
+  const errors: Record<string, string> = {
+    limit: 'Tu as posé tes trois questions du jour. Reviens demain, ou écris-moi.',
+    global_limit: "L'IA a assez parlé pour aujourd'hui. Reviens demain, ou écris-moi.",
+    failed: "L'IA n'a pas pu répondre. Réessaie dans un moment.",
+  };
+
+  function init() {
+    const form = document.querySelector<HTMLFormElement>('#ask-form');
+    if (!form) return;
+    const section = form.closest('.ask')!;
+    const input = form.querySelector('input')!;
+    const button = form.querySelector('button')!;
+    const reply = section.querySelector<HTMLElement>('.reply')!;
+    const question = section.querySelector<HTMLElement>('.question')!;
+    const answer = section.querySelector<HTMLElement>('.answer')!;
+    const sources = section.querySelector<HTMLElement>('.sources')!;
+    const status = section.querySelector<HTMLElement>('.status')!;
+
+    let conversation: string | undefined;
+    let controller: AbortController | undefined;
+    document.addEventListener('astro:before-swap', () => controller?.abort(), { once: true });
+
+    const setBusy = (busy: boolean) => {
+      input.disabled = busy;
+      button.textContent = busy ? 'Arrêter' : 'Demander';
+      answer.setAttribute('aria-busy', String(busy));
+    };
+
+    const disable = () => {
+      input.disabled = true;
+      button.disabled = true;
+    };
+
+    const showSources = (list: Source[]) => {
+      sources.replaceChildren();
+      sources.hidden = list.length === 0;
+      if (sources.hidden) return;
+      sources.append('Sources : ');
+      list.forEach((source, i) => {
+        if (i > 0) sources.append(' · ');
+        const link = document.createElement('a');
+        link.className = 'link';
+        link.href = source.url;
+        link.textContent = source.title;
+        if (new URL(source.url, location.href).origin !== location.origin) {
+          link.target = '_blank';
+          link.rel = 'noopener';
+          const hint = document.createElement('span');
+          hint.className = 'sr-only';
+          hint.textContent = ' (nouvel onglet)';
+          link.append(hint);
+        }
+        sources.append(link);
+      });
+    };
+
+    const showRemaining = (remaining: number) => {
+      if (remaining === 0) {
+        status.textContent = "C'était ta dernière question pour aujourd'hui.";
+        disable();
+      } else {
+        status.textContent = `Encore ${remaining} question${remaining > 1 ? 's' : ''} aujourd'hui.`;
+      }
+    };
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (controller) {
+        controller.abort();
+        return;
+      }
+      const text = input.value.trim();
+      if (!text) return;
+
+      controller = new AbortController();
+      setBusy(true);
+      reply.hidden = false;
+      question.textContent = text;
+      answer.textContent = '';
+      showSources([]);
+      status.textContent = 'Réponse en cours…';
+
+      try {
+        const response = await fetch('/api/ask', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ question: text, conversation }),
+          signal: controller.signal,
+        });
+        if (!response.ok || !response.body) {
+          const { code } = await response.json().catch(() => ({ code: 'failed' }));
+          if (code === 'limit' || code === 'global_limit') disable();
+          reply.hidden = true;
+          status.textContent = errors[code] ?? errors.failed!;
+          return;
+        }
+        for await (const event of readEvents(response.body)) {
+          if (event.type === 'text') {
+            if (!answer.textContent) status.textContent = '';
+            answer.append(event.text);
+          } else if (event.type === 'sources') {
+            showSources(event.sources);
+          } else if (event.type === 'done') {
+            conversation = event.conversation;
+            input.value = '';
+            showRemaining(event.remaining);
+          } else {
+            status.textContent = errors.failed!;
+          }
+        }
+      } catch {
+        status.textContent = controller.signal.aborted ? 'Réponse arrêtée.' : errors.failed!;
+      } finally {
+        controller = undefined;
+        setBusy(false);
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', init);
+</script>
+
+<style>
+  .ask {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  form {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  label {
+    font-size: 1.25rem;
+  }
+
+  .field {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--muted);
+  }
+
+  /* Focus thickens the underline to 2px instead of drawing an outline around the bare input. */
+  .field:focus-within {
+    border-bottom-color: var(--fg);
+    box-shadow: 0 1px 0 var(--fg);
+  }
+
+  input,
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    min-height: 2.75rem;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+  }
+
+  input::placeholder {
+    color: var(--muted);
+    opacity: 1;
+  }
+
+  input:focus-visible {
+    outline: none;
+  }
+
+  button {
+    padding-inline: 0.75rem 0;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    text-decoration-color: var(--rule);
+  }
+
+  button:hover {
+    text-decoration-color: currentColor;
+  }
+
+  input:disabled,
+  button:disabled {
+    cursor: not-allowed;
+    color: var(--muted);
+  }
+
+  .note,
+  .status,
+  .question,
+  .sources {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .reply:not([hidden]) {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .question {
+    font-style: italic;
+  }
+
+  .answer {
+    font-size: 1.2rem;
+  }
+
+  .status:empty {
+    display: none;
+  }
+</style>
