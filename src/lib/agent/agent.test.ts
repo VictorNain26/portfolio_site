@@ -2,7 +2,7 @@ import type { LanguageModelV4StreamPart } from '@ai-sdk/provider';
 import { convertArrayToReadableStream, MockLanguageModelV4 } from 'ai/test';
 import { describe, expect, it } from 'vitest';
 import { createAgent } from './agent';
-import { documentsOf, type Knowledge } from './knowledge';
+import type { Knowledge } from './knowledge';
 
 const usage = {
   inputTokens: { total: 10, noCache: 10, cacheRead: 0, cacheWrite: 0 },
@@ -59,13 +59,32 @@ const knowledge: Knowledge = {
     },
   ],
 };
-const documents = documentsOf(knowledge, new Date('2026-10-01'), 'https://example.com');
+// GitHub as the build snapshot: the agent's own behaviour is under test, not the live fetch.
+const github = {
+  repos: async () => knowledge.repos,
+  readme: async (name: string) => knowledge.repos.find(repo => repo.name === name)?.readme ?? null,
+  search: undefined,
+};
+
+const searches = (query: string) => ({
+  stream: convertArrayToReadableStream<LanguageModelV4StreamPart>([
+    {
+      type: 'tool-call',
+      toolCallId: 'call-search',
+      toolName: 'search_code',
+      input: JSON.stringify({ query }),
+    },
+    finish('tool-calls'),
+  ]),
+});
 
 const run = async (model: MockLanguageModelV4, signal = new AbortController().signal) => {
   const answer = createAgent({
     model,
     knowledge,
-    documents,
+    github,
+    publishedBy: new Date('2026-10-01'),
+    siteUrl: 'https://example.com',
     activity: async () => [],
     reasoning: 'none',
   })({
@@ -88,13 +107,13 @@ describe('createAgent', () => {
     expect(sources).toEqual([{ title: 'AubeSonore', url: 'https://www.aubesonore.fr/' }]);
   });
 
-  it('drops markdown asterisks but keeps underscores in repo names', async () => {
+  it('drops markdown asterisks and backticks but keeps underscores in repo names', async () => {
     const { text } = await run(
       new MockLanguageModelV4({
-        doStream: says('Le dépôt **portfolio', '_site** et *AubeSonore*.'),
+        doStream: says('Le dépôt **portfolio', '_site** et *AubeSonore*, dans `tests/`.'),
       }),
     );
-    expect(text).toBe('Le dépôt portfolio_site et AubeSonore.');
+    expect(text).toBe('Le dépôt portfolio_site et AubeSonore, dans tests/.');
   });
 
   it('cites a README the model read, and sends the README back to it', async () => {
@@ -108,12 +127,46 @@ describe('createAgent', () => {
     );
   });
 
+  it('cites the repo of a file found by the code search', async () => {
+    const model = new MockLanguageModelV4({
+      doStream: [searches('streamText'), says('Le flux est dans pipeline.py.')],
+    });
+    const answer = createAgent({
+      model,
+      knowledge,
+      github: {
+        ...github,
+        search: async () => [
+          {
+            repo: 'radio-pipeline',
+            path: 'pipeline.py',
+            url: 'https://github.com/VictorNain26/radio-pipeline/blob/main/pipeline.py',
+            fragments: ['def stream():'],
+          },
+        ],
+      },
+      publishedBy: new Date('2026-10-01'),
+      siteUrl: 'https://example.com',
+      activity: async () => [],
+      reasoning: 'none',
+    })({ question: 'Où ?', history: [], signal: new AbortController().signal, now: new Date() });
+    let text = '';
+    for await (const chunk of answer.text) text += chunk;
+    expect(answer.sources(text).map(source => source.title)).toEqual(['radio-pipeline sur GitHub']);
+    expect(JSON.stringify(model.doStreamCalls[1]!.prompt)).toContain('def stream():');
+  });
+
   it('forbids tools on the last step, so the model has to write', async () => {
     const model = new MockLanguageModelV4({
-      doStream: [reads('radio-pipeline'), reads('radio-pipeline'), says('Fini.')],
+      doStream: [
+        reads('radio-pipeline'),
+        reads('radio-pipeline'),
+        reads('radio-pipeline'),
+        says('Fini.'),
+      ],
     });
     expect((await run(model)).text).toBe('Fini.');
-    expect(model.doStreamCalls[2]!.toolChoice).toEqual({ type: 'none' });
+    expect(model.doStreamCalls[3]!.toolChoice).toEqual({ type: 'none' });
   });
 
   it('throws when the answer is aborted, instead of ending as if complete', async () => {

@@ -19,7 +19,8 @@ import { createAgent, MODEL } from '../../lib/agent/agent';
 import { redisConversations } from '../../lib/agent/conversations';
 import { knowledge } from '../../lib/agent/corpus';
 import { handleAsk } from '../../lib/agent/handler';
-import { documentsOf } from '../../lib/agent/knowledge';
+import { createGitHub } from '../../lib/agent/github';
+import allowlist from '../../data/github-allowlist.json';
 import { createModeration } from '../../lib/agent/moderation';
 import { PROMPT_VERSION } from '../../lib/agent/prompt';
 import { langfuseTracer, noTracer, startTelemetry } from '../../lib/agent/telemetry';
@@ -46,16 +47,15 @@ const global = new Ratelimit({
   limiter: Ratelimit.fixedWindow(300, '1 d'),
   prefix: `ask:${environment}:global`,
 });
-// Posts scheduled after the build have no page yet: the agent must not know them.
-const documents = documentsOf(knowledge, new Date(__BUILD_TIME__), import.meta.env.SITE);
+const user = new URL(site.links.github).pathname.slice(1);
 const answer = createAgent({
   model: createMistral({ apiKey: MISTRAL_API_KEY })(MODEL),
   knowledge,
-  documents,
-  activity: createActivityFetcher({
-    user: new URL(site.links.github).pathname.slice(1),
-    token: GITHUB_TOKEN,
-  }),
+  github: createGitHub({ user, token: GITHUB_TOKEN, allowlist, snapshot: knowledge.repos }),
+  // Posts scheduled after the build have no page yet: the agent must not know them.
+  publishedBy: new Date(__BUILD_TIME__),
+  siteUrl: import.meta.env.SITE,
+  activity: createActivityFetcher({ user, token: GITHUB_TOKEN }),
   reasoning: 'none',
 });
 

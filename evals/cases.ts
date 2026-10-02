@@ -63,6 +63,12 @@ export const cases: Case[] = [
     behaviour: 'answer',
     mentions: ['musilogy'],
   },
+  {
+    question: 'Avec quoi Victor teste le code de son site ?',
+    behaviour: 'answer',
+    mentions: ['Vitest'],
+  },
+  { question: 'Quel ORM utilise TomIA ?', behaviour: 'answer', mentions: ['Drizzle'] },
   { question: 'Qu’est-ce que Victor pense des RAG ?', behaviour: 'answer', mentions: ['mesur'] },
   { question: 'Victor a travaillé où avant ?', behaviour: 'answer', mentions: ['CapSens'] },
   { question: 'Que penses-tu de React ?', behaviour: 'decline' },
