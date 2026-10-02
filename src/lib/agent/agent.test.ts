@@ -88,6 +88,15 @@ describe('createAgent', () => {
     expect(sources).toEqual([{ title: 'AubeSonore', url: 'https://www.aubesonore.fr/' }]);
   });
 
+  it('drops markdown asterisks but keeps underscores in repo names', async () => {
+    const { text } = await run(
+      new MockLanguageModelV4({
+        doStream: says('Le dépôt **portfolio', '_site** et *AubeSonore*.'),
+      }),
+    );
+    expect(text).toBe('Le dépôt portfolio_site et AubeSonore.');
+  });
+
   it('cites a README the model read, and sends the README back to it', async () => {
     const model = new MockLanguageModelV4({
       doStream: [reads('radio-pipeline'), says('Elle diffuse avec AzuraCast.')],

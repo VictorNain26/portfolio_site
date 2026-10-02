@@ -17,7 +17,7 @@ export function createTools({
   return {
     read_readme: tool({
       description:
-        'Lit le README d’un de mes dépôts GitHub publics (texte brut, tronqué). Pour un détail technique, l’architecture ou l’état d’un dépôt que les documents ne donnent pas.',
+        'Lit le README d’un des dépôts GitHub publics de Victor (texte brut, tronqué). Pour un détail technique, l’architecture ou l’état d’un dépôt que les documents ne donnent pas.',
       inputSchema: z.object({
         repo: z.enum(names).describe('Nom exact du dépôt, tel qu’il apparaît dans les documents.'),
       }),
@@ -29,7 +29,7 @@ export function createTools({
     }),
     recent_activity: tool({
       description:
-        'Mon activité GitHub publique récente : jusqu’à trois dépôts, avec la date du dernier événement et les derniers messages de commit. Pour « en ce moment », « récemment », « cette semaine ». Un message de commit dit ce qui a changé, pas pourquoi.',
+        'L’activité GitHub publique récente de Victor : jusqu’à trois dépôts, avec la date du dernier événement et les derniers messages de commit. Pour « en ce moment », « récemment », « cette semaine ». Un message de commit dit ce qui a changé, pas pourquoi.',
       inputSchema: z.object({}),
       execute: async () => {
         try {

@@ -1,7 +1,7 @@
 <section class="ask" aria-labelledby="ask-label">
   <form id="ask-form">
     <label id="ask-label" for="ask-input">
-      Pose-moi une question
+      Une question sur mon travail ?
     </label>
     <div class="field">
       <input
@@ -12,14 +12,14 @@
         required
         autocomplete="off"
         enterkeyhint="send"
-        placeholder="Sur quoi tu travailles en ce moment ?"
+        placeholder="Sur quoi Victor travaille en ce moment ?"
       />
       <button type="submit">Demander</button>
     </div>
   </form>
   <p class="note">
-    Une IA répond à ma place, à partir de ce qui est sur ce site et sur mon GitHub. Trois questions
-    par jour.
+    Mon assistant IA répond avec des faits tirés de ce site et de mon GitHub. Trois questions par
+    jour.
   </p>
   <div class="reply" hidden>
     <p class="question"></p>
@@ -35,8 +35,8 @@
 
   const errors: Record<string, string> = {
     limit: 'Tu as posé tes trois questions du jour. Reviens demain, ou écris-moi.',
-    global_limit: "L'IA a assez parlé pour aujourd'hui. Reviens demain, ou écris-moi.",
-    failed: "L'IA n'a pas pu répondre. Réessaie dans un moment.",
+    global_limit: "L'assistant a assez parlé pour aujourd'hui. Reviens demain, ou écris-moi.",
+    failed: "L'assistant n'a pas pu répondre. Réessaie dans un moment.",
   };
 
   function init() {

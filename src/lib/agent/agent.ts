@@ -83,7 +83,9 @@ export function createAgent({
     const toolOutputs: ToolOutput[] = [];
     async function* text() {
       for await (const part of result.stream) {
-        if (part.type === 'text-delta') yield part.text;
+        // The model sets names in markdown bold despite the prompt; the page shows plain text,
+        // and French prose has no use for an asterisk. Underscores stay: repo names carry them.
+        if (part.type === 'text-delta') yield part.text.replaceAll('*', '');
         else if (part.type === 'tool-result')
           toolOutputs.push({ tool: part.toolName, output: part.output });
         else if (part.type === 'error') throw part.error;
