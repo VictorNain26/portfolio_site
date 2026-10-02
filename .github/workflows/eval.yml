@@ -1,0 +1,45 @@
+# Live evaluation of the assistant against Mistral, gated by evals/agent.test.ts.
+# Paths: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+name: Agent evaluation
+
+on:
+  pull_request:
+    paths:
+      - 'src/lib/agent/**'
+      - 'src/pages/api/ask.ts'
+      - 'src/content/persona.md'
+      - 'src/content/posts/**'
+      - 'src/data/projects.ts'
+      - 'src/data/github-allowlist.json'
+      - 'evals/**'
+      - 'package-lock.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eval-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evaluate:
+    # Secrets never reach pull requests from forks: the run would only fail.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+      LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+      LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+      # Code search needs a token that reads the public repos; secret names cannot start with GITHUB_.
+      GITHUB_TOKEN: ${{ secrets.PUBLIC_REPOS_TOKEN }}
+      EVAL_RUNS: 2
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run eval
