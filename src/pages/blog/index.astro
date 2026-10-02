@@ -1,6 +1,5 @@
 ---
 import { getCollection } from 'astro:content';
-import Stroke from '../../components/Stroke.astro';
 import Base from '../../layouts/Base.astro';
 import { formatDate, publishedPosts } from '../../lib/posts';
 import { personJsonLd, site } from '../../site';
@@ -26,23 +25,17 @@ const blog = {
 
 <Base title="Blog" description={site.blog.description} jsonLd={[blog]}>
   <section class="wrap">
-    <h1 class="page-title">
-      Blog
-      <Stroke />
-    </h1>
+    <h1 class="page-title">Blog</h1>
     {posts.length === 0 && <p class="summary">Rien pour l'instant, mais ça arrive !</p>}
-    <ol class="posts">
+    <ol class="rows">
       {posts.map(post => (
         <li>
           <a href={`/blog/${post.id}`}>
             <time class="meta" datetime={post.data.publishedAt.toISOString()}>
               {formatDate(post.data.publishedAt)}
             </time>
-            <h2
-              class="ink"
-              style={`view-transition-name: post-${post.id}; view-transition-class: title`}
-            >
-              {post.data.title}
+            <h2 style={`view-transition-name: post-${post.id}; view-transition-class: title`}>
+              <span class="title-text">{post.data.title}</span>
             </h2>
             <p class="summary">{post.data.summary}</p>
           </a>
@@ -58,29 +51,18 @@ const blog = {
     view-transition-class: title;
   }
 
-  .posts {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .posts li {
-    border-top: 1px solid var(--rule);
-  }
-
-  .posts a {
+  .rows a {
     display: grid;
     gap: 0.4rem;
-    padding-block: 1.75rem;
-    max-width: var(--measure);
+    padding-block: 1.5rem;
   }
 
-  .posts h2 {
+  h2 {
     justify-self: start;
-    font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+    font-size: 1.4rem;
   }
 
   .summary {
-    color: var(--ink-soft);
+    color: var(--muted);
   }
 </style>

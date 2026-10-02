@@ -7,7 +7,7 @@ import config from '../astro.config.mjs';
 import { contrast } from '../src/lib/contrast';
 
 const origin = new URL(config.site!).origin;
-const paper = { light: '#f2efe8', dark: '#1a1813' };
+const background = { light: '#ffffff', dark: '#121212' };
 
 // URLs indexed before the Astro rebuild: each must keep answering, as a page or a vercel.json redirect.
 const legacySlugs = [
@@ -105,13 +105,15 @@ describe.each(published)('article %s', slug => {
     expect($('.contact').length).toBe(1);
   });
 
-  it('keeps code colours at 4.5:1 or more on both papers', () => {
+  it('keeps code colours at 4.5:1 or more on both backgrounds', () => {
     for (const span of $('pre span[style]').toArray()) {
       for (const declaration of ($(span).attr('style') ?? '').split(';')) {
         const [property, value = ''] = declaration.split(':');
         const theme = property === 'color' ? 'light' : property === '--shiki-dark' ? 'dark' : null;
         if (theme)
-          expect(contrast(value, paper[theme]), `${property}:${value}`).toBeGreaterThanOrEqual(4.5);
+          expect(contrast(value, background[theme]), `${property}:${value}`).toBeGreaterThanOrEqual(
+            4.5,
+          );
       }
     }
   });

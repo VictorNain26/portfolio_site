@@ -1,6 +1,5 @@
 ---
 import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
-import Stroke from '../components/Stroke.astro';
 import Base from '../layouts/Base.astro';
 import { projects } from '../data/projects';
 ---
@@ -10,24 +9,19 @@ import { projects } from '../data/projects';
   description="Ce que je bricole pour le plaisir, avec son état réel : en ligne, en pré-lancement ou rangé au placard."
 >
   <section class="wrap">
-    <h1 class="page-title">
-      Projets
-      <Stroke />
-    </h1>
-    <ul class="projects">
+    <h1 class="page-title">Projets</h1>
+    <ul class="rows">
       {projects.map(project => (
         <li>
           <a href={project.url} target="_blank" rel="noopener">
             <h2>
-              <span class="ink">{project.name}</span>
-              <span class="arrow">
-                <ArrowUpRight size="1em" stroke-width={2} />
-              </span>
+              <span class="title-text">{project.name}</span>
+              <ArrowUpRight size="0.75em" stroke-width={1.5} />
               <span class="sr-only"> (nouvel onglet)</span>
             </h2>
             <p>{project.tagline}</p>
             <p class="meta">
-              {project.status} · {project.stack.join(' · ')}
+              {project.status} · {project.stack.join(', ')}
             </p>
           </a>
         </li>
@@ -42,39 +36,18 @@ import { projects } from '../data/projects';
     view-transition-class: title;
   }
 
-  .projects {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .projects li {
-    border-top: 1px solid var(--rule);
-  }
-
-  .projects a {
+  .rows a {
     display: grid;
-    gap: 0.5rem;
-    padding-block: 2rem;
-    max-width: var(--measure);
+    gap: 0.4rem;
+    padding-block: 1.5rem;
   }
 
   h2 {
-    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-size: 1.4rem;
   }
 
-  .arrow {
-    display: inline-block;
-    font-size: 0.5em;
-    vertical-align: super;
-    transition:
-      color 0.4s var(--ease-out),
-      transform 0.6s var(--ease-out);
-  }
-
-  .projects a:hover .arrow,
-  .projects a:focus-visible .arrow {
-    color: var(--accent);
-    transform: translate(0.15em, -0.15em);
+  h2 .lucide {
+    color: var(--muted);
+    margin-inline-start: 0.15em;
   }
 </style>

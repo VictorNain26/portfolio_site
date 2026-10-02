@@ -3,10 +3,10 @@ const url = (path: string) => new URL(path, import.meta.env.SITE).href;
 
 export const site = {
   name,
-  title: 'Victor Lenain · Développeur full-stack · Systèmes IA · Paris',
-  tagline: 'Développeur full-stack · Systèmes IA · Paris',
+  title: 'Victor Lenain · Développeur · Paris',
+  tagline: 'Développeur · Paris',
   description:
-    "Développeur full-stack à Paris, et bidouilleur le reste du temps. Mes projets perso, surtout autour de l'IA, et ce qu'ils m'apprennent.",
+    "Développeur à Paris. Je partage ici ce que je construis sur mon temps libre, surtout autour de l'IA, et ce que ça m'apprend.",
   email: 'victor.lenain26@gmail.com',
   links: {
     linkedin: 'https://www.linkedin.com/in/victorlenain/',
@@ -24,7 +24,7 @@ export const personJsonLd = {
   '@type': 'Person',
   '@id': url('/#person'),
   name: site.name,
-  jobTitle: 'Développeur full-stack · Systèmes IA',
+  jobTitle: 'Développeur',
   description: site.description,
   url: url('/'),
   image: url('/og.png'),

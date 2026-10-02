@@ -45,22 +45,22 @@ export default defineConfig({
       ],
     }),
     shikiConfig: {
-      // Shiki tokens that fall under 4.5:1 on their paper, adjusted to pass AA.
+      // Shiki tokens that fall under 4.5:1 on the page background, adjusted to pass AA.
       themes: {
         light: {
           ...githubLight,
           colorReplacements: {
-            '#6a737d': '#5e594f',
+            '#6a737d': '#5c5c5c',
             '#d73a49': '#b8323d',
             '#e36209': '#a84b06',
             '#22863a': '#1a7532',
           },
         },
-        dark: { ...githubDark, colorReplacements: { '#6a737d': '#a8a193' } },
+        dark: { ...githubDark, colorReplacements: { '#6a737d': '#a6a6a6' } },
       },
       transformers: [
         {
-          // Let code blocks sit on the paper instead of github-light's white box.
+          // Let code blocks sit on the page background instead of the theme's own box.
           pre(node) {
             node.properties.style = String(node.properties.style ?? '').replace(
               /(background-color|--shiki-dark-bg):[^;]+;?/g,
@@ -73,20 +73,12 @@ export default defineConfig({
   },
   fonts: [
     {
-      provider: fontProviders.google(),
-      name: 'Instrument Serif',
-      cssVariable: '--font-display',
-      weights: [400],
+      provider: fontProviders.fontsource(),
+      name: 'Newsreader',
+      cssVariable: '--font-serif',
+      weights: ['200 800'],
       styles: ['normal', 'italic'],
       fallbacks: ['Georgia', 'serif'],
-    },
-    {
-      provider: fontProviders.google(),
-      name: 'Inter Tight',
-      cssVariable: '--font-text',
-      weights: [400, 500],
-      styles: ['normal'],
-      fallbacks: ['system-ui', 'sans-serif'],
     },
   ],
 });
