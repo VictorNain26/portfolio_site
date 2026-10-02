@@ -27,21 +27,24 @@ import { site } from '../../site';
 
 export const prerender = false;
 
+// Every Vercel build is PROD: VERCEL_ENV tells production, preview and local dev apart.
+const environment = process.env.VERCEL_ENV ?? 'development';
 const telemetry = startTelemetry(
   { publicKey: LANGFUSE_PUBLIC_KEY, secretKey: LANGFUSE_SECRET_KEY, baseUrl: LANGFUSE_BASE_URL },
-  // Every Vercel build is PROD: VERCEL_ENV keeps preview traces out of production dashboards.
-  process.env.VERCEL_ENV ?? 'development',
+  environment,
 );
+// Previews share the production Redis: their own key prefix keeps tests off production quotas
+// and conversations. Previews sit behind Vercel Authentication, so they get more questions.
 const redis = new Redis({ url: KV_REST_API_URL, token: KV_REST_API_TOKEN });
 const visitor = new Ratelimit({
   redis,
-  limiter: Ratelimit.fixedWindow(10, '1 d'),
-  prefix: 'ask:visitor',
+  limiter: Ratelimit.fixedWindow(environment === 'production' ? 10 : 100, '1 d'),
+  prefix: `ask:${environment}:visitor`,
 });
 const global = new Ratelimit({
   redis,
   limiter: Ratelimit.fixedWindow(300, '1 d'),
-  prefix: 'ask:global',
+  prefix: `ask:${environment}:global`,
 });
 // Posts scheduled after the build have no page yet: the agent must not know them.
 const documents = documentsOf(knowledge, new Date(__BUILD_TIME__), import.meta.env.SITE);
@@ -66,7 +69,7 @@ export const POST: APIRoute = async context => {
   return handleAsk(context.request, ip, {
     visitor,
     global,
-    conversations: redisConversations(redis),
+    conversations: redisConversations(redis, `ask:${environment}:conversation`),
     moderate: createModeration(new Mistral({ apiKey: MISTRAL_API_KEY })),
     answer,
     trace: telemetry ? langfuseTracer(PROMPT_VERSION) : noTracer,

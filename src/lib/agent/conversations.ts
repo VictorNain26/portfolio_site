@@ -10,8 +10,11 @@ export type Conversations = {
 };
 
 // Kept server-side under a random id: the visitor cannot forge what the agent said.
-export function redisConversations(redis: Pick<Redis, 'get' | 'set'>): Conversations {
-  const key = (id: string) => `ask:conversation:${id}`;
+export function redisConversations(
+  redis: Pick<Redis, 'get' | 'set'>,
+  prefix: string,
+): Conversations {
+  const key = (id: string) => `${prefix}:${id}`;
   return {
     async load(id) {
       return (await redis.get<Turn[]>(key(id))) ?? [];
