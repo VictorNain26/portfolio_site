@@ -26,6 +26,7 @@ export default defineConfig({
   env: {
     schema: {
       MISTRAL_API_KEY: envField.string({ context: 'server', access: 'secret' }),
+      VISITOR_SECRET: envField.string({ context: 'server', access: 'secret' }),
       KV_REST_API_URL: envField.string({ context: 'server', access: 'secret' }),
       KV_REST_API_TOKEN: envField.string({ context: 'server', access: 'secret' }),
       GITHUB_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),

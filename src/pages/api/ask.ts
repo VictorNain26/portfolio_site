@@ -13,6 +13,7 @@ import {
   LANGFUSE_PUBLIC_KEY,
   LANGFUSE_SECRET_KEY,
   MISTRAL_API_KEY,
+  VISITOR_SECRET,
 } from 'astro:env/server';
 import { createActivityFetcher } from '../../lib/agent/activity';
 import { createAgent, MODEL } from '../../lib/agent/agent';
@@ -72,5 +73,6 @@ export const POST: APIRoute = async context => {
     defer: task => waitUntil(task.then(() => telemetry?.forceFlush())),
     newId: () => crypto.randomUUID(),
     timeoutMs: 50_000,
+    visitorSecret: VISITOR_SECRET,
   });
 };
