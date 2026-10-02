@@ -6,7 +6,7 @@ import { visitorKey } from './visitor';
 
 // `reset` ends the counted window; `reason: 'timeout'` is Upstash letting the call through
 // when Redis is too slow to answer.
-export type Limit = { success: boolean; remaining: number; reset: number; reason?: string };
+type Limit = { success: boolean; remaining: number; reset: number; reason?: string };
 export type Limiter = { limit(id: string, options?: { rate: number }): Promise<Limit> };
 
 export type AskDeps = {
@@ -24,7 +24,7 @@ export type AskDeps = {
 };
 
 // One trace per question: the guardrail and the model calls nest under it.
-export type TraceSpan = {
+type TraceSpan = {
   guard(check: () => Promise<boolean>): Promise<boolean>;
   end(result: { answer: string; sources: Source[] } | { error: string }): void;
 };

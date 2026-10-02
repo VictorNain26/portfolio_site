@@ -14,7 +14,7 @@ export type Knowledge = { persona: string; projects: Project[]; posts: Post[]; r
 // One citable item: a project, a published post or a public repo.
 export type Document = { id: string; title: string; url: string; names: string[]; text: string };
 
-export const slugify = (text: string) =>
+const slugify = (text: string) =>
   text
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')

@@ -3,7 +3,7 @@ import type { Fetcher } from './activity';
 import type { Repo } from './repos';
 
 // What the build wrote (src/data/github.json) is the fallback when GitHub does not answer.
-export const MAX_README = 6000;
+const MAX_README = 6000;
 const TIMEOUT_MS = 5_000;
 const MAX_HITS = 5;
 

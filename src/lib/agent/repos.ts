@@ -1,6 +1,6 @@
 import { z } from 'astro/zod';
 
-export const repoSchema = z.object({
+const repoSchema = z.object({
   name: z.string(),
   description: z.string().nullable(),
   url: z.url(),
