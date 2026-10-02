@@ -207,6 +207,12 @@ describe('site', () => {
     }
   });
 
+  it('lists every project in the /projets ItemList JSON-LD', async () => {
+    const { projects } = await import('../src/data/projects');
+    const list = jsonLd(html(pageFile('projets'))).find(item => item['@type'] === 'ItemList');
+    expect(list?.['numberOfItems']).toBe(projects.length);
+  });
+
   it('gives /blog its Blog JSON-LD and marks its nav link current', () => {
     const $ = html('blog/index.html');
     expect(types($)).toContain('Blog');
