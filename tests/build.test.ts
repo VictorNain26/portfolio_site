@@ -8,6 +8,10 @@ import { contrast } from '../src/lib/contrast';
 
 const origin = new URL(config.site!).origin;
 const background = { light: '#ffffff', dark: '#121212' };
+const client = 'dist/client';
+// The Vercel adapter builds pages as directories: /blog is blog/index.html.
+const pageFile = (page: string) =>
+  page === 'index' || page === '404' ? `${page}.html` : `${page}/index.html`;
 
 // URLs indexed before the Astro rebuild: each must keep answering, as a page or a vercel.json redirect.
 const legacySlugs = [
@@ -30,8 +34,8 @@ const legacySlugs = [
 ];
 
 const read = (path: string) => readFileSync(path, 'utf8');
-const html = (file: string) => cheerio.load(read(`dist/${file}`));
-const xml = (file: string) => cheerio.load(read(`dist/${file}`), { xml: true });
+const html = (file: string) => cheerio.load(read(`${client}/${file}`));
+const xml = (file: string) => cheerio.load(read(`${client}/${file}`), { xml: true });
 const jsonLd = ($: cheerio.CheerioAPI): Record<string, unknown>[] =>
   $('script[type="application/ld+json"]')
     .toArray()
@@ -49,7 +53,7 @@ const posts = readdirSync('src/content/posts')
   }));
 const now = new Date();
 const published = posts.filter(post => post.publishedAt <= now).map(post => post.slug);
-const articles = published.map(slug => `blog/${slug}.html`);
+const articles = published.map(slug => `blog/${slug}/index.html`);
 
 const redirected = new Set<string>(
   JSON.parse(read('vercel.json')).redirects.map(({ source }: { source: string }) => source),
@@ -77,7 +81,7 @@ describe('posts', () => {
 
 describe.each(published)('article %s', slug => {
   const url = `${origin}/blog/${slug}`;
-  const $ = html(`blog/${slug}.html`);
+  const $ = html(`blog/${slug}/index.html`);
 
   it('is not redirected away', () => {
     expect(redirected.has(`/blog/${slug}`)).toBe(false);
@@ -119,7 +123,7 @@ describe.each(published)('article %s', slug => {
   });
 });
 
-describe.each(['index.html', 'blog.html', 'projets.html', '404.html', ...articles])(
+describe.each(['index', 'blog', 'projets', '404'].map(pageFile).concat(articles))(
   'page %s',
   file => {
     const $ = html(file);
@@ -149,9 +153,18 @@ describe.each(['index.html', 'blog.html', 'projets.html', '404.html', ...article
 describe('site', () => {
   it('builds the fixed pages and no longer the services pages', () => {
     for (const page of ['index', 'blog', 'projets', '404']) {
-      expect(existsSync(`dist/${page}.html`), page).toBe(true);
+      expect(existsSync(`${client}/${pageFile(page)}`), page).toBe(true);
     }
-    expect(readdirSync('dist').filter(name => name.startsWith('services'))).toEqual([]);
+    expect(readdirSync(client).filter(name => name.startsWith('services'))).toEqual([]);
+  });
+
+  it('serves /api/ask from a streaming function, not a prerendered file', () => {
+    expect(existsSync(`${client}/api/ask`)).toBe(false);
+    expect(existsSync(`${client}/api/ask/index.html`)).toBe(false);
+    const config = JSON.parse(
+      readFileSync('.vercel/output/functions/_render.func/.vc-config.json', 'utf8'),
+    );
+    expect(config).toMatchObject({ maxDuration: 60, supportsResponseStreaming: true });
   });
 
   it('keeps /services, /404 and trailing-slash URLs out of the sitemap', () => {
@@ -173,7 +186,7 @@ describe('site', () => {
   });
 
   it('gives /blog its Blog JSON-LD and marks its nav link current', () => {
-    const $ = html('blog.html');
+    const $ = html('blog/index.html');
     expect(types($)).toContain('Blog');
     expect($('a[href="/blog"][aria-current="page"]').length).toBe(1);
   });
