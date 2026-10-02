@@ -34,7 +34,7 @@ const telemetry = startTelemetry(
 const redis = new Redis({ url: KV_REST_API_URL, token: KV_REST_API_TOKEN });
 const visitor = new Ratelimit({
   redis,
-  limiter: Ratelimit.fixedWindow(3, '1 d'),
+  limiter: Ratelimit.fixedWindow(10, '1 d'),
   prefix: 'ask:visitor',
 });
 const global = new Ratelimit({

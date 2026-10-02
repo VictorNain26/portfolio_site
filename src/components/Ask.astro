@@ -18,7 +18,7 @@
     </div>
   </form>
   <p class="note">
-    Mon assistant IA répond avec des faits tirés de ce site et de mon GitHub. Trois questions par
+    Mon assistant IA répond avec des faits tirés de ce site et de mon GitHub. Dix questions par
     jour.
   </p>
   <div class="reply" hidden>
@@ -34,7 +34,7 @@
   import { readEvents } from '../lib/ask';
 
   const errors: Record<string, string> = {
-    limit: 'Tu as posé tes trois questions du jour. Reviens demain, ou écris-moi.',
+    limit: 'Tu as posé tes dix questions du jour. Reviens demain, ou écris-moi.',
     global_limit: "L'assistant a assez parlé pour aujourd'hui. Reviens demain, ou écris-moi.",
     failed: "L'assistant n'a pas pu répondre. Réessaie dans un moment.",
   };
