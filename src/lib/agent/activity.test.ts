@@ -35,11 +35,12 @@ function fakeFetch() {
 }
 
 const open = new AbortController().signal;
+const allowlist = ['musilogy', 'portfolio_site'];
 
 describe('createActivityFetcher', () => {
   it('keeps own repos, newest first, with commit first lines', async () => {
     const fetch = fakeFetch();
-    const activity = await createActivityFetcher({ user: 'VictorNain26', fetch })(open);
+    const activity = await createActivityFetcher({ user: 'VictorNain26', allowlist, fetch })(open);
     expect(activity).toEqual([
       {
         repo: 'VictorNain26/musilogy',
@@ -58,7 +59,7 @@ describe('createActivityFetcher', () => {
 
   it('sends the token when given', async () => {
     const fetch = fakeFetch();
-    await createActivityFetcher({ user: 'VictorNain26', token: 't0k', fetch })(open);
+    await createActivityFetcher({ user: 'VictorNain26', allowlist, token: 't0k', fetch })(open);
     expect(fetch.mock.calls[0]![1].headers.Authorization).toBe('Bearer t0k');
   });
 
@@ -67,6 +68,7 @@ describe('createActivityFetcher', () => {
     let clock = 0;
     const get = createActivityFetcher({
       user: 'VictorNain26',
+      allowlist,
       fetch,
       ttlMs: 1000,
       now: () => clock,
@@ -83,9 +85,9 @@ describe('createActivityFetcher', () => {
 
   it('throws when the events request fails', async () => {
     const fetch = vi.fn(async () => json({}, 403));
-    await expect(createActivityFetcher({ user: 'VictorNain26', fetch })(open)).rejects.toThrow(
-      'GitHub events: 403',
-    );
+    await expect(
+      createActivityFetcher({ user: 'VictorNain26', allowlist, fetch })(open),
+    ).rejects.toThrow('GitHub events: 403');
   });
 
   it('stops waiting for a stalled GitHub when the answer is aborted', async () => {
@@ -96,7 +98,9 @@ describe('createActivityFetcher', () => {
         ),
     );
     const stop = new AbortController();
-    const pending = createActivityFetcher({ user: 'VictorNain26', fetch: stalled })(stop.signal);
+    const pending = createActivityFetcher({ user: 'VictorNain26', allowlist, fetch: stalled })(
+      stop.signal,
+    );
     stop.abort(new Error('deadline'));
     await expect(pending).rejects.toThrow('deadline');
   });
@@ -110,10 +114,32 @@ describe('createActivityFetcher', () => {
         throw new TypeError('fetch failed');
       },
     );
-    const activity = await createActivityFetcher({ user: 'VictorNain26', fetch })(open);
+    const activity = await createActivityFetcher({ user: 'VictorNain26', allowlist, fetch })(open);
     expect(activity.map(({ repo, commits }) => [repo, commits])).toEqual([
       ['VictorNain26/musilogy', ['feat: genres']],
       ['VictorNain26/portfolio_site', []],
     ]);
+  });
+
+  it('fills its slots with allowlisted repos only, and never reads the others', async () => {
+    const clientWork = ['client-a', 'client-b', 'client-c'].map((name, i) => ({
+      type: 'PushEvent',
+      repo: { name: `VictorNain26/${name}` },
+      created_at: `2026-09-23T1${i}:00:00Z`,
+    }));
+    const fetch = vi.fn(
+      async (url: string, _init: { headers: Record<string, string>; signal: AbortSignal }) => {
+        if (url.includes('/events/public')) return json([...clientWork, ...events]);
+        if (url.includes('/musilogy/commits'))
+          return json([{ commit: { message: 'feat: genres' } }]);
+        return json([]);
+      },
+    );
+    const activity = await createActivityFetcher({ user: 'VictorNain26', allowlist, fetch })(open);
+    expect(activity.map(({ repo }) => repo)).toEqual([
+      'VictorNain26/musilogy',
+      'VictorNain26/portfolio_site',
+    ]);
+    expect(fetch.mock.calls.some(([url]) => url.includes('client-'))).toBe(false);
   });
 });
