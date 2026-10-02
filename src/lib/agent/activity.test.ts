@@ -23,19 +23,23 @@ const events = [
 ];
 
 function fakeFetch() {
-  return vi.fn(async (url: string, _init: { headers: Record<string, string> }) => {
-    if (url.includes('/events/public')) return json(events);
-    if (url.includes('/musilogy/commits'))
-      return json([{ commit: { message: 'feat: genres\n\nbody' } }]);
-    if (url.includes('/portfolio_site/commits')) return json([], 500);
-    return json({}, 404);
-  });
+  return vi.fn(
+    async (url: string, _init: { headers: Record<string, string>; signal: AbortSignal }) => {
+      if (url.includes('/events/public')) return json(events);
+      if (url.includes('/musilogy/commits'))
+        return json([{ commit: { message: 'feat: genres\n\nbody' } }]);
+      if (url.includes('/portfolio_site/commits')) return json([], 500);
+      return json({}, 404);
+    },
+  );
 }
+
+const open = new AbortController().signal;
 
 describe('createActivityFetcher', () => {
   it('keeps own repos, newest first, with commit first lines', async () => {
     const fetch = fakeFetch();
-    const activity = await createActivityFetcher({ user: 'VictorNain26', fetch })();
+    const activity = await createActivityFetcher({ user: 'VictorNain26', fetch })(open);
     expect(activity).toEqual([
       {
         repo: 'VictorNain26/musilogy',
@@ -54,7 +58,7 @@ describe('createActivityFetcher', () => {
 
   it('sends the token when given', async () => {
     const fetch = fakeFetch();
-    await createActivityFetcher({ user: 'VictorNain26', token: 't0k', fetch })();
+    await createActivityFetcher({ user: 'VictorNain26', token: 't0k', fetch })(open);
     expect(fetch.mock.calls[0]![1].headers.Authorization).toBe('Bearer t0k');
   });
 
@@ -67,30 +71,46 @@ describe('createActivityFetcher', () => {
       ttlMs: 1000,
       now: () => clock,
     });
-    await get();
+    await get(open);
     const calls = fetch.mock.calls.length;
     clock = 999;
-    await get();
+    await get(open);
     expect(fetch.mock.calls.length).toBe(calls);
     clock = 1000;
-    await get();
+    await get(open);
     expect(fetch.mock.calls.length).toBeGreaterThan(calls);
   });
 
   it('throws when the events request fails', async () => {
     const fetch = vi.fn(async () => json({}, 403));
-    await expect(createActivityFetcher({ user: 'VictorNain26', fetch })()).rejects.toThrow(
+    await expect(createActivityFetcher({ user: 'VictorNain26', fetch })(open)).rejects.toThrow(
       'GitHub events: 403',
     );
   });
 
+  it('stops waiting for a stalled GitHub when the answer is aborted', async () => {
+    const stalled = vi.fn(
+      (_url: string, init: { headers: Record<string, string>; signal: AbortSignal }) =>
+        new Promise<Response>((_, reject) =>
+          init.signal.addEventListener('abort', () => reject(init.signal.reason)),
+        ),
+    );
+    const stop = new AbortController();
+    const pending = createActivityFetcher({ user: 'VictorNain26', fetch: stalled })(stop.signal);
+    stop.abort(new Error('deadline'));
+    await expect(pending).rejects.toThrow('deadline');
+  });
+
   it('keeps the other repos when one commits request rejects', async () => {
-    const fetch = vi.fn(async (url: string, _init: { headers: Record<string, string> }) => {
-      if (url.includes('/events/public')) return json(events);
-      if (url.includes('/musilogy/commits')) return json([{ commit: { message: 'feat: genres' } }]);
-      throw new TypeError('fetch failed');
-    });
-    const activity = await createActivityFetcher({ user: 'VictorNain26', fetch })();
+    const fetch = vi.fn(
+      async (url: string, _init: { headers: Record<string, string>; signal: AbortSignal }) => {
+        if (url.includes('/events/public')) return json(events);
+        if (url.includes('/musilogy/commits'))
+          return json([{ commit: { message: 'feat: genres' } }]);
+        throw new TypeError('fetch failed');
+      },
+    );
+    const activity = await createActivityFetcher({ user: 'VictorNain26', fetch })(open);
     expect(activity.map(({ repo, commits }) => [repo, commits])).toEqual([
       ['VictorNain26/musilogy', ['feat: genres']],
       ['VictorNain26/portfolio_site', []],

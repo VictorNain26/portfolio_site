@@ -1,7 +1,10 @@
 import { z } from 'astro/zod';
 
 export type Activity = { repo: string; type: string; date: string; commits: string[] };
-export type Fetcher = (url: string, init: { headers: Record<string, string> }) => Promise<Response>;
+export type Fetcher = (
+  url: string,
+  init: { headers: Record<string, string>; signal: AbortSignal },
+) => Promise<Response>;
 
 const eventsSchema = z.array(
   z.object({ type: z.string(), repo: z.object({ name: z.string() }), created_at: z.string() }),
@@ -9,6 +12,8 @@ const eventsSchema = z.array(
 const commitsSchema = z.array(z.object({ commit: z.object({ message: z.string() }) }));
 
 const MAX_REPOS = 3;
+// GitHub gets a few seconds: a stalled API must not hold the answer past its deadline.
+const TIMEOUT_MS = 5_000;
 
 export function createActivityFetcher({
   user,
@@ -22,7 +27,7 @@ export function createActivityFetcher({
   fetch?: Fetcher | undefined;
   ttlMs?: number | undefined;
   now?: (() => number) | undefined;
-}): () => Promise<Activity[]> {
+}): (signal: AbortSignal) => Promise<Activity[]> {
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
@@ -30,9 +35,10 @@ export function createActivityFetcher({
   };
   let cache: { at: number; value: Activity[] } | undefined;
 
-  async function load(): Promise<Activity[]> {
+  async function load(signal: AbortSignal): Promise<Activity[]> {
     const res = await get(`https://api.github.com/users/${user}/events/public?per_page=30`, {
       headers,
+      signal,
     });
     if (!res.ok) throw new Error(`GitHub events: ${res.status}`);
     const byRepo = new Map<string, Activity>();
@@ -50,7 +56,7 @@ export function createActivityFetcher({
       recent.map(async activity => {
         const commits = await get(
           `https://api.github.com/repos/${activity.repo}/commits?per_page=3`,
-          { headers },
+          { headers, signal },
         );
         if (commits.ok)
           activity.commits = commitsSchema
@@ -61,9 +67,9 @@ export function createActivityFetcher({
     return recent;
   }
 
-  return async () => {
+  return async signal => {
     if (cache && now() - cache.at < ttlMs) return cache.value;
-    const value = await load();
+    const value = await load(AbortSignal.any([signal, AbortSignal.timeout(TIMEOUT_MS)]));
     cache = { at: now(), value };
     return value;
   };

@@ -10,7 +10,7 @@ export function createTools({
   read,
 }: {
   repos: Repo[];
-  activity: () => Promise<Activity[]>;
+  activity: (signal: AbortSignal) => Promise<Activity[]>;
   read: string[];
 }) {
   const names = repos.map(repo => repo.name);
@@ -31,10 +31,12 @@ export function createTools({
       description:
         'L’activité GitHub publique récente de Victor : jusqu’à trois dépôts, avec la date du dernier événement et les derniers messages de commit. Pour « en ce moment », « récemment », « cette semaine ». Un message de commit dit ce qui a changé, pas pourquoi.',
       inputSchema: z.object({}),
-      execute: async () => {
+      execute: async (_input, { abortSignal }) => {
         try {
           const known = new Set(names);
-          return (await activity()).filter(({ repo }) => known.has(repo.split('/')[1] ?? ''));
+          return (await activity(abortSignal ?? AbortSignal.timeout(50_000))).filter(({ repo }) =>
+            known.has(repo.split('/')[1] ?? ''),
+          );
         } catch {
           return 'GitHub ne répond pas : l’activité récente est indisponible.';
         }
