@@ -72,7 +72,11 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       }),
       publishedBy: now,
       siteUrl: 'https://www.victorlenain.fr',
-      activity: createActivityFetcher({ user: 'VictorNain26', token: process.env.GITHUB_TOKEN }),
+      activity: createActivityFetcher({
+        user: 'VictorNain26',
+        token: process.env.GITHUB_TOKEN,
+        allowlist,
+      }),
       reasoning: REASONING,
     });
     // Mistral allows mistral-large-2512 0.25 requests a second on this plan (console > Limits):

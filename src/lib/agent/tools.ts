@@ -21,7 +21,6 @@ export function createTools({
   read: string[];
 }) {
   const names = repos.map(repo => repo.name);
-  const known = new Set(names);
   return {
     read_readme: tool({
       description:
@@ -42,9 +41,7 @@ export function createTools({
       inputSchema: z.object({}),
       execute: async (_input, { abortSignal }) => {
         try {
-          return (await activity(abortSignal ?? fallbackSignal())).filter(({ repo }) =>
-            known.has(repo.split('/')[1] ?? ''),
-          );
+          return await activity(abortSignal ?? fallbackSignal());
         } catch {
           return 'GitHub ne répond pas : l’activité récente est indisponible.';
         }

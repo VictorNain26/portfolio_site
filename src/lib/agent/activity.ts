@@ -18,12 +18,14 @@ const TIMEOUT_MS = 5_000;
 export function createActivityFetcher({
   user,
   token,
+  allowlist,
   fetch: get = fetch,
   ttlMs = 10 * 60 * 1000,
   now = Date.now,
 }: {
   user: string;
   token?: string | undefined;
+  allowlist: string[];
   fetch?: Fetcher | undefined;
   ttlMs?: number | undefined;
   now?: (() => number) | undefined;
@@ -33,6 +35,7 @@ export function createActivityFetcher({
     'X-GitHub-Api-Version': '2022-11-28',
     ...(token && { Authorization: `Bearer ${token}` }),
   };
+  const allowed = new Set(allowlist.map(name => `${user}/${name}`));
   let cache: { at: number; value: Activity[] } | undefined;
 
   async function load(signal: AbortSignal): Promise<Activity[]> {
@@ -43,7 +46,8 @@ export function createActivityFetcher({
     if (!res.ok) throw new Error(`GitHub events: ${res.status}`);
     const byRepo = new Map<string, Activity>();
     for (const event of eventsSchema.parse(await res.json())) {
-      if (!event.repo.name.startsWith(`${user}/`) || byRepo.has(event.repo.name)) continue;
+      // Filtered before the cut to MAX_REPOS: another repo's push must not take a slot.
+      if (!allowed.has(event.repo.name) || byRepo.has(event.repo.name)) continue;
       byRepo.set(event.repo.name, {
         repo: event.repo.name,
         type: event.type,
