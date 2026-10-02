@@ -4,24 +4,38 @@
 
 - `npm install` — dépendances (Node ≥ 22.12)
 - `npm run dev` — serveur de développement
-- `npm run build` — build statique dans `dist/`
-- `npm run verify:build` — Vitest sur `dist/` (`tests/`) : articles, sitemap,
-  canonicals, JSON-LD, contraste du code
+- `npm run build` — build dans `dist/client/` et `.vercel/output/`
+- `npm run verify:build` — Vitest sur `dist/client/` et `.vercel/output/`
+  (`tests/`) : articles, sitemap, canonicals, JSON-LD, contraste du code, config
+  de la fonction
 - `npm run check` — `astro check` (types `.astro` et TS)
-- `npm test` — Vitest sur `src/lib`
+- `npm test` — Vitest sur `src/`
 - `npm run format` / `npm run format:check` — Prettier
+- `npm run eval` — expérience Langfuse sur l'agent contre le vrai Mistral (clés
+  dans `.env`, noms dans `.env.example`) : `EVAL_RUNS`, `EVAL_REASONING`. À
+  lancer avant un merge qui touche l'agent ; ses seuils sont dans
+  `evals/agent.test.ts`
 
 ## Architecture
 
-Site statique Astro 7 déployé sur Vercel (`vercel.json` : framework, URLs sans
-`.html` ni slash final, 301 des anciennes pages `/services` et des anciens
-articles vers `/blog`).
+Site statique Astro 7 sauf une route : `/api/ask`, rendue à la demande par
+`@astrojs/vercel` (les pages statiques sortent dans `dist/client/`). Déployé sur
+Vercel (`vercel.json` : framework, URLs sans `.html` ni slash final, 301 des
+anciennes pages `/services` et des anciens articles vers `/blog`).
 
 - `src/pages/` — `/`, `/projets`, `/blog`, `/blog/[slug]`, 404
 - `src/layouts/Base.astro` — `<head>`, SEO, JSON-LD, header, footer
 - `src/content/posts/*.mdx` — articles ; `publishedAt` dans le futur = non
   publié
 - `src/data/projects.ts` — projets affichés
+- `src/pages/api/ask.ts` — agent qui répond en mon nom : AI SDK, Mistral Small 4
+  (`mistral-small-2603`), quota et conversations dans Upstash Redis, traces
+  Langfuse quand ses clés existent (secrets via `astro:env`)
+- `src/lib/agent/` — l'agent, testé : prompt, outils, sources calculées, handler
+  HTTP ; `src/content/persona.md` — sa fiche
+- `scripts/github.mjs` — écrit `src/data/github.json` (non versionné) avant
+  `dev`, `check` et `build`
+- `evals/` — cas, juge et expérience de l'agent (`npm run eval`)
 - `src/lib/` — seule logique du site, testée
 - `tests/` — assertions sur le build, lancées après `npm run build`
 - `src/styles/global.css` — tokens de la charte « texte brut » : Newsreader
@@ -42,5 +56,9 @@ articles vers `/blog`).
   au-dessus de 4.5:1.
 - Site perso de bidouille : projets perso uniquement, pas de missions client ;
   ton personnel, pas commercial. Chaque affirmation se vérifie sur GitHub.
+- L'agent n'affirme sur moi que ce que disent la fiche, les projets, les
+  articles publiés ou GitHub ; un article programmé ne doit jamais lui parvenir.
+  Modèle Mistral daté, jamais `-latest`. Ses sources se calculent dans le code,
+  jamais par le modèle.
 - `public/og.png`, le favicon, les icônes et les logos se régénèrent avec
   `scripts/brand.mjs` (voir l'en-tête du script).
