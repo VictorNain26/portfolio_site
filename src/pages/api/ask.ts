@@ -47,6 +47,8 @@ const global = new Ratelimit({
   limiter: Ratelimit.fixedWindow(300, '1 d'),
   prefix: `ask:${environment}:global`,
 });
+const conversations = redisConversations(redis, `ask:${environment}:conversation`);
+const moderate = createModeration(new Mistral({ apiKey: MISTRAL_API_KEY }));
 const user = new URL(site.links.github).pathname.slice(1);
 const answer = createAgent({
   model: createMistral({ apiKey: MISTRAL_API_KEY })(MODEL),
@@ -69,8 +71,8 @@ export const POST: APIRoute = async context => {
   return handleAsk(context.request, ip, {
     visitor,
     global,
-    conversations: redisConversations(redis, `ask:${environment}:conversation`),
-    moderate: createModeration(new Mistral({ apiKey: MISTRAL_API_KEY })),
+    conversations,
+    moderate,
     answer,
     trace: telemetry ? langfuseTracer(PROMPT_VERSION) : noTracer,
     defer: task => waitUntil(task.then(() => telemetry?.forceFlush())),

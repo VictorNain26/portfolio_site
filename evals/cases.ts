@@ -1,7 +1,7 @@
 import type { Turn } from '../src/lib/agent/agent';
 
 // What a correct answer does, whatever its wording.
-export type Behaviour = 'answer' | 'unknown' | 'untried' | 'decline' | 'ai';
+type Behaviour = 'answer' | 'unknown' | 'untried' | 'decline' | 'ai';
 
 export type Case = {
   question: string;

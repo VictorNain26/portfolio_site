@@ -1,6 +1,6 @@
 import type { Mistral } from '@mistralai/mistralai';
 
-export const MODERATION_MODEL = 'mistral-moderation-2603';
+const MODERATION_MODEL = 'mistral-moderation-2603';
 
 const BLOCKING = [
   'sexual',

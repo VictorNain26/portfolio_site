@@ -1,7 +1,7 @@
 import type { Redis } from '@upstash/redis';
 import type { Turn } from './agent';
 
-export const MAX_TURNS = 2;
+const MAX_TURNS = 2;
 const TTL_SECONDS = 24 * 60 * 60;
 
 export type Conversations = {
