@@ -24,9 +24,9 @@ articles vers `/blog`).
 - `src/data/projects.ts` — projets affichés
 - `src/lib/` — seule logique du site, testée
 - `tests/` — assertions sur le build, lancées après `npm run build`
-- `src/styles/global.css` — tokens de la charte « Papier & encre » (papier
-  crème, Instrument Serif, filets) : direction visuelle arrêtée, pas un défaut
-  générique à corriger
+- `src/styles/global.css` — tokens de la charte « texte brut » : Newsreader
+  seule (Fonts API d'Astro, fournisseur Fontsource, axes `wght` et `opsz`), noir
+  sur blanc, filets fins, aucune couleur d'accent
 
 ## Règles
 
@@ -34,9 +34,13 @@ articles vers `/blog`).
   (transitions entre pages dans les deux sens, repli animé pour les navigateurs
   sans View Transitions) et le script inline du thème (sombre de 20 h à 7 h,
   heure locale du visiteur, dans `Base.astro`, réappliqué à `astro:after-swap`).
-  Toute animation respecte `prefers-reduced-motion`.
-- L'accent bleu profond `--accent` passe AA sur les deux papiers (8.30:1 en
-  clair, 6.64:1 en sombre) : toute nouvelle teinte reste au-dessus de 4.5:1.
+  Le `ClientRouter` garde son fondu par défaut ; seuls le nom et les titres de
+  section glissent d'une page à l'autre. Toute animation respecte
+  `prefers-reduced-motion`.
+- Une seule police, pas de teinte d'accent. `--muted` passe AA sur les deux
+  fonds (6.69:1 en clair, 7.70:1 en sombre) : toute nouvelle teinte reste
+  au-dessus de 4.5:1.
 - Site perso de bidouille : projets perso uniquement, pas de missions client ;
   ton personnel, pas commercial. Chaque affirmation se vérifie sur GitHub.
-- `public/og.png` se régénère avec `scripts/og.mjs` (voir l'en-tête du script).
+- `public/og.png`, le favicon, les icônes et les logos se régénèrent avec
+  `scripts/brand.mjs` (voir l'en-tête du script).
