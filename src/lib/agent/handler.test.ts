@@ -15,7 +15,7 @@ const request = (body: unknown, origin = 'https://www.victorlenain.fr', signal?:
     ...(signal && { signal }),
   });
 
-function limiter(allowed: number) {
+function limiter(allowed: number, reset = Date.now() + 60_000) {
   let used = 0;
   const calls: number[] = [];
   const limit: Limiter = {
@@ -24,15 +24,20 @@ function limiter(allowed: number) {
       calls.push(rate);
       if (rate < 0) {
         used += rate;
-        return { success: true, remaining: allowed - used, reset: 0 };
+        return { success: true, remaining: allowed - used, reset };
       }
       if (used >= allowed) return { success: false, remaining: 0, reset: 42 };
       used += 1;
-      return { success: true, remaining: allowed - used, reset: 0 };
+      return { success: true, remaining: allowed - used, reset };
     },
   };
   return { limit, calls, refunds: () => calls.filter(rate => rate < 0).length };
 }
+
+// What @upstash/ratelimit resolves when Redis does not answer within its timeout.
+const slow: Limiter = {
+  limit: async () => ({ success: true, remaining: 0, reset: 0, reason: 'timeout' }),
+};
 
 function memory(initial: Record<string, Turn[]> = {}) {
   const store = new Map(Object.entries(initial));
@@ -76,6 +81,7 @@ function setup(overrides: Partial<AskDeps> = {}) {
     defer: () => undefined,
     newId: () => ID,
     timeoutMs: 5_000,
+    visitorSecret: 'test',
     ...overrides,
   };
   return { deps, visitor, global, store, seen };
@@ -149,6 +155,30 @@ describe('handleAsk', () => {
     const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
     expect(response.status).toBe(503);
     expect(seen).toEqual([]);
+  });
+
+  it('fails closed when Upstash lets a call through on its timeout', async () => {
+    const { deps, seen } = setup({ visitor: slow });
+    const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
+    expect(response.status).toBe(503);
+    expect(seen).toEqual([]);
+  });
+
+  it('gives the visitor question back when only the global quota times out', async () => {
+    const { deps, visitor, seen } = setup({ global: slow });
+    const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
+    expect(response.status).toBe(503);
+    expect(visitor.refunds()).toBe(1);
+    expect(seen).toEqual([]);
+  });
+
+  it('does not refund into the next window when the day ended during the answer', async () => {
+    const { answer } = answers(new Error('overloaded'));
+    const visitor = limiter(3, Date.now() - 1);
+    const { deps } = setup({ answer, visitor: visitor.limit });
+    const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
+    expect(await events(response)).toEqual([{ type: 'error', code: 'failed' }]);
+    expect(visitor.refunds()).toBe(0);
   });
 
   it('answers a blocked question with one fixed sentence and saves nothing', async () => {

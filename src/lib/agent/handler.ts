@@ -4,7 +4,9 @@ import type { Conversations } from './conversations';
 import type { Source } from './sources';
 import { visitorKey } from './visitor';
 
-export type Limit = { success: boolean; remaining: number; reset: number };
+// `reset` ends the counted window; `reason: 'timeout'` is Upstash letting the call through
+// when Redis is too slow to answer.
+export type Limit = { success: boolean; remaining: number; reset: number; reason?: string };
 export type Limiter = { limit(id: string, options?: { rate: number }): Promise<Limit> };
 
 export type AskDeps = {
@@ -19,6 +21,7 @@ export type AskDeps = {
   defer(task: Promise<unknown>): void;
   newId(): string;
   timeoutMs: number;
+  visitorSecret: string;
 };
 
 export type AskEvent =
@@ -48,19 +51,26 @@ export async function handleAsk(
 ): Promise<Response> {
   if (request.headers.get('origin') !== new URL(request.url).origin)
     return json(403, { code: 'origin' });
-  const key = ip === undefined ? undefined : visitorKey(ip);
+  const key = ip === undefined ? undefined : visitorKey(ip, deps.visitorSecret);
   if (!key) return json(400, { code: 'ip' });
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return json(400, { code: 'invalid' });
   const { question } = parsed.data;
 
   // A quota store that does not answer fails closed: no free questions while it is down.
-  const limit = (limiter: Limiter, id: string) => limiter.limit(id).catch(() => undefined);
+  const limit = (limiter: Limiter, id: string) =>
+    limiter
+      .limit(id)
+      .then(result => (result.reason === 'timeout' ? undefined : result))
+      .catch(() => undefined);
   const visitor = await limit(deps.visitor, key);
   if (!visitor) return json(503, { code: 'failed' });
   if (!visitor.success) return json(429, { code: 'limit', reset: visitor.reset });
   const global = await limit(deps.global, GLOBAL_ID);
-  const refundVisitor = () => deps.visitor.limit(key, { rate: -1 }).catch(() => undefined);
+  // A refund after the window closed would land on the next one and give a free question.
+  const giveBack = (limiter: Limiter, id: string, reset: number) =>
+    Date.now() < reset ? limiter.limit(id, { rate: -1 }).catch(() => undefined) : undefined;
+  const refundVisitor = () => giveBack(deps.visitor, key, visitor.reset);
   if (!global) {
     await refundVisitor();
     return json(503, { code: 'failed' });
@@ -70,10 +80,7 @@ export async function handleAsk(
     return json(429, { code: 'global_limit', reset: global.reset });
   }
   const refund = () =>
-    Promise.all([
-      refundVisitor(),
-      deps.global.limit(GLOBAL_ID, { rate: -1 }).catch(() => undefined),
-    ]);
+    Promise.all([refundVisitor(), giveBack(deps.global, GLOBAL_ID, global.reset)]);
 
   const history = parsed.data.conversation
     ? await deps.conversations.load(parsed.data.conversation).catch(() => [])
