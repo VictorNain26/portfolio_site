@@ -1,183 +1,89 @@
 ---
-import ArrowRight from '@lucide/astro/icons/arrow-right';
-import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
-import Stroke from '../components/Stroke.astro';
+import { getCollection } from 'astro:content';
+import { projects } from '../data/projects';
 import Base from '../layouts/Base.astro';
+import { publishedPosts } from '../lib/posts';
 import { site } from '../site';
 
-let letterIndex = 0;
-const words = site.name
-  .split(' ')
-  .map(word => [...word].map(letter => ({ letter, i: letterIndex++ })));
+const posts = publishedPosts(await getCollection('posts'), new Date());
 const entries = [
-  { label: 'Projets', href: '/projets', arrow: ArrowRight, transition: 'title-projets' },
-  { label: 'Blog', href: '/blog', arrow: ArrowRight, transition: 'title-blog' },
-  { label: 'Écrire', href: `mailto:${site.email}`, arrow: ArrowUpRight },
+  { label: 'Projets', href: '/projets', count: projects.length, transition: 'title-projets' },
+  { label: 'Blog', href: '/blog', count: posts.length, transition: 'title-blog' },
 ];
 ---
 
 <Base header={false}>
-  <section class="wrap hero" style={`--letters: ${letterIndex}`}>
-    <div class="signature">
-      <h1 class="name" aria-label={site.name}>
-        {words.map((letters, w) => (
-          <>
-            {w > 0 && ' '}
-            <span class="word">
-              {letters.map(({ letter, i }) => (
-                <span class="letter" style={`--i: ${i}`}>
-                  {letter}
-                </span>
-              ))}
-            </span>
-          </>
-        ))}
-      </h1>
-      <Stroke />
-    </div>
+  <section class="wrap hero">
+    <h1 class="name">{site.name}</h1>
     <p class="pitch">
-      Développeur full-stack, et bidouilleur le reste du temps. Ici, je montre ce que je construis
-      pour le plaisir, surtout autour de l'IA, et ce que ça m'apprend.
+      Développeur à Paris. Je partage ici ce que je construis sur mon temps libre, surtout autour de
+      l'IA, et ce que ça m'apprend.
     </p>
-    <nav class="index" aria-label="Sommaire">
-      <ul>
-        {entries.map((entry, i) => (
-          <li style={`--i: ${i}`}>
+    <nav aria-label="Sommaire">
+      <ul class="rows">
+        {entries.map(entry => (
+          <li>
             <a href={entry.href}>
               <span
-                class="label ink"
-                style={
-                  entry.transition &&
-                  `view-transition-name: ${entry.transition}; view-transition-class: title`
-                }
+                class="title-text"
+                style={`view-transition-name: ${entry.transition}; view-transition-class: title`}
               >
                 {entry.label}
               </span>
-              <span class="arrow">
-                <entry.arrow size="0.8em" stroke-width={1.5} />
-              </span>
+              <span class="count">{entry.count}</span>
             </a>
           </li>
         ))}
+        <li>
+          <a href={`mailto:${site.email}`}>
+            <span class="title-text">{site.email}</span>
+          </a>
+        </li>
       </ul>
     </nav>
   </section>
 </Base>
 
 <style>
-  /* One sequence: the name inks in letter by letter, the pen underlines it,
-     then the rest settles. --letters lets later steps wait for the last letter. */
   .hero {
-    --ink-step: 0.045s;
-    --after-name: calc(0.35s + var(--letters) * var(--ink-step));
-    --stroke-delay: var(--after-name);
-    --stroke-duration: 0.9s;
-    --stroke-height: clamp(0.6rem, 1.6vw, 1.1rem);
     flex: 1;
     display: grid;
     align-content: center;
-    gap: clamp(1.5rem, 4vh, 2.75rem);
-    padding-block: clamp(1rem, 3vh, 2rem);
-  }
-
-  .signature {
-    width: fit-content;
-    max-width: 100%;
+    gap: 2rem;
+    padding-block: clamp(3rem, 12vh, 7rem) 1rem;
   }
 
   .name {
-    font-size: clamp(3.5rem, min(13vw, 17vh), 9.5rem);
-    line-height: 0.95;
+    font-size: clamp(2.75rem, 9vw, 4.25rem);
+    line-height: 1;
+    letter-spacing: -0.015em;
     view-transition-name: site-name;
     view-transition-class: title;
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 0.25em;
-  }
-
-  .word {
-    white-space: nowrap;
-  }
-
-  .letter {
-    display: inline-block;
-    animation: soak 1.1s var(--ease-out) backwards;
-    animation-delay: calc(0.1s + var(--i) * var(--ink-step));
   }
 
   .pitch {
-    max-width: 38ch;
-    font-size: clamp(1.1rem, 2vw, 1.35rem);
-    color: var(--ink-soft);
-    animation: settle 0.9s var(--ease-out) backwards;
-    animation-delay: calc(var(--after-name) + 0.35s);
+    max-width: 34ch;
+    font-size: clamp(1.25rem, 2.4vw, 1.4rem);
+    line-height: 1.45;
+    color: var(--muted);
   }
 
-  .index ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--rule);
-    max-width: 40rem;
-  }
-
-  .index li {
-    border-bottom: 1px solid var(--rule);
-    animation: settle 0.8s var(--ease-out) backwards;
-    animation-delay: calc(var(--after-name) + 0.5s + var(--i) * 0.08s);
-  }
-
-  .label {
-    display: inline-block;
-  }
-
-  .index a {
+  .rows a {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    padding-block: clamp(0.5rem, 1.2vh, 0.7rem);
-    font-family: var(--font-display);
-    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
-    line-height: 1.2;
+    gap: 1rem;
+    padding-block: 0.8rem;
+    font-size: 1.25rem;
   }
 
-  .arrow {
-    display: inline-block;
-    transition:
-      color 0.4s var(--ease-out),
-      transform 0.6s var(--ease-out);
+  .title-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
-  .index a:hover .arrow,
-  .index a:focus-visible .arrow {
-    color: var(--accent);
-    transform: translateX(0.3rem);
-  }
-
-  /* Coming back from another page, the name has already glided in: only the pen writes. */
-  :global(:root[data-navigated]) .hero {
-    --stroke-delay: 0.45s;
-  }
-
-  :global(:root[data-navigated]) .letter,
-  :global(:root[data-navigated]) .pitch,
-  :global(:root[data-navigated]) .index li {
-    animation: none;
-  }
-
-  @keyframes soak {
-    from {
-      opacity: 0;
-      filter: blur(0.12em);
-    }
-    60% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes settle {
-    from {
-      opacity: 0;
-    }
+  .count {
+    color: var(--muted);
+    font-variant-numeric: lining-nums tabular-nums;
   }
 </style>

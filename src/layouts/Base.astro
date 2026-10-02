@@ -1,10 +1,8 @@
 ---
-import type { TransitionDirectionalAnimations } from 'astro';
 import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import External from '../components/External.astro';
-import Stroke from '../components/Stroke.astro';
 import { canonicalUrl } from '../lib/url';
 import { personJsonLd, site, websiteJsonLd } from '../site';
 
@@ -34,17 +32,6 @@ const path = new URL(canonical).pathname;
 const ogImage = new URL('/og.png', Astro.site).href;
 const year = new Date().getFullYear();
 
-// The old page stays put (animation-name: none also drops the UA plus-lighter blend)
-// while the new one washes over it.
-const wash = (name: string) => ({
-  old: { name: 'none' },
-  new: { name, duration: '0.7s', easing: 'var(--ease-out)', fillMode: 'both' },
-});
-const pageTransition: TransitionDirectionalAnimations = {
-  forwards: wash('wash-forwards'),
-  backwards: wash('wash-backwards'),
-};
-
 const nav = [
   { label: 'Projets', href: '/projets' },
   { label: 'Blog', href: '/blog' },
@@ -56,7 +43,7 @@ const nav = [
 ---
 
 <!doctype html>
-<html lang="fr" transition:name="root" transition:animate={pageTransition}>
+<html lang="fr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -64,7 +51,7 @@ const nav = [
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
-    <meta name="theme-color" content="#F2EFE8" />
+    <meta name="theme-color" content="#FFFFFF" />
     <script is:inline>
       {
         // The client router swaps <html> attributes and <head> on each navigation.
@@ -72,16 +59,11 @@ const nav = [
           const hour = new Date().getHours();
           if (hour >= 20 || hour < 7) {
             document.documentElement.dataset.theme = 'dark';
-            document.querySelector('meta[name="theme-color"]').content = '#1A1813';
+            document.querySelector('meta[name="theme-color"]').content = '#121212';
           }
         };
         applyTheme();
-        // data-navigated lets the home page skip its intro when reached from another page;
-        // the router's own data-astro-transition is removed once the transition ends.
-        document.addEventListener('astro:after-swap', () => {
-          applyTheme();
-          document.documentElement.dataset.navigated = '';
-        });
+        document.addEventListener('astro:after-swap', applyTheme);
       }
     </script>
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
@@ -113,8 +95,7 @@ const nav = [
     )}
     <meta name="twitter:card" content="summary_large_image" />
     <ClientRouter />
-    <Font cssVariable="--font-display" preload={[{ style: 'normal' }]} />
-    <Font cssVariable="--font-text" preload={[{ weight: 400 }]} />
+    <Font cssVariable="--font-serif" preload={[{ style: 'normal' }]} />
     {[personJsonLd, websiteJsonLd, ...jsonLd].map(data => (
       <script type="application/ld+json" set:html={JSON.stringify(data)}></script>
     ))}
@@ -132,7 +113,7 @@ const nav = [
     </a>
     {header && (
       <header class="wrap site-header">
-        <a class="display home" href="/">
+        <a class="home" href="/">
           {site.name}
         </a>
         <nav aria-label="Principale">
@@ -143,7 +124,6 @@ const nav = [
               aria-current={item.current ? 'page' : undefined}
             >
               {item.label}
-              {item.inSection && <Stroke class="nav-pen" />}
             </a>
           ))}
         </nav>
@@ -171,15 +151,15 @@ const nav = [
 <style>
   .site-header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: baseline;
-    gap: 1rem;
+    gap: 0.5rem 1.5rem;
     padding-block: 1.75rem;
   }
 
   .home {
-    display: inline-block;
-    font-size: 1.5rem;
+    font-weight: 500;
     view-transition-name: site-name;
     view-transition-class: title;
   }
@@ -190,12 +170,19 @@ const nav = [
     gap: 1.25rem;
   }
 
-  .site-header nav a {
-    position: relative;
+  .site-header .link {
+    color: var(--muted);
+    text-decoration-color: transparent;
   }
 
-  .active {
-    background-image: none;
+  .site-header .link:hover,
+  .site-header .link:focus-visible,
+  .site-header .active {
+    color: var(--fg);
+  }
+
+  .site-header .active {
+    text-decoration-color: currentColor;
   }
 
   .site-footer {
@@ -204,7 +191,6 @@ const nav = [
     justify-content: space-between;
     gap: 1rem;
     padding-block: 2rem;
-    border-top: 1px solid var(--rule);
-    margin-top: clamp(1.5rem, 5vh, 4rem);
+    margin-top: clamp(3rem, 8vh, 5rem);
   }
 </style>

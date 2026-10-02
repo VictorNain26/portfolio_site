@@ -8,11 +8,11 @@ describe('contrast', () => {
   });
 
   it('does not depend on argument order', () => {
-    expect(contrast('#1f3f95', '#f2efe8')).toBe(contrast('#f2efe8', '#1f3f95'));
+    expect(contrast('#5c5c5c', '#ffffff')).toBe(contrast('#ffffff', '#5c5c5c'));
   });
 
-  it('matches the accent ratios documented in CLAUDE.md', () => {
-    expect(contrast('#1F3F95', '#F2EFE8')).toBeCloseTo(8.3, 1);
-    expect(contrast('#7b9cf0', '#1a1813')).toBeCloseTo(6.64, 1);
+  it('matches the --muted ratios documented in CLAUDE.md', () => {
+    expect(contrast('#5C5C5C', '#FFFFFF')).toBeCloseTo(6.69, 1);
+    expect(contrast('#a6a6a6', '#121212')).toBeCloseTo(7.7, 1);
   });
 });

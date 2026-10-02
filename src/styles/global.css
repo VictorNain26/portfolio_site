@@ -1,22 +1,18 @@
 :root {
-  --paper: #f2efe8;
-  --ink: #16140f;
-  --ink-soft: #5e594f;
-  --rule: #d9d3c7;
-  --accent: #1f3f95;
-  --ease-out: cubic-bezier(0.2, 0.7, 0, 1);
-  --ease-pen: cubic-bezier(0.65, 0, 0.35, 1);
-  --gutter: clamp(1.25rem, 5vw, 4rem);
-  --measure: 65ch;
+  --bg: #ffffff;
+  --fg: #141414;
+  --muted: #5c5c5c;
+  --rule: #e2e2e2;
+  --measure: 40rem;
+  --gutter: clamp(1.25rem, 5vw, 2.5rem);
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --paper: #1a1813;
-  --ink: #ece6da;
-  --ink-soft: #a8a193;
-  --rule: #38342c;
-  --accent: #7b9cf0;
+  --bg: #121212;
+  --fg: #ebebeb;
+  --muted: #a6a6a6;
+  --rule: #2c2c2c;
   color-scheme: dark;
 }
 
@@ -29,8 +25,8 @@
 }
 
 ::view-transition-group(*) {
-  animation-duration: 0.55s;
-  animation-timing-function: var(--ease-out);
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0, 1);
 }
 
 /* A shared title glides as one piece of text: cross-fading its two sizes doubles the letters. */
@@ -41,40 +37,6 @@
 
 ::view-transition-new(.title) {
   animation: none;
-}
-
-/* Page change, applied by transition:animate in Base.astro: the new page spreads
-   over the old one like the title hover wash, from the left going forwards and
-   from the right going back. The mask sits in the keyframes so that Astro's
-   fallback animation, which only sets animation properties, carries it too. */
-@keyframes wash-forwards {
-  from {
-    mask-image: linear-gradient(90deg, #000 45%, transparent 55%);
-    mask-size: 250% 100%;
-    mask-repeat: no-repeat;
-    mask-position: 100% 0;
-  }
-  to {
-    mask-image: linear-gradient(90deg, #000 45%, transparent 55%);
-    mask-size: 250% 100%;
-    mask-repeat: no-repeat;
-    mask-position: 0 0;
-  }
-}
-
-@keyframes wash-backwards {
-  from {
-    mask-image: linear-gradient(270deg, #000 45%, transparent 55%);
-    mask-size: 250% 100%;
-    mask-repeat: no-repeat;
-    mask-position: 0 0;
-  }
-  to {
-    mask-image: linear-gradient(270deg, #000 45%, transparent 55%);
-    mask-size: 250% 100%;
-    mask-repeat: no-repeat;
-    mask-position: 100% 0;
-  }
 }
 
 *,
@@ -92,13 +54,12 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background-color: var(--paper);
-  /* Paper grain: tiny tiled SVG noise, no request. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
-  color: var(--ink);
-  font-family: var(--font-text);
-  font-size: 1.0625rem;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-serif);
+  font-size: 1.1875rem;
   line-height: 1.6;
+  font-kerning: normal;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -110,17 +71,16 @@ main {
 
 h1,
 h2,
-h3,
-.display {
-  font-family: var(--font-display);
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -0.01em;
+h3 {
   margin: 0;
+  font-weight: 500;
+  line-height: 1.15;
+  text-wrap: balance;
 }
 
 p {
   margin: 0;
+  text-wrap: pretty;
 }
 
 a {
@@ -129,126 +89,63 @@ a {
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--paper);
+  background: var(--fg);
+  color: var(--bg);
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 1px solid var(--fg);
   outline-offset: 4px;
 }
 
 .wrap {
   width: 100%;
-  max-width: 72rem;
+  max-width: calc(var(--measure) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
 
 .meta {
-  color: var(--ink-soft);
-  font-size: 0.875rem;
+  color: var(--muted);
+  font-size: 1rem;
+  font-variant-numeric: lining-nums;
 }
 
 .page-title {
-  width: fit-content;
-  max-width: 100%;
-  font-size: clamp(3rem, 9vw, 6rem);
-  margin-block: 2rem 3rem;
+  font-size: clamp(2.25rem, 6vw, 3rem);
+  margin-block: 1.5rem 2.5rem;
 }
 
-/* Drawn underline: a resting line, the accent line grows over it. Links inside
-   content set --link-rest to --ink-soft so they read as links without hovering. */
 .link {
-  background-image:
-    linear-gradient(var(--accent), var(--accent)),
-    linear-gradient(var(--link-rest, var(--rule)), var(--link-rest, var(--rule)));
-  background-position:
-    0 100%,
-    0 100%;
-  background-repeat: no-repeat;
-  background-size:
-    0 1px,
-    100% 1px;
-  padding-bottom: 2px;
-  transition: background-size 0.5s var(--ease-out);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--rule);
+  transition: text-decoration-color 0.2s;
 }
 
 .link:hover,
 .link:focus-visible {
-  background-size:
-    100% 1px,
-    100% 1px;
+  text-decoration-color: currentColor;
 }
 
-/* The pen stroke from the home page, drawn under titles once the page has arrived. */
-.stroke {
-  display: block;
-  width: 100%;
-  height: var(--stroke-height, 0.16em);
-  margin-top: 0.08em;
-  overflow: visible;
-  /* Without it the viewBox ratio gives the SVG an intrinsic width that widens fit-content titles. */
-  contain: inline-size;
-}
-
-.stroke path {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-  stroke-dasharray: 1 2;
-  animation: draw var(--stroke-duration, 0.7s) var(--ease-pen) var(--stroke-delay, 0.45s) backwards;
-}
-
-@keyframes draw {
-  from {
-    stroke-dashoffset: 1;
-  }
-}
-
-/* Marks the current section; its shared name slides it between nav links. */
-.nav-pen {
-  position: absolute;
-  left: -0.15em;
-  top: 100%;
-  width: calc(100% + 0.3em);
-  height: 0.4em;
+/* Rows of the home and listing pages: a hairline between entries, the title underlined on hover. */
+.rows {
+  list-style: none;
   margin: 0;
-  view-transition-name: nav-pen;
+  padding: 0;
+  border-top: 1px solid var(--rule);
 }
 
-.nav-pen path {
-  stroke-width: 1.75;
-  animation: none;
+.rows > li {
+  border-bottom: 1px solid var(--rule);
 }
 
-/* Hovering a title lets the accent ink spread through it, left to right. The soft
-   band between the two colours keeps the edge from reading as a hard wipe. */
-.ink {
-  background-image: linear-gradient(90deg, var(--accent) 45%, var(--ink) 55%);
-  background-size: 250% 100%;
-  background-position: 100% 0;
-  background-clip: text;
-  color: transparent;
-  transition: background-position 0.8s var(--ease-out);
-}
-
-a:hover .ink,
-a:focus-visible .ink {
-  background-position: 0 0;
-}
-
-@media (forced-colors: active) {
-  .ink {
-    background: none;
-    color: inherit;
-  }
-
-  .stroke path {
-    stroke: CanvasText;
-  }
+.rows a:hover .title-text,
+.rows a:focus-visible .title-text {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
 .skip {
@@ -256,8 +153,8 @@ a:focus-visible .ink {
   left: var(--gutter);
   top: -3rem;
   padding: 0.5rem 0.75rem;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .skip:focus {
@@ -268,9 +165,6 @@ a:focus-visible .ink {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0s !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
@@ -287,7 +181,7 @@ a:focus-visible .ink {
   border: 0;
 }
 
-/* Arrows are Lucide SVGs: the fonts ship no arrow glyphs and Safari falls back to emoji. */
+/* Arrows are Lucide SVGs: Safari would draw text arrows from the emoji font. */
 .lucide {
-  vertical-align: -0.125em;
+  vertical-align: -0.1em;
 }

@@ -1,14 +1,10 @@
 ---
-import Stroke from '../components/Stroke.astro';
 import Base from '../layouts/Base.astro';
 ---
 
 <Base title="Page introuvable" noindex>
   <section class="wrap lost">
-    <h1>
-      Cette page n'existe pas.
-      <Stroke />
-    </h1>
+    <h1>Cette page n'existe pas.</h1>
     <p>
       <a class="link" href="/">
         Revenir à l'accueil
@@ -19,15 +15,12 @@ import Base from '../layouts/Base.astro';
 
 <style>
   .lost {
-    --link-rest: var(--ink-soft);
     display: grid;
     gap: 1.5rem;
     padding-block: 6rem;
   }
 
   h1 {
-    width: fit-content;
-    max-width: 100%;
-    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-size: clamp(2.25rem, 6vw, 3rem);
   }
 </style>
