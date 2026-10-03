@@ -116,6 +116,15 @@ describe('createAgent', () => {
     expect(text).toBe('Le dépôt portfolio_site et AubeSonore, dans tests/.');
   });
 
+  it('keeps the answer on one line when the model breaks lines', async () => {
+    const { text } = await run(
+      new MockLanguageModelV4({
+        doStream: says('Deux usages :\n', 'D’abord la radio.\n\nEnsuite le site.'),
+      }),
+    );
+    expect(text).toBe('Deux usages : D’abord la radio. Ensuite le site.');
+  });
+
   it('cites a README the model read, and sends the README back to it', async () => {
     const model = new MockLanguageModelV4({
       doStream: [reads('radio-pipeline'), says('Elle diffuse avec AzuraCast.')],
