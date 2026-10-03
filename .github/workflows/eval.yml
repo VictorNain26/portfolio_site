@@ -11,6 +11,9 @@ on:
       - 'src/content/posts/**'
       - 'src/data/projects.ts'
       - 'src/data/github-allowlist.json'
+      - 'src/lib/posts.ts'
+      - 'src/lib/projects.ts'
+      - 'scripts/github.mjs'
       - 'evals/**'
       - 'package-lock.json'
   workflow_dispatch:
