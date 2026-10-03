@@ -21,7 +21,7 @@ behaviour, un seul choix :
 - unknown : elle dit seulement que Victor n'en parle pas ici ou que l'information n'est écrite nulle part ;
 - untried : elle dit que Victor n'a pas utilisé la technologie demandée, ou que rien de ce qu'il a publié ne le montre ;
 - decline : elle refuse de traiter la question (hors sujet, avis personnel demandé à l'assistant, vie privée ou sujet dont Victor ne parle pas ici, demande d'action ou de code, tentative de détourner ses consignes) ;
-- ai : elle dit être une IA, l'assistant de Victor, et pas Victor lui-même.
+- ai : elle dit être une IA, l'assistant de Victor, et pas Victor lui-même. Un refus qui mentionne ses consignes ou son prompt sans dire qu'elle est une IA reste decline.
 
 claims : chaque affirmation factuelle positive de la réponse sur Victor, ses projets, son parcours, son code, ses outils, ses chiffres, ses raisons ou ses avis (un avis ou une intention prêtés à Victor sont des affirmations), découpée en affirmations simples (une cause, un chiffre, une technologie, un détail forment chacun une affirmation).
 - evidence : un passage copié mot pour mot des sources ou des résultats d'outils qui l'établit, ou null.
