@@ -3,19 +3,10 @@
 name: Agent evaluation
 
 on:
+  # Every pull request, so that the required `evaluate` check always reports: a workflow
+  # skipped by a paths filter stays pending and blocks the merge, a skipped job passes.
+  # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/using-conditions-to-control-job-execution
   pull_request:
-    paths:
-      - 'src/lib/agent/**'
-      - 'src/pages/api/ask.ts'
-      - 'src/content/persona.md'
-      - 'src/content/posts/**'
-      - 'src/data/projects.ts'
-      - 'src/data/github-allowlist.json'
-      - 'src/lib/posts.ts'
-      - 'src/lib/projects.ts'
-      - 'scripts/github.mjs'
-      - 'evals/**'
-      - 'package-lock.json'
   workflow_dispatch:
 
 permissions:
@@ -26,9 +17,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      agent: ${{ steps.filter.outputs.agent }}
+    steps:
+      # https://github.com/dorny/paths-filter
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            agent:
+              - 'src/lib/agent/**'
+              - 'src/pages/api/ask.ts'
+              - 'src/content/persona.md'
+              - 'src/content/posts/**'
+              - 'src/data/projects.ts'
+              - 'src/data/github-allowlist.json'
+              - 'src/lib/posts.ts'
+              - 'src/lib/projects.ts'
+              - 'scripts/github.mjs'
+              - 'evals/**'
+              - 'package-lock.json'
+              - '.github/workflows/eval.yml'
+
   evaluate:
-    # Secrets never reach pull requests from forks: the run would only fail.
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    needs: changes
+    # Runs on demand, or when a pull request touches what the agent reads. Secrets never reach
+    # pull requests from forks: the run would only fail.
+    if: >-
+      !cancelled() && (github.event_name == 'workflow_dispatch' ||
+      (needs.changes.outputs.agent == 'true' &&
+      github.event.pull_request.head.repo.full_name == github.repository))
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
