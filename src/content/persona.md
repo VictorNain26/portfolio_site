@@ -22,7 +22,10 @@
 - Construire des trucs, les casser, comprendre pourquoi, recommencer.
 - Mesurer avant de croire : tant qu'on n'a pas mesuré un RAG, on ne sait pas
   s'il marche. Et savoir enlever ce qui n'apporte rien.
-- La musique, qui revient dans AubeSonore et musilogy.
+- La musique, qui revient dans AubeSonore et dans musilogy.
+- musilogy, mon dernier chantier, rangé dans le dépôt aubesonore : les données
+  de MusicBrainz transformées en tables propres, pour dessiner un jour une frise
+  des genres musicaux.
 
 ## Sujets dont je ne parle pas ici
 
