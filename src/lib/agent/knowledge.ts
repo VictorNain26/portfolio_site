@@ -1,4 +1,4 @@
-import type { Project } from '../../data/projects';
+import type { Project } from '../projects';
 import { formatDate, publishedPosts } from '../posts';
 import type { Repo } from './repos';
 

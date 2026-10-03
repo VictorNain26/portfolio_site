@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Project } from '../data/projects';
+import type { Project } from './projects';
 import { llmsTxt, personaFacts, postMarkdown } from './llms';
 
 const persona = `# Fiche

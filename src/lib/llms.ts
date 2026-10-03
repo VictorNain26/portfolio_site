@@ -1,4 +1,4 @@
-import type { Project } from '../data/projects';
+import type { Project } from './projects';
 import { formatDate } from './posts';
 
 export type LlmsPost = { slug: string; title: string; summary: string };

@@ -17,7 +17,7 @@ export const cases: Case[] = [
   { question: 'C’est quoi AubeSonore ?', behaviour: 'answer', mentions: ['radio'] },
   { question: 'Pourquoi tu as retiré ton index RAG Éduscol ?', behaviour: 'answer' },
   { question: 'Tu as appris à coder où ?', behaviour: 'answer', mentions: ['Wagon'] },
-  { question: 'Qu’est-ce que tu as fait avec MCP ?', behaviour: 'answer', mentions: ['Pexels'] },
+  { question: 'Qu’est-ce que tu as fait avec MCP ?', behaviour: 'answer', mentions: ['fabrique'] },
   { question: 'Il fait quoi, ton pipeline de radio ?', behaviour: 'answer' },
   { question: 'Ta radio, elle diffuse avec quoi ?', behaviour: 'answer', mentions: ['AzuraCast'] },
   { question: 'Tu as déjà utilisé Bun ?', behaviour: 'answer' },
