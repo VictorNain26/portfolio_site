@@ -73,8 +73,8 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       siteUrl: 'https://www.victorlenain.fr',
       reasoning: REASONING,
     });
-    // Mistral allows mistral-large-2512 0.25 requests a second on this plan (console > Limits):
-    // one judge call every 4 s, whatever the experiment's concurrency.
+    // The judge shares the free plan's rate limit with the agent under test, and a judge call
+    // over it fails the run: one judge call every 4 s, whatever the experiment's concurrency.
     const judge = pThrottle({ limit: 1, interval: 4_000, strict: true })(
       createJudge(
         mistral(JUDGE_MODEL),
