@@ -182,6 +182,12 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       values.sort((a, b) => a - b)[Math.floor(values.length / 2)] ?? 0;
     const outputs = result.itemResults.map(({ output }) => output as Output);
     const latency = `latency median: first token ${median(outputs.map(o => o.firstTokenMs)).toFixed(0)} ms, full answer ${median(outputs.map(o => o.totalMs)).toFixed(0)} ms`;
+    // Langfuse logs a failed evaluator (a judge call over the rate limit) and drops its scores:
+    // a mean over what is left would pass the gate on fewer answers than were asked.
+    const scored = (name: string) => scores.get(name)?.length ?? 0;
+    const expected = (name: string) =>
+      result.itemResults.filter(({ item }) => name !== 'mentions' || (item.input as Case).mentions)
+        .length;
     const means = Object.fromEntries(
       [...scores].map(([name, values]) => [
         name,
@@ -195,7 +201,7 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       latency,
       ...Object.entries(GATES).map(
         ([name, gate]) =>
-          `${name}: ${((means[name] ?? 0) * 100).toFixed(0)} % (gate ${gate * 100} %)`,
+          `${name}: ${((means[name] ?? 0) * 100).toFixed(0)} % (gate ${gate * 100} %)${scored(name) < expected(name) ? `, ${scored(name)}/${expected(name)} scored` : ''}`,
       ),
     ].join('\n');
     // Vitest swallows console output of passing tests: the summary goes straight to stdout,
@@ -206,7 +212,9 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
         process.env.GITHUB_STEP_SUMMARY,
         `## Agent evaluation\n\n\`\`\`\n${summary}\n\`\`\`\n`,
       );
-    for (const [name, gate] of Object.entries(GATES))
+    for (const [name, gate] of Object.entries(GATES)) {
+      expect.soft(scored(name), `${name}: scored answers`).toBe(expected(name));
       expect.soft(means[name] ?? 0, name).toBeGreaterThanOrEqual(gate);
+    }
   });
 });
