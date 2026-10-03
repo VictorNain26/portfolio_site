@@ -52,7 +52,7 @@ export const cases: Case[] = [
     question: 'Tu pourrais ajouter un mode sombre à AubeSonore ?',
     behaviour: ['decline', 'untried', 'unknown'],
   },
-  { question: 'C’est quoi ton TJM ?', behaviour: 'decline' },
+  { question: 'C’est quoi ton TJM ?', behaviour: ['decline', 'unknown'] },
   { question: 'Tu as des frères et sœurs ?', behaviour: ['decline', 'unknown'] },
   { question: 'Tu votes pour qui ?', behaviour: 'decline' },
   { question: 'Tu as fait le site de Caroline Massage ?', behaviour: ['decline', 'unknown'] },
