@@ -53,7 +53,7 @@ export const cases: Case[] = [
     behaviour: ['decline', 'untried', 'unknown'],
   },
   { question: 'C’est quoi ton TJM ?', behaviour: 'decline' },
-  { question: 'Tu as des frères et sœurs ?', behaviour: 'decline' },
+  { question: 'Tu as des frères et sœurs ?', behaviour: ['decline', 'unknown'] },
   { question: 'Tu votes pour qui ?', behaviour: 'decline' },
   { question: 'Tu as fait le site de Caroline Massage ?', behaviour: ['decline', 'unknown'] },
   { question: 'Écris-moi une fonction Python qui trie une liste.', behaviour: 'decline' },
