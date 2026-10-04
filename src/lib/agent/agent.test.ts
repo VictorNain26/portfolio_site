@@ -44,7 +44,7 @@ const aubesonore: Repo = {
   pushedAt: '2026-09-01',
   archived: false,
   topics: ['portfolio', 'typescript'],
-  readme: null,
+  readme: 'Diffuse via AzuraCast, le dimanche.',
 };
 
 const knowledge: Omit<Knowledge, 'projects'> = {
@@ -132,44 +132,30 @@ describe('createAgent', () => {
     expect(prompt).not.toContain('Web radio diffusée 24 h/24.');
   });
 
-  it('reads GitHub first when the question names a project or a repo', async () => {
-    const model = new MockLanguageModelV4({
-      doStream: [reads('radio-pipeline'), says('Elle diffuse avec AzuraCast.')],
-    });
-    await run(model, undefined, 'Le pipeline d’AubeSonore tourne quand ?');
-    expect(model.doStreamCalls.map(call => call.toolChoice)).toEqual([
-      { type: 'required' },
-      { type: 'auto' },
-    ]);
+  it('reads the README of the project a question names before the model answers', async () => {
+    const model = new MockLanguageModelV4({ doStream: says('Elle diffuse via AzuraCast.') });
+    const { sources } = await run(model, undefined, 'Comment diffuse AubeSonore ?');
+    const prompt = JSON.stringify(model.doStreamCalls[0]?.prompt);
+    expect(prompt).toContain('README du dépôt aubesonore');
+    expect(prompt).toContain('Diffuse via AzuraCast, le dimanche.');
+    expect(model.doStreamCalls).toHaveLength(1);
+    expect(sources.map(source => source.title)).toEqual(['aubesonore sur GitHub']);
   });
 
-  it('shows only the answer written after the lookup, not the draft of the forced step', async () => {
-    const draft = {
-      stream: convertArrayToReadableStream<LanguageModelV4StreamPart>([
-        { type: 'text-start', id: 'draft' },
-        { type: 'text-delta', id: 'draft', delta: 'Je ne réponds qu’à des questions sur Victor.' },
-        { type: 'text-end', id: 'draft' },
-        {
-          type: 'tool-call',
-          toolCallId: 'call-draft',
-          toolName: 'read_readme',
-          input: JSON.stringify({ repo: 'radio-pipeline' }),
-        },
-        finish('tool-calls'),
-      ]),
-    };
-    const { text } = await run(
-      new MockLanguageModelV4({ doStream: [draft, says('Elle diffuse avec AzuraCast.')] }),
-      undefined,
-      'Comment diffuse AubeSonore ?',
-    );
-    expect(text).toBe('Elle diffuse avec AzuraCast.');
+  it('reads the README of a repo named directly, and no other', async () => {
+    const model = new MockLanguageModelV4({ doStream: says('Il alimente la radio.') });
+    await run(model, undefined, 'Que fait radio-pipeline ?');
+    const prompt = JSON.stringify(model.doStreamCalls[0]?.prompt);
+    expect(prompt).toContain('README du dépôt radio-pipeline');
+    expect(prompt).not.toContain('README du dépôt aubesonore');
   });
 
-  it('leaves the first step to the model when no project or repo is named', async () => {
+  it('reads no README when the conversation names no project or repo', async () => {
     const model = new MockLanguageModelV4({ doStream: says('Victor a appris au Wagon.') });
     await run(model, undefined, 'Tu as appris à coder où ?');
-    expect(model.doStreamCalls[0]?.toolChoice).toEqual({ type: 'auto' });
+    const prompt = JSON.stringify(model.doStreamCalls[0]?.prompt);
+    expect(prompt).not.toContain('README du dépôt aubesonore');
+    expect(prompt).not.toContain('README du dépôt radio-pipeline');
   });
 
   it('streams the answer and cites the project it names', async () => {

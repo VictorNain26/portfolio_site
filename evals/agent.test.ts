@@ -170,6 +170,10 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
     });
     await telemetry?.forceFlush();
     await langfuse.flush();
+    // The runner skips an item whose task threw (« Task failed … Skipping item »): without this,
+    // a crashed answer vanished from every gate.
+    const asked = cases.length * RUNS;
+    expect.soft(result.itemResults.length, 'answers that did not crash').toBe(asked);
 
     const scores = new Map<string, number[]>();
     const lines: string[] = [];
@@ -206,6 +210,7 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       '',
       latency,
       lookups,
+      `crashed: ${asked - result.itemResults.length} of ${asked}`,
       ...Object.entries(GATES).map(
         ([name, gate]) =>
           `${name}: ${((means[name] ?? 0) * 100).toFixed(0)} % (gate ${gate * 100} %)${scored(name) < expected(name) ? `, ${scored(name)}/${expected(name)} scored` : ''}`,
