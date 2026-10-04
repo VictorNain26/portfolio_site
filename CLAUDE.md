@@ -31,21 +31,23 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
 - `src/content/posts/*.mdx` — articles ; `publishedAt` dans le futur = non
   publié
 - `src/data/projects.ts` — projets affichés, lus dans `github.json`
-  (`src/lib/projects.ts`) : les dépôts de l'allowlist qui ont le topic
-  `portfolio`. La description GitHub s'écrit « Nom — accroche », les autres
-  topics font la stack, `pre-launch` ou une homepage donnent le statut. Un
-  workflow planifié (`refresh.yml`) relance le déploiement toutes les heures
+  (`src/lib/projects.ts`) : les dépôts publics qui ont le topic `portfolio`,
+  sans rien d'autre à remplir. Une description « Nom — accroche » donne le nom,
+  sinon c'est le nom du dépôt ; les autres topics font la stack ; archivé,
+  `pre-launch` ou une homepage donnent le statut. Toutes les 15 min, `sync.yml`
+  compare GitHub et la date du prochain article programmé à `/sync.json` du site
+  en ligne, et ne redéploie que s'ils diffèrent
 - `src/pages/api/ask.ts` — mon assistant IA, qui répond sur moi et mon code : AI
   SDK, Mistral Small 4 (`mistral-small-2603`), quota et conversations dans
   Upstash Redis, traces Langfuse quand ses clés existent (secrets via
   `astro:env`)
 - `src/lib/agent/` — l'agent, testé : prompt, outils, sources calculées, handler
   HTTP ; `src/content/persona.md` — sa fiche
-- `scripts/github.mjs` — écrit `src/data/github.json` (non versionné) avant
+- `scripts/github.ts` — écrit `src/data/github.json` (non versionné) avant
   `dev`, `check` et `build` ; l'assistant relit dépôts et README en direct
   (`src/lib/agent/github.ts`, cache 10 min) et cherche dans le code si
-  `GITHUB_TOKEN` existe. `src/data/github-allowlist.json` liste les seuls dépôts
-  qu'il voit : jamais un projet client
+  `GITHUB_TOKEN` existe. Il ne voit que les dépôts qui ont le topic `portfolio`,
+  plus le dépôt profil : le topic ne se met jamais sur un projet client
 - `evals/` — cas, juge et expérience de l'agent (`npm run eval`)
 - `src/lib/` — seule logique du site, testée
 - `tests/` — assertions sur le build, lancées après `npm run build`
