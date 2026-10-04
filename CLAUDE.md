@@ -71,6 +71,9 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
   au-dessus de 4.5:1.
 - Site perso de bidouille : projets perso uniquement, pas de missions client ;
   ton personnel, pas commercial. Chaque affirmation se vérifie sur GitHub.
+- Un article raconte l'état à sa date : ses liens vers un fichier ou un dossier
+  d'un dépôt pointent sur un commit (SHA complet, vérifié par `tests/`), et
+  `links.yml` vérifie chaque semaine que ses liens répondent encore.
 - L'assistant parle de moi à la troisième personne, jamais en mon nom, et ne
   donne que des faits : il n'affirme sur moi que ce que disent la fiche, les
   projets, les articles publiés ou GitHub ; un article programmé ne doit jamais
