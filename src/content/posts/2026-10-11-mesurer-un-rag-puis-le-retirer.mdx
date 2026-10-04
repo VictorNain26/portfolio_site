@@ -1,0 +1,61 @@
+---
+title: 'J’ai mesuré mon RAG, puis je l’ai retiré'
+summary: 'L’index des programmes du collège que j’ai construit pour TomIA : trois chiffres faux avant un vrai, un rappel passé de 0,81 à 0,89, et un retrait avant d’avoir servi.'
+publishedAt: '2026-10-11'
+tags:
+  - RAG
+  - Évaluation
+  - TomIA
+---
+
+Pour [TomIA](https://www.tomia.fr/), mon tuteur pour collégiens, je voulais que l'assistant s'appuie sur les programmes officiels du collège, de la 6e à la 3e. J'ai donc construit un index RAG : les textes officiels découpés en morceaux, transformés en vecteurs, et une recherche qui retrouve les bons passages pour une question d'élève.
+
+Je l'ai dit dans [mon premier article](/blog/2026-09-22-qui-je-suis) : c'est la mesure qui m'a le plus appris. Voilà l'histoire complète, telle que la racontent [le dépôt](https://github.com/VictorNain26/tomai-curriculum) et son historique.
+
+## Des chiffres qui ne voulaient rien dire
+
+En décembre 2025, le projet affichait de très beaux scores. Un score de qualité qui passait de « 6.5/10 » à « 9.2/10 » dans un message de commit. Un rappel au top 5 de 0,962. Sauf que ce rappel était mesuré sur une maquette de 13 questions.
+
+Le jeu de données lui-même posait problème. En janvier 2026, il comptait 1 861 documents rédigés par une IA, ajoutés en même temps qu'un résumé du programme rédigé lui aussi par une IA, sans vérification contre le texte officiel. En mai, j'ai audité les maths de 5e contre le texte officiel du Bulletin officiel. Résultat : [7 % du programme couvert](https://github.com/VictorNain26/tomai-curriculum/commit/1fbeb57), 8 chapitres sur 111. Et une section entière, « Grandeurs et Mesures », qui n'existait pas.
+
+L'ancien taux de couverture, 46,2 %, était artificiel : un programme inventé comparé à des documents inventés sur la même base. Depuis, la règle est simple : aucun contenu généré par une IA dans le jeu de données. Tout part des PDF officiels.
+
+## Un jeu de test qui ne triche pas
+
+Restait à mesurer la recherche. J'ai fait trois faux départs.
+
+D'abord, 4 615 questions générées à partir des « questions fréquentes » de chaque document. Le problème : ces questions faisaient partie du texte indexé. Le rappel serait monté au-dessus de 0,95 [mécaniquement](https://github.com/VictorNain26/tomai-curriculum/commit/25230cb), quelle que soit la qualité réelle de la recherche. C'est devenu un simple test de fumée.
+
+Ensuite, un rappel par mots-clés : une réponse compte si elle contient les bons mots. Mais un mot-clé générique se trouve partout, et un mot-clé précis fait chuter le score à tort. Sur la même série, ce rappel donnait 0,875 quand la vraie mesure donnait 0,810.
+
+Enfin, 202 questions écrites à la main, annulées le jour même.
+
+La version qui tient est [ancrée sur les documents](https://github.com/VictorNain26/tomai-curriculum/blob/main/scripts/generate_golden.py). Le script tire des morceaux du corpus, répartis par matière et par niveau, et demande pour chacun à un modèle de Mistral une question et quelques mots-clés, dans un format JSON strict. Une question n'est gardée que si au moins deux de ses mots-clés figurent mot pour mot dans le morceau d'origine. Sur une cible de 400, 189 questions ont passé le filtre.
+
+La mesure devient alors propre : pour chaque question, le morceau d'où elle vient est-il dans les 5 premiers résultats ?
+
+## De 0,81 à 0,89
+
+Avec ce jeu de 189 questions, j'ai comparé trois configurations. Mêmes questions, même découpage, mêmes 5 résultats ; seuls le modèle d'embedding et la partie lexicale de la recherche changent ([détail](https://github.com/VictorNain26/tomai-curriculum/blob/main/docs/ARCHITECTURE.md)) :
+
+| Configuration                    | Rappel au top 5 | MRR   |
+| -------------------------------- | --------------- | ----- |
+| mistral-embed + BM25 maison      | 0,810           | 0,576 |
+| BGE-M3 + BM25 maison             | 0,857           | 0,654 |
+| BGE-M3, dense et sparse natif    | 0,894           | 0,739 |
+
+Le MRR dit à quel rang arrive le bon morceau : plus il est haut, mieux c'est. L'espagnol, la pire matière au départ, passe de 0,43 à 0,71, et l'allemand de 0,60 à 0,93.
+
+Tout ne monte pas : la technologie descend de 0,89 à 0,67. Et il faut garder la mesure en tête : selon les matières, il n'y a que 4 à 16 questions. Pour l'italien, à 8 questions, le dépôt note lui-même que c'est trop peu pour conclure.
+
+## Et puis je l'ai retiré
+
+Le gain avait un prix. La recherche sparse de BGE-M3 n'est pas reproductible en TypeScript pur, alors que le serveur de TomIA est en TypeScript. Il fallait un service Python à côté, et [ce service n'a jamais été mis en production](https://github.com/VictorNain26/tomai-curriculum/blob/main/README.md).
+
+Le 24 août 2026, j'ai retiré toute la couche RAG du serveur. Le message du [commit](https://github.com/VictorNain26/tomai-monorepo/commit/8f5011f33f100bb4eb2b0b6c33a625ecc080b466) le dit sans détour : rien n'avait été déployé, le cluster Qdrant n'existait plus, et garder la moitié du pipeline aurait laissé le serveur interroger un index disparu. J'ai archivé le dépôt le 2 octobre, mais je le laisse public, avec son jeu de test et ses résultats.
+
+## Ce que j'en garde
+
+Trois chiffres faux avant un vrai : un score sur une maquette, une couverture calculée sur du contenu inventé, un rappel gonflé par ses propres questions. Chaque fois, le chiffre était beau, et chaque fois, c'est la façon de le mesurer qui mentait.
+
+Tant qu'on n'a pas mesuré un RAG, on ne sait pas s'il marche. Et quand on l'a mesuré, il faut encore savoir l'enlever s'il n'apporte rien.
