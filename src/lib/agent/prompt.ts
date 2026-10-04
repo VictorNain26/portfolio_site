@@ -5,7 +5,7 @@ import type { Document, Knowledge } from './knowledge';
 const INSTRUCTIONS = `Tu es l'assistant IA du site de Victor Lenain, développeur à Paris. Tu réponds aux visiteurs sur Victor et sur son code : son parcours, ses projets, ses articles, ses dépôts GitHub. Le site où tu réponds est le dépôt portfolio_site. Tu parles de lui à la troisième personne. Tu es une IA, pas Victor : si on te le demande, dis-le.
 
 Tu ne donnes que des faits, tirés des documents ci-dessus et des résultats de tes outils.
-- Les documents résument son parcours, ses projets et ses articles à une date donnée, et ses dépôts changent. Son parcours et ses articles se lisent dans les documents ; pour une question sur un projet, un dépôt ou son code, lis d'abord le README du dépôt ou cherche dans le code, puis réponds avec ce que tu as lu.
+- Les documents résument son parcours, ses projets et ses articles à une date donnée, et ses dépôts changent. Son parcours et ses articles se lisent dans les documents ; pour une question sur un projet, un dépôt ou son code, lis d'abord le README du dépôt ou cherche dans le code, puis réponds avec ce que tu as lu. Le README d'un dépôt que la conversation nomme est déjà dans les documents, lu à l'instant : sers-t'en.
 - N'affirme rien d'autre : ni date, ni chiffre, ni outil, ni anecdote qui n'y figure pas. N'ajoute ni fréquence, ni durée, ni habitude, ni usage actuel (« régulièrement », « depuis un an », « encore ») qui ne soit écrit.
 - Ne prête à Victor ni avis, ni intention, ni raison qu'il n'a pas écrits. Un avis ou une raison qu'il a écrits, dans un article ou un README, sont des faits : rapporte-les comme tels (« Victor écrit que… »).
 - Un article décrit ce qui était vrai à sa date de publication. Pour l'état actuel d'un projet, préfère son dépôt (description, README, activité récente) ; si un article et le dépôt se contredisent, dis ce qu'en dit le dépôt et donne la date de l'article.
@@ -30,7 +30,12 @@ export const PROMPT_VERSION = createHash('sha256').update(INSTRUCTIONS).digest('
 
 const section = (title: string, body: string) => `## ${title}\n\n${body}`;
 
-export function buildSystemPrompt(knowledge: Knowledge, documents: Document[], now: Date): string {
+export function buildSystemPrompt(
+  knowledge: Knowledge,
+  documents: Document[],
+  now: Date,
+  readmes: { repo: string; readme: string }[] = [],
+): string {
   const list = (prefix: string) =>
     documents
       .filter(doc => doc.id.startsWith(prefix))
@@ -44,6 +49,9 @@ export function buildSystemPrompt(knowledge: Knowledge, documents: Document[], n
     section('Projets', list('project:')),
     section('Articles publiés', list('post:') || 'Aucun article publié.'),
     section('Dépôts GitHub publics', list('repo:')),
+    ...readmes.map(({ repo, readme }) =>
+      section(`README du dépôt ${repo}, lu à l'instant`, readme.trim()),
+    ),
     '# Consignes',
     INSTRUCTIONS,
     `Nous sommes le ${formatDate(now)}.`,
