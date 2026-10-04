@@ -41,7 +41,7 @@ export function llmsTxt({
       'Projets',
       projects.map(
         project =>
-          `- [${project.name}](${project.url}): ${project.tagline} Statut : ${project.status}. Stack : ${project.stack.join(', ')}.`,
+          `- [${project.name}](${project.url}): ${[project.tagline, `Statut : ${project.status}.`, project.stack.length > 0 && `Stack : ${project.stack.join(', ')}.`].filter(Boolean).join(' ')}`,
       ),
     ),
     posts.length > 0 &&

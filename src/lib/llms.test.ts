@@ -22,6 +22,7 @@ const project: Project = {
   stack: ['Python', 'Docker'],
   url: 'https://www.aubesonore.fr/',
   status: 'En ligne',
+  updatedAt: new Date('2026-10-03'),
 };
 
 const input = {

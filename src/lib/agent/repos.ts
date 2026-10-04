@@ -4,6 +4,7 @@ const repoSchema = z.object({
   name: z.string(),
   description: z.string().nullable(),
   url: z.url(),
+  homepage: z.url().nullable(),
   language: z.string().nullable(),
   stars: z.number(),
   pushedAt: z.string(),

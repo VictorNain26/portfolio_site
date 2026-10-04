@@ -3,20 +3,20 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.18.0"
   },
   "scripts": {
-    "predev": "node scripts/github.mjs --if-missing",
+    "predev": "node scripts/github.ts --if-missing",
     "dev": "astro dev",
-    "prebuild": "node scripts/github.mjs",
+    "prebuild": "node scripts/github.ts",
     "build": "astro build",
-    "precheck": "node scripts/github.mjs --if-missing",
+    "precheck": "node scripts/github.ts --if-missing",
     "check": "astro check",
     "test": "vitest run --dir src",
     "verify:build": "vitest run --dir tests",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "eval": "node scripts/github.mjs --if-missing && EVAL_LIVE=1 vitest run --dir evals --silent=false"
+    "eval": "node scripts/github.ts --if-missing && EVAL_LIVE=1 vitest run --dir evals --silent=false"
   },
   "dependencies": {
     "@ai-sdk/mistral": "4.0.56",

@@ -7,7 +7,6 @@ import { appendFileSync, existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { createAgent, MODEL, type Reasoning, type ToolOutput } from '../src/lib/agent/agent';
 import { knowledge } from '../src/lib/agent/corpus';
-import allowlist from '../src/data/github-allowlist.json';
 import { createGitHub } from '../src/lib/agent/github';
 import { documentsOf } from '../src/lib/agent/knowledge';
 import { startTelemetry } from '../src/lib/agent/telemetry';
@@ -66,7 +65,6 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       github: createGitHub({
         user: 'VictorNain26',
         token: process.env.GITHUB_TOKEN,
-        allowlist,
         snapshot: knowledge.repos,
       }),
       publishedBy: now,

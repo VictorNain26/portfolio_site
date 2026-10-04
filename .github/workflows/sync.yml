@@ -1,0 +1,55 @@
+name: Sync
+
+# The site reads GitHub at build time. This compares a fresh read of GitHub, and the clock, with
+# what the live site was built from (/sync.json), and redeploys only when they differ.
+# https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule
+# https://vercel.com/docs/deploy-hooks
+on:
+  schedule:
+    # Every 15 minutes, off the top of the hour, when GitHub delays scheduled runs.
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node scripts/github.ts
+      - id: compare
+        run: |
+          fresh=$(sha256sum src/data/github.json | cut -d' ' -f1)
+          live=$(curl --fail --silent --show-error https://www.victorlenain.fr/sync.json || echo '{}')
+          built=$(jq -r '.github // ""' <<<"$live")
+          stale_at=$(jq -r '.staleAt // "1970-01-01T00:00:00Z"' <<<"$live")
+          if [ "$built" != "$fresh" ]; then
+            echo "GitHub changed since the live build."
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+          elif [ "$(date -u +%s)" -ge "$(date -u -d "$stale_at" +%s)" ]; then
+            echo "The live build went stale at $stale_at."
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "The live site is up to date."
+          fi
+      # Whatever breaks the build fails here, not on Vercel.
+      - if: steps.compare.outputs.stale == 'true'
+        run: npm run build
+      - if: steps.compare.outputs.stale == 'true'
+        run: curl --fail --silent --show-error --request POST "$DEPLOY_HOOK"
+        env:
+          DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}

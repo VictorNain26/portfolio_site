@@ -7,6 +7,8 @@ const repo = (extra: Record<string, unknown> = {}) => ({
   url: 'https://github.com/VictorNain26/aubesonore',
   homepage: null,
   topics: ['portfolio', 'python'],
+  archived: false,
+  pushedAt: '2026-10-03',
   ...extra,
 });
 
@@ -18,7 +20,8 @@ describe('projectsFrom', () => {
         tagline: 'Web radio diffusée 24 h/24.',
         stack: ['python'],
         url: 'https://github.com/VictorNain26/aubesonore',
-        status: 'Open source',
+        status: 'Sur GitHub',
+        updatedAt: new Date('2026-10-03T00:00:00Z'),
       },
     ]);
   });
@@ -39,15 +42,30 @@ describe('projectsFrom', () => {
     expect(project).toMatchObject({ status: 'Pré-lancement', stack: ['nextjs'] });
   });
 
+  it('shows an archived repo as archived, after the others', () => {
+    const projects = projectsFrom([
+      repo({ name: 'tomai-curriculum', description: 'Index RAG — Retiré.', archived: true }),
+      repo({ homepage: 'https://aubesonore.fr/' }),
+    ]);
+    expect(projects.map(project => [project.name, project.status])).toEqual([
+      ['AubeSonore', 'En ligne'],
+      ['Index RAG', 'Archivé'],
+    ]);
+  });
+
   it('keeps a dash inside the tagline', () => {
     const [project] = projectsFrom([repo({ description: 'TomIA — Tuteur — pour collégiens.' })]);
     expect(project).toMatchObject({ name: 'TomIA', tagline: 'Tuteur — pour collégiens.' });
   });
 
-  it.each([null, 'Web radio sans nom.', ' — Sans nom.'])(
-    'fails the build on the description %j',
-    description => {
-      expect(() => projectsFrom([repo({ description })])).toThrow('aubesonore');
-    },
-  );
+  it.each([
+    ['Web radio diffusée 24 h/24.', 'Web radio diffusée 24 h/24.'],
+    [' — Sans nom.', '— Sans nom.'],
+    [null, ''],
+  ])('names it after the repo when the description %j has no name', (description, tagline) => {
+    expect(projectsFrom([repo({ description })])[0]).toMatchObject({
+      name: 'aubesonore',
+      tagline,
+    });
+  });
 });

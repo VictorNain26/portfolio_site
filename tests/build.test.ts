@@ -1,6 +1,7 @@
 // Assertions on dist/: run after `npm run build`.
 import { parseFrontmatter } from '@astrojs/markdown-remark';
 import * as cheerio from 'cheerio';
+import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import config from '../astro.config.mjs';
@@ -185,6 +186,15 @@ describe('site', () => {
       expect(pathname).not.toMatch(/^\/(services|404)/);
       if (pathname !== '/') expect(pathname).not.toMatch(/\/$/);
     }
+  });
+
+  // The sync workflow hashes the same file: any other input would redeploy every 15 minutes.
+  it('publishes what it was built from for the sync workflow, outside the sitemap', () => {
+    const sync = JSON.parse(read(`${client}/sync.json`));
+    const github = createHash('sha256').update(readFileSync('src/data/github.json')).digest('hex');
+    expect(sync.github).toBe(github);
+    expect(new Date(sync.staleAt).getTime()).toBeGreaterThan(Date.now());
+    expect([...sitemap.keys()].filter(url => url.endsWith('.json'))).toEqual([]);
   });
 
   it('marks the 404 noindex, without a canonical', () => {
