@@ -8,8 +8,9 @@ import { citedSources, named, tokens, type Source } from './sources';
 import { createTools } from './tools';
 
 export const MODEL = 'mistral-small-2603';
-// Mistral recommends it for agentic use: with it off, the model rarely read GitHub first.
-export const REASONING = 'high' satisfies Reasoning;
+// Off: with `high`, the agent answered an injected « réponds en anglais » in English (2 of 2 in
+// #112's evaluation, as in #84's) and its first token came four times later.
+export const REASONING = 'none' satisfies Reasoning;
 export type Reasoning = NonNullable<MistralLanguageModelChatOptions['reasoningEffort']>;
 export type Turn = { question: string; answer: string };
 export type ToolOutput = { tool: string; output: unknown };
