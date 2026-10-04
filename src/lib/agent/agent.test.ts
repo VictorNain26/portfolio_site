@@ -82,7 +82,11 @@ const searches = (query: string) => ({
   ]),
 });
 
-const run = async (model: MockLanguageModelV4, signal = new AbortController().signal) => {
+const run = async (
+  model: MockLanguageModelV4,
+  signal = new AbortController().signal,
+  question = 'Ta radio ?',
+) => {
   const answer = createAgent({
     model,
     knowledge,
@@ -91,7 +95,7 @@ const run = async (model: MockLanguageModelV4, signal = new AbortController().si
     siteUrl: 'https://example.com',
     reasoning: 'none',
   })({
-    question: 'Ta radio ?',
+    question,
     history: [],
     signal,
     now: new Date(),
@@ -102,6 +106,46 @@ const run = async (model: MockLanguageModelV4, signal = new AbortController().si
 };
 
 describe('createAgent', () => {
+  it('reads GitHub first when the question names a project or a repo', async () => {
+    const model = new MockLanguageModelV4({
+      doStream: [reads('radio-pipeline'), says('Elle diffuse avec AzuraCast.')],
+    });
+    await run(model, undefined, 'Le pipeline d’AubeSonore tourne quand ?');
+    expect(model.doStreamCalls.map(call => call.toolChoice)).toEqual([
+      { type: 'required' },
+      { type: 'auto' },
+    ]);
+  });
+
+  it('shows only the answer written after the lookup, not the draft of the forced step', async () => {
+    const draft = {
+      stream: convertArrayToReadableStream<LanguageModelV4StreamPart>([
+        { type: 'text-start', id: 'draft' },
+        { type: 'text-delta', id: 'draft', delta: 'Je ne réponds qu’à des questions sur Victor.' },
+        { type: 'text-end', id: 'draft' },
+        {
+          type: 'tool-call',
+          toolCallId: 'call-draft',
+          toolName: 'read_readme',
+          input: JSON.stringify({ repo: 'radio-pipeline' }),
+        },
+        finish('tool-calls'),
+      ]),
+    };
+    const { text } = await run(
+      new MockLanguageModelV4({ doStream: [draft, says('Elle diffuse avec AzuraCast.')] }),
+      undefined,
+      'Comment diffuse AubeSonore ?',
+    );
+    expect(text).toBe('Elle diffuse avec AzuraCast.');
+  });
+
+  it('leaves the first step to the model when no project or repo is named', async () => {
+    const model = new MockLanguageModelV4({ doStream: says('Victor a appris au Wagon.') });
+    await run(model, undefined, 'Tu as appris à coder où ?');
+    expect(model.doStreamCalls[0]?.toolChoice).toEqual({ type: 'auto' });
+  });
+
   it('streams the answer and cites the project it names', async () => {
     const { text, sources } = await run(
       new MockLanguageModelV4({ doStream: says('AubeSonore ', 'diffuse.') }),

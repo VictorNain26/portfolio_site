@@ -39,9 +39,9 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
   la date du prochain article programmé à `/sync.json` du site en ligne, et ne
   redéploie que s'ils diffèrent
 - `src/pages/api/ask.ts` — mon assistant IA, qui répond sur moi et mon code : AI
-  SDK, Mistral Small 4 (`mistral-small-2603`), quota et conversations dans
-  Upstash Redis, traces Langfuse quand ses clés existent (secrets via
-  `astro:env`)
+  SDK, Mistral Small 4 (`mistral-small-2603`, raisonnement coupé, 400 tokens de
+  sortie au plus), quota et conversations dans Upstash Redis, traces Langfuse
+  quand ses clés existent (secrets via `astro:env`)
 - `src/lib/agent/` — l'agent, testé : prompt, outils, sources calculées, handler
   HTTP ; `src/content/persona.md` — sa fiche
 - `scripts/github.ts` — écrit `src/data/github.json` (non versionné) avant
@@ -78,6 +78,7 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
   donne que des faits : il n'affirme sur moi que ce que disent la fiche, les
   projets, les articles publiés ou GitHub ; un article programmé ne doit jamais
   lui parvenir. Modèle Mistral daté, jamais `-latest`. Ses sources se calculent
-  dans le code, jamais par le modèle.
+  dans le code, jamais par le modèle, et c'est le code qui l'oblige à lire
+  GitHub avant de répondre quand une question nomme un dépôt ou un projet.
 - `public/og.png`, le favicon, les icônes et les logos se régénèrent avec
   `scripts/brand.mjs` (voir l'en-tête du script).

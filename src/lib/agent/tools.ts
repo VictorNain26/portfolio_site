@@ -23,7 +23,7 @@ export function createTools({
   return {
     read_readme: tool({
       description:
-        'Lit le README à jour d’un des dépôts GitHub publics de Victor (texte brut, tronqué). Pour un détail technique, l’architecture ou l’état d’un dépôt que les documents ne donnent pas.',
+        'Lit le README à jour d’un des dépôts GitHub publics de Victor (texte brut, tronqué). Les documents ne résument ses projets qu’à une date donnée, et un dépôt change : avant de répondre sur un projet ou un dépôt (ce qu’il fait, avec quoi, pourquoi, où il en est), lis son README.',
       inputSchema: z.object({
         repo: z.enum(names).describe('Nom exact du dépôt, tel qu’il apparaît dans les documents.'),
       }),
@@ -47,7 +47,7 @@ export function createTools({
     ...(search && {
       search_code: tool({
         description:
-          'Cherche dans le code des dépôts GitHub publics de Victor et renvoie jusqu’à cinq fichiers avec des extraits. Pour une question sur le code lui-même : où quelque chose est fait, comment, avec quelle bibliothèque. Donne quelques mots-clés tels qu’ils apparaissent dans le code, souvent en anglais (noms de fonctions, de bibliothèques, de fichiers).',
+          'Cherche dans le code à jour des dépôts GitHub publics de Victor et renvoie jusqu’à cinq fichiers avec des extraits. Pour une question sur le code ou sur une technologie (où quelque chose est fait, comment, avec quelle bibliothèque, s’il a utilisé tel outil) : les documents n’en disent presque jamais assez. Donne quelques mots-clés tels qu’ils apparaissent dans le code, souvent en anglais (noms de fonctions, de bibliothèques, de fichiers).',
         inputSchema: z.object({
           query: z.string().min(1).max(120).describe('Mots-clés, sans opérateur de recherche.'),
           repo: z
