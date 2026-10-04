@@ -34,9 +34,10 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
   (`src/lib/projects.ts`) : les dépôts publics qui ont le topic `portfolio`,
   sans rien d'autre à remplir. Une description « Nom — accroche » donne le nom,
   sinon c'est le nom du dépôt ; les autres topics font la stack ; archivé,
-  `pre-launch` ou une homepage donnent le statut. Toutes les 15 min, `sync.yml`
-  compare GitHub et la date du prochain article programmé à `/sync.json` du site
-  en ligne, et ne redéploie que s'ils diffèrent
+  `pre-launch` ou une homepage donnent le statut. `sync.yml` (planifié toutes
+  les 15 min, que GitHub retarde souvent de quelques heures) compare GitHub et
+  la date du prochain article programmé à `/sync.json` du site en ligne, et ne
+  redéploie que s'ils diffèrent
 - `src/pages/api/ask.ts` — mon assistant IA, qui répond sur moi et mon code : AI
   SDK, Mistral Small 4 (`mistral-small-2603`), quota et conversations dans
   Upstash Redis, traces Langfuse quand ses clés existent (secrets via
