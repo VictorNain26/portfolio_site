@@ -143,6 +143,27 @@ const breadcrumb = {
     line-height: 1.5;
   }
 
+  .prose :global(table) {
+    width: 100%;
+    margin-block: 0 1.25rem;
+    border-collapse: collapse;
+    font-size: 1rem;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 0.45rem 1rem 0.45rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-align: start;
+    vertical-align: baseline;
+  }
+
+  .prose :global(th) {
+    font-weight: 400;
+    color: var(--muted);
+  }
+
   .prose :global(hr) {
     border: 0;
     border-top: 1px solid var(--rule);

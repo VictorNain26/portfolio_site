@@ -1,0 +1,60 @@
+---
+title: 'Je ne suis d’accord avec moi-même qu’à 85 %'
+summary: 'Pour qu’AubeSonore passe des morceaux à mon goût, j’ai jeté son pipeline et recommencé page blanche. Puis j’ai mesuré la vraie limite du système : moi.'
+publishedAt: '2026-10-04'
+tags:
+  - AubeSonore
+  - Mesure
+---
+
+Dans [mon premier article](/blog/2026-09-22-qui-je-suis), je décrivais le pipeline d'[AubeSonore](https://aubesonore.fr/), ma web radio : chaque jour, il cherchait de nouveaux morceaux, vérifiait leur genre auprès de trois sources et remplissait l'antenne. Ce pipeline n'existe plus. Je l'ai supprimé le 30 septembre, et voilà pourquoi.
+
+## Un premier essai raté, mais mesuré
+
+Le 24 septembre, j'ai lancé pour de vrai une nouvelle version du filtre de goût : 15 artistes de départ, 336 morceaux proposés. Résultat : ça ne me plaisait pas. Et quand j'ai regardé les chiffres, j'ai compris pourquoi.
+
+Le filtre apprenait à séparer ma bibliothèque de quatre catégories que je lui avais données comme exemples de ce que je n'aime pas. Il le faisait très bien : une AUC de 0,985, quand 1 est un classement parfait et 0,5 le hasard. Sauf qu'il acceptait 81 % des candidats. Il savait reconnaître mes exemples, pas mon goût.
+
+Deuxième problème : pour chaque artiste voisin, je prenais ses titres les plus populaires sur Deezer. J'obtenais des tubes. Uptown Girl, sur ma radio de découverte !
+
+J'ai aussi testé l'idée la plus intuitive : garder ce qui ressemble à ma bibliothèque. Mesuré, ça laissait passer 79 % des morceaux que je n'aime pas. Ma bibliothèque est trop éclectique pour ça. Le goût se joue à l'intérieur d'un genre, pas entre les genres.
+
+Et en relisant l'ancien code, j'ai trouvé pire. Quand MusicBrainz ou Discogs ne répondaient pas, [le client de genres](https://github.com/VictorNain26/aubesonore/blob/9e842fc57dbbcef3fedaeeea99f9806784a86b97/scripts/genre_client.py) renvoyait une liste vide, et un morceau sans genre était accepté. Une panne passait pour un feu vert. C'est devenu un principe de la nouvelle version : [un repli silencieux est pire qu'une panne](https://github.com/VictorNain26/aubesonore/blob/master/pipeline/docs/vision.md). Tout ce qui est sauté est compté et nommé dans le rapport de la passe.
+
+## Page blanche
+
+J'ai décidé de tout réécrire, clients Deezer, Last.fm et Plex compris. [La conception](https://github.com/VictorNain26/aubesonore/blob/9a6d66e/docs/superpowers/specs/2026-09-24-gout-decouverte-v3-design.md) tient en une idée : seul mon avis, donné morceau par morceau, peut apprendre mon goût au système.
+
+Le nouveau pipeline tourne une fois par semaine, le dimanche à 3 h. Il part d'artistes tirés de ma bibliothèque. Il ne garde un artiste voisin que si Deezer **et** Last.fm le citent tous les deux. Pour chaque morceau candidat, il analyse l'extrait de 30 secondes avec Discogs-EffNet, un modèle qui en tire une empreinte sonore. Puis un modèle entraîné sur mes votes classe la fournée.
+
+Pour voter, j'ai une petite page privée. Chaque semaine, 20 morceaux : 10 pour l'examen, qui mesure le modèle, et 10 pour la leçon, qui l'entraîne. Le dimanche, un message me le rappelle.
+
+## Ce qui porte vraiment le signal
+
+Sur [les 60 premiers votes d'examen](https://github.com/VictorNain26/aubesonore/blob/master/pipeline/docs/recherches/2026-09-30-modele-audio-seul.md), j'ai mesuré chaque signal seul :
+
+| Signal                     | AUC       |
+| -------------------------- | --------- |
+| L'empreinte sonore seule   | 0,80–0,81 |
+| Le rang du titre sur Deezer | 0,57      |
+| La popularité de l'artiste | 0,52–0,57 |
+| Les tags Last.fm           | 0,53      |
+| La proximité avec mes artistes | 0,53–0,58 |
+
+La popularité, les tags et la proximité avec mes artistes ne faisaient guère mieux que le hasard. J'avais construit un modèle qui empilait quatre signaux. Il est parti, remplacé par une simple régression logistique sur l'empreinte sonore.
+
+Premier vrai modèle : une AUC d'examen de 0,816, et 15 « oui » sur les 20 morceaux d'examen qu'il notait le mieux, soit 75 %. Ce chiffre est optimiste, parce que ces mêmes votes ont servi à régler le modèle. Les votes de leçon aident, mais de moins en moins : 0,760 sans aucun, 0,787 avec 25, 0,791 avec 50, 0,816 avec 99.
+
+## La limite, c'est moi
+
+Mon objectif de départ : 90 % de « oui » à l'aveugle sur les morceaux retenus.
+
+Alors j'ai fait un test. Trois jours après, j'ai revoté à l'aveugle 20 morceaux que j'avais déjà notés. J'étais d'accord avec moi-même 17 fois sur 20. 85 %, avec un intervalle de Wilson de 64 à 95 %, qui rappelle que 20 votes, c'est peu.
+
+Aucun modèle ne peut reproduire mon goût mieux que je ne le reproduis moi-même. Les 90 % restent un horizon, plus une barrière.
+
+## Moins de code, plus de mesure
+
+Le nettoyage a fait maigrir le pipeline : de 3 865 à 2 720 lignes, et de 313 à 230 tests, qui passent en 12 secondes au lieu de 83. Un autre principe du projet résume tout ça : [tout se mesure](https://github.com/VictorNain26/aubesonore/blob/master/pipeline/docs/vision.md). Un signal ou un mécanisme qui ne prouve pas son utilité est retiré.
+
+Le code est dans [le dossier `pipeline`](https://github.com/VictorNain26/aubesonore/tree/master/pipeline), et la radio tourne sur [aubesonore.fr](https://aubesonore.fr/). Chaque dimanche, je vote, et le modèle apprend un peu mieux mon goût. Mais jamais mieux que moi.
