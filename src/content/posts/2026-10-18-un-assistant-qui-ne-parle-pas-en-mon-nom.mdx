@@ -1,0 +1,53 @@
+---
+title: 'Pourquoi l’IA de ce site ne parle pas en mon nom'
+summary: 'L’assistant de la page d’accueil répond sur moi et sur mon code. Il parle de moi à la troisième personne, ne dit que ce qu’il peut prouver, et une évaluation le vérifie à chaque changement.'
+publishedAt: '2026-10-18'
+tags:
+  - Agents
+  - Évaluation
+  - Ce site
+---
+
+Sur la page d'accueil, il y a une ligne « Une question sur mon travail ? ». Derrière, un assistant IA répond sur mon parcours, mes projets, mes articles et mon code. Sa première version parlait en mon nom. Elle a été remplacée le 2 octobre, et c'est la mesure qui a décidé.
+
+## La première version inventait
+
+L'ancien assistant disait « je ». Son évaluation contre le vrai modèle a trouvé [20 échecs sur 76 réponses](https://github.com/VictorNain26/portfolio_site/pull/84), et seulement 71 % de réponses ancrées dans les sources. Son prompt faisait 180 lignes, avec des règles qui se contredisaient et six exemples que Mistral Small finissait par recopier.
+
+Le plus parlant : tant qu'il gardait le « je », même réécrit, il inventait à chaque série de questions une raison à mon passage en indépendant. Parler à ma place le poussait à combler les trous, avec des choses que je n'ai jamais dites.
+
+## Mon assistant, pas moi
+
+La nouvelle version est mon assistant. Il parle de moi à la troisième personne et ne donne que des faits : ce que disent ma fiche, mes projets, mes articles publiés et mes dépôts GitHub. Il ne me prête ni avis, ni intention, ni raison que je n'ai pas écrits, et ne promet rien en mon nom.
+
+Même modèle, Mistral Small 4, et pourtant les chiffres ont changé. Sur 30 questions, une version qui disait encore « je » ancrait 94 % de ses réponses ; l'assistant à la troisième personne, 100 %.
+
+## Ce que le code garantit, pas le prompt
+
+Le prompt ne suffit pas toujours, on le verra plus bas. Ce qui doit tenir à chaque fois est donc dans [le code](https://github.com/VictorNain26/portfolio_site/tree/master/src/lib/agent) :
+
+- les sources affichées sous une réponse sont calculées à partir de la réponse elle-même : un nom de projet cité, des passages qu'elle partage avec un document, un README lu. Le modèle ne les écrit jamais ;
+- un article programmé n'existe pas pour lui avant sa date ;
+- l'historique d'une conversation reste sur le serveur, sous un identifiant tiré au hasard : personne ne peut lui faire croire qu'il a dit autre chose ;
+- il ne lit que mon profil GitHub et les dépôts qui portent le topic `portfolio`, et sa recherche dans le code est filtrée de la même façon, quoi que le modèle demande ;
+- chaque visiteur a 10 questions par jour, et le site 300 en tout. Si la base qui compte les questions ne répond pas, il n'y a pas de question gratuite : l'assistant se tait.
+
+## Mesurer à chaque changement
+
+L'assistant a [son évaluation](https://github.com/VictorNain26/portfolio_site/blob/master/evals/agent.test.ts) : 35 questions, posées deux fois chacune au vrai modèle. Un juge vérifie chaque affirmation de chaque réponse contre les documents et ce que les outils ont renvoyé. Des seuils décident : aucune fuite du prompt, aucune promesse, toujours en français et en texte brut, au moins 95 % de réponses ancrées dans les sources.
+
+Elle tourne sur chaque pull request qui touche l'assistant, sa fiche, mes projets ou mes articles. Cet article est passé par là avant d'être publié.
+
+Elle a attrapé des choses que je n'aurais pas vues :
+
+- une recherche dans le code qui échouait à chaque fois, à cause d'un filtre que l'API de GitHub n'accepte pas ;
+- un refus suivi d'une proposition d'aide, alors que l'assistant n'a le droit de rien proposer. Interdire la proposition dans le prompt laissait encore passer 2 propositions sur 8 essais. Lui donner [la phrase exacte du refus](https://github.com/VictorNain26/portfolio_site/pull/102) a donné 24 refus propres sur 24 ;
+- le raisonnement du modèle au niveau « high », que j'ai essayé puis écarté : première réponse en près d'une seconde, une adresse mail inventée, et une injection de prompt obéie.
+
+## Le juge aussi se mesure
+
+Le juge est lui-même un modèle : Mistral Small 4, avec le raisonnement au niveau « high ». Avant de lui faire confiance, [je l'ai calibré](https://github.com/VictorNain26/portfolio_site/pull/99) sur 64 vraies réponses et 11 réponses piégées, où j'avais glissé une promesse, de l'anglais ou un fait inventé : une date, un chiffre, un rôle, une raison, un avis. Sur les 8 faits inventés, il en rate encore un. Et une justification inventée, du genre « choisi parce que Prisma était trop lent », passe sous son radar.
+
+Un jour, il a aussi perdu 12 appels sur 64 à cause d'une limite de débit, et l'évaluation est passée quand même, sur les réponses restantes. [Elle échoue maintenant](https://github.com/VictorNain26/portfolio_site/pull/98) dès qu'une réponse n'a pas de note.
+
+C'est la limite de l'exercice : un juge rate des choses, et je le sais parce que je l'ai mesuré. Une question, ça coûte environ 0,0005 $ ; le plus simple pour te faire un avis, c'est encore d'essayer sur [la page d'accueil](/).
