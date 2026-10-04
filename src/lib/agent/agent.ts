@@ -24,6 +24,8 @@ export type Answer = {
 // Up to three tool calls (search, then a README), then the answer: the last step may not
 // call a tool, so it always writes.
 const MAX_STEPS = 4;
+// READMEs the code reads for the repos a question names, before the model answers.
+const MAX_READMES = 2;
 
 export function createAgent({
   model,
@@ -67,13 +69,27 @@ export function createAgent({
       // The repo list is live (cached), so a fresh push or a new repo needs no redeploy.
       const live: Knowledge = { ...knowledge, repos: await github.repos(signal) };
       documents = documentsOf(live, publishedBy, siteUrl);
-      const instructions = buildSystemPrompt(live, documents, now);
-      // The documents are a dated summary and repos change: a question that names a repo or a
-      // project reads GitHub before it is answered, whatever the model would decide.
+      // The documents are a dated summary and repos change: the code itself reads the README of
+      // each repo the conversation names, directly or through its project, before the model
+      // answers. Asking the model for a tool call instead failed when it wrote text regardless.
       const asked = tokens([...history.map(turn => turn.question), question].join(' ')).join(' ');
-      const lookup = [...live.repos.map(repo => repo.name), ...live.projects.map(p => p.name)].some(
-        name => named(asked, name),
-      );
+      const namedRepos = live.repos
+        .filter(
+          repo =>
+            named(asked, repo.name) ||
+            live.projects.some(project => project.repo === repo.url && named(asked, project.name)),
+        )
+        .slice(0, MAX_READMES);
+      const readmes = (
+        await Promise.all(
+          namedRepos.map(async repo => ({
+            repo: repo.name,
+            readme: await github.readme(repo.name, signal),
+          })),
+        )
+      ).filter((read): read is { repo: string; readme: string } => read.readme !== null);
+      for (const { repo } of readmes) read.push(`repo:${repo}`);
+      const instructions = buildSystemPrompt(live, documents, now, readmes);
       // Mistral caches by shared prefix; the date closes the prompt, so the key leaves it out.
       const promptCacheKey = createHash('sha256')
         .update(instructions.slice(0, instructions.lastIndexOf('\n\n')))
@@ -93,11 +109,7 @@ export function createAgent({
         }),
         stopWhen: isStepCount(MAX_STEPS),
         prepareStep: ({ stepNumber }) =>
-          stepNumber === MAX_STEPS - 1
-            ? { toolChoice: 'none' }
-            : stepNumber === 0 && lookup
-              ? { toolChoice: 'required' }
-              : undefined,
+          stepNumber === MAX_STEPS - 1 ? { toolChoice: 'none' } : undefined,
         temperature: 0.3,
         // An answer takes under 100; without a cap the model looped up to 1,148 words (#112).
         maxOutputTokens: 800,
@@ -111,16 +123,11 @@ export function createAgent({
         },
         telemetry: { functionId: 'generate-answer' },
       });
-      let step = -1;
       for await (const part of result.stream) {
-        if (part.type === 'start-step') step++;
-        // A step that must call a tool still drafts text, sometimes a refusal: only the answer
-        // written after the lookup is shown.
-        else if (part.type === 'text-delta' && lookup && step === 0) continue;
         // The model sets names in markdown bold or code despite the prompt; the page shows plain
         // text, and French prose has no use for an asterisk or a backtick. Underscores stay:
         // repo names carry them. It also breaks lines to enumerate, though the answer is one line.
-        else if (part.type === 'text-delta')
+        if (part.type === 'text-delta')
           yield part.text.replace(/[*`]/g, '').replace(/\s*\n\s*/g, ' ');
         else if (part.type === 'tool-result')
           toolOutputs.push({ tool: part.toolName, output: part.output });

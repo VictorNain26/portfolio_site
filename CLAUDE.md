@@ -78,7 +78,8 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
   donne que des faits : il n'affirme sur moi que ce que disent la fiche, les
   projets, les articles publiés ou GitHub ; un article programmé ne doit jamais
   lui parvenir. Modèle Mistral daté, jamais `-latest`. Ses sources se calculent
-  dans le code, jamais par le modèle, et c'est le code qui l'oblige à lire
-  GitHub avant de répondre quand une question nomme un dépôt ou un projet.
+  dans le code, jamais par le modèle, et c'est le code qui lit le README à jour
+  d'un dépôt ou d'un projet que la conversation nomme, avant que le modèle
+  réponde.
 - `public/og.png`, le favicon, les icônes et les logos se régénèrent avec
   `scripts/brand.mjs` (voir l'en-tête du script).
