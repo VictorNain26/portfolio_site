@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import type { GitHub } from './github';
 import { documentsOf, type Document, type Knowledge } from './knowledge';
 import { buildSystemPrompt } from './prompt';
+import { projectsFrom } from '../projects';
 import { citedSources, named, tokens, type Source } from './sources';
 import { createTools } from './tools';
 
@@ -34,7 +35,8 @@ export function createAgent({
   reasoning,
 }: {
   model: LanguageModel;
-  knowledge: Knowledge;
+  // Projects are read from the live repo list, not from the build.
+  knowledge: Omit<Knowledge, 'projects'>;
   github: Pick<GitHub, 'repos' | 'readme' | 'search' | 'activity'>;
   // Posts scheduled after this date have no page yet: the agent must not know them.
   publishedBy: Date;
@@ -64,8 +66,10 @@ export function createAgent({
     let documents: Document[] = [];
 
     async function* text() {
-      // The repo list is live (cached), so a fresh push or a new repo needs no redeploy.
-      const live: Knowledge = { ...knowledge, repos: await github.repos(signal) };
+      // The repo list is live (cached): a new repo, a fresh push or a description edited on
+      // GitHub reaches the agent without a redeploy, projects included.
+      const repos = await github.repos(signal);
+      const live: Knowledge = { ...knowledge, repos, projects: projectsFrom(repos) };
       documents = documentsOf(live, publishedBy, siteUrl);
       const instructions = buildSystemPrompt(live, documents, now);
       // The documents are a dated summary and repos change: a question that names a repo or a

@@ -3,6 +3,7 @@ import { convertArrayToReadableStream, MockLanguageModelV4 } from 'ai/test';
 import { describe, expect, it } from 'vitest';
 import { createAgent } from './agent';
 import type { Knowledge } from './knowledge';
+import type { Repo } from './repos';
 
 const usage = {
   inputTokens: { total: 10, noCache: 10, cacheRead: 0, cacheWrite: 0 },
@@ -33,21 +34,24 @@ const reads = (repo: string) => ({
   ]),
 });
 
-const knowledge: Knowledge = {
+const aubesonore: Repo = {
+  name: 'aubesonore',
+  description: 'AubeSonore — Web radio diffusée 24 h/24.',
+  url: 'https://github.com/VictorNain26/aubesonore',
+  homepage: 'https://www.aubesonore.fr/',
+  language: 'TypeScript',
+  stars: 0,
+  pushedAt: '2026-09-01',
+  archived: false,
+  topics: ['portfolio', 'typescript'],
+  readme: null,
+};
+
+const knowledge: Omit<Knowledge, 'projects'> = {
   persona: 'Victor, développeur.',
-  projects: [
-    {
-      name: 'AubeSonore',
-      tagline: 'Web radio diffusée 24 h/24.',
-      stack: ['TypeScript'],
-      url: 'https://www.aubesonore.fr/',
-      repo: 'https://github.com/VictorNain26/aubesonore',
-      status: 'En ligne',
-      updatedAt: new Date('2026-09-01'),
-    },
-  ],
   posts: [],
   repos: [
+    aubesonore,
     {
       name: 'radio-pipeline',
       description: 'Feeds the radio.',
@@ -106,6 +110,28 @@ const run = async (
 };
 
 describe('createAgent', () => {
+  it('reads projects from the live repo list: a description edited on GitHub needs no deploy', async () => {
+    const model = new MockLanguageModelV4({ doStream: says('Une radio du dimanche.') });
+    const edited = { ...aubesonore, description: 'AubeSonore — Radio du dimanche matin.' };
+    const answer = createAgent({
+      model,
+      knowledge,
+      github: { ...github, repos: async () => [edited] },
+      publishedBy: new Date('2026-10-01'),
+      siteUrl: 'https://example.com',
+      reasoning: 'none',
+    })({
+      question: 'Ta radio ?',
+      history: [],
+      signal: new AbortController().signal,
+      now: new Date(),
+    });
+    for await (const _ of answer.text);
+    const prompt = JSON.stringify(model.doStreamCalls[0]?.prompt);
+    expect(prompt).toContain('AubeSonore (En ligne) : Radio du dimanche matin.');
+    expect(prompt).not.toContain('Web radio diffusée 24 h/24.');
+  });
+
   it('reads GitHub first when the question names a project or a repo', async () => {
     const model = new MockLanguageModelV4({
       doStream: [reads('radio-pipeline'), says('Elle diffuse avec AzuraCast.')],
