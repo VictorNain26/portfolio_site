@@ -43,10 +43,10 @@
 
 <script>
   import type { Source } from '../lib/agent/sources';
-  import { linkSources, readEvents } from '../lib/ask';
+  import { linkSources, locked, readEvents } from '../lib/ask';
 
   type Turn = { question: string; answer: string; sources: Source[] };
-  type State = { conversation?: string; turns: Turn[]; status?: string; exhausted?: boolean };
+  type State = { conversation?: string; turns: Turn[]; status?: string; exhaustedUntil?: number };
 
   // The thread lives in this tab only, so it survives a visit to another page and back.
   const STORE = 'ask-thread';
@@ -124,6 +124,12 @@
 
     let state = load();
     let controller: AbortController | undefined;
+    const exhausted = () => locked(state.exhaustedUntil, Date.now());
+    if (state.exhaustedUntil !== undefined && !exhausted()) {
+      delete state.exhaustedUntil;
+      delete state.status;
+      save(state);
+    }
     document.addEventListener('astro:before-swap', () => controller?.abort(), { once: true });
 
     const persist = () => save(state);
@@ -134,11 +140,11 @@
       toggleState.textContent = open ? 'Fermer' : 'Demander';
     };
     const lock = () => {
-      input.disabled = state.exhausted === true;
-      send.disabled = state.exhausted === true;
+      input.disabled = exhausted();
+      send.disabled = exhausted();
     };
     const setBusy = (busy: boolean) => {
-      input.disabled = busy || state.exhausted === true;
+      input.disabled = busy || exhausted();
       send.textContent = busy ? 'Arrêter' : 'Envoyer';
       thread.setAttribute('aria-busy', String(busy));
     };
@@ -168,10 +174,11 @@
     reset.addEventListener('click', () => {
       controller?.abort();
       thread.replaceChildren();
-      state = { turns: [], ...(state.exhausted && { exhausted: true, status: state.status }) };
+      const { exhaustedUntil, status: spent } = state;
+      state = { turns: [], ...(exhausted() && { exhaustedUntil, status: spent }) };
       persist();
       reset.hidden = true;
-      if (!state.exhausted) {
+      if (!exhausted()) {
         status.textContent = '';
         input.focus({ preventScroll: true });
       }
@@ -206,7 +213,7 @@
         dots.remove();
         li.append(para('note', message));
         // Nothing was answered: give the question back so it can be sent again.
-        if (!text && !state.exhausted) input.value = question;
+        if (!text && !exhausted()) input.value = question;
       };
 
       try {
@@ -217,9 +224,9 @@
           signal: controller.signal,
         });
         if (!response.ok || !response.body) {
-          const { code } = await response.json().catch(() => ({ code: 'failed' }));
+          const { code, reset } = await response.json().catch(() => ({ code: 'failed' }));
           if (code === 'limit' || code === 'global_limit') {
-            state.exhausted = true;
+            state.exhaustedUntil = reset;
             lock();
           }
           fail(errors[code] ?? errors.failed!);
@@ -240,7 +247,7 @@
             state.conversation = event.conversation;
             state.turns.push({ question, answer: text, sources });
             if (event.remaining === 0) {
-              state.exhausted = true;
+              state.exhaustedUntil = event.reset;
               lock();
               setStatus("C'était ta dernière question pour aujourd'hui.");
             } else {
@@ -257,7 +264,7 @@
       } finally {
         controller = undefined;
         setBusy(false);
-        if (refocus && !state.exhausted) input.focus({ preventScroll: true });
+        if (refocus && !exhausted()) input.focus({ preventScroll: true });
       }
     });
   }

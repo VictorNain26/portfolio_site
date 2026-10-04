@@ -36,7 +36,8 @@ export type Tracer = <T>(
 export type AskEvent =
   | { type: 'text'; text: string }
   | { type: 'sources'; sources: Source[] }
-  | { type: 'done'; remaining: number; conversation: string }
+  // `reset` closes the visitor's window: the page unlocks then, not a day after the last refusal.
+  | { type: 'done'; remaining: number; reset: number; conversation: string }
   | { type: 'error'; code: 'failed' };
 
 export const BLOCKED_ANSWER = 'Je préfère ne pas répondre à ça.';
@@ -108,7 +109,8 @@ export async function handleAsk(
       const send = (event: AskEvent) => {
         if (!gone.aborted) controller.enqueue(encoder.encode(`${JSON.stringify(event)}\n`));
       };
-      const done = () => send({ type: 'done', remaining: visitor.remaining, conversation });
+      const done = () =>
+        send({ type: 'done', remaining: visitor.remaining, reset: visitor.reset, conversation });
       let text = '';
       try {
         await deps.trace({ conversation, question, turn: history.length + 1 }, async span => {
