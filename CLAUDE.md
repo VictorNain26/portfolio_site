@@ -61,8 +61,9 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
   (transitions entre pages dans les deux sens, repli animé pour les navigateurs
   sans View Transitions) et le script inline du thème (sombre de 20 h à 7 h,
   heure locale du visiteur, dans `Base.astro`, réappliqué à `astro:after-swap`).
-  Le `ClientRouter` garde son fondu par défaut ; seuls le nom et les titres de
-  section glissent d'une page à l'autre. Toute animation respecte
+  L'ancienne page sort d'abord (`page-out`, dans `Base.astro`), puis les blocs
+  `.enter` de la nouvelle entrent dans l'ordre de lecture (`global.css`) : les
+  deux pages ne se chevauchent jamais. Toute animation respecte
   `prefers-reduced-motion`.
 - Une seule police, pas de teinte d'accent. `--muted` passe AA sur les deux
   fonds (6.69:1 en clair, 7.70:1 en sombre) : toute nouvelle teinte reste

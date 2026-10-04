@@ -21,6 +21,7 @@ const project: Project = {
   tagline: 'Web radio.',
   stack: ['Python', 'Docker'],
   url: 'https://www.aubesonore.fr/',
+  repo: 'https://github.com/VictorNain26/aubesonore',
   status: 'En ligne',
   updatedAt: new Date('2026-10-03'),
 };
@@ -60,11 +61,12 @@ describe('llmsTxt', () => {
     expect(text.match(/^## .+$/gm)).toEqual(['## Projets', '## Articles', '## Optional']);
   });
 
-  it('lists projects with status and stack, and posts by their Markdown URL', () => {
+  it('lists projects with status, stack and code, and posts by their Markdown URL', () => {
     const line = text.split('\n').find(row => row.startsWith('- [AubeSonore]'));
     expect(line).toMatch(/^- \[AubeSonore\]\(https:\/\/www\.aubesonore\.fr\/\): Web radio\./);
     expect(line).toContain('En ligne');
     expect(line).toContain('Python, Docker');
+    expect(line).toContain('Code : https://github.com/VictorNain26/aubesonore');
     expect(text).toContain('[Salut](https://www.victorlenain.fr/blog/2026-09-22-qui-je-suis.md)');
   });
 
