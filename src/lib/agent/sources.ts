@@ -7,7 +7,7 @@ const MAX_SOURCES = 4;
 // paraphrase to its post ("au Wagon à l'été 2021"), not enough for stock phrases.
 const MIN_SHARED = 3;
 
-const tokens = (text: string) =>
+export const tokens = (text: string) =>
   text
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
@@ -24,8 +24,8 @@ const trigrams = (list: string[]) =>
       .map(gram => gram.join(' ')),
   );
 
-const named = (answer: string, name: string) =>
-  ` ${answer} `.includes(` ${tokens(name).join(' ')} `);
+export const named = (text: string, name: string) =>
+  ` ${text} `.includes(` ${tokens(name).join(' ')} `);
 
 export function citedSources(answer: string, documents: Document[], readRepos: string[]): Source[] {
   const words = tokens(answer);

@@ -4,10 +4,12 @@ import { createHash } from 'node:crypto';
 import type { GitHub } from './github';
 import { documentsOf, type Document, type Knowledge } from './knowledge';
 import { buildSystemPrompt } from './prompt';
-import { citedSources, type Source } from './sources';
+import { citedSources, named, tokens, type Source } from './sources';
 import { createTools } from './tools';
 
 export const MODEL = 'mistral-small-2603';
+// Mistral recommends it for agentic use: with it off, the model rarely read GitHub first.
+export const REASONING = 'high' satisfies Reasoning;
 export type Reasoning = NonNullable<MistralLanguageModelChatOptions['reasoningEffort']>;
 export type Turn = { question: string; answer: string };
 export type ToolOutput = { tool: string; output: unknown };
@@ -65,6 +67,12 @@ export function createAgent({
       const live: Knowledge = { ...knowledge, repos: await github.repos(signal) };
       documents = documentsOf(live, publishedBy, siteUrl);
       const instructions = buildSystemPrompt(live, documents, now);
+      // The documents are a dated summary and repos change: a question that names a repo or a
+      // project reads GitHub before it is answered, whatever the model would decide.
+      const asked = tokens([...history.map(turn => turn.question), question].join(' ')).join(' ');
+      const lookup = [...live.repos.map(repo => repo.name), ...live.projects.map(p => p.name)].some(
+        name => named(asked, name),
+      );
       // Mistral caches by shared prefix; the date closes the prompt, so the key leaves it out.
       const promptCacheKey = createHash('sha256')
         .update(instructions.slice(0, instructions.lastIndexOf('\n\n')))
@@ -84,9 +92,12 @@ export function createAgent({
         }),
         stopWhen: isStepCount(MAX_STEPS),
         prepareStep: ({ stepNumber }) =>
-          stepNumber === MAX_STEPS - 1 ? { toolChoice: 'none' } : undefined,
+          stepNumber === MAX_STEPS - 1
+            ? { toolChoice: 'none' }
+            : stepNumber === 0 && lookup
+              ? { toolChoice: 'required' }
+              : undefined,
         temperature: 0.3,
-        maxOutputTokens: 400,
         abortSignal: signal,
         providerOptions: {
           mistral: {

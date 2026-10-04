@@ -14,7 +14,7 @@ import {
   MISTRAL_API_KEY,
   VISITOR_SECRET,
 } from 'astro:env/server';
-import { createAgent, MODEL } from '../../lib/agent/agent';
+import { createAgent, MODEL, REASONING } from '../../lib/agent/agent';
 import { redisConversations } from '../../lib/agent/conversations';
 import { knowledge } from '../../lib/agent/corpus';
 import { handleAsk } from '../../lib/agent/handler';
@@ -55,7 +55,7 @@ const answer = createAgent({
   // Posts scheduled after the build have no page yet: the agent must not know them.
   publishedBy: new Date(__BUILD_TIME__),
   siteUrl: import.meta.env.SITE,
-  reasoning: 'none',
+  reasoning: REASONING,
 });
 
 export const POST: APIRoute = async context => {

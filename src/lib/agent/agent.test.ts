@@ -82,7 +82,11 @@ const searches = (query: string) => ({
   ]),
 });
 
-const run = async (model: MockLanguageModelV4, signal = new AbortController().signal) => {
+const run = async (
+  model: MockLanguageModelV4,
+  signal = new AbortController().signal,
+  question = 'Ta radio ?',
+) => {
   const answer = createAgent({
     model,
     knowledge,
@@ -91,7 +95,7 @@ const run = async (model: MockLanguageModelV4, signal = new AbortController().si
     siteUrl: 'https://example.com',
     reasoning: 'none',
   })({
-    question: 'Ta radio ?',
+    question,
     history: [],
     signal,
     now: new Date(),
@@ -102,6 +106,23 @@ const run = async (model: MockLanguageModelV4, signal = new AbortController().si
 };
 
 describe('createAgent', () => {
+  it('reads GitHub first when the question names a project or a repo', async () => {
+    const model = new MockLanguageModelV4({
+      doStream: [reads('radio-pipeline'), says('Elle diffuse avec AzuraCast.')],
+    });
+    await run(model, undefined, 'Le pipeline d’AubeSonore tourne quand ?');
+    expect(model.doStreamCalls.map(call => call.toolChoice)).toEqual([
+      { type: 'required' },
+      { type: 'auto' },
+    ]);
+  });
+
+  it('leaves the first step to the model when no project or repo is named', async () => {
+    const model = new MockLanguageModelV4({ doStream: says('Victor a appris au Wagon.') });
+    await run(model, undefined, 'Tu as appris à coder où ?');
+    expect(model.doStreamCalls[0]?.toolChoice).toEqual({ type: 'auto' });
+  });
+
   it('streams the answer and cites the project it names', async () => {
     const { text, sources } = await run(
       new MockLanguageModelV4({ doStream: says('AubeSonore ', 'diffuse.') }),

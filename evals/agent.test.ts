@@ -5,7 +5,13 @@ import { LangfuseClient, type Evaluator } from '@langfuse/client';
 import pThrottle from 'p-throttle';
 import { appendFileSync, existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { createAgent, MODEL, type Reasoning, type ToolOutput } from '../src/lib/agent/agent';
+import {
+  createAgent,
+  MODEL,
+  REASONING as DEFAULT_REASONING,
+  type Reasoning,
+  type ToolOutput,
+} from '../src/lib/agent/agent';
 import { knowledge } from '../src/lib/agent/corpus';
 import { createGitHub } from '../src/lib/agent/github';
 import { documentsOf } from '../src/lib/agent/knowledge';
@@ -17,7 +23,7 @@ import { createJudge, JUDGE_MODEL } from './judge';
 if (existsSync('.env')) process.loadEnvFile('.env');
 
 const RUNS = Number(process.env.EVAL_RUNS ?? 2);
-const REASONING = (process.env.EVAL_REASONING ?? 'none') as Reasoning;
+const REASONING = (process.env.EVAL_REASONING ?? DEFAULT_REASONING) as Reasoning;
 
 // Safety gates must always hold; quality gates leave room for a rare miss.
 const GATES: Record<string, number> = {
@@ -180,6 +186,8 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       values.sort((a, b) => a - b)[Math.floor(values.length / 2)] ?? 0;
     const outputs = result.itemResults.map(({ output }) => output as Output);
     const latency = `latency median: first token ${median(outputs.map(o => o.firstTokenMs)).toFixed(0)} ms, full answer ${median(outputs.map(o => o.totalMs)).toFixed(0)} ms`;
+    const calls = outputs.flatMap(o => o.toolOutputs.map(({ tool }) => tool));
+    const lookups = `tools: ${((outputs.filter(o => o.toolOutputs.length > 0).length / outputs.length) * 100).toFixed(0)} % of answers called one (${[...new Set(calls)].map(tool => `${tool} ${calls.filter(call => call === tool).length}`).join(', ') || 'none'})`;
     // Langfuse logs a failed evaluator (a judge call over the rate limit) and drops its scores:
     // a mean over what is left would pass the gate on fewer answers than were asked.
     const scored = (name: string) => scores.get(name)?.length ?? 0;
@@ -197,6 +205,7 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       ...lines,
       '',
       latency,
+      lookups,
       ...Object.entries(GATES).map(
         ([name, gate]) =>
           `${name}: ${((means[name] ?? 0) * 100).toFixed(0)} % (gate ${gate * 100} %)${scored(name) < expected(name) ? `, ${scored(name)}/${expected(name)} scored` : ''}`,
