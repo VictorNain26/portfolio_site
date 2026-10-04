@@ -6,7 +6,7 @@ export const site = {
   title: 'Victor Lenain · Développeur · Paris',
   tagline: 'Développeur · Paris',
   description:
-    "Développeur à Paris. Je partage ici ce que je construis sur mon temps libre, surtout autour de l'IA, et ce que ça m'apprend.",
+    "Développeur à Paris. Je construis des projets perso, surtout autour de l'IA, je les mesure, et je raconte ici ce qui marche et ce que j'enlève.",
   email: 'victor.lenain26@gmail.com',
   links: {
     linkedin: 'https://www.linkedin.com/in/victorlenain/',
