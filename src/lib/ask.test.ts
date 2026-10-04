@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { linkSources, readEvents } from './ask';
+import { linkSources, locked, readEvents } from './ask';
 
 const stream = (...chunks: string[]) => {
   const encoder = new TextEncoder();
@@ -77,5 +77,18 @@ describe('linkSources', () => {
     const segments = linkSources('radio-pipeline alimente AubeSonore.', [aube, repo]);
     expect(segments.map(s => s.text).join('')).toBe('radio-pipeline alimente AubeSonore.');
     expect(segments.filter(s => s.url).map(s => s.text)).toEqual(['radio-pipeline', 'AubeSonore']);
+  });
+});
+
+describe('locked', () => {
+  const reset = Date.parse('2026-10-05T00:00:00Z');
+
+  it('locks until the quota window closes, then unlocks', () => {
+    expect(locked(reset, reset - 1)).toBe(true);
+    expect(locked(reset, reset)).toBe(false);
+  });
+
+  it('never locks without a known window', () => {
+    expect(locked(undefined, reset)).toBe(false);
   });
 });

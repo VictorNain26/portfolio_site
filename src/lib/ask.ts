@@ -44,3 +44,8 @@ export function linkSources(answer: string, sources: Source[]): Segment[] {
   if (at < answer.length) segments.push({ text: answer.slice(at) });
   return segments;
 }
+
+// The page locks the field once the quota is spent, until the window it was counted in closes:
+// a tab left open overnight must not stay locked when the server would answer again.
+export const locked = (until: number | undefined, now: number) =>
+  until !== undefined && now < until;

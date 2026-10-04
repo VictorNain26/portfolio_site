@@ -3,8 +3,6 @@ import { z } from 'astro/zod';
 import type { Activity, CodeHit } from './github';
 import type { Repo } from './repos';
 
-const fallbackSignal = () => AbortSignal.timeout(50_000);
-
 // `read` collects the repos the model read during one answer (README or code): they are cited.
 export function createTools({
   repos,
@@ -12,12 +10,14 @@ export function createTools({
   readme,
   search,
   read,
+  signal,
 }: {
   repos: Repo[];
   activity: (signal: AbortSignal) => Promise<Activity[]>;
   readme: (name: string, signal: AbortSignal) => Promise<string | null>;
   search?: ((query: string, signal: AbortSignal, repo?: string) => Promise<CodeHit[]>) | undefined;
   read: string[];
+  signal: AbortSignal;
 }) {
   const names = repos.map(repo => repo.name);
   return {
@@ -27,20 +27,18 @@ export function createTools({
       inputSchema: z.object({
         repo: z.enum(names).describe('Nom exact du dépôt, tel qu’il apparaît dans les documents.'),
       }),
-      execute: async ({ repo }, { abortSignal }) => {
+      execute: async ({ repo }) => {
         read.push(`repo:${repo}`);
-        return (
-          (await readme(repo, abortSignal ?? fallbackSignal())) ?? 'Ce dépôt n’a pas de README.'
-        );
+        return (await readme(repo, signal)) ?? 'Ce dépôt n’a pas de README.';
       },
     }),
     recent_activity: tool({
       description:
         'L’activité GitHub publique récente de Victor : jusqu’à trois dépôts, avec la date du dernier événement et les derniers messages de commit. Pour « en ce moment », « récemment », « cette semaine ». Un message de commit dit ce qui a changé, pas pourquoi.',
       inputSchema: z.object({}),
-      execute: async (_input, { abortSignal }) => {
+      execute: async () => {
         try {
-          return await activity(abortSignal ?? fallbackSignal());
+          return await activity(signal);
         } catch {
           return 'GitHub ne répond pas : l’activité récente est indisponible.';
         }
@@ -57,9 +55,9 @@ export function createTools({
             .optional()
             .describe('Le dépôt où chercher, quand la question en vise un ; sinon tous.'),
         }),
-        execute: async ({ query, repo }, { abortSignal }) => {
+        execute: async ({ query, repo }) => {
           try {
-            const hits = await search(query, abortSignal ?? fallbackSignal(), repo);
+            const hits = await search(query, signal, repo);
             for (const hit of hits) read.push(`repo:${hit.repo}`);
             return hits.length ? hits : 'Aucun fichier ne correspond dans ses dépôts publics.';
           } catch {

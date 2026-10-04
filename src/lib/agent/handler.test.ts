@@ -31,7 +31,7 @@ function limiter(allowed: number, reset = Date.now() + 60_000) {
       return { success: true, remaining: allowed - used, reset };
     },
   };
-  return { limit, calls, refunds: () => calls.filter(rate => rate < 0).length };
+  return { limit, calls, reset, refunds: () => calls.filter(rate => rate < 0).length };
 }
 
 // What @upstash/ratelimit resolves when Redis does not answer within its timeout.
@@ -68,7 +68,7 @@ const answers = (...chunks: (string | Error)[]) => {
 
 function setup(overrides: Partial<AskDeps> = {}) {
   const visitor = limiter(3);
-  const global = limiter(300);
+  const global = limiter(300, Date.now() + 120_000);
   const { conversations, store } = memory();
   const { answer, seen } = answers('AubeSonore ', 'diffuse.');
   const deps: AskDeps = {
@@ -106,13 +106,13 @@ describe('handleAsk', () => {
   });
 
   it('streams the answer, its sources and a new conversation, then saves the turn', async () => {
-    const { deps, store } = setup();
+    const { deps, store, visitor } = setup();
     const response = await handleAsk(request({ question: 'Ta radio ?' }), '1.2.3.4', deps);
     expect(await events(response)).toEqual([
       { type: 'text', text: 'AubeSonore ' },
       { type: 'text', text: 'diffuse.' },
       { type: 'sources', sources: [{ title: 'AubeSonore', url: 'https://www.aubesonore.fr/' }] },
-      { type: 'done', remaining: 2, conversation: ID },
+      { type: 'done', remaining: 2, reset: visitor.reset, conversation: ID },
     ]);
     expect(store.get(ID)).toEqual([{ question: 'Ta radio ?', answer: 'AubeSonore diffuse.' }]);
   });

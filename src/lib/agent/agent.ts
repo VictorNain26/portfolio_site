@@ -80,6 +80,7 @@ export function createAgent({
           readme: github.readme,
           search: github.search,
           read,
+          signal,
         }),
         stopWhen: isStepCount(MAX_STEPS),
         prepareStep: ({ stepNumber }) =>
