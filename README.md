@@ -19,13 +19,16 @@ npm run dev
 Ajouter `src/content/posts/<AAAA-MM-JJ>-<slug>.mdx` avec `title`, `summary`,
 `publishedAt` et `tags` en frontmatter, puis merger sur `master`. Un article
 daté dans le futur se publie seul à sa date : `.github/workflows/sync.yml`
-redéploie le site dès qu'il la voit passée.
+redéploie le site dès qu'il la voit passée. Ce workflow est planifié toutes les
+15 minutes, mais GitHub retarde ses crons : l'ancien horaire tournait en
+pratique toutes les 3 à 4 heures. `workflow_dispatch` le lance à la main.
 
 ## Ajouter un projet
 
-Mettre le topic `portfolio` sur un dépôt public : il apparaît sur `/projets` et
-l'assistant le lit dans les 15 minutes. Une description « Nom — accroche » lui
-donne son nom, sinon c'est celui du dépôt ; ses autres topics font sa stack.
+Mettre le topic `portfolio` sur un dépôt public : l'assistant le lit dans les 10
+minutes, et il apparaît sur `/projets` au passage suivant de `sync.yml`. Une
+description « Nom — accroche » lui donne son nom, sinon c'est celui du dépôt ;
+ses autres topics font sa stack.
 
 ## Valider
 
