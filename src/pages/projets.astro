@@ -1,5 +1,6 @@
 ---
 import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import External from '../components/External.astro';
 import Base from '../layouts/Base.astro';
 import { projects } from '../data/projects';
 import { formatDate } from '../lib/posts';
@@ -35,22 +36,30 @@ const projectList = {
     <h1 class="page-title enter">Projets</h1>
     <ul class="rows">
       {projects.map((project, i) => (
-        <li class="enter" style={`--i: ${i + 1}`}>
-          <a href={project.url} target="_blank" rel="noopener">
-            <h2>
+        <li class="project enter" style={`--i: ${i + 1}`}>
+          <h2>
+            <a class="card" href={project.url} target="_blank" rel="noopener">
               <span class="title-text">{project.name}</span>
               <ArrowUpRight size="0.75em" stroke-width={1.5} />
               <span class="sr-only"> (nouvel onglet)</span>
-            </h2>
-            {project.tagline && <p>{project.tagline}</p>}
-            <p class="meta">
-              {project.status} · mis à jour le{' '}
-              <time datetime={project.updatedAt.toISOString().slice(0, 10)}>
-                {formatDate(project.updatedAt)}
-              </time>
-            </p>
-            {project.stack.length > 0 && <p class="meta">{project.stack.join(', ')}</p>}
-          </a>
+            </a>
+          </h2>
+          {project.tagline && <p>{project.tagline}</p>}
+          <p class="meta">
+            {project.status} · mis à jour le{' '}
+            <time datetime={project.updatedAt.toISOString().slice(0, 10)}>
+              {formatDate(project.updatedAt)}
+            </time>
+            {project.repo !== project.url && (
+              <>
+                {' · '}
+                <External class="link code" href={project.repo}>
+                  code source
+                </External>
+              </>
+            )}
+          </p>
+          {project.stack.length > 0 && <p class="meta">{project.stack.join(', ')}</p>}
         </li>
       ))}
     </ul>
@@ -58,10 +67,23 @@ const projectList = {
 </Base>
 
 <style>
-  .rows a {
+  .project {
+    position: relative;
     display: grid;
     gap: 0.4rem;
     padding-block: 1.5rem;
+  }
+
+  /* The title's link covers the whole entry; the code link sits above it. */
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Rendered by External, so outside this component's scope. */
+  .project :global(.code) {
+    position: relative;
   }
 
   h2 {

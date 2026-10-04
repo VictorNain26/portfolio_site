@@ -41,6 +41,7 @@ const knowledge: Knowledge = {
       tagline: 'Web radio diffusée 24 h/24.',
       stack: ['TypeScript'],
       url: 'https://www.aubesonore.fr/',
+      repo: 'https://github.com/VictorNain26/aubesonore',
       status: 'En ligne',
       updatedAt: new Date('2026-09-01'),
     },

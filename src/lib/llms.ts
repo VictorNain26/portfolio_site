@@ -39,10 +39,15 @@ export function llmsTxt({
     `Contact : ${email}`,
     section(
       'Projets',
-      projects.map(
-        project =>
-          `- [${project.name}](${project.url}): ${[project.tagline, `Statut : ${project.status}.`, project.stack.length > 0 && `Stack : ${project.stack.join(', ')}.`].filter(Boolean).join(' ')}`,
-      ),
+      projects.map(project => {
+        const details = [
+          project.tagline,
+          `Statut : ${project.status}.`,
+          project.stack.length > 0 && `Stack : ${project.stack.join(', ')}.`,
+          project.repo !== project.url && `Code : ${project.repo}`,
+        ];
+        return `- [${project.name}](${project.url}): ${details.filter(Boolean).join(' ')}`;
+      }),
     ),
     posts.length > 0 &&
       section(

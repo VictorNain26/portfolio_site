@@ -6,6 +6,7 @@ export type Project = {
   tagline: string;
   stack: string[];
   url: string;
+  repo: string;
   status: 'En ligne' | 'Pré-lancement' | 'Sur GitHub' | 'Archivé';
   updatedAt: Date;
 };
@@ -45,6 +46,7 @@ export function projectsFrom(github: unknown): Project[] {
         tagline: at > 0 ? description.slice(at + SEPARATOR.length) : description,
         stack: repo.topics.filter(topic => topic !== PORTFOLIO_TOPIC && topic !== PRE_LAUNCH),
         url: repo.homepage ?? repo.url,
+        repo: repo.url,
         status: status(repo),
         updatedAt: new Date(repo.pushedAt),
       };

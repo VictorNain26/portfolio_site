@@ -20,6 +20,7 @@ describe('projectsFrom', () => {
         tagline: 'Web radio diffusée 24 h/24.',
         stack: ['python'],
         url: 'https://github.com/VictorNain26/aubesonore',
+        repo: 'https://github.com/VictorNain26/aubesonore',
         status: 'Sur GitHub',
         updatedAt: new Date('2026-10-03T00:00:00Z'),
       },
@@ -32,7 +33,11 @@ describe('projectsFrom', () => {
 
   it('links the homepage and calls the project online when it has one', () => {
     const [project] = projectsFrom([repo({ homepage: 'https://aubesonore.fr/' })]);
-    expect(project).toMatchObject({ url: 'https://aubesonore.fr/', status: 'En ligne' });
+    expect(project).toMatchObject({
+      url: 'https://aubesonore.fr/',
+      repo: 'https://github.com/VictorNain26/aubesonore',
+      status: 'En ligne',
+    });
   });
 
   it('reads the pre-launch status from its topic, before the homepage', () => {
