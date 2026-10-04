@@ -1,6 +1,7 @@
 import { tool } from 'ai';
 import { z } from 'astro/zod';
 import type { Activity, CodeHit } from './github';
+import { unlink } from './knowledge';
 import type { Repo } from './repos';
 
 // `read` collects the repos the model read during one answer (README or code): they are cited.
@@ -29,7 +30,8 @@ export function createTools({
       }),
       execute: async ({ repo }) => {
         read.push(`repo:${repo}`);
-        return (await readme(repo, signal)) ?? 'Ce dépôt n’a pas de README.';
+        const text = await readme(repo, signal);
+        return text === null ? 'Ce dépôt n’a pas de README.' : unlink(text);
       },
     }),
     recent_activity: tool({

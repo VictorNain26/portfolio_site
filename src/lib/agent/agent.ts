@@ -2,7 +2,7 @@ import type { MistralLanguageModelChatOptions } from '@ai-sdk/mistral';
 import { isStepCount, streamText, type LanguageModel, type ModelMessage } from 'ai';
 import { createHash } from 'node:crypto';
 import type { GitHub } from './github';
-import { documentsOf, type Document, type Knowledge } from './knowledge';
+import { documentsOf, unlink, type Document, type Knowledge } from './knowledge';
 import { buildSystemPrompt } from './prompt';
 import { projectsFrom } from '../projects';
 import { citedSources, named, tokens, type Source } from './sources';
@@ -91,7 +91,7 @@ export function createAgent({
             readme: await github.readme(repo.name, signal),
           })),
         )
-      ).filter((read): read is { repo: string; readme: string } => read.readme !== null);
+      ).flatMap(({ repo, readme }) => (readme === null ? [] : [{ repo, readme: unlink(readme) }]));
       for (const { repo } of readmes) read.push(`repo:${repo}`);
       const instructions = buildSystemPrompt(live, documents, now, readmes);
       // Mistral caches by shared prefix; the date closes the prompt, so the key leaves it out.

@@ -23,7 +23,7 @@ const slugify = (text: string) =>
     .replace(/^-|-$/g, '');
 
 // The model copies markdown links it reads; answers must stay plain text.
-const unlink = (markdown: string) => markdown.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');
+export const unlink = (markdown: string) => markdown.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');
 
 export function documentsOf(knowledge: Knowledge, now: Date, siteUrl: string): Document[] {
   const posts = publishedPosts(

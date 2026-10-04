@@ -44,7 +44,7 @@ const aubesonore: Repo = {
   pushedAt: '2026-09-01',
   archived: false,
   topics: ['portfolio', 'typescript'],
-  readme: 'Diffuse via AzuraCast, le dimanche.',
+  readme: 'Diffuse via [AzuraCast](https://www.azuracast.com/), le dimanche.',
 };
 
 const knowledge: Omit<Knowledge, 'projects'> = {
@@ -62,7 +62,7 @@ const knowledge: Omit<Knowledge, 'projects'> = {
       pushedAt: '2026-09-01',
       archived: false,
       topics: [],
-      readme: 'Uses AzuraCast to broadcast.',
+      readme: 'Uses [AzuraCast](https://www.azuracast.com/) to broadcast.',
     },
   ],
 };
@@ -137,7 +137,9 @@ describe('createAgent', () => {
     const { sources } = await run(model, undefined, 'Comment diffuse AubeSonore ?');
     const prompt = JSON.stringify(model.doStreamCalls[0]?.prompt);
     expect(prompt).toContain('README du dépôt aubesonore');
+    // Without its links: the model copies them into answers that must stay plain text.
     expect(prompt).toContain('Diffuse via AzuraCast, le dimanche.');
+    expect(prompt).not.toContain('azuracast.com');
     expect(model.doStreamCalls).toHaveLength(1);
     expect(sources.map(source => source.title)).toEqual(['aubesonore sur GitHub']);
   });
@@ -190,9 +192,9 @@ describe('createAgent', () => {
     });
     const { sources } = await run(model);
     expect(sources.map(source => source.title)).toEqual(['radio-pipeline sur GitHub']);
-    expect(JSON.stringify(model.doStreamCalls[1]!.prompt)).toContain(
-      'Uses AzuraCast to broadcast.',
-    );
+    const prompt = JSON.stringify(model.doStreamCalls[1]!.prompt);
+    expect(prompt).toContain('Uses AzuraCast to broadcast.');
+    expect(prompt).not.toContain('azuracast.com');
   });
 
   it('cites the repo of a file found by the code search', async () => {
