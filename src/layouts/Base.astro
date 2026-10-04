@@ -72,8 +72,10 @@ const nav = [
       {
         // The client router swaps <html> attributes and <head> on each navigation.
         const applyTheme = () => {
+          // Dark when the visitor's system asks for it, and for everyone at night.
           const hour = new Date().getHours();
-          if (hour >= 20 || hour < 7) {
+          const night = hour >= 20 || hour < 7;
+          if (night || matchMedia('(prefers-color-scheme: dark)').matches) {
             document.documentElement.dataset.theme = 'dark';
             document.querySelector('meta[name="theme-color"]').content = '#121212';
           }
