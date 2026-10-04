@@ -21,7 +21,11 @@ jobs:
       - uses: actions/checkout@v7
       - uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress 'src/content/posts/*.mdx'
+          # Root-relative links (/blog/…) resolve against the live site, so a post that links to
+          # another one not deployed yet fails until that one is live.
+          args: >-
+            --no-progress --base-url https://www.victorlenain.fr --root-dir /
+            'src/content/posts/*.mdx'
           fail: true
           jobSummary: true
           token: ${{ github.token }}
