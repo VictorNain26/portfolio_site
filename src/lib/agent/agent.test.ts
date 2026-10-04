@@ -117,6 +117,29 @@ describe('createAgent', () => {
     ]);
   });
 
+  it('shows only the answer written after the lookup, not the draft of the forced step', async () => {
+    const draft = {
+      stream: convertArrayToReadableStream<LanguageModelV4StreamPart>([
+        { type: 'text-start', id: 'draft' },
+        { type: 'text-delta', id: 'draft', delta: 'Je ne réponds qu’à des questions sur Victor.' },
+        { type: 'text-end', id: 'draft' },
+        {
+          type: 'tool-call',
+          toolCallId: 'call-draft',
+          toolName: 'read_readme',
+          input: JSON.stringify({ repo: 'radio-pipeline' }),
+        },
+        finish('tool-calls'),
+      ]),
+    };
+    const { text } = await run(
+      new MockLanguageModelV4({ doStream: [draft, says('Elle diffuse avec AzuraCast.')] }),
+      undefined,
+      'Comment diffuse AubeSonore ?',
+    );
+    expect(text).toBe('Elle diffuse avec AzuraCast.');
+  });
+
   it('leaves the first step to the model when no project or repo is named', async () => {
     const model = new MockLanguageModelV4({ doStream: says('Victor a appris au Wagon.') });
     await run(model, undefined, 'Tu as appris à coder où ?');

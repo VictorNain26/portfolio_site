@@ -99,6 +99,8 @@ export function createAgent({
               ? { toolChoice: 'required' }
               : undefined,
         temperature: 0.3,
+        // Without it, the model looped up to 1,148 words in #112's evaluation.
+        maxOutputTokens: 400,
         abortSignal: signal,
         providerOptions: {
           mistral: {
@@ -109,11 +111,16 @@ export function createAgent({
         },
         telemetry: { functionId: 'generate-answer' },
       });
+      let step = -1;
       for await (const part of result.stream) {
+        if (part.type === 'start-step') step++;
+        // A step that must call a tool still drafts text, sometimes a refusal: only the answer
+        // written after the lookup is shown.
+        else if (part.type === 'text-delta' && lookup && step === 0) continue;
         // The model sets names in markdown bold or code despite the prompt; the page shows plain
         // text, and French prose has no use for an asterisk or a backtick. Underscores stay:
         // repo names carry them. It also breaks lines to enumerate, though the answer is one line.
-        if (part.type === 'text-delta')
+        else if (part.type === 'text-delta')
           yield part.text.replace(/[*`]/g, '').replace(/\s*\n\s*/g, ' ');
         else if (part.type === 'tool-result')
           toolOutputs.push({ tool: part.toolName, output: part.output });
