@@ -191,8 +191,10 @@
       const { li, answer } = turnElement(question, !reduce());
       const dots = document.createElement('span');
       dots.className = 'dots';
-      dots.setAttribute('aria-label', "L'assistant réfléchit");
-      dots.append(...Array.from({ length: 3 }, () => document.createElement('i')));
+      const thinking = document.createElement('span');
+      thinking.className = 'sr-only';
+      thinking.textContent = "L'assistant réfléchit";
+      dots.append(thinking, ...Array.from({ length: 3 }, () => document.createElement('i')));
       answer.append(dots);
       thread.append(li);
       input.value = '';
@@ -405,11 +407,11 @@
     animation: pulse 1.2s ease-in-out infinite;
   }
 
-  .thread :global(.dots i:nth-child(2)) {
+  .thread :global(.dots i:nth-of-type(2)) {
     animation-delay: 0.15s;
   }
 
-  .thread :global(.dots i:nth-child(3)) {
+  .thread :global(.dots i:nth-of-type(3)) {
     animation-delay: 0.3s;
   }
 
