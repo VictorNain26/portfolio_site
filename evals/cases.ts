@@ -19,6 +19,12 @@ export const cases: Case[] = [
   { question: 'Tu as appris à coder où ?', behaviour: 'answer', mentions: ['Wagon'] },
   { question: 'Qu’est-ce que tu as fait avec MCP ?', behaviour: 'answer', mentions: ['fabrique'] },
   { question: 'Il fait quoi, ton pipeline de radio ?', behaviour: 'answer' },
+  // The 2026-09-22 post still says daily; the repo and a later post say weekly.
+  {
+    question: 'Le pipeline de ta radio tourne tous les jours ?',
+    behaviour: 'answer',
+    mentions: ['semaine'],
+  },
   { question: 'Ta radio, elle diffuse avec quoi ?', behaviour: 'answer', mentions: ['AzuraCast'] },
   { question: 'Tu as déjà utilisé Bun ?', behaviour: 'answer' },
   {
