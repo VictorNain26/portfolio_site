@@ -19,11 +19,11 @@ Deuxième problème : pour chaque artiste voisin, je prenais ses titres les plus
 
 J'ai aussi testé l'idée la plus intuitive : garder ce qui ressemble à ma bibliothèque. Mesuré, ça laissait passer 79 % des morceaux que je n'aime pas. Ma bibliothèque est trop éclectique pour ça. Le goût se joue à l'intérieur d'un genre, pas entre les genres.
 
-Et en relisant l'ancien code, j'ai trouvé pire. Quand MusicBrainz ou Discogs ne répondaient pas, [le client de genres](https://github.com/VictorNain26/aubesonore/blob/9e842fc57dbbcef3fedaeeea99f9806784a86b97/scripts/genre_client.py) renvoyait une liste vide, et un morceau sans genre était accepté. Une panne passait pour un feu vert. C'est devenu un principe de la nouvelle version : [un repli silencieux est pire qu'une panne](https://github.com/VictorNain26/aubesonore/blob/master/pipeline/docs/vision.md). Tout ce qui est sauté est compté et nommé dans le rapport de la passe.
+Et en relisant l'ancien code, j'ai trouvé pire. Quand MusicBrainz ou Discogs ne répondaient pas, [le client de genres](https://github.com/VictorNain26/aubesonore/blob/9e842fc57dbbcef3fedaeeea99f9806784a86b97/scripts/genre_client.py) renvoyait une liste vide, et un morceau sans genre était accepté. Une panne passait pour un feu vert. C'est devenu un principe de la nouvelle version : [un repli silencieux est pire qu'une panne](https://github.com/VictorNain26/aubesonore/blob/94866c12f216c1a18b326122b97491a403c811e3/pipeline/docs/vision.md). Tout ce qui est sauté est compté et nommé dans le rapport de la passe.
 
 ## Page blanche
 
-J'ai décidé de tout réécrire, clients Deezer, Last.fm et Plex compris. [La conception](https://github.com/VictorNain26/aubesonore/blob/9a6d66e/docs/superpowers/specs/2026-09-24-gout-decouverte-v3-design.md) tient en une idée : seul mon avis, donné morceau par morceau, peut apprendre mon goût au système.
+J'ai décidé de tout réécrire, clients Deezer, Last.fm et Plex compris. [La conception](https://github.com/VictorNain26/aubesonore/blob/9a6d66e0e8d2ed7f4db77ed55cdea637f830a7c9/docs/superpowers/specs/2026-09-24-gout-decouverte-v3-design.md) tient en une idée : seul mon avis, donné morceau par morceau, peut apprendre mon goût au système.
 
 Le nouveau pipeline tourne une fois par semaine, le dimanche à 3 h. Il part d'artistes tirés de ma bibliothèque. Il ne garde un artiste voisin que si Deezer **et** Last.fm le citent tous les deux. Pour chaque morceau candidat, il analyse l'extrait de 30 secondes avec Discogs-EffNet, un modèle qui en tire une empreinte sonore. Puis un modèle entraîné sur mes votes classe la fournée.
 
@@ -31,7 +31,7 @@ Pour voter, j'ai une petite page privée. Chaque semaine, 20 morceaux : 10 pour 
 
 ## Ce qui porte vraiment le signal
 
-Sur [les 60 premiers votes d'examen](https://github.com/VictorNain26/aubesonore/blob/master/pipeline/docs/recherches/2026-09-30-modele-audio-seul.md), j'ai mesuré chaque signal seul :
+Sur [les 60 premiers votes d'examen](https://github.com/VictorNain26/aubesonore/blob/94866c12f216c1a18b326122b97491a403c811e3/pipeline/docs/recherches/2026-09-30-modele-audio-seul.md), j'ai mesuré chaque signal seul :
 
 | Signal                     | AUC       |
 | -------------------------- | --------- |
@@ -55,6 +55,6 @@ Aucun modèle ne peut reproduire mon goût mieux que je ne le reproduis moi-mêm
 
 ## Moins de code, plus de mesure
 
-Le nettoyage a fait maigrir le pipeline : de 3 865 à 2 720 lignes, et de 313 à 230 tests, qui passent en 12 secondes au lieu de 83. Un autre principe du projet résume tout ça : [tout se mesure](https://github.com/VictorNain26/aubesonore/blob/master/pipeline/docs/vision.md). Un signal ou un mécanisme qui ne prouve pas son utilité est retiré.
+Le nettoyage a fait maigrir le pipeline : de 3 865 à 2 720 lignes, et de 313 à 230 tests, qui passent en 12 secondes au lieu de 83. Un autre principe du projet résume tout ça : [tout se mesure](https://github.com/VictorNain26/aubesonore/blob/94866c12f216c1a18b326122b97491a403c811e3/pipeline/docs/vision.md). Un signal ou un mécanisme qui ne prouve pas son utilité est retiré.
 
-Le code est dans [le dossier `pipeline`](https://github.com/VictorNain26/aubesonore/tree/master/pipeline), et la radio tourne sur [aubesonore.fr](https://aubesonore.fr/). Chaque dimanche, je vote, et le modèle apprend un peu mieux mon goût. Mais jamais mieux que moi.
+Le code est dans [le dossier `pipeline`](https://github.com/VictorNain26/aubesonore/tree/94866c12f216c1a18b326122b97491a403c811e3/pipeline), et la radio tourne sur [aubesonore.fr](https://aubesonore.fr/). Chaque dimanche, je vote, et le modèle apprend un peu mieux mon goût. Mais jamais mieux que moi.

@@ -77,6 +77,15 @@ describe('posts', () => {
     expect(publishedAt.getTime()).not.toBeNaN();
   });
 
+  // A branch link follows the repo and drifts away from what the post says.
+  it.each(posts)('$file links repo files at a commit, not a branch', ({ file }) => {
+    const source = read(`src/content/posts/${file}`);
+    for (const [link] of source.matchAll(
+      /https:\/\/github\.com\/[^\s)]+?\/(?:blob|tree)\/[^/\s)]+/g,
+    ))
+      expect(link, link).toMatch(/\/(?:blob|tree)\/[0-9a-f]{40}$/);
+  });
+
   it.each(legacySlugs)('legacy /blog/%s is published or redirected', slug => {
     expect(published.includes(slug) || redirected.has(`/blog/${slug}`)).toBe(true);
   });

@@ -24,7 +24,7 @@ Même modèle, Mistral Small 4, et pourtant les chiffres ont changé. Sur 30 que
 
 ## Ce que le code garantit, pas le prompt
 
-Le prompt ne suffit pas toujours, on le verra plus bas. Ce qui doit tenir à chaque fois est donc dans [le code](https://github.com/VictorNain26/portfolio_site/tree/master/src/lib/agent) :
+Le prompt ne suffit pas toujours, on le verra plus bas. Ce qui doit tenir à chaque fois est donc dans [le code](https://github.com/VictorNain26/portfolio_site/tree/ff8d5e8fb2c6d29fef9547d3de1c411fbd516bc9/src/lib/agent) :
 
 - les sources affichées sous une réponse sont calculées à partir de la réponse elle-même : un nom de projet cité, des passages qu'elle partage avec un document, un README lu. Le modèle ne les écrit jamais ;
 - un article programmé n'existe pas pour lui avant sa date ;
@@ -34,7 +34,7 @@ Le prompt ne suffit pas toujours, on le verra plus bas. Ce qui doit tenir à cha
 
 ## Mesurer à chaque changement
 
-L'assistant a [son évaluation](https://github.com/VictorNain26/portfolio_site/blob/master/evals/agent.test.ts) : 35 questions, posées deux fois chacune au vrai modèle. Un juge vérifie chaque affirmation de chaque réponse contre les documents et ce que les outils ont renvoyé. Des seuils décident : aucune fuite du prompt, aucune promesse, toujours en français et en texte brut, au moins 95 % de réponses ancrées dans les sources.
+L'assistant a [son évaluation](https://github.com/VictorNain26/portfolio_site/blob/ff8d5e8fb2c6d29fef9547d3de1c411fbd516bc9/evals/agent.test.ts) : 35 questions, posées deux fois chacune au vrai modèle. Un juge vérifie chaque affirmation de chaque réponse contre les documents et ce que les outils ont renvoyé. Des seuils décident : aucune fuite du prompt, aucune promesse, toujours en français et en texte brut, au moins 95 % de réponses ancrées dans les sources.
 
 Elle tourne sur chaque pull request qui touche l'assistant, sa fiche, mes projets ou mes articles. Cet article est passé par là avant d'être publié.
 
