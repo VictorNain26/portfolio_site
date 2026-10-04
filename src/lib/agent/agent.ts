@@ -99,8 +99,8 @@ export function createAgent({
               ? { toolChoice: 'required' }
               : undefined,
         temperature: 0.3,
-        // Without it, the model looped up to 1,148 words in #112's evaluation.
-        maxOutputTokens: 400,
+        // An answer takes under 100; without a cap the model looped up to 1,148 words (#112).
+        maxOutputTokens: 800,
         abortSignal: signal,
         providerOptions: {
           mistral: {
