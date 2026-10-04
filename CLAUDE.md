@@ -39,7 +39,7 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
   la date du prochain article programmé à `/sync.json` du site en ligne, et ne
   redéploie que s'ils diffèrent
 - `src/pages/api/ask.ts` — mon assistant IA, qui répond sur moi et mon code : AI
-  SDK, Mistral Small 4 (`mistral-small-2603`, raisonnement coupé, 400 tokens de
+  SDK, Mistral Small 4 (`mistral-small-2603`, raisonnement coupé, 800 tokens de
   sortie au plus), quota et conversations dans Upstash Redis, traces Langfuse
   quand ses clés existent (secrets via `astro:env`)
 - `src/lib/agent/` — l'agent, testé : prompt, outils, sources calculées, handler
