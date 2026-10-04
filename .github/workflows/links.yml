@@ -1,0 +1,31 @@
+name: Links
+
+# Posts link to repos, files, commits and sites that can move or disappear: check them every
+# week, and on pull requests that touch a post.
+# https://github.com/lycheeverse/lychee-action
+on:
+  schedule:
+    - cron: '23 6 * * 1'
+  pull_request:
+    paths:
+      - 'src/content/posts/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          # Root-relative links (/blog/…) resolve against the live site, so a post that links to
+          # another one not deployed yet fails until that one is live.
+          args: >-
+            --no-progress --base-url https://www.victorlenain.fr --root-dir /
+            'src/content/posts/*.mdx'
+          fail: true
+          jobSummary: true
+          token: ${{ github.token }}

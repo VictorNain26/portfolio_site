@@ -30,13 +30,13 @@ Ensuite, un rappel par mots-clés : une réponse compte si elle contient les bon
 
 Enfin, 202 questions écrites à la main, annulées le jour même.
 
-La version qui tient est [ancrée sur les documents](https://github.com/VictorNain26/tomai-curriculum/blob/main/scripts/generate_golden.py). Le script tire des morceaux du corpus, répartis par matière et par niveau, et demande pour chacun à un modèle de Mistral une question et quelques mots-clés, dans un format JSON strict. Une question n'est gardée que si au moins deux de ses mots-clés figurent mot pour mot dans le morceau d'origine. Sur une cible de 400, 189 questions ont passé le filtre.
+La version qui tient est [ancrée sur les documents](https://github.com/VictorNain26/tomai-curriculum/blob/14ebf2803b4c449fa82c62a3025362be30fe0a38/scripts/generate_golden.py). Le script tire des morceaux du corpus, répartis par matière et par niveau, et demande pour chacun à un modèle de Mistral une question et quelques mots-clés, dans un format JSON strict. Une question n'est gardée que si au moins deux de ses mots-clés figurent mot pour mot dans le morceau d'origine. Sur une cible de 400, 189 questions ont passé le filtre.
 
 La mesure devient alors propre : pour chaque question, le morceau d'où elle vient est-il dans les 5 premiers résultats ?
 
 ## De 0,81 à 0,89
 
-Avec ce jeu de 189 questions, j'ai comparé trois configurations. Mêmes questions, même découpage, mêmes 5 résultats ; seuls le modèle d'embedding et la partie lexicale de la recherche changent ([détail](https://github.com/VictorNain26/tomai-curriculum/blob/main/docs/ARCHITECTURE.md)) :
+Avec ce jeu de 189 questions, j'ai comparé trois configurations. Mêmes questions, même découpage, mêmes 5 résultats ; seuls le modèle d'embedding et la partie lexicale de la recherche changent ([détail](https://github.com/VictorNain26/tomai-curriculum/blob/14ebf2803b4c449fa82c62a3025362be30fe0a38/docs/ARCHITECTURE.md)) :
 
 | Configuration                    | Rappel au top 5 | MRR   |
 | -------------------------------- | --------------- | ----- |
@@ -50,7 +50,7 @@ Tout ne monte pas : la technologie descend de 0,89 à 0,67. Et il faut garder la
 
 ## Et puis je l'ai retiré
 
-Le gain avait un prix. La recherche sparse de BGE-M3 n'est pas reproductible en TypeScript pur, alors que le serveur de TomIA est en TypeScript. Il fallait un service Python à côté, et [ce service n'a jamais été mis en production](https://github.com/VictorNain26/tomai-curriculum/blob/main/README.md).
+Le gain avait un prix. La recherche sparse de BGE-M3 n'est pas reproductible en TypeScript pur, alors que le serveur de TomIA est en TypeScript. Il fallait un service Python à côté, et [ce service n'a jamais été mis en production](https://github.com/VictorNain26/tomai-curriculum/blob/14ebf2803b4c449fa82c62a3025362be30fe0a38/README.md).
 
 Le 24 août 2026, j'ai retiré toute la couche RAG du serveur. Le message du [commit](https://github.com/VictorNain26/tomai-monorepo/commit/8f5011f33f100bb4eb2b0b6c33a625ecc080b466) le dit sans détour : rien n'avait été déployé, le cluster Qdrant n'existait plus, et garder la moitié du pipeline aurait laissé le serveur interroger un index disparu. J'ai archivé le dépôt le 2 octobre, mais je le laisse public, avec son jeu de test et ses résultats.
 
