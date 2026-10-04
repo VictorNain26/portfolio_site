@@ -1,6 +1,7 @@
 import { tool } from 'ai';
 import { z } from 'astro/zod';
 import type { Activity, CodeHit } from './github';
+import { unlink } from './knowledge';
 import type { Repo } from './repos';
 
 // `read` collects the repos the model read during one answer (README or code): they are cited.
@@ -23,18 +24,19 @@ export function createTools({
   return {
     read_readme: tool({
       description:
-        'Lit le README à jour d’un des dépôts GitHub publics de Victor (texte brut, tronqué). Les documents ne résument ses projets qu’à une date donnée, et un dépôt change : avant de répondre sur un projet ou un dépôt (ce qu’il fait, avec quoi, pourquoi, où il en est), lis son README.',
+        'Lit le README à jour d’un dépôt de Victor (texte brut, tronqué). À appeler avant de répondre sur un projet ou un dépôt : ce qu’il fait, comment il marche, pourquoi, où il en est. Les documents n’en donnent qu’une ligne.',
       inputSchema: z.object({
         repo: z.enum(names).describe('Nom exact du dépôt, tel qu’il apparaît dans les documents.'),
       }),
       execute: async ({ repo }) => {
         read.push(`repo:${repo}`);
-        return (await readme(repo, signal)) ?? 'Ce dépôt n’a pas de README.';
+        const text = await readme(repo, signal);
+        return text === null ? 'Ce dépôt n’a pas de README.' : unlink(text);
       },
     }),
     recent_activity: tool({
       description:
-        'L’activité GitHub publique récente de Victor : jusqu’à trois dépôts, avec la date du dernier événement et les derniers messages de commit. Pour « en ce moment », « récemment », « cette semaine ». Un message de commit dit ce qui a changé, pas pourquoi.',
+        'L’activité GitHub publique récente de Victor : jusqu’à trois dépôts, avec la date du dernier événement et les derniers messages de commit. À appeler pour « en ce moment », « récemment », « cette semaine ». Un message de commit dit ce qui a changé, pas pourquoi.',
       inputSchema: z.object({}),
       execute: async () => {
         try {
@@ -47,7 +49,7 @@ export function createTools({
     ...(search && {
       search_code: tool({
         description:
-          'Cherche dans le code à jour des dépôts GitHub publics de Victor et renvoie jusqu’à cinq fichiers avec des extraits. Pour une question sur le code ou sur une technologie (où quelque chose est fait, comment, avec quelle bibliothèque, s’il a utilisé tel outil) : les documents n’en disent presque jamais assez. Donne quelques mots-clés tels qu’ils apparaissent dans le code, souvent en anglais (noms de fonctions, de bibliothèques, de fichiers).',
+          'Cherche dans le code à jour des dépôts publics de Victor et renvoie jusqu’à cinq fichiers avec des extraits. À appeler avant de répondre sur une technologie, une bibliothèque, un outil ou un langage (« tu as déjà utilisé X ? », « tu codes en Y ? », « avec quoi il teste ? »), ou sur la façon dont quelque chose est fait dans son code. Donne un ou deux mots-clés tels qu’ils apparaissent dans le code, souvent en anglais : nom du paquet, de la bibliothèque, du fichier de configuration.',
         inputSchema: z.object({
           query: z.string().min(1).max(120).describe('Mots-clés, sans opérateur de recherche.'),
           repo: z

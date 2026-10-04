@@ -45,8 +45,8 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
 - `src/lib/agent/` — l'agent, testé : prompt, outils, sources calculées, handler
   HTTP ; `src/content/persona.md` — sa fiche
 - `scripts/github.ts` — écrit `src/data/github.json` (non versionné) avant
-  `dev`, `check` et `build` ; l'assistant relit dépôts et README en direct
-  (`src/lib/agent/github.ts`, cache 10 min) et cherche dans le code si
+  `dev`, `check` et `build` ; l'assistant relit en direct dépôts, projets et
+  README (`src/lib/agent/github.ts`, cache 10 min) et cherche dans le code si
   `GITHUB_TOKEN` existe. Il ne voit que les dépôts qui ont le topic `portfolio`,
   plus le dépôt profil : le topic ne se met jamais sur un projet client
 - `evals/` — cas, juge et expérience de l'agent (`npm run eval`)

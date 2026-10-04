@@ -2,8 +2,9 @@ import type { MistralLanguageModelChatOptions } from '@ai-sdk/mistral';
 import { isStepCount, streamText, type LanguageModel, type ModelMessage } from 'ai';
 import { createHash } from 'node:crypto';
 import type { GitHub } from './github';
-import { documentsOf, type Document, type Knowledge } from './knowledge';
+import { documentsOf, unlink, type Document, type Knowledge } from './knowledge';
 import { buildSystemPrompt } from './prompt';
+import { projectsFrom } from '../projects';
 import { citedSources, named, tokens, type Source } from './sources';
 import { createTools } from './tools';
 
@@ -36,7 +37,8 @@ export function createAgent({
   reasoning,
 }: {
   model: LanguageModel;
-  knowledge: Knowledge;
+  // Projects are read from the live repo list, not from the build.
+  knowledge: Omit<Knowledge, 'projects'>;
   github: Pick<GitHub, 'repos' | 'readme' | 'search' | 'activity'>;
   // Posts scheduled after this date have no page yet: the agent must not know them.
   publishedBy: Date;
@@ -66,12 +68,14 @@ export function createAgent({
     let documents: Document[] = [];
 
     async function* text() {
-      // The repo list is live (cached), so a fresh push or a new repo needs no redeploy.
-      const live: Knowledge = { ...knowledge, repos: await github.repos(signal) };
+      // The repo list is live (cached): a new repo, a fresh push or a description edited on
+      // GitHub reaches the agent without a redeploy, projects included.
+      const repos = await github.repos(signal);
+      const live: Knowledge = { ...knowledge, repos, projects: projectsFrom(repos) };
       documents = documentsOf(live, publishedBy, siteUrl);
-      // The documents are a dated summary and repos change: the code itself reads the README of
-      // each repo the conversation names, directly or through its project, before the model
-      // answers. Asking the model for a tool call instead failed when it wrote text regardless.
+      // A project's line in the documents says little: the code itself reads the README of each
+      // repo the conversation names, directly or through its project, before the model answers.
+      // Asking the model for a tool call instead failed when it wrote text regardless.
       const asked = tokens([...history.map(turn => turn.question), question].join(' ')).join(' ');
       const namedRepos = live.repos
         .filter(
@@ -87,7 +91,7 @@ export function createAgent({
             readme: await github.readme(repo.name, signal),
           })),
         )
-      ).filter((read): read is { repo: string; readme: string } => read.readme !== null);
+      ).flatMap(({ repo, readme }) => (readme === null ? [] : [{ repo, readme: unlink(readme) }]));
       for (const { repo } of readmes) read.push(`repo:${repo}`);
       const instructions = buildSystemPrompt(live, documents, now, readmes);
       // Mistral caches by shared prefix; the date closes the prompt, so the key leaves it out.
