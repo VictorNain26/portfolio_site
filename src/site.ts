@@ -47,7 +47,6 @@ export const personJsonLd = {
     { '@type': 'EducationalOrganization', name: 'Le Wagon' },
     { '@type': 'EducationalOrganization', name: 'OpenClassrooms' },
   ],
-  memberOf: { '@type': 'Organization', name: 'Growth Wave — AI Crew' },
   knowsAbout: [
     'Agents IA',
     'RAG',
