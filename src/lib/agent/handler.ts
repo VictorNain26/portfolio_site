@@ -68,18 +68,30 @@ export async function handleAsk(
   const { question } = parsed.data;
 
   // A quota store that does not answer fails closed: no free questions while it is down.
+  // Every failure the visitor doesn't see is logged: Vercel files console.error as an error.
   const limit = (limiter: Limiter, id: string) =>
     limiter
       .limit(id)
-      .then(result => (result.reason === 'timeout' ? undefined : result))
-      .catch(() => undefined);
+      .then(result => {
+        if (result.reason !== 'timeout') return result;
+        console.error('ask: quota store timed out');
+        return undefined;
+      })
+      .catch((error: unknown) => {
+        console.error('ask: quota store failed', error);
+        return undefined;
+      });
   const visitor = await limit(deps.visitor, key);
   if (!visitor) return json(503, { code: 'failed' });
   if (!visitor.success) return json(429, { code: 'limit', reset: visitor.reset });
   const global = await limit(deps.global, GLOBAL_ID);
   // A refund after the window closed would land on the next one and give a free question.
   const giveBack = (limiter: Limiter, id: string, reset: number) =>
-    Date.now() < reset ? limiter.limit(id, { rate: -1 }).catch(() => undefined) : undefined;
+    Date.now() < reset
+      ? limiter
+          .limit(id, { rate: -1 })
+          .catch((error: unknown) => console.error('ask: refund failed', error))
+      : undefined;
   const refundVisitor = () => giveBack(deps.visitor, key, visitor.reset);
   if (!global) {
     await refundVisitor();
@@ -93,7 +105,10 @@ export async function handleAsk(
     Promise.all([refundVisitor(), giveBack(deps.global, GLOBAL_ID, global.reset)]);
 
   const history = parsed.data.conversation
-    ? await deps.conversations.load(parsed.data.conversation).catch(() => [])
+    ? await deps.conversations.load(parsed.data.conversation).catch((error: unknown) => {
+        console.error('ask: conversation load failed', error);
+        return [];
+      })
     : [];
   const conversation = history.length > 0 ? parsed.data.conversation! : deps.newId();
 
@@ -133,17 +148,19 @@ export async function handleAsk(
             span.end({ answer: text.trim(), sources });
             await deps.conversations
               .save(conversation, [...history, { question, answer: text.trim() }])
-              .catch(() => undefined);
+              .catch((error: unknown) => console.error('ask: conversation save failed', error));
             done();
           } catch (error) {
             span.end({ error: error instanceof Error ? error.message : String(error) });
             throw error;
           }
         });
-      } catch {
+      } catch (error) {
         // A visitor who stops an answer has spent it. Text already shown is spent too:
         // refunding it would let a visitor force failures for free answers.
         if (!gone.aborted) {
+          // The response is already a 200: this log is the only server-side trace without Langfuse.
+          console.error('ask: answer failed', error);
           if (!text) await refund();
           send({ type: 'error', code: 'failed' });
         }
