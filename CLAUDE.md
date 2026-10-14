@@ -14,7 +14,11 @@
 - `npm run eval` — expérience Langfuse sur l'agent contre le vrai Mistral (clés
   dans `.env`, noms dans `.env.example`) : `EVAL_RUNS`, `EVAL_REASONING`. À
   lancer avant un merge qui touche l'agent ; ses seuils sont dans
-  `evals/agent.test.ts`
+  `evals/agent.test.ts`. Elle lit le GitHub enregistré dans `evals/world.json`,
+  pas le GitHub du jour : un dépôt qui change ne la fait pas échouer
+- `npm run eval:record` — réenregistre `evals/world.json` (`GITHUB_TOKEN` pour
+  le débit). Dans sa propre PR : `evals/cases.test.ts` signale les faits
+  attendus dont le passage a disparu, à revoir avec la diff des données
 
 ## Architecture
 
@@ -49,7 +53,10 @@ anciennes pages `/services` et des anciens articles vers `/blog`).
   README (`src/lib/agent/github.ts`, cache 10 min) et cherche dans le code si
   `GITHUB_TOKEN` existe. Il ne voit que les dépôts qui ont le topic `portfolio`,
   plus le dépôt profil : le topic ne se met jamais sur un projet client
-- `evals/` — cas, juge et expérience de l'agent (`npm run eval`)
+- `evals/` — cas, juges et expérience de l'agent (`npm run eval`). Un cas attend
+  des faits, jugés sur le sens, et chacun cite son passage dans la fiche, un
+  article ou le monde enregistré ; un juge LLM ne passe en gate qu'avec ses
+  verdicts connus d'avance (`evals/judge.test.ts`)
 - `src/lib/` — seule logique du site, testée
 - `tests/` — assertions sur le build, lancées après `npm run build`
 - `src/styles/global.css` — tokens de la charte « texte brut » : Newsreader
