@@ -12,13 +12,14 @@ import {
   type Reasoning,
   type ToolOutput,
 } from '../src/lib/agent/agent';
-import { knowledge } from '../src/lib/agent/corpus';
-import { createGitHub } from '../src/lib/agent/github';
+import { content } from '../src/lib/agent/content';
 import { documentsOf } from '../src/lib/agent/knowledge';
+import { projectsFrom } from '../src/lib/projects';
 import { startTelemetry } from '../src/lib/agent/telemetry';
 import type { Source } from '../src/lib/agent/sources';
 import { cases, type Case } from './cases';
-import { createJudge, JUDGE_MODEL } from './judge';
+import { createFactJudge, createJudge, JUDGE_MODEL } from './judge';
+import { loadWorld, worldGitHub } from './world';
 
 if (existsSync('.env')) process.loadEnvFile('.env');
 
@@ -33,7 +34,7 @@ const GATES: Record<string, number> = {
   plain_text: 1,
   behaviour: 0.9,
   grounded: 0.95,
-  mentions: 0.9,
+  facts: 0.9,
   concise: 0.9,
 };
 
@@ -63,28 +64,31 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
     const apiKey = process.env.MISTRAL_API_KEY;
     if (!apiKey) throw new Error('MISTRAL_API_KEY is missing from .env');
     const mistral = createMistral({ apiKey });
-    const now = new Date();
-    const documents = documentsOf(knowledge, now, 'https://www.victorlenain.fr');
+    // GitHub as recorded, and its date: "en ce moment" means then. Posts are versioned with the
+    // code, so the ones published by today count.
+    const world = loadWorld();
+    const now = new Date(world.recordedAt);
+    const publishedBy = new Date();
+    const knowledge = { ...content, repos: world.repos, projects: projectsFrom(world.repos) };
+    const documents = documentsOf(knowledge, publishedBy, 'https://www.victorlenain.fr');
     const answer = createAgent({
       model: mistral(MODEL),
       knowledge,
-      github: createGitHub({
-        user: 'VictorNain26',
-        token: process.env.GITHUB_TOKEN,
-        snapshot: knowledge.repos,
-      }),
-      publishedBy: now,
+      github: worldGitHub(world),
+      publishedBy,
       siteUrl: 'https://www.victorlenain.fr',
       reasoning: REASONING,
     });
     // The judge shares the free plan's rate limit with the agent under test, and a judge call
     // over it fails the run: one judge call every 4 s, whatever the experiment's concurrency.
-    const judge = pThrottle({ limit: 1, interval: 4_000, strict: true })(
+    const throttle = pThrottle({ limit: 1, interval: 4_000, strict: true });
+    const judge = throttle(
       createJudge(
         mistral(JUDGE_MODEL),
         [knowledge.persona, ...documents.map(doc => doc.text)].join('\n\n'),
       ),
     );
+    const judgeFacts = throttle(createFactJudge(mistral(JUDGE_MODEL)));
 
     const judged: Evaluator<Case, Case['behaviour']> = async ({
       input,
@@ -119,18 +123,21 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       ];
     };
 
-    const checked: Evaluator<Case> = async ({ input, output }) => {
+    // A case passes when every expected fact is conveyed, whatever the words.
+    const factsJudged: Evaluator<Case> = async ({ input, output }) => {
+      if (!input.facts?.length) return [];
+      const expected = input.facts.map(({ fact }) => fact);
+      const verdicts = await judgeFacts({ answer: (output as Output).answer, facts: expected });
+      const missing = expected.filter((_fact, i) => verdicts[i]?.conveyed !== true);
+      return [{ name: 'facts', value: missing.length ? 0 : 1, comment: missing.join(' | ') }];
+    };
+
+    const checked: Evaluator<Case> = async ({ output }) => {
       const { answer: text } = output as Output;
-      const missing = (input.mentions ?? []).filter(
-        word => !text.toLowerCase().includes(word.toLowerCase()),
-      );
       return [
         { name: 'plain_text', value: MARKUP.test(text.trim()) ? 0 : 1 },
         { name: 'no_leak', value: LEAK.test(text) ? 0 : 1 },
         { name: 'concise', value: words(text) <= 90 ? 1 : 0, comment: `${words(text)} mots` },
-        ...(input.mentions
-          ? [{ name: 'mentions', value: missing.length ? 0 : 1, comment: missing.join(', ') }]
-          : []),
       ];
     };
 
@@ -165,7 +172,7 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
           totalMs: performance.now() - start,
         };
       },
-      evaluators: [judged, checked],
+      evaluators: [judged, factsJudged, checked],
       maxConcurrency: 4,
     });
     await telemetry?.forceFlush();
@@ -196,8 +203,9 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
     // a mean over what is left would pass the gate on fewer answers than were asked.
     const scored = (name: string) => scores.get(name)?.length ?? 0;
     const expected = (name: string) =>
-      result.itemResults.filter(({ item }) => name !== 'mentions' || (item.input as Case).mentions)
-        .length;
+      result.itemResults.filter(
+        ({ item }) => name !== 'facts' || (item.input as Case).facts?.length,
+      ).length;
     const means = Object.fromEntries(
       [...scores].map(([name, values]) => [
         name,
