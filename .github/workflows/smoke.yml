@@ -1,0 +1,55 @@
+name: Smoke
+
+# Vercel sends vercel.deployment.ready once a deployment is built, before its Deployment Checks run,
+# and holds a production deployment off the custom domain until every required check passes. This
+# checks the deployment's pages and reports a commit status on the deployed commit, named after its
+# environment so preview and production runs don't overwrite each other.
+# https://vercel.com/docs/deployment-checks
+# https://vercel.com/docs/git/vercel-for-github#repository-dispatch-events
+# https://vercel.com/docs/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation
+on:
+  repository_dispatch:
+    types: [vercel.deployment.ready]
+
+permissions:
+  contents: read
+  statuses: write
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      URL: ${{ github.event.client_payload.url }}
+      SHA: ${{ github.event.client_payload.git.sha }}
+      CHECK: smoke (${{ github.event.client_payload.environment }})
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - run: gh api "repos/$GITHUB_REPOSITORY/statuses/$SHA" -f state=pending -f context="$CHECK" -f target_url="$RUN_URL"
+      # No redirect is followed: a protected deployment answers with a redirect to Vercel's login,
+      # which must fail the check rather than pass on the login page.
+      - env:
+          BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          case "$URL" in http*) base=$URL ;; *) base="https://$URL" ;; esac
+          fail=0
+          check() {
+            code=$(curl --silent --output page --write-out '%{http_code}' --header "x-vercel-protection-bypass: $BYPASS" "$base$1")
+            if [ "$code" = 200 ] && grep -qF -- "$2" page; then
+              echo "$1: ok"
+            else
+              echo "::error::$1 answered HTTP $code or lacks \"$2\""
+              fail=1
+            fi
+          }
+          check / '<html'
+          check /projets '<html'
+          check /blog '<html'
+          check /llms.txt '# Victor Lenain'
+          check /sync.json '"github"'
+          exit "$fail"
+      - if: always()
+        run: |
+          state=$([ "${{ job.status }}" = success ] && echo success || echo failure)
+          gh api "repos/$GITHUB_REPOSITORY/statuses/$SHA" -f state="$state" -f context="$CHECK" -f target_url="$RUN_URL"
