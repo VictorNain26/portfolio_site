@@ -6,3 +6,4 @@ package-lock.json
 src/content/posts/
 docs/
 src/data/github.json
+evals/world.json
