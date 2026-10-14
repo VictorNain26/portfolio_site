@@ -41,3 +41,25 @@ npm run format:check && npm run check && npm test && npm run build && npm run ve
 
 Une PR qui touche l'assistant lance aussi son évaluation contre Mistral
 (`.github/workflows/eval.yml`, `npm run eval` en local).
+
+## Revenir en arrière
+
+Une production cassée se répare en deux temps : remettre en ligne le déploiement
+précédent, puis corriger sur `master`.
+
+1. Dans le projet Vercel, tuile _Production Deployment_ : **Instant Rollback**,
+   puis **Confirm Rollback** (ou `vercel rollback`). Le plan Hobby ne propose
+   que le déploiement de production précédent : agir avant qu'un nouveau
+   déploiement le remplace, et un redéploiement de `sync.yml` en crée un aussi
+   bien qu'un merge.
+2. Corriger par une PR sur `master`, un `git revert` du commit fautif au besoin,
+   et attendre que son déploiement de production passe `smoke (production)`.
+3. Le mettre en ligne : **Undo Rollback** sur la même tuile, ou
+   `vercel promote <url>`.
+
+Tant que le rollback dure, Vercel n'assigne plus le domaine aux nouveaux
+déploiements : ni un merge ni `sync.yml` ne passent en ligne, et un article
+programmé ne paraît pas. Le déploiement restauré garde les variables
+d'environnement de son build : une clé changée depuis (Mistral, Upstash,
+Langfuse) ne l'atteint pas, et une clé révoquée le casse. Les données Upstash,
+quotas et conversations, ne reviennent pas en arrière.
