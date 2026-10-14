@@ -63,3 +63,7 @@ programmé ne paraît pas. Le déploiement restauré garde les variables
 d'environnement de son build : une clé changée depuis (Mistral, Upstash,
 Langfuse) ne l'atteint pas, et une clé révoquée le casse. Les données Upstash,
 quotas et conversations, ne reviennent pas en arrière.
+
+Un déploiement de production qui échoue `validate` ou `smoke (production)`, les
+Deployment Checks du projet, reste hors ligne et l'ancien continue de servir :
+rien à annuler. **Force Promote**, sur la page du déploiement, passe outre.
