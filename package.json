@@ -16,7 +16,8 @@
     "verify:build": "vitest run --dir tests",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "eval": "node scripts/github.ts --if-missing && EVAL_LIVE=1 vitest run --dir evals --silent=false"
+    "eval": "EVAL_LIVE=1 vitest run --dir evals --no-file-parallelism --silent=false",
+    "eval:record": "node evals/record-world.ts"
   },
   "dependencies": {
     "@ai-sdk/mistral": "4.0.56",

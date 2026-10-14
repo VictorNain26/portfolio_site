@@ -41,6 +41,40 @@ const INVITATION =
 export const withoutInvitations = (promises: string[]) =>
   promises.filter(promise => !INVITATION.test(promise.replace(/\s+/g, ' ').trim()));
 
+const factsSchema = z.object({
+  facts: z.array(
+    z.object({ fact: z.string(), passage: z.string().nullable(), conveyed: z.boolean() }),
+  ),
+});
+
+const FACT_INSTRUCTIONS = `Tu vérifies si une réponse transmet des faits attendus. Pour chaque fait, dans l'ordre donné :
+- passage : le passage de la réponse, copié mot pour mot, qui transmet ce fait, ou null ;
+- conveyed : true si ce passage dit la même chose que le fait, quels que soient les mots (un synonyme, une reformulation ou un détail en plus comptent) ; false si la réponse ne le dit pas, le dit seulement en partie ou dit le contraire.
+Un nom que le fait donne (une entreprise, un projet, un outil, une école) doit figurer dans le passage : une description qui pourrait le désigner ne suffit pas, même si tu sais à quoi elle renvoie. Tu ne sais rien d'autre que la réponse.
+Ne juge rien d'autre que ces faits.`;
+
+// One grader per dimension, as Anthropic advises: the fact check stays out of the calibrated judge,
+// and gets the expected facts as a reference, which cut a judge's errors from 70 % to 15 % in
+// Zheng et al. 2023 (https://arxiv.org/abs/2306.05685).
+export function createFactJudge(model: LanguageModel) {
+  return async ({ answer, facts }: { answer: string; facts: string[] }) => {
+    const { output } = await generateText({
+      model,
+      instructions: FACT_INSTRUCTIONS,
+      prompt: [
+        `<faits_attendus>\n${facts.map((fact, i) => `${i + 1}. ${fact}`).join('\n')}\n</faits_attendus>`,
+        `<reponse>\n${answer}\n</reponse>`,
+      ].join('\n\n'),
+      output: Output.object({ schema: factsSchema }),
+      temperature: 0,
+      providerOptions: {
+        mistral: { reasoningEffort: 'high' } satisfies MistralLanguageModelChatOptions,
+      },
+    });
+    return output.facts;
+  };
+}
+
 export function createJudge(model: LanguageModel, sources: string) {
   return async ({
     question,
