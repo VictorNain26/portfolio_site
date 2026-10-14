@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 import { readEvents } from '../ask';
 import type { Answer, Turn } from './agent';
 import type { Conversations } from './conversations';
@@ -94,6 +94,14 @@ const events = async (response: Response) => {
 };
 
 describe('handleAsk', () => {
+  let logged: MockInstance<typeof console.error>;
+  beforeEach(() => {
+    logged = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+  });
+  afterEach(() => {
+    logged.mockRestore();
+  });
+
   it('rejects a request from another site', async () => {
     const { deps, visitor } = setup();
     const response = await handleAsk(
@@ -155,6 +163,7 @@ describe('handleAsk', () => {
     const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
     expect(response.status).toBe(503);
     expect(seen).toEqual([]);
+    expect(logged).toHaveBeenCalledWith('ask: quota store failed', new Error('timeout'));
   });
 
   it('fails closed when Upstash lets a call through on its timeout', async () => {
@@ -162,6 +171,25 @@ describe('handleAsk', () => {
     const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
     expect(response.status).toBe(503);
     expect(seen).toEqual([]);
+    expect(logged).toHaveBeenCalledWith('ask: quota store timed out');
+  });
+
+  it('answers and logs when the conversation store fails', async () => {
+    const broken: Conversations = {
+      load: () => Promise.reject(new Error('redis down')),
+      save: () => Promise.reject(new Error('redis down')),
+    };
+    const { deps } = setup({ conversations: broken });
+    const response = await handleAsk(
+      request({ question: 'Et ensuite ?', conversation: ID }),
+      '1.2.3.4',
+      deps,
+    );
+    expect((await events(response)).at(-1)).toMatchObject({ type: 'done' });
+    expect(logged.mock.calls.map(([message]) => message)).toEqual([
+      'ask: conversation load failed',
+      'ask: conversation save failed',
+    ]);
   });
 
   it('gives the visitor question back when only the global quota times out', async () => {
@@ -199,6 +227,32 @@ describe('handleAsk', () => {
     const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
     expect(await events(response)).toEqual([{ type: 'error', code: 'failed' }]);
     expect([visitor.refunds(), global.refunds()]).toEqual([1, 1]);
+    expect(logged).toHaveBeenCalledWith('ask: answer failed', new Error('overloaded'));
+  });
+
+  it('logs nothing when the visitor stops the answer', async () => {
+    const leave = new AbortController();
+    let settled: Promise<unknown> = Promise.resolve();
+    const { deps } = setup({
+      defer: task => void (settled = task),
+      answer: () => ({
+        text: (async function* () {
+          yield 'Début';
+          leave.abort();
+          throw new DOMException('aborted', 'AbortError');
+        })(),
+        sources: () => [],
+        toolOutputs: [],
+      }),
+    });
+    const response = await handleAsk(
+      request({ question: 'Salut' }, undefined, leave.signal),
+      '1.2.3.4',
+      deps,
+    );
+    expect(response.status).toBe(200);
+    await settled;
+    expect(logged).not.toHaveBeenCalled();
   });
 
   it('keeps the quota spent when the answer fails after text was shown', async () => {
