@@ -49,7 +49,9 @@ jobs:
       # Whatever breaks the build fails here, not on Vercel.
       - if: steps.compare.outputs.stale == 'true'
         run: npm run build
+      # Vercel's body names the limit behind a 429 (they are per account, not per project):
+      # https://vercel.com/docs/limits#rate-limits
       - if: steps.compare.outputs.stale == 'true'
-        run: curl --fail --silent --show-error --request POST "$DEPLOY_HOOK"
+        run: curl --fail-with-body --silent --show-error --request POST "$DEPLOY_HOOK"
         env:
           DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
