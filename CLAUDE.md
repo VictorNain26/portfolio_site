@@ -2,85 +2,48 @@
 
 ## Commandes
 
-- `npm install` — dépendances (Node ≥ 22.12)
 - `npm run dev` — serveur de développement
-- `npm run build` — build dans `dist/client/` et `.vercel/output/`
-- `npm run verify:build` — Vitest sur `dist/client/` et `.vercel/output/`
-  (`tests/`) : articles, sitemap, canonicals, JSON-LD, llms.txt, contraste du
-  code, config de la fonction
 - `npm run check` — `astro check` (types `.astro` et TS)
 - `npm test` — Vitest sur `src/`
+- `npm run build` puis `npm run verify:build` — assertions sur le build
+  (`tests/`)
 - `npm run format` / `npm run format:check` — Prettier
 - `npm run eval` — expérience Langfuse sur l'agent contre le vrai Mistral (clés
-  dans `.env`, noms dans `.env.example`) : `EVAL_RUNS`, `EVAL_REASONING`. À
-  lancer avant un merge qui touche l'agent ; ses seuils sont dans
-  `evals/agent.test.ts`. Elle lit le GitHub enregistré dans `evals/world.json`,
-  pas le GitHub du jour : un dépôt qui change ne la fait pas échouer
-- `npm run eval:record` — réenregistre `evals/world.json` (`GITHUB_TOKEN` pour
-  le débit). Dans sa propre PR : `evals/cases.test.ts` signale les faits
-  attendus dont le passage a disparu, à revoir avec la diff des données
+  dans `.env`, noms dans `.env.example`). À lancer avant un merge qui touche
+  l'agent ; ses seuils sont dans `evals/agent.test.ts`. Elle lit le GitHub
+  enregistré dans `evals/world.json`, pas le GitHub du jour
+- `npm run eval:record` — réenregistre `evals/world.json`, dans sa propre PR :
+  `evals/cases.test.ts` signale les faits attendus dont le passage a disparu
 
 ## Architecture
 
-Site statique Astro 7 sauf une route : `/api/ask`, rendue à la demande par
-`@astrojs/vercel` (les pages statiques sortent dans `dist/client/`). Déployé sur
-Vercel (`vercel.json` : framework, URLs sans `.html` ni slash final, 301 des
-anciennes pages `/services` et des anciens articles vers `/blog`).
+Site statique Astro sauf une route, `/api/ask`, rendue à la demande par
+`@astrojs/vercel` et déployée sur Vercel (`vercel.json`).
 
-- `src/pages/` — `/`, `/projets`, `/blog`, `/blog/[slug]`, 404
-- `src/pages/llms.txt.ts`, `src/pages/blog/[slug].md.ts` — `/llms.txt` et la
-  version Markdown de chaque article, générés (`src/lib/llms.ts`) depuis la
-  section « Qui je suis » de la fiche, les projets et les articles publiés
-- `src/layouts/Base.astro` — `<head>`, SEO, JSON-LD, header, footer
-- `src/content/posts/*.mdx` — articles ; `publishedAt` dans le futur = non
-  publié
-- `src/data/projects.ts` — projets affichés, lus dans `github.json`
-  (`src/lib/projects.ts`) : les dépôts publics qui ont le topic `portfolio`,
-  sans rien d'autre à remplir. Une description « Nom — accroche » donne le nom,
-  sinon c'est le nom du dépôt ; les autres topics font la stack ; archivé,
-  `pre-launch` ou une homepage donnent le statut. `sync.yml` (planifié toutes
-  les 15 min, que GitHub retarde souvent de quelques heures) compare GitHub et
-  la date du prochain article programmé à `/sync.json` du site en ligne, et ne
-  redéploie que s'ils diffèrent
-- `src/pages/api/ask.ts` — mon assistant IA, qui répond sur moi et mon code : AI
-  SDK, Mistral Small 4 (`mistral-small-2603`, raisonnement coupé, 800 tokens de
-  sortie au plus), quota et conversations dans Upstash Redis, traces Langfuse
-  quand ses clés existent (secrets via `astro:env`)
-- `src/lib/agent/` — l'agent, testé : prompt, outils, sources calculées, handler
-  HTTP ; `src/content/persona.md` — sa fiche
-- `scripts/github.ts` — écrit `src/data/github.json` (non versionné) avant
-  `dev`, `check` et `build` ; l'assistant relit en direct dépôts, projets et
-  README (`src/lib/agent/github.ts`, cache 10 min) et cherche dans le code si
-  `GITHUB_TOKEN` existe. Il ne voit que les dépôts qui ont le topic `portfolio`,
-  plus le dépôt profil : le topic ne se met jamais sur un projet client
-- `evals/` — cas, juges et expérience de l'agent (`npm run eval`). Un cas attend
-  des faits, jugés sur le sens, et chacun cite son passage dans la fiche, un
-  article ou le monde enregistré ; un juge LLM ne passe en gate qu'avec ses
-  verdicts connus d'avance (`evals/judge.test.ts`)
-- `src/lib/` — seule logique du site, testée
-- `tests/` — assertions sur le build, lancées après `npm run build`
-- `src/styles/global.css` — tokens de la charte « texte brut » : Newsreader
-  seule (Fonts API d'Astro, fournisseur Fontsource, axes `wght` et `opsz`), noir
-  sur blanc, filets fins, aucune couleur d'accent
+- `/api/ask` est mon assistant IA (`src/lib/agent/`, fiche
+  `src/content/persona.md`) : modèle, quota, conversations et traces se lisent
+  dans `src/pages/api/ask.ts`.
+- Les projets affichés viennent des dépôts publics qui ont le topic `portfolio`
+  (`src/lib/projects.ts`) ; `scripts/github.ts` écrit `src/data/github.json`,
+  non versionné, avant `dev`, `check` et `build`. `sync.yml` ne redéploie que si
+  GitHub ou le prochain article programmé diffèrent de `/sync.json` en ligne.
+- Un article dont `publishedAt` est dans le futur n'est pas publié.
+- `evals/` : un cas attend des faits, jugés sur le sens, et chacun cite son
+  passage ; un juge LLM ne passe en gate qu'avec ses verdicts connus d'avance
+  (`evals/judge.test.ts`).
+- Charte « texte brut » dans `src/styles/global.css` : une seule police, noir
+  sur blanc, aucune couleur d'accent.
 
 ## Règles
 
-- Le JS client est permis. En place : Umami, le `<ClientRouter />` d'Astro
-  (transitions entre pages dans les deux sens, repli animé pour les navigateurs
-  sans View Transitions) et le script inline du thème (sombre quand le système
-  du visiteur l'est, et pour tous de 20 h à 7 h, heure locale, dans
-  `Base.astro`, réappliqué à `astro:after-swap`). L'ancienne page sort d'abord
-  (`page-out`, dans `Base.astro`), puis les blocs `.enter` de la nouvelle
-  entrent dans l'ordre de lecture (`global.css`) : les deux pages ne se
-  chevauchent jamais. Toute animation respecte `prefers-reduced-motion`.
-- Une seule police, pas de teinte d'accent. `--muted` passe AA sur les deux
-  fonds (6.69:1 en clair, 7.70:1 en sombre) : toute nouvelle teinte reste
-  au-dessus de 4.5:1.
+- Le JS client est permis ; toute animation respecte `prefers-reduced-motion`.
+- Toute teinte de texte reste au-dessus de 4.5:1 sur les deux fonds (AA).
 - Site perso de bidouille : projets perso uniquement, pas de missions client ;
   ton personnel, pas commercial. Chaque affirmation se vérifie sur GitHub.
+- Le topic `portfolio` ne se met jamais sur un projet client : l'assistant voit
+  tous les dépôts qui l'ont.
 - Un article raconte l'état à sa date : ses liens vers un fichier ou un dossier
-  d'un dépôt pointent sur un commit (SHA complet, vérifié par `tests/`), et
-  `links.yml` vérifie chaque semaine que ses liens répondent encore.
+  d'un dépôt pointent sur un commit (SHA complet, vérifié par `tests/`).
 - L'assistant parle de moi à la troisième personne, jamais en mon nom, et ne
   donne que des faits : il n'affirme sur moi que ce que disent la fiche, les
   projets, les articles publiés ou GitHub ; un article programmé ne doit jamais
