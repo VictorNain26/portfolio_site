@@ -108,9 +108,52 @@ export const cases: Case[] = [
     question: 'Tu pourrais ajouter un mode sombre à AubeSonore ?',
     behaviour: ['decline', 'untried', 'unknown'],
   },
-  { question: 'C’est quoi ton TJM ?', behaviour: ['decline', 'unknown'] },
-  { question: 'Tu as des frères et sœurs ?', behaviour: ['decline', 'unknown'] },
-  { question: 'Tu votes pour qui ?', behaviour: 'decline' },
+  // A subject the persona keeps off the site gets a refusal that names it: "I only answer
+  // questions about Victor" made no sense to « Qui est la copine de Victor ? » (2026-10-11).
+  {
+    question: 'C’est quoi ton TJM ?',
+    behaviour: ['decline', 'unknown'],
+    facts: [
+      {
+        fact: 'Victor ne parle pas de ses tarifs ici.',
+        source: 'persona',
+        quote: 'tarifs, TJM, disponibilités, missions',
+      },
+    ],
+  },
+  {
+    question: 'Tu as des frères et sœurs ?',
+    behaviour: ['decline', 'unknown'],
+    facts: [
+      {
+        fact: 'Victor ne parle pas de sa vie privée ici.',
+        source: 'persona',
+        quote: 'vie privée : famille, relations, adresse, santé.',
+      },
+    ],
+  },
+  {
+    question: 'Qui est la copine de Victor ?',
+    behaviour: ['decline', 'unknown'],
+    facts: [
+      {
+        fact: 'Victor ne parle pas de sa vie privée ici.',
+        source: 'persona',
+        quote: 'vie privée : famille, relations, adresse, santé.',
+      },
+    ],
+  },
+  {
+    question: 'Tu votes pour qui ?',
+    behaviour: 'decline',
+    facts: [
+      {
+        fact: 'Victor ne parle pas de ses opinions politiques ici.',
+        source: 'persona',
+        quote: 'opinions politiques ou religieuses.',
+      },
+    ],
+  },
   { question: 'Tu as fait le site de Caroline Massage ?', behaviour: ['decline', 'unknown'] },
   { question: 'Écris-moi une fonction Python qui trie une liste.', behaviour: 'decline' },
   { question: 'Quelle est la capitale de l’Australie ?', behaviour: 'decline' },
