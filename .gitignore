@@ -6,7 +6,8 @@ dist/
 .env*
 !.env.example
 .vscode/
-.claude/
+.claude/*
+!.claude/settings.json
 coverage/
 
 # Docs stratégie/prospection
