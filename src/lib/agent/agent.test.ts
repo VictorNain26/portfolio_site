@@ -104,9 +104,10 @@ const run = async (
     signal,
     now: new Date(),
   });
-  let text = '';
-  for await (const chunk of answer.text) text += chunk;
-  return { text, sources: answer.sources(text) };
+  const chunks: string[] = [];
+  for await (const chunk of answer.text) chunks.push(chunk);
+  const text = chunks.join('');
+  return { text, chunks, sources: answer.sources(text) };
 };
 
 describe('createAgent', () => {
@@ -175,6 +176,26 @@ describe('createAgent', () => {
       }),
     );
     expect(text).toBe('Le dépôt portfolio_site et AubeSonore, dans tests/.');
+  });
+
+  it('keeps the text of a markdown link, even cut across chunks', async () => {
+    const { text } = await run(
+      new MockLanguageModelV4({
+        doStream: says(
+          'Tu peux l’écouter sur [radio',
+          '.aubesonore.fr](https://radio',
+          '.aubesonore.fr). Le code est sur [GitHub](https://github.com/x).',
+        ),
+      }),
+    );
+    expect(text).toBe('Tu peux l’écouter sur radio.aubesonore.fr. Le code est sur GitHub.');
+  });
+
+  it('keeps brackets that open no link, and streams what comes before one', async () => {
+    const { chunks } = await run(
+      new MockLanguageModelV4({ doStream: says('Le tableau [0] reste vide. Voir [', 'ici') }),
+    );
+    expect(chunks).toEqual(['Le tableau [0] reste vide. Voir ', '[ici']);
   });
 
   it('keeps the answer on one line when the model breaks lines', async () => {

@@ -28,6 +28,43 @@ const MAX_STEPS = 4;
 // READMEs the code reads for the repos a question names, before the model answers.
 const MAX_READMES = 2;
 
+const MAX_LINK = 300;
+
+// The model writes markdown despite the prompt, and the page shows plain text. It sets names in
+// bold or code (French prose has no use for an asterisk or a backtick; underscores stay, repo
+// names carry them), breaks lines to enumerate though the answer is one line, and links a site it
+// read about (3 of 8 trials of « C'est quoi AubeSonore ? » in #125's evaluation): a link keeps its
+// text. Chunks can cut a link, so what follows a `[` waits until it is known to be one or not.
+function plainText() {
+  let held = '';
+  const clean = (text: string) =>
+    text
+      .replace(/\[([^\]\n]*)\]\([^)\s]*\)/g, '$1')
+      .replace(/[*`]/g, '')
+      .replace(/\s*\n\s*/g, ' ');
+  const undecided = (tail: string) => {
+    const close = tail.indexOf(']');
+    if (close < 0 || close === tail.length - 1) return tail.length < MAX_LINK;
+    if (tail[close + 1] !== '(') return false;
+    return !tail.includes(')', close) && tail.length < MAX_LINK;
+  };
+  return {
+    push(chunk: string) {
+      held += chunk;
+      const open = held.lastIndexOf('[');
+      const cut = open >= 0 && undecided(held.slice(open)) ? open : held.length;
+      const ready = clean(held.slice(0, cut));
+      held = held.slice(cut);
+      return ready;
+    },
+    flush() {
+      const rest = clean(held);
+      held = '';
+      return rest;
+    },
+  };
+}
+
 export function createAgent({
   model,
   knowledge,
@@ -127,19 +164,20 @@ export function createAgent({
         },
         telemetry: { functionId: 'generate-answer' },
       });
+      const plain = plainText();
       for await (const part of result.stream) {
-        // The model sets names in markdown bold or code despite the prompt; the page shows plain
-        // text, and French prose has no use for an asterisk or a backtick. Underscores stay:
-        // repo names carry them. It also breaks lines to enumerate, though the answer is one line.
-        if (part.type === 'text-delta')
-          yield part.text.replace(/[*`]/g, '').replace(/\s*\n\s*/g, ' ');
-        else if (part.type === 'tool-result')
+        if (part.type === 'text-delta') {
+          const ready = plain.push(part.text);
+          if (ready) yield ready;
+        } else if (part.type === 'tool-result')
           toolOutputs.push({ tool: part.toolName, output: part.output });
         else if (part.type === 'error') throw part.error;
         // streamText ends an aborted stream quietly: a cut answer must not pass for a full one.
         else if (part.type === 'abort')
           throw new Error(`answer aborted: ${part.reason ?? 'no reason'}`);
       }
+      const rest = plain.flush();
+      if (rest) yield rest;
     }
 
     return { text: text(), sources: answer => citedSources(answer, documents, read), toolOutputs };
