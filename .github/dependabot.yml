@@ -1,6 +1,6 @@
 # Weekly version updates, minor and patch grouped into one pull request per ecosystem; a major
-# version gets its own. Langfuse and OpenTelemetry move together: their peer ranges break when one
-# is bumped alone (ERESOLVE on #143). A new release waits 7 days, so a broken or compromised one
+# version gets its own, except for Langfuse and OpenTelemetry, which move together whatever the
+# update: their peer ranges break when one is bumped alone (ERESOLVE on #143). A new release waits 7 days, so a broken or compromised one
 # is often pulled before it lands here. TypeScript majors wait until astro check supports them.
 # An npm update changes package-lock.json, so it runs the agent evaluation: its secrets must also
 # exist as Dependabot secrets, under the same names.

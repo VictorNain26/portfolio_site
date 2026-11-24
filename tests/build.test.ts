@@ -176,11 +176,19 @@ describe.each(['index', 'blog', 'projets', '404'].map(pageFile).concat(articles)
 describe('security headers', () => {
   const headers: { source: string; headers: { key: string; value: string }[] }[] =
     JSON.parse(read('vercel.json')).headers ?? [];
-  const all = new Map(
-    headers
-      .filter(rule => rule.source === '/(.*)')
-      .flatMap(rule => rule.headers.map(({ key, value }) => [key.toLowerCase(), value] as const)),
+  const rules = headers.flatMap(rule =>
+    rule.headers.map(({ key, value }) => ({ source: rule.source, key: key.toLowerCase(), value })),
   );
+  // Vercel applies every matching rule, a later one over an earlier one: the values are set once,
+  // for every path, and no narrower rule redefines them.
+  const all = new Map(
+    rules.filter(rule => rule.source === '/(.*)').map(rule => [rule.key, rule.value] as const),
+  );
+
+  it('sets each header once, for every path', () => {
+    for (const key of all.keys())
+      expect(rules.filter(rule => rule.key === key).map(rule => rule.source)).toEqual(['/(.*)']);
+  });
 
   it('forbids framing, plugins and foreign base URLs and form targets', () => {
     const csp = all.get('content-security-policy') ?? '';
@@ -193,7 +201,7 @@ describe('security headers', () => {
       expect(csp, directive).toContain(directive);
   });
 
-  it('sets nosniff, a referrer policy and a permissions policy on every path', () => {
+  it('sets nosniff, a referrer policy and a permissions policy', () => {
     expect(all.get('x-content-type-options')).toBe('nosniff');
     expect(all.get('referrer-policy')).toBe('strict-origin-when-cross-origin');
     expect(all.get('permissions-policy')).toMatch(/camera=\(\).*microphone=\(\)/);
