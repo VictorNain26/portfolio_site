@@ -17,5 +17,8 @@
   échoue sur ses imports.
 - Le topic GitHub `portfolio` décide des projets affichés et de ce que
   l'assistant voit (`src/lib/projects.ts`) : il reste hors des projets clients.
+- L'assistant ne lit pas GitHub en direct : son corpus (la fiche et le README de
+  chaque projet) vient de `src/data/github.json`, au build. Un README changé
+  l'atteint au redéploiement suivant de `sync.yml`.
 - `public/og.png`, le favicon, les icônes et les logos se régénèrent avec
   `scripts/brand.mjs` (voir l'en-tête du script).

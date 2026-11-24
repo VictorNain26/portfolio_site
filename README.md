@@ -16,8 +16,8 @@ npm run dev
 
 ## Ajouter un projet
 
-Mettre le topic `portfolio` sur un dépôt public : l'assistant le lit dans les 10
-minutes, et il apparaît sur `/projets` au passage suivant de `sync.yml`. Une
+Mettre le topic `portfolio` sur un dépôt public : au passage suivant de
+`sync.yml`, il apparaît sur `/projets` et l'assistant lit son README. Une
 description « Nom — accroche » lui donne son nom, sinon c'est celui du dépôt ;
 ses autres topics font sa stack.
 
