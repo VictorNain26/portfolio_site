@@ -32,17 +32,12 @@ export function createAgent({
   model,
   knowledge,
   github,
-  publishedBy,
-  siteUrl,
   reasoning,
 }: {
   model: LanguageModel;
   // Projects are read from the live repo list, not from the build.
   knowledge: Omit<Knowledge, 'projects'>;
   github: Pick<GitHub, 'repos' | 'readme' | 'search' | 'activity'>;
-  // Posts scheduled after this date have no page yet: the agent must not know them.
-  publishedBy: Date;
-  siteUrl: string;
   reasoning: Reasoning;
 }) {
   return function answer({
@@ -72,7 +67,7 @@ export function createAgent({
       // GitHub reaches the agent without a redeploy, projects included.
       const repos = await github.repos(signal);
       const live: Knowledge = { ...knowledge, repos, projects: projectsFrom(repos) };
-      documents = documentsOf(live, publishedBy, siteUrl);
+      documents = documentsOf(live);
       // A project's line in the documents says little: the code itself reads the README of each
       // repo the conversation names, directly or through its project, before the model answers.
       // Asking the model for a tool call instead failed when it wrote text regardless.

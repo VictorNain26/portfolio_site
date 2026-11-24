@@ -52,9 +52,6 @@ const answer = createAgent({
   model: createMistral({ apiKey: MISTRAL_API_KEY })(MODEL),
   knowledge,
   github: createGitHub({ user, token: GITHUB_TOKEN, snapshot: knowledge.repos }),
-  // Posts scheduled after the build have no page yet: the agent must not know them.
-  publishedBy: new Date(__BUILD_TIME__),
-  siteUrl: import.meta.env.SITE,
   reasoning: REASONING,
 });
 

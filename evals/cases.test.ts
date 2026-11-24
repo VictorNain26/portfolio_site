@@ -12,7 +12,6 @@ function sourceText(source: string): string | undefined {
   const [kind, name] = cut < 0 ? [source, ''] : [source.slice(0, cut), source.slice(cut + 1)];
   const repo = world.repos.find(candidate => candidate.name === name);
   if (kind === 'persona') return content.persona;
-  if (kind === 'post') return content.posts.find(post => post.slug === name)?.body;
   if (kind === 'readme') return repo?.readme ?? undefined;
   if (kind === 'description') return repo?.description ?? undefined;
   if (kind === 'file') {

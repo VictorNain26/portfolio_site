@@ -45,7 +45,6 @@ jobs:
           }
           check / '<html'
           check /projets '<html'
-          check /blog '<html'
           check /llms.txt '# Victor Lenain'
           check /sync.json '"github"'
           exit "$fail"

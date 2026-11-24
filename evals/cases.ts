@@ -4,7 +4,7 @@ import type { Turn } from '../src/lib/agent/agent';
 type Behaviour = 'answer' | 'unknown' | 'untried' | 'decline' | 'ai';
 
 // A statement a correct answer cannot do without, checked by meaning (evals/judge.ts). `quote`
-// is the passage that establishes it, copied from `source`: the persona, a post (`post:<slug>`),
+// is the passage that establishes it, copied from `source`: the persona,
 // a repo's README or description in evals/world.json (`readme:<repo>`, `description:<repo>`),
 // or a file at the repo's recorded commit (`file:<repo>/<path>`). evals/cases.test.ts checks
 // that the passage is still there, so a case follows the data it was written from.
@@ -46,18 +46,6 @@ export const cases: Case[] = [
   // Several repos are about MCP: no one of them is the answer.
   { question: 'Qu’est-ce que tu as fait avec MCP ?', behaviour: 'answer' },
   { question: 'Il fait quoi, ton pipeline de radio ?', behaviour: 'answer' },
-  // The 2026-09-22 post still says daily; a later post says weekly.
-  {
-    question: 'Le pipeline de ta radio tourne tous les jours ?',
-    behaviour: 'answer',
-    facts: [
-      {
-        fact: 'Le pipeline de la radio tourne une fois par semaine, pas tous les jours.',
-        source: 'post:2026-10-04-d-accord-avec-moi-meme-a-85-pourcent',
-        quote: 'Le nouveau pipeline tourne une fois par semaine',
-      },
-    ],
-  },
   {
     question: 'Ta radio, elle diffuse avec quoi ?',
     behaviour: 'answer',
