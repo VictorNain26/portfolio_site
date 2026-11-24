@@ -30,18 +30,22 @@ const sitemap = new Set(
     .toArray()
     .map(url => $sitemap(url).find('loc').text()),
 );
-// The blog is gone: every URL it served, the legacy slugs before it included, goes home for good.
+// The blog is gone with nothing to replace it: its URLs, the legacy slugs before it included,
+// answer 404 rather than a redirect to an unrelated page, which Google reads as a soft 404.
+// https://developers.google.com/search/docs/crawling-indexing/http-network-errors#soft-404-errors
 describe('removed blog', () => {
-  it.each(['/blog', '/blog/:path*', '/rss.xml'])('redirects %s to / with a 301', source => {
-    expect(redirects).toContainEqual({ source, destination: '/', statusCode: 301 });
+  it('redirects none of its URLs', () => {
+    expect(redirects.filter(({ source }) => /^\/(blog|rss\.xml)/.test(source))).toEqual([]);
   });
 
   it('no longer builds a blog page, an article or a feed', () => {
     expect(existsSync(`${client}/blog`)).toBe(false);
     expect(existsSync(`${client}/rss.xml`)).toBe(false);
-    expect([...sitemap.keys()].filter(url => new URL(url).pathname.startsWith('/blog'))).toEqual(
-      [],
-    );
+    expect([...sitemap].filter(url => new URL(url).pathname.startsWith('/blog'))).toEqual([]);
+  });
+
+  it('leaves a way home on the 404 page', () => {
+    expect(html('404.html')('a[href="/"]').length).toBeGreaterThan(0);
   });
 });
 

@@ -14,21 +14,6 @@
       "source": "/services/:path*",
       "destination": "/",
       "statusCode": 301
-    },
-    {
-      "source": "/blog",
-      "destination": "/",
-      "statusCode": 301
-    },
-    {
-      "source": "/blog/:path*",
-      "destination": "/",
-      "statusCode": 301
-    },
-    {
-      "source": "/rss.xml",
-      "destination": "/",
-      "statusCode": 301
     }
   ]
 }
