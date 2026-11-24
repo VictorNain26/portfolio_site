@@ -112,6 +112,12 @@ export const cases: Case[] = [
       },
     ],
   },
+  // Since v2 the assistant sees READMEs, not package.json, and no README in evals/world.json names
+  // the test runner: saying so is as right as an answer. Kept to measure questions on tooling.
+  {
+    question: 'Avec quoi Victor teste le code de son site ?',
+    behaviour: ['answer', 'untried', 'unknown'],
+  },
   {
     question: 'Quel ORM utilise TomIA ?',
     behaviour: 'answer',

@@ -14,7 +14,10 @@ paths:
   et tient dans le prompt ; `sync.yml` redéploie quand GitHub change. Ajouter un
   outil ou un RAG se justifie par une mesure de l'eval.
 - Ses sources se calculent dans le code, pas par le modèle : un projet est cité
-  quand la réponse le nomme.
+  quand la réponse le nomme, puis quand la question ou un tour précédent le
+  nomme.
+- Le corpus a un budget (`MAX_CORPUS`, `src/lib/agent/knowledge.ts`) : le build
+  échoue au-delà.
 - `npm run eval` interroge le vrai Mistral (clés dans `.env`, noms dans
   `.env.example`) ; seuils dans `evals/agent.test.ts`. Elle lit le GitHub
   enregistré dans `evals/world.json`, pas celui du jour. `eval.yml` la lance sur

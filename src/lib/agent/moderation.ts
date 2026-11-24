@@ -18,7 +18,7 @@ const BLOCKING = [
 ];
 
 const responseSchema = z.object({
-  results: z.array(z.object({ categories: z.record(z.string(), z.boolean()) })),
+  results: z.array(z.object({ categories: z.record(z.string(), z.unknown()) })),
 });
 
 type Fetch = (url: string, init: RequestInit) => Promise<Response>;
@@ -43,6 +43,7 @@ export function createModeration({
     });
     if (!res.ok) throw new Error(`moderation: ${res.status}`);
     const categories = responseSchema.parse(await res.json()).results[0]?.categories ?? {};
-    return BLOCKING.some(category => categories[category]);
+    // Only a strict true blocks: a field Mistral adds later must not fail or block every question.
+    return BLOCKING.some(category => categories[category] === true);
   };
 }

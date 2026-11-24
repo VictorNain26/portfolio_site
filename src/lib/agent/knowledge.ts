@@ -8,12 +8,37 @@ export type Document = { id: string; title: string; url: string; names: string[]
 
 // The build already cuts a README to this; a stale github.json must not grow the prompt either.
 const MAX_README = 6000;
+// The whole corpus, persona included, was 31 124 characters in November 2026 (seven repos, three
+// of them cut at MAX_README). Past this, every question pays for a bigger prompt: the build
+// fails and someone decides what goes.
+export const MAX_CORPUS = 60_000;
 
 // The model copies the markdown links it reads; answers must stay plain text.
 export const unlink = (markdown: string) => markdown.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');
 
+// No URL reaches the model in any form: images, links, references, autolinks, bare addresses.
+const withoutUrls = (markdown: string) =>
+  unlink(
+    markdown
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+      .replace(/<img\b[^>]*>/gi, '')
+      .replace(/^\s*\[[^\]]+\]:\s*\S+.*$/gm, ''),
+  )
+    .replace(/\[([^\]]+)\]\[[^\]]*\]/g, '$1')
+    .replace(/<(?:https?:\/\/|www\.)[^>]*>/gi, '')
+    .replace(/(?:https?:\/\/|www\.)[^\s)>\]]+/gi, '')
+    .replace(/\n{3,}/g, '\n\n');
+
 const readmeOf = (repo: Repo | undefined) =>
-  repo?.readme ? unlink(repo.readme.slice(0, MAX_README)).trim() : '';
+  repo?.readme ? withoutUrls(repo.readme).trim().slice(0, MAX_README).trim() : '';
+
+export function checkBudget(persona: string, documents: Document[], max = MAX_CORPUS): void {
+  const size = persona.length + documents.reduce((sum, doc) => sum + doc.text.length, 0);
+  if (size > max)
+    throw new Error(
+      `agent corpus: ${size} characters, over the ${max} budget (src/lib/agent/knowledge.ts)`,
+    );
+}
 
 export function documentsOf(repos: Repo[]): Document[] {
   const byUrl = new Map(repos.map(repo => [repo.url, repo]));
@@ -22,6 +47,7 @@ export function documentsOf(repos: Repo[]): Document[] {
     const details = [
       `${project.name} (${project.status}, dépôt ${repo.name}, dernier push ${repo.pushedAt}) : ${project.tagline}`,
       project.stack.length > 0 && `Stack : ${project.stack.join(', ')}.`,
+      repo.language && `Langage : ${repo.language}.`,
     ].filter(Boolean);
     return {
       id: `project:${repo.name}`,

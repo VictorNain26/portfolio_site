@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createModeration } from './moderation';
 
-const verdict = (categories: Record<string, boolean>) =>
+const verdict = (categories: Record<string, unknown>) =>
   new Response(JSON.stringify({ results: [{ categories }] }), { status: 200 });
 const open = new AbortController().signal;
 
@@ -25,6 +25,14 @@ describe('createModeration', () => {
     expect(await moderate({ jailbreaking: true })).toBe(true);
     expect(await moderate({ dangerous_and_criminal_content: true })).toBe(true);
     expect(await moderate({ financial: true, pii: true })).toBe(false);
+  });
+
+  it('reads only true as a flag, whatever else a category carries', async () => {
+    const moderate = createModeration({
+      apiKey: 'k',
+      fetch: async () => verdict({ jailbreaking: 'true', sexual: 1, extra: { score: 0.9 } }),
+    });
+    expect(await moderate('q', open)).toBe(false);
   });
 
   it('throws when Mistral fails, so the handler can log it', async () => {

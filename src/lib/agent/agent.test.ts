@@ -61,6 +61,31 @@ describe('createAgent', () => {
     expect(system.trimEnd().endsWith('Nous sommes le 24 novembre 2026.')).toBe(true);
   });
 
+  // A README's own headings (# AubeSonore, ## Stack) must not read as the prompt's structure.
+  it('wraps the persona and each document in a tag, so README headings stay inside', async () => {
+    const { call } = await run(new MockLanguageModelV4({ doStream: says('Une radio.') }));
+    const system = call.prompt.find(message => message.role === 'system')!.content as string;
+    expect(system).toContain('<document title="Fiche de Victor">\n## Qui je suis');
+    expect(system).toContain('<document title="AubeSonore">\nAubeSonore (En ligne)');
+    expect(system.match(/<\/document>/g)).toHaveLength(2);
+    expect(system).toMatch(/victorlenain\.fr.*portfolio_site/);
+  });
+
+  it('cites the project a follow-up is about, though its answer does not name it', async () => {
+    const model = new MockLanguageModelV4({ doStream: says('Elle passe par AzuraCast.') });
+    const answer = createAgent({ model, persona, documents, reasoning: 'none' })({
+      question: 'Et elle diffuse comment ?',
+      history: [{ question: 'C’est quoi AubeSonore ?', answer: 'Une web radio.' }],
+      signal: new AbortController().signal,
+      now: new Date('2026-11-24'),
+    });
+    let text = '';
+    for await (const chunk of answer.text) text += chunk;
+    expect(answer.sources(text)).toEqual([
+      { title: 'AubeSonore', url: 'https://www.aubesonore.fr/' },
+    ]);
+  });
+
   it('keeps the cache key the same from one day to the next', async () => {
     const key = async (now: Date) =>
       (await run(new MockLanguageModelV4({ doStream: says('Oui.') }), { now })).call

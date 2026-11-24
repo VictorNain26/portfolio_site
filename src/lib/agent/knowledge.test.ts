@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { documentsOf } from './knowledge';
+import { checkBudget, documentsOf } from './knowledge';
 import type { Repo } from './repos';
 
 const repo = (name: string, extra: Partial<Repo> = {}): Repo => ({
@@ -20,7 +20,15 @@ const aubesonore = repo('aubesonore', {
   description: 'AubeSonore — Web radio diffusée 24 h/24.',
   homepage: 'https://www.aubesonore.fr/',
   topics: ['portfolio', 'python'],
-  readme: 'Diffuse via [AzuraCast](https://www.azuracast.com/), le dimanche.',
+  language: 'Python',
+  readme: [
+    '![Logo](https://www.aubesonore.fr/logo.png)',
+    'Diffuse via [AzuraCast](https://www.azuracast.com/), le dimanche.',
+    'Démo sur <https://demo.aubesonore.fr> ou https://staging.aubesonore.fr/live, en local http://localhost:3000.',
+    'Voir le [guide][g] et <img src="https://x.fr/a.png" alt="a">.',
+    '',
+    '[g]: https://www.aubesonore.fr/guide',
+  ].join('\n'),
 });
 const profile = repo('VictorNain26', { topics: [], readme: 'Salut, je suis Victor.' });
 
@@ -44,6 +52,15 @@ describe('documentsOf', () => {
     expect(project.text).not.toContain('azuracast.com');
   });
 
+  it('gives the main language GitHub reports', () => {
+    expect(project.text).toContain('Langage : Python.');
+  });
+
+  it('leaves no URL in the README: bare, autolinked, referenced, or in an image', () => {
+    expect(project.text).not.toMatch(/https?:\/\/|www\.|<img|!\[|\]:/);
+    expect(project.text).toContain('Voir le guide');
+  });
+
   it('keeps the profile README as its own document', () => {
     expect(documents.find(doc => doc.id === 'profile')).toMatchObject({
       url: 'https://github.com/VictorNain26/VictorNain26',
@@ -52,8 +69,25 @@ describe('documentsOf', () => {
     });
   });
 
-  it('caps a long README', () => {
-    const long = documentsOf([repo('long', { readme: 'x'.repeat(20_000) })]);
-    expect(long[0]!.text.length).toBeLessThan(7_000);
+  it('caps a long README after its links are gone', () => {
+    const link = '[mot](https://example.com/une/longue/adresse/de/page) ';
+    const long = documentsOf([repo('long', { readme: link.repeat(2_000) })]);
+    const readme = long[0]!.text.split('\n\n').at(-1)!;
+    expect(readme.length).toBeGreaterThan(5_900);
+    expect(readme.length).toBeLessThanOrEqual(6_000);
+  });
+});
+
+describe('checkBudget', () => {
+  const doc = (text: string) => ({ id: 'x', title: 'X', url: 'https://x', names: ['X'], text });
+
+  it('passes a corpus within the budget', () => {
+    expect(() => checkBudget('fiche', [doc('a'.repeat(100))], 1_000)).not.toThrow();
+  });
+
+  it('fails the build when the corpus outgrows it', () => {
+    expect(() => checkBudget('fiche', [doc('a'.repeat(600)), doc('b'.repeat(600))], 1_000)).toThrow(
+      /corpus/,
+    );
   });
 });

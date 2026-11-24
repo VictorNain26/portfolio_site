@@ -13,8 +13,9 @@ export type Reasoning = NonNullable<MistralLanguageModelChatOptions['reasoningEf
 export type Turn = { question: string; answer: string };
 export type Answer = { text: AsyncIterable<string>; sources(answer: string): Source[] };
 
-// One model call, no tools: the whole corpus (persona and projects with their README, a few
-// thousand tokens) sits in the prompt, built once per deployment.
+// One model call, no tools: the whole corpus (persona and seven projects with their README,
+// 31 124 characters, roughly 9 000 tokens, in November 2026) sits in the prompt, built once per
+// deployment. MAX_CORPUS in knowledge.ts caps it.
 export function createAgent({
   model,
   persona,
@@ -79,6 +80,7 @@ export function createAgent({
       }
     }
 
-    return { text: text(), sources: answer => citedSources(answer, documents) };
+    const conversation = [question, ...[...history].reverse().flatMap(t => [t.answer, t.question])];
+    return { text: text(), sources: answer => citedSources(answer, documents, conversation) };
   };
 }
