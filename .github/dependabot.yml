@@ -1,6 +1,9 @@
 # Weekly version updates, minor and patch grouped into one pull request per ecosystem; a major
-# version gets its own. An npm update changes package-lock.json, so it runs the agent evaluation:
-# its secrets must also exist as Dependabot secrets, under the same names.
+# version gets its own, except for Langfuse and OpenTelemetry, which move together whatever the
+# update: their peer ranges break when one is bumped alone (ERESOLVE on #143). A new release waits 7 days, so a broken or compromised one
+# is often pulled before it lands here. TypeScript majors wait until astro check supports them.
+# An npm update changes package-lock.json, so it runs the agent evaluation: its secrets must also
+# exist as Dependabot secrets, under the same names.
 # https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 # https://docs.github.com/en/code-security/reference/supply-chain-security/troubleshoot-dependabot/dependabot-on-actions#accessing-secrets
 version: 2
@@ -12,7 +15,15 @@ updates:
     commit-message:
       prefix: build
       include: scope
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
     groups:
+      # The first group that matches takes the package.
+      tracing:
+        patterns: ['@langfuse/*', '@opentelemetry/*']
       npm:
         update-types: [minor, patch]
 
@@ -23,6 +34,8 @@ updates:
     commit-message:
       prefix: ci
       include: scope
+    cooldown:
+      default-days: 7
     groups:
       actions:
         update-types: [minor, patch]
