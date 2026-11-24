@@ -172,6 +172,34 @@ describe.each(['index', 'blog', 'projets', '404'].map(pageFile).concat(articles)
   },
 );
 
+// https://owasp.org/www-project-secure-headers/ ; HSTS comes from Vercel itself.
+describe('security headers', () => {
+  const headers: { source: string; headers: { key: string; value: string }[] }[] =
+    JSON.parse(read('vercel.json')).headers ?? [];
+  const all = new Map(
+    headers
+      .filter(rule => rule.source === '/(.*)')
+      .flatMap(rule => rule.headers.map(({ key, value }) => [key.toLowerCase(), value] as const)),
+  );
+
+  it('forbids framing, plugins and foreign base URLs and form targets', () => {
+    const csp = all.get('content-security-policy') ?? '';
+    for (const directive of [
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "object-src 'none'",
+      "form-action 'self'",
+    ])
+      expect(csp, directive).toContain(directive);
+  });
+
+  it('sets nosniff, a referrer policy and a permissions policy on every path', () => {
+    expect(all.get('x-content-type-options')).toBe('nosniff');
+    expect(all.get('referrer-policy')).toBe('strict-origin-when-cross-origin');
+    expect(all.get('permissions-policy')).toMatch(/camera=\(\).*microphone=\(\)/);
+  });
+});
+
 describe('site', () => {
   it('builds the fixed pages and no longer the services pages', () => {
     for (const page of ['index', 'blog', 'projets', '404']) {
