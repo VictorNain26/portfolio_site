@@ -1,7 +1,9 @@
 import github from '../../data/github.json';
-import { projects } from '../../data/projects';
 import { content } from './content';
-import type { Knowledge } from './knowledge';
+import { documentsOf } from './knowledge';
 import { reposSchema } from './repos';
 
-export const knowledge: Knowledge = { ...content, projects, repos: reposSchema.parse(github) };
+// Built with the site: sync.yml redeploys when GitHub changes, so a new README reaches the
+// assistant within a few hours.
+export const persona = content.persona;
+export const documents = documentsOf(reposSchema.parse(github));

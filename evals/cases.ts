@@ -4,10 +4,9 @@ import type { Turn } from '../src/lib/agent/agent';
 type Behaviour = 'answer' | 'unknown' | 'untried' | 'decline' | 'ai';
 
 // A statement a correct answer cannot do without, checked by meaning (evals/judge.ts). `quote`
-// is the passage that establishes it, copied from `source`: the persona,
-// a repo's README or description in evals/world.json (`readme:<repo>`, `description:<repo>`),
-// or a file at the repo's recorded commit (`file:<repo>/<path>`). evals/cases.test.ts checks
-// that the passage is still there, so a case follows the data it was written from.
+// is the passage that establishes it, copied from `source`: the persona, or a repo's README or
+// description in evals/world.json (`readme:<repo>`, `description:<repo>`). evals/cases.test.ts
+// checks that the passage is still there, so a case follows the data it was written from.
 export type Fact = { fact: string; source: string; quote: string };
 
 export type Case = {
@@ -110,17 +109,6 @@ export const cases: Case[] = [
         fact: 'musilogy transforme les données de MusicBrainz en tables propres.',
         source: 'persona',
         quote: 'les données de MusicBrainz transformées en tables propres',
-      },
-    ],
-  },
-  {
-    question: 'Avec quoi Victor teste le code de son site ?',
-    behaviour: 'answer',
-    facts: [
-      {
-        fact: 'Victor teste le code de son site avec Vitest.',
-        source: 'file:portfolio_site/package.json',
-        quote: '"test": "vitest run --dir src"',
       },
     ],
   },

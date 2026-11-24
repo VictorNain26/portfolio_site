@@ -1,5 +1,5 @@
 import { z } from 'astro/zod';
-import { PORTFOLIO_TOPIC } from './agent/github';
+import { PORTFOLIO_TOPIC } from './github';
 
 export type Project = {
   name: string;

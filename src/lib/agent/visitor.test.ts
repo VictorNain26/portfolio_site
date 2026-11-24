@@ -1,3 +1,4 @@
+import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { visitorKey } from './visitor';
 
@@ -27,5 +28,47 @@ describe('visitorKey', () => {
 
   it('returns undefined for an invalid address', () => {
     expect(key('nope')).toBeUndefined();
+  });
+});
+
+describe('visitorKey properties', () => {
+  const secret = 's3cret';
+  const hextet = fc.integer({ min: 0, max: 0xffff }).map(n => n.toString(16));
+  const prefix = fc.array(hextet, { minLength: 4, maxLength: 4 });
+
+  it('gives an IPv4 the same key every time, and a key to every IPv4', () => {
+    fc.assert(
+      fc.property(fc.ipV4(), ip => {
+        const key = visitorKey(ip, secret);
+        expect(key).toMatch(/^[0-9a-f]{32}$/);
+        expect(visitorKey(ip, secret)).toBe(key);
+      }),
+    );
+  });
+
+  it('gives every address of an IPv6 /64 the same key', () => {
+    fc.assert(
+      fc.property(
+        prefix,
+        fc.array(hextet, { minLength: 4, maxLength: 4 }),
+        fc.array(hextet, { minLength: 4, maxLength: 4 }),
+        (network, a, b) => {
+          expect(visitorKey([...network, ...a].join(':'), secret)).toBe(
+            visitorKey([...network, ...b].join(':'), secret),
+          );
+        },
+      ),
+    );
+  });
+
+  it('refuses anything that is not an IP address', () => {
+    fc.assert(
+      fc.property(
+        fc.string().filter(text => !/^[0-9a-fA-F:.]+$/.test(text)),
+        text => {
+          expect(visitorKey(text, secret)).toBeUndefined();
+        },
+      ),
+    );
   });
 });

@@ -35,6 +35,8 @@ jobs:
               - 'src/pages/api/ask.ts'
               - 'src/content/persona.md'
               - 'src/lib/projects.ts'
+              - 'src/lib/github.ts'
+              - 'src/lib/date.ts'
               - 'evals/**'
               - 'package-lock.json'
               - '.github/workflows/eval.yml'

@@ -174,48 +174,5 @@
       ],
       "readme": "# La fabrique — cours interactif et application\n\nUn cours en terminal dont les ateliers **sont** les modules d'une application qui\ntourne. À la fin des douze chapitres, tu n'as pas douze fichiers d'exercice : tu as\nun service de génération de pages web sous garde-fous, avec validation humaine,\npersistance, observabilité et une porte de non-régression en intégration continue.\n\nUn cours pour apprendre à construire des agents IA qui tiennent en production,\ndont les ateliers écrivent les modules d'une application réelle.\n\n## Démarrer\n\n```bash\npython3 -m venv .venv && source .venv/bin/activate\npip install -r requirements.txt -r requirements-dev.txt\n\npython3 cours.py              # menu\npython3 cours.py 5            # aller au chapitre 5\npython3 cours.py --env        # comparer ton environnement aux versions de reference\npython3 cours.py --restaurer   # remettre l'app en etat apres un atelier\npython3 cours.py --reset      # effacer la progression\n```\n\nPython 3.10 ou plus. Aucune clé d'API n'est nécessaire : le fournisseur factice\nfait tourner l'application, les tests et la CI.\n\n## L'application\n\nUn brief entre, une page validée sort. Le fil qui relie tous les chapitres : le\ngarde-fou **interdit les prix en dur**, donc le modèle doit émettre un\n`product_ref`, et le prix réel est résolu par un serveur MCP qui interroge le\ncatalogue. Le chapitre 5 et le chapitre 6 cessent d'être deux exercices séparés.\n\n```\nbrief -> redaction -> controle -> [correction -> redaction]* -> validation humaine -> publication\n            |             |                                            |\n    chaine de repli   garde-fous                                  interrupt()\n```\n\nLa rédaction passe par une **chaîne de fournisseurs** ordonnée du moins cher au\nplus cher : le premier qui répond gagne, on ne bascule que sur surcharge, et le\nnom de celui qui a réellement répondu est écrit dans l'état avec son coût. Le\nbudget par page est vérifié avant chaque essai — dépassé, l'API renvoie 402.\n\n```\nFOURNISSEURS=ovhcloud,anthropic   # defaut : fake seul, aucun appel reseau\nBUDGET_PAR_PAGE=0.50\n```\n\nLes modèles par défaut sont les moins chers de chaque fournisseur — Llama 3.3 70B\nchez OVHcloud (0,67 €/M tokens), Haiku 4.5 chez Anthropic. C'est un cours et une\ndémonstration : mille pages coûtent environ un euro.\n\n```bash\ncp .env.exemple .env               # Postgres exige un mot de passe\ndocker compose up --build          # api sur http://localhost:8000\ncurl localhost:8000/sante\n```\n\nQuatre services, environ 460 Mo au total : l'API, Postgres, un **serveur Temporal\nauto-hébergé** (MIT, pas Temporal Cloud) et le worker qui exécute les workflows.\nL'API ne sert que le chemin LangGraph, avec validation humaine. Le workflow\nTemporal du chapitre 4 (rédaction, contrôle, correction, publication, sans\nvalidation humaine) partage les mêmes garde-fous et le même catalogue, mais\n**aucune route ne le démarre** : il est exercé par `tests/test_temporal.py`, et le\nworker du compose n'exécute que ce qu'on lui soumet à la main.\n\n| Route | Rôle |\n|---|---|\n| `POST /pages` | lance une génération, renvoie un `thread_id` et s'arrête pour validation |\n| `GET /pages/{id}` | relit l'état courant |\n| `POST /pages/{id}/validation` | approuve ou refuse ; publie une seule fois |\n| `GET /sante` | sonde du conteneur |\n\n## Les douze chapitres\n\n| # | Chapitre | Module de l'app que tu écris |\n|---|---|---|\n| 1 | Pydantic v2 et réparation | `fabrique/generation/reparation.py` |\n| 2 | LangGraph : le vrai StateGraph | `fabrique/generation/graphe.py` |\n| 3 | Gestion du contexte | `fabrique/generation/contexte.py` |\n| 4 | Temporal : le workflow déterministe | `fabrique/temporal/workflows.py` |\n| 5 | Garde-fous déterministes | `fabrique/garde_fous/validateur.py` |\n| 6 | MCP : un vrai serveur | `fabrique/mcp_catalogue/serveur.py` |\n| 7 | Évaluation et non-régression | `fabrique/evaluation/experience.py` |\n| 8 | Erreurs, retry, fallback et coûts | `fabrique/providers/repli.py` |\n| 9 | Validation humaine | `fabrique/generation/reprise.py` |\n| 10 | L'API et la persistance | `fabrique/api.py` |\n| 11 | Observabilité | `fabrique/observabilite.py` |\n| 12 | Livraison et non-régression | `fabrique/evaluation/ci.py` |\n\n**Comment un atelier peut être un vrai module.** Ouvrir un atelier met le module de\nl'app de côté dans `.solutions/` et installe le squelette à sa place. Le correcteur\nteste **ce chemin-là**, pas une copie. À la sortie de l'atelier, le module est\nrestauré. `python3 cours.py --restaurer` rattrape une sortie brutale.\n\n**Les douze chapitres sont adossés à un module réel, sans exception.** Le\ncorrecteur du chapitre 4 introspecte les décorateurs du SDK Temporal puis analyse\nl'arbre syntaxique de ta classe pour y traquer les appels non déterministes, et\nses tests exécutent de vrais workflows via `WorkflowEnvironment` — un serveur de\ntest embarqué dans le SDK, qui ne télécharge rien.\n\n## Observabilité\n\nAvec `LANGFUSE_PUBLIC_KEY` et `LANGFUSE_SECRET_KEY`, chaque page devient **une\ntrace Langfuse**, dont l'identifiant est dérivé du `thread_id` : la reprise après\nvalidation humaine retombe dans la même trace.\n\n```\ntrace \"page\"\n  redaction                  span : etat en entree, page + fournisseur + cout en sortie\n    essai ovhcloud           span, ERROR sur Surcharge : le repli se lit dans la trace\n      ovhcloud               generation : modele, tokens, cout_eur en metadonnee\n    essai anthropic          span\n      anthropic              generation : modele, tokens, cout en USD\n  controle                   span\n    LIEN_MORT                guardrail, avec un score booleen du meme nom\n  correction                 span : le retour reinjecte a la redaction\n  ...\n  publication                span, apres la validation humaine : meme trace\n```\n\nChaque appel fournisseur, factice compris, est une observation `generation`. Les\ntokens sont notés dès la réponse, avant la validation du schéma : une sortie\ninvalide a déjà été facturée, elle doit compter. Le coût suit les tarifs\nci-des"
     }
-  ],
-  "commits": {
-    "portfolio_site": "90bd24a536e35da8093ed7b6ab46a0a8ad23c46e",
-    "claude-code-config": "d005514d408838a8e886e767df1f55c5240cd02a",
-    "aubesonore": "76483ecd3d4029044f551748b76e3de65f2a93bd",
-    "tomai-monorepo": "1e6b44cc1de7119e5ce4c5ddc7e1973bd86a6282",
-    "trip-brief-agent": "83c4db5fa8a9237371027448ff3c6dd7f92350d4",
-    "VictorNain26": "8cf4f638386dbc37666bc2ce16a752bb86eef85f",
-    "cca-f-revision": "9766d4fec48756a506f63e7723550f521b661bc6",
-    "tomai-curriculum": "14ebf2803b4c449fa82c62a3025362be30fe0a38",
-    "fabrique-cours-agents": "91cf44c75cd6063bb5801dfee55f0a740812af3f"
-  },
-  "activity": [
-    {
-      "repo": "VictorNain26/aubesonore",
-      "type": "IssuesEvent",
-      "date": "2026-10-14T20:54:05Z",
-      "commits": [
-        "docs(pipeline): what antenne.origin means, next to the category it looks like (#528)",
-        "Merge pull request #527 from VictorNain26/docs/repo-entry-point",
-        "docs(repo): the root README is an entry point, the root CLAUDE.md says what is enforced"
-      ]
-    },
-    {
-      "repo": "VictorNain26/portfolio_site",
-      "type": "PullRequestEvent",
-      "date": "2026-10-14T20:34:00Z",
-      "commits": [
-        "docs(readme): rollback runbook for a broken production (#117)",
-        "ci(smoke): check each Vercel deployment's pages before it can be promoted (#116)",
-        "feat(agent): live projects, one up-to-date source per kind of question (#114)"
-      ]
-    },
-    {
-      "repo": "VictorNain26/tomai-monorepo",
-      "type": "PushEvent",
-      "date": "2026-10-13T11:17:59Z",
-      "commits": [
-        "deps(deps): update hono (#500)",
-        "deps(deps): update dependency vite to ^8.3.4 (#498)",
-        "deps(deps): update eslint (#499)"
-      ]
-    }
   ]
 }

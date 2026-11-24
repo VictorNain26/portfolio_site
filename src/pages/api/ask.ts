@@ -1,11 +1,9 @@
 import { createMistral } from '@ai-sdk/mistral';
-import { Mistral } from '@mistralai/mistralai';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { waitUntil } from '@vercel/functions';
 import type { APIRoute } from 'astro';
 import {
-  GITHUB_TOKEN,
   KV_REST_API_TOKEN,
   KV_REST_API_URL,
   LANGFUSE_BASE_URL,
@@ -16,13 +14,11 @@ import {
 } from 'astro:env/server';
 import { createAgent, MODEL, REASONING } from '../../lib/agent/agent';
 import { redisConversations } from '../../lib/agent/conversations';
-import { knowledge } from '../../lib/agent/corpus';
+import { documents, persona } from '../../lib/agent/corpus';
 import { handleAsk } from '../../lib/agent/handler';
-import { createGitHub } from '../../lib/agent/github';
 import { createModeration } from '../../lib/agent/moderation';
 import { PROMPT_VERSION } from '../../lib/agent/prompt';
 import { langfuseTracer, noTracer, startTelemetry } from '../../lib/agent/telemetry';
-import { site } from '../../site';
 
 export const prerender = false;
 
@@ -46,12 +42,11 @@ const global = new Ratelimit({
   prefix: `ask:${environment}:global`,
 });
 const conversations = redisConversations(redis, `ask:${environment}:conversation`);
-const moderate = createModeration(new Mistral({ apiKey: MISTRAL_API_KEY }));
-const user = new URL(site.links.github).pathname.slice(1);
+const moderate = createModeration({ apiKey: MISTRAL_API_KEY });
 const answer = createAgent({
   model: createMistral({ apiKey: MISTRAL_API_KEY })(MODEL),
-  knowledge,
-  github: createGitHub({ user, token: GITHUB_TOKEN, snapshot: knowledge.repos }),
+  persona,
+  documents,
   reasoning: REASONING,
 });
 

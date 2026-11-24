@@ -12,7 +12,6 @@ export default defineConfig({
       VISITOR_SECRET: envField.string({ context: 'server', access: 'secret' }),
       KV_REST_API_URL: envField.string({ context: 'server', access: 'secret' }),
       KV_REST_API_TOKEN: envField.string({ context: 'server', access: 'secret' }),
-      GITHUB_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
       LANGFUSE_PUBLIC_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       LANGFUSE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       LANGFUSE_BASE_URL: envField.string({ context: 'server', access: 'secret', optional: true }),

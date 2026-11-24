@@ -60,7 +60,6 @@ const answers = (...chunks: (string | Error)[]) => {
         }
       })(),
       sources: () => [{ title: 'AubeSonore', url: 'https://www.aubesonore.fr/' }],
-      toolOutputs: [],
     };
   };
   return { answer, seen };
@@ -242,7 +241,6 @@ describe('handleAsk', () => {
           throw new DOMException('aborted', 'AbortError');
         })(),
         sources: () => [],
-        toolOutputs: [],
       }),
     });
     const response = await handleAsk(

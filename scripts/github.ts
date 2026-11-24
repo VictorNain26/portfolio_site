@@ -1,7 +1,7 @@
 // Writes src/data/github.json: the opted-in public repos and their READMEs, read by /projets and
 // the agent. Fails loudly rather than shipping a site that knows nothing about GitHub.
 import { existsSync, writeFileSync } from 'node:fs';
-import { githubApi } from '../src/lib/agent/github.ts';
+import { githubApi } from '../src/lib/github.ts';
 
 const out = new URL('../src/data/github.json', import.meta.url);
 
