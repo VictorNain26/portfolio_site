@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Project } from './projects';
-import { llmsTxt, personaFacts, postMarkdown } from './llms';
+import { llmsTxt, personaFacts } from './llms';
 
 const persona = `# Fiche
 
@@ -32,13 +32,10 @@ const input = {
   persona,
   email: 'v@example.com',
   projects: [project],
-  posts: [{ slug: '2026-09-22-qui-je-suis', title: 'Salut', summary: 'Qui je suis.' }],
   links: {
-    blog: 'Ce que je retiens.',
     github: 'https://github.com/VictorNain26',
     linkedin: 'https://www.linkedin.com/in/victorlenain/',
   },
-  siteUrl: 'https://www.victorlenain.fr',
 };
 
 describe('personaFacts', () => {
@@ -58,40 +55,18 @@ describe('llmsTxt', () => {
     expect(text.startsWith('# Victor Lenain\n\n> Développeur à Paris.\n\n- Développeur')).toBe(
       true,
     );
-    expect(text.match(/^## .+$/gm)).toEqual(['## Projets', '## Articles', '## Optional']);
+    expect(text.match(/^## .+$/gm)).toEqual(['## Projets', '## Optional']);
   });
 
-  it('lists projects with status, stack and code, and posts by their Markdown URL', () => {
+  it('lists projects with status, stack and code', () => {
     const line = text.split('\n').find(row => row.startsWith('- [AubeSonore]'));
     expect(line).toMatch(/^- \[AubeSonore\]\(https:\/\/www\.aubesonore\.fr\/\): Web radio\./);
     expect(line).toContain('En ligne');
     expect(line).toContain('Python, Docker');
     expect(line).toContain('Code : https://github.com/VictorNain26/aubesonore');
-    expect(text).toContain('[Salut](https://www.victorlenain.fr/blog/2026-09-22-qui-je-suis.md)');
   });
 
   it('never carries the topics the persona keeps off the site', () => {
     expect(text).not.toContain('tarifs');
-  });
-
-  it('drops the Articles section when nothing is published', () => {
-    expect(llmsTxt({ ...input, posts: [] })).not.toContain('## Articles');
-  });
-});
-
-describe('postMarkdown', () => {
-  it('heads the body with title, summary, date and page URL', () => {
-    const markdown = postMarkdown({
-      title: 'Salut',
-      summary: 'Qui je suis.',
-      publishedAt: new Date('2026-09-22'),
-      author: 'Victor Lenain',
-      url: 'https://www.victorlenain.fr/blog/salut',
-      body: '\nPendant longtemps…\n',
-    });
-    expect(markdown.startsWith('# Salut\n\n> Qui je suis.\n\n')).toBe(true);
-    expect(markdown).toContain('22 septembre 2026');
-    expect(markdown).toContain('https://www.victorlenain.fr/blog/salut');
-    expect(markdown.endsWith('\n\nPendant longtemps…\n')).toBe(true);
   });
 });

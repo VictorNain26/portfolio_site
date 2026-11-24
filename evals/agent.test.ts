@@ -64,19 +64,15 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
     const apiKey = process.env.MISTRAL_API_KEY;
     if (!apiKey) throw new Error('MISTRAL_API_KEY is missing from .env');
     const mistral = createMistral({ apiKey });
-    // GitHub as recorded, and its date: "en ce moment" means then. Posts are versioned with the
-    // code, so the ones published by today count.
+    // GitHub as recorded, and its date: "en ce moment" means then.
     const world = loadWorld();
     const now = new Date(world.recordedAt);
-    const publishedBy = new Date();
     const knowledge = { ...content, repos: world.repos, projects: projectsFrom(world.repos) };
-    const documents = documentsOf(knowledge, publishedBy, 'https://www.victorlenain.fr');
+    const documents = documentsOf(knowledge);
     const answer = createAgent({
       model: mistral(MODEL),
       knowledge,
       github: worldGitHub(world),
-      publishedBy,
-      siteUrl: 'https://www.victorlenain.fr',
       reasoning: REASONING,
     });
     // The judge shares the free plan's rate limit with the agent under test, and a judge call

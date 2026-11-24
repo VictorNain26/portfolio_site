@@ -3,8 +3,8 @@
 Site de Victor Lenain, développeur à Paris : <https://www.victorlenain.fr>
 
 Site [Astro](https://astro.build) déployé sur Vercel : une page d'accueil, une
-page projets, un blog en MDX, tous statiques, et une seule route rendue à la
-demande, `/api/ask`, l'assistant IA qui répond sur Victor et son code.
+page projets, toutes deux statiques, et une seule route rendue à la demande,
+`/api/ask`, l'assistant IA qui répond sur Victor et son code.
 
 ## Démarrer
 
@@ -13,15 +13,6 @@ npm install
 cp .env.example .env  # clés de l'assistant, voir les commentaires du fichier
 npm run dev
 ```
-
-## Publier un article
-
-Ajouter `src/content/posts/<AAAA-MM-JJ>-<slug>.mdx` avec `title`, `summary`,
-`publishedAt` et `tags` en frontmatter, puis merger sur `master`. Un article
-daté dans le futur se publie seul à sa date : `.github/workflows/sync.yml`
-redéploie le site dès qu'il la voit passée. Ce workflow est planifié toutes les
-15 minutes, mais GitHub retarde ses crons : l'ancien horaire tournait en
-pratique toutes les 3 à 4 heures. `workflow_dispatch` le lance à la main.
 
 ## Ajouter un projet
 
@@ -58,11 +49,11 @@ précédent, puis corriger sur `master`.
    `vercel promote <url>`.
 
 Tant que le rollback dure, Vercel n'assigne plus le domaine aux nouveaux
-déploiements : ni un merge ni `sync.yml` ne passent en ligne, et un article
-programmé ne paraît pas. Le déploiement restauré garde les variables
-d'environnement de son build : une clé changée depuis (Mistral, Upstash,
-Langfuse) ne l'atteint pas, et une clé révoquée le casse. Les données Upstash,
-quotas et conversations, ne reviennent pas en arrière.
+déploiements : ni un merge ni `sync.yml` ne passent en ligne. Le déploiement
+restauré garde les variables d'environnement de son build : une clé changée
+depuis (Mistral, Upstash, Langfuse) ne l'atteint pas, et une clé révoquée le
+casse. Les données Upstash, quotas et conversations, ne reviennent pas en
+arrière.
 
 Un déploiement de production qui échoue `validate` ou `smoke (production)`, les
 Deployment Checks du projet, reste hors ligne et l'ancien continue de servir :

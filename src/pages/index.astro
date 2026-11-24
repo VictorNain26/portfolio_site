@@ -1,16 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import Ask from '../components/Ask.astro';
 import { projects } from '../data/projects';
 import Base from '../layouts/Base.astro';
-import { publishedPosts } from '../lib/posts';
 import { site } from '../site';
 
-const posts = publishedPosts(await getCollection('posts'), new Date());
-const entries = [
-  { label: 'Projets', href: '/projets', count: projects.length },
-  { label: 'Blog', href: '/blog', count: posts.length },
-];
+const entries = [{ label: 'Projets', href: '/projets', count: projects.length }];
 ---
 
 <Base header={false}>

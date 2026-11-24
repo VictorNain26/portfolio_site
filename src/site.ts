@@ -12,11 +12,6 @@ export const site = {
     linkedin: 'https://www.linkedin.com/in/victorlenain/',
     github: 'https://github.com/VictorNain26',
   },
-  blog: {
-    title: `Blog de ${name}`,
-    description:
-      'Ce que je retiens de mes projets perso : agents, RAG, serveurs MCP et développement web.',
-  },
 } as const;
 
 export const personJsonLd = {

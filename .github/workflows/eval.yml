@@ -34,8 +34,6 @@ jobs:
               - 'src/lib/agent/**'
               - 'src/pages/api/ask.ts'
               - 'src/content/persona.md'
-              - 'src/content/posts/**'
-              - 'src/lib/posts.ts'
               - 'src/lib/projects.ts'
               - 'evals/**'
               - 'package-lock.json'

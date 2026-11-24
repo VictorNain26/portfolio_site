@@ -7,8 +7,7 @@ paths:
 ---
 
 - L'assistant parle de moi à la troisième personne, pas en mon nom, et n'affirme
-  sur moi que ce que disent la fiche, les projets, les articles publiés ou
-  GitHub ; un article programmé (`publishedAt` futur) reste hors de sa portée.
+  sur moi que ce que disent la fiche, les projets ou GitHub.
 - Modèle Mistral : un identifiant daté, pas `-latest`.
 - Ses sources se calculent dans le code, pas par le modèle, et c'est le code qui
   lit le README à jour d'un dépôt ou d'un projet que la conversation nomme,

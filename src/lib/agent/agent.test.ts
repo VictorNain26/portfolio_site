@@ -49,7 +49,6 @@ const aubesonore: Repo = {
 
 const knowledge: Omit<Knowledge, 'projects'> = {
   persona: 'Victor, développeur.',
-  posts: [],
   repos: [
     aubesonore,
     {
@@ -95,8 +94,6 @@ const run = async (
     model,
     knowledge,
     github,
-    publishedBy: new Date('2026-10-01'),
-    siteUrl: 'https://example.com',
     reasoning: 'none',
   })({
     question,
@@ -117,8 +114,6 @@ describe('createAgent', () => {
       model,
       knowledge,
       github: { ...github, repos: async () => [edited] },
-      publishedBy: new Date('2026-10-01'),
-      siteUrl: 'https://example.com',
       reasoning: 'none',
     })({
       question: 'Ta radio ?',
@@ -215,8 +210,6 @@ describe('createAgent', () => {
           },
         ],
       },
-      publishedBy: new Date('2026-10-01'),
-      siteUrl: 'https://example.com',
       reasoning: 'none',
     })({ question: 'Où ?', history: [], signal: new AbortController().signal, now: new Date() });
     let text = '';
