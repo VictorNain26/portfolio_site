@@ -1,7 +1,7 @@
 import { useChat } from '@ai-sdk/react';
 import { APICallError, DefaultChatTransport, generateId } from 'ai';
 import { useEffect, useRef, useState, type SubmitEvent } from 'react';
-import { MAX_QUESTION, textOf, type AskMessage, type Quota } from '../lib/agent/messages';
+import { MAX_QUESTION, textOf, turnsOf, type AskMessage, type Quota } from '../lib/agent/messages';
 
 // The thread lives in this tab only, so it survives a visit to another page and back.
 const STORE = 'ask-thread';
@@ -50,21 +50,23 @@ const remainingText = ({ remaining }: Quota) =>
     : `Encore ${remaining} question${remaining > 1 ? 's' : ''} aujourd'hui.`;
 
 export default function Ask() {
-  const [initial] = useState(load);
-  const [chatId, setChatId] = useState(initial.id);
-  const [open, setOpen] = useState(initial.messages.length > 0);
-  const [status, setStatus] = useState(initial.status ?? '');
-  const [exhaustedUntil, setExhaustedUntil] = useState(initial.exhaustedUntil);
+  // The server renders an empty thread; the tab's thread is read once mounted, so the first
+  // client render matches the server's HTML. https://react.dev/reference/react-dom/client/hydrateRoot#handling-different-client-and-server-content
+  const [initial, setInitial] = useState<Saved>();
+  const [chatId, setChatId] = useState(generateId);
+  const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState('');
+  const [exhaustedUntil, setExhaustedUntil] = useState<number>();
   const [question, setQuestion] = useState('');
   const [stopped, setStopped] = useState(false);
   // Turns restored from the tab arrive without the entrance animation.
-  const [restored, setRestored] = useState(initial.messages.length / 2);
+  const [restored, setRestored] = useState(0);
   const input = useRef<HTMLInputElement>(null);
   const exhausted = exhaustedUntil !== undefined && Date.now() < exhaustedUntil;
 
   const chat = useChat<AskMessage>({
     id: chatId,
-    messages: chatId === initial.id ? initial.messages : [],
+    messages: chatId === initial?.id ? initial.messages : [],
     // The server keeps the conversation: only the new question and the chat id go up.
     // https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-message-persistence
     transport: new DefaultChatTransport({
@@ -83,6 +85,16 @@ export default function Ask() {
   const failure = refusal(chat.error);
 
   useEffect(() => {
+    const saved = load();
+    setInitial(saved);
+    setChatId(saved.id);
+    setOpen(saved.messages.length > 0);
+    setStatus(saved.status ?? '');
+    setExhaustedUntil(saved.exhaustedUntil);
+    setRestored(turnsOf(saved.messages).length);
+  }, []);
+
+  useEffect(() => {
     if (failure?.reset && (failure.code === 'limit' || failure.code === 'global_limit'))
       setExhaustedUntil(failure.reset);
   }, [failure?.code, failure?.reset]);
@@ -96,14 +108,17 @@ export default function Ask() {
   }, [chat.status]);
 
   useEffect(() => {
-    if (busy) return;
+    if (busy || !initial) return;
     save({
       id: chatId,
-      messages: chat.messages,
+      // A question that got no answer stays out: the server didn't keep it either.
+      messages: chat.messages.filter(
+        (message, i, all) => message.role !== 'user' || all[i + 1]?.role === 'assistant',
+      ),
       status,
       ...(exhausted && { exhaustedUntil }),
     });
-  }, [busy, chatId, chat.messages, status, exhausted, exhaustedUntil]);
+  }, [busy, initial, chatId, chat.messages, status, exhausted, exhaustedUntil]);
 
   const submit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -136,9 +151,7 @@ export default function Ask() {
     if (!open && !exhausted) setTimeout(() => input.current?.focus({ preventScroll: true }), 250);
   };
 
-  const turns = chat.messages.flatMap((message, i) =>
-    message.role === 'user' ? [{ question: message, answer: chat.messages[i + 1] }] : [],
-  );
+  const turns = turnsOf(chat.messages);
   const last = turns.length - 1;
 
   return (

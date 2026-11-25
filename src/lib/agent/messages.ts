@@ -12,3 +12,16 @@ export const MAX_QUESTION = 280;
 // The text a message carries, its text parts joined.
 export const textOf = (message: Pick<AskMessage, 'parts'>) =>
   message.parts.flatMap(part => (part.type === 'text' ? [part.text] : [])).join('');
+
+// The thread as question/answer turns. A question whose request failed has no answer.
+export const turnsOf = (messages: AskMessage[]) =>
+  messages.flatMap((message, i) =>
+    message.role === 'user'
+      ? [
+          {
+            question: message,
+            answer: messages[i + 1]?.role === 'assistant' ? messages[i + 1] : undefined,
+          },
+        ]
+      : [],
+  );
