@@ -176,7 +176,6 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
     // The runner skips an item whose task threw (« Task failed … Skipping item »): without this,
     // a crashed answer vanished from every gate.
     const asked = cases.length * RUNS;
-    expect.soft(result.itemResults.length, 'answers that did not crash').toBe(asked);
 
     const scores = new Map<string, number[]>();
     const lines: string[] = [];
@@ -227,9 +226,17 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
         process.env.GITHUB_STEP_SUMMARY,
         `## Agent evaluation\n\n\`\`\`\n${summary}\n\`\`\`\n`,
       );
-    for (const [name, gate] of Object.entries(GATES)) {
-      expect.soft(scored(name), `${name}: scored answers`).toBe(expected(name));
+    // A crashed answer or a failed judge call is the API's failure, not the agent's: the run
+    // stops here with that cause, instead of reporting it as a low score on a quality gate.
+    const crashed = asked - result.itemResults.length;
+    const unscored = Object.keys(GATES).filter(name => scored(name) < expected(name));
+    if (crashed > 0 || unscored.length > 0)
+      throw new Error(
+        `Infrastructure failure, quality gates not evaluated: ${crashed} of ${asked} answers crashed` +
+          `${unscored.length ? `; judge calls failed for ${unscored.map(name => `${name} (${scored(name)}/${expected(name)} scored)`).join(', ')}` : ''}.` +
+          ' Check the Mistral and Langfuse logs above, then rerun.',
+      );
+    for (const [name, gate] of Object.entries(GATES))
       expect.soft(means[name] ?? 0, name).toBeGreaterThanOrEqual(gate);
-    }
   });
 });
