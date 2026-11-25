@@ -1,7 +1,7 @@
 import type { MistralLanguageModelChatOptions } from '@ai-sdk/mistral';
 import { generateText, Output, type LanguageModel } from 'ai';
 import { z } from 'astro/zod';
-import type { Turn } from '../src/lib/agent/agent';
+import type { Turn } from './cases';
 
 export const JUDGE_MODEL = 'mistral-small-2603';
 

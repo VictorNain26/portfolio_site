@@ -3,6 +3,7 @@ import { convertArrayToReadableStream, MockLanguageModelV4 } from 'ai/test';
 import { describe, expect, it } from 'vitest';
 import { createAgent } from './agent';
 import type { Document } from './knowledge';
+import type { AskMessage } from './messages';
 
 const usage = {
   inputTokens: { total: 10, noCache: 10, cacheRead: 0, cacheWrite: 0 },
@@ -28,19 +29,27 @@ const documents: Document[] = [
 ];
 const persona = '## Qui je suis\n\n- Développeur à Paris, passé par le Wagon.';
 
+const ask = (text: string, id: string, role: 'user' | 'assistant' = 'user'): AskMessage => ({
+  id,
+  role,
+  parts: [{ type: 'text', text }],
+});
+
 const run = async (
   model: MockLanguageModelV4,
-  { signal = new AbortController().signal, now = new Date('2026-11-24T12:00:00Z') } = {},
+  {
+    signal = new AbortController().signal,
+    now = new Date('2026-11-24T12:00:00Z'),
+    messages = [ask('Bonjour', '1'), ask('Bonjour !', '2', 'assistant'), ask('Ta radio ?', '3')],
+  } = {},
 ) => {
-  const answer = createAgent({ model, persona, documents, reasoning: 'none' })({
-    question: 'Ta radio ?',
-    history: [{ question: 'Bonjour', answer: 'Bonjour !' }],
+  const { result, sources } = await createAgent({ model, persona, documents, reasoning: 'none' })({
+    messages,
     signal,
     now,
   });
-  let text = '';
-  for await (const chunk of answer.text) text += chunk;
-  return { text, sources: answer.sources(text), call: model.doStreamCalls[0]! };
+  const text = await result.text;
+  return { text, sources: sources(text), call: model.doStreamCalls[0]! };
 };
 
 describe('createAgent', () => {
@@ -73,17 +82,14 @@ describe('createAgent', () => {
 
   it('cites the project a follow-up is about, though its answer does not name it', async () => {
     const model = new MockLanguageModelV4({ doStream: says('Elle passe par AzuraCast.') });
-    const answer = createAgent({ model, persona, documents, reasoning: 'none' })({
-      question: 'Et elle diffuse comment ?',
-      history: [{ question: 'C’est quoi AubeSonore ?', answer: 'Une web radio.' }],
-      signal: new AbortController().signal,
-      now: new Date('2026-11-24'),
+    const { sources } = await run(model, {
+      messages: [
+        ask('C’est quoi AubeSonore ?', '1'),
+        ask('Une web radio.', '2', 'assistant'),
+        ask('Et elle diffuse comment ?', '3'),
+      ],
     });
-    let text = '';
-    for await (const chunk of answer.text) text += chunk;
-    expect(answer.sources(text)).toEqual([
-      { title: 'AubeSonore', url: 'https://www.aubesonore.fr/' },
-    ]);
+    expect(sources).toEqual([{ title: 'AubeSonore', url: 'https://www.aubesonore.fr/' }]);
   });
 
   it('keeps the cache key the same from one day to the next', async () => {
@@ -112,35 +118,15 @@ describe('createAgent', () => {
     expect(sources).toEqual([{ title: 'AubeSonore', url: 'https://www.aubesonore.fr/' }]);
   });
 
-  it('drops markdown asterisks and backticks across chunks, but keeps underscores', async () => {
+  // Streamdown renders the answer's markdown on the page: the stream carries it untouched.
+  it('passes the model’s markdown through', async () => {
     const { text } = await run(
-      new MockLanguageModelV4({
-        doStream: says('Le dépôt **portfolio', '_site** et *AubeSonore*, dans `tests/`.'),
-      }),
+      new MockLanguageModelV4({ doStream: says('Le dépôt **portfolio', '_site**.') }),
     );
-    expect(text).toBe('Le dépôt portfolio_site et AubeSonore, dans tests/.');
+    expect(text).toBe('Le dépôt **portfolio_site**.');
   });
 
-  it('keeps the answer on one line when the model breaks lines', async () => {
-    const { text } = await run(
-      new MockLanguageModelV4({
-        doStream: says('Deux usages :\n', 'D’abord la radio.\n\nEnsuite le site.'),
-      }),
-    );
-    expect(text).toBe('Deux usages : D’abord la radio. Ensuite le site.');
-  });
-
-  it('throws when the answer is aborted, instead of ending as if complete', async () => {
-    const stop = new AbortController();
-    stop.abort(new Error('deadline'));
-    await expect(
-      run(new MockLanguageModelV4({ doStream: says('Une réponse ', 'coupée.') }), {
-        signal: stop.signal,
-      }),
-    ).rejects.toThrow('answer aborted');
-  });
-
-  it('throws when the provider fails mid-stream', async () => {
+  it('reports a provider failure in the stream, for the handler to turn into an error part', async () => {
     const model = new MockLanguageModelV4({
       doStream: {
         stream: convertArrayToReadableStream<LanguageModelV4StreamPart>([
@@ -148,6 +134,13 @@ describe('createAgent', () => {
         ]),
       },
     });
-    await expect(run(model)).rejects.toThrow('overloaded');
+    const { result } = await createAgent({ model, persona, documents, reasoning: 'none' })({
+      messages: [ask('Ta radio ?', '1')],
+      signal: new AbortController().signal,
+      now: new Date(),
+    });
+    const parts = [];
+    for await (const part of result.stream) parts.push(part.type);
+    expect(parts).toContain('error');
   });
 });

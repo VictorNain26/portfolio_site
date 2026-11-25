@@ -13,6 +13,7 @@ import {
 } from '../src/lib/agent/agent';
 import { content } from '../src/lib/agent/content';
 import { documentsOf } from '../src/lib/agent/knowledge';
+import type { AskMessage } from '../src/lib/agent/messages';
 import { startTelemetry } from '../src/lib/agent/telemetry';
 import type { Source } from '../src/lib/agent/sources';
 import { cases, type Case } from './cases';
@@ -142,22 +143,27 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       // An experiment item may also be a hosted DatasetItem, whose input is untyped.
       task: async ({ input }) => {
         const { question, history = [] } = input as Case;
-        const reply = answer({
-          question,
-          history,
-          signal: AbortSignal.timeout(50_000),
-          now,
-        });
+        const text = (value: string) => [{ type: 'text' as const, text: value }];
+        const messages: AskMessage[] = [
+          ...history.flatMap((turn, i): AskMessage[] => [
+            { id: `q${i}`, role: 'user', parts: text(turn.question) },
+            { id: `a${i}`, role: 'assistant', parts: text(turn.answer) },
+          ]),
+          { id: 'q', role: 'user', parts: text(question) },
+        ];
         const start = performance.now();
+        const reply = await answer({ messages, signal: AbortSignal.timeout(50_000), now });
         let firstTokenMs = 0;
-        let text = '';
-        for await (const chunk of reply.text) {
+        let answerText = '';
+        for await (const part of reply.result.stream) {
+          if (part.type === 'error') throw part.error;
+          if (part.type !== 'text-delta') continue;
           firstTokenMs ||= performance.now() - start;
-          text += chunk;
+          answerText += part.text;
         }
         return {
-          answer: text,
-          sources: reply.sources(text),
+          answer: answerText,
+          sources: reply.sources(answerText),
           firstTokenMs,
           totalMs: performance.now() - start,
         };

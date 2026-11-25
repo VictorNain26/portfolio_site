@@ -20,7 +20,9 @@
     "eval:record": "node evals/record-world.ts"
   },
   "dependencies": {
-    "@ai-sdk/mistral": "4.0.56",
+    "@ai-sdk/mistral": "4.0.89",
+    "@ai-sdk/react": "4.0.186",
+    "@astrojs/react": "^7.1.9",
     "@astrojs/sitemap": "^3.7.4",
     "@astrojs/vercel": "11.0.11",
     "@langfuse/otel": "5.11.1",
@@ -33,15 +35,19 @@
     "@upstash/ratelimit": "2.2.0",
     "@upstash/redis": "1.39.0",
     "@vercel/functions": "3.9.9",
-    "ai": "7.0.127",
+    "ai": "7.0.181",
     "astro": "^7.3.4",
-    "ipaddr.js": "2.5.0"
+    "ipaddr.js": "2.5.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
-    "@ai-sdk/provider": "4.0.21",
+    "@ai-sdk/provider": "4.0.39",
     "@astrojs/check": "^0.9.10",
     "@langfuse/client": "5.11.1",
     "@octokit/rest": "22.0.1",
+    "@types/react": "^19.3.2",
+    "@types/react-dom": "^19.3.0",
     "cheerio": "^1.2.0",
     "fast-check": "^4.11.0",
     "p-throttle": "8.1.1",

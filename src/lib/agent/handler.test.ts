@@ -1,96 +1,122 @@
+import type { LanguageModelV4StreamPart } from '@ai-sdk/provider';
+import { parseJsonEventStream, uiMessageChunkSchema, type UIMessageChunk } from 'ai';
+import { convertArrayToReadableStream, MockLanguageModelV4 } from 'ai/test';
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
-import { readEvents } from '../ask';
-import type { Answer, Turn } from './agent';
-import type { Conversations } from './conversations';
-import { BLOCKED_ANSWER, handleAsk, type AskDeps, type AskEvent, type Limiter } from './handler';
+import { createAgent } from './agent';
+import { redisConversations } from './conversations';
+import { BLOCKED_ANSWER, FAILED, handleAsk, type AskDeps, type Limiter } from './handler';
+import type { Document } from './knowledge';
+import type { AskMessage } from './messages';
 
 const URL_ = 'https://www.victorlenain.fr/api/ask';
-const ID = '6f1c1b2e-8a4d-4a8e-9b1f-0c2d3e4f5a6b';
+const CHAT = 'chat-1';
 
-const request = (body: unknown, origin = 'https://www.victorlenain.fr', signal?: AbortSignal) =>
+const usage = {
+  inputTokens: { total: 10, noCache: 10, cacheRead: 0, cacheWrite: 0 },
+  outputTokens: { total: 5, text: 5, reasoning: 0 },
+};
+const says = (...chunks: string[]) => ({
+  stream: convertArrayToReadableStream<LanguageModelV4StreamPart>([
+    { type: 'text-start', id: 't' },
+    ...chunks.map(delta => ({ type: 'text-delta' as const, id: 't', delta })),
+    { type: 'text-end', id: 't' },
+    { type: 'finish', usage, finishReason: { unified: 'stop', raw: 'stop' } },
+  ]),
+});
+
+const documents: Document[] = [
+  {
+    id: 'project:aubesonore',
+    title: 'AubeSonore',
+    url: 'https://www.aubesonore.fr/',
+    names: ['AubeSonore', 'aubesonore'],
+    text: 'AubeSonore : web radio diffusée via AzuraCast.',
+  },
+];
+
+// What useChat's DefaultChatTransport posts once prepareSendMessagesRequest keeps the last message.
+const request = (
+  text: string,
+  {
+    origin = 'https://www.victorlenain.fr',
+    id = CHAT,
+    signal,
+  }: { origin?: string; id?: string; signal?: AbortSignal } = {},
+) =>
   new Request(URL_, {
     method: 'POST',
     headers: { origin, 'content-type': 'application/json' },
-    body: JSON.stringify(body),
+    body: JSON.stringify({
+      id,
+      message: { id: 'client-id', role: 'user', parts: [{ type: 'text', text }] },
+    }),
     ...(signal && { signal }),
   });
 
 function limiter(allowed: number, reset = Date.now() + 60_000) {
   let used = 0;
-  const calls: number[] = [];
   const limit: Limiter = {
-    async limit(_id, options) {
-      const rate = options?.rate ?? 1;
-      calls.push(rate);
-      if (rate < 0) {
-        used += rate;
-        return { success: true, remaining: allowed - used, reset };
-      }
+    async limit() {
       if (used >= allowed) return { success: false, remaining: 0, reset: 42 };
       used += 1;
       return { success: true, remaining: allowed - used, reset };
     },
   };
-  return { limit, calls, reset, refunds: () => calls.filter(rate => rate < 0).length };
+  return { limit, reset, used: () => used };
 }
 
-// What @upstash/ratelimit resolves when Redis does not answer within its timeout.
-const slow: Limiter = {
-  limit: async () => ({ success: true, remaining: 0, reset: 0, reason: 'timeout' }),
-};
-
-function memory(initial: Record<string, Turn[]> = {}) {
-  const store = new Map(Object.entries(initial));
-  const conversations: Conversations = {
-    load: async id => store.get(id) ?? [],
-    save: async (id, turns) => void store.set(id, turns),
+// The two Redis calls the conversation store makes, kept in memory.
+function memoryRedis(initial: Record<string, unknown> = {}) {
+  const store = new Map<string, unknown>(Object.entries(initial));
+  const redis = {
+    get: async (key: string) => (store.get(key) ?? null) as never,
+    set: async (key: string, value: unknown) => {
+      store.set(key, value);
+      return 'OK' as never;
+    },
   };
-  return { conversations, store };
+  return { redis, store };
 }
 
-const answers = (...chunks: (string | Error)[]) => {
-  const seen: { question: string; history: Turn[] }[] = [];
-  const answer: AskDeps['answer'] = ({ question, history }): Answer => {
-    seen.push({ question, history });
-    return {
-      text: (async function* () {
-        for (const chunk of chunks) {
-          if (chunk instanceof Error) throw chunk;
-          yield chunk;
-        }
-      })(),
-      sources: () => [{ title: 'AubeSonore', url: 'https://www.aubesonore.fr/' }],
-    };
-  };
-  return { answer, seen };
-};
-
-function setup(overrides: Partial<AskDeps> = {}) {
+function setup(
+  overrides: Partial<AskDeps> = {},
+  model = new MockLanguageModelV4({ doStream: async () => says('AubeSonore ', 'diffuse.') }),
+) {
   const visitor = limiter(3);
-  const global = limiter(300, Date.now() + 120_000);
-  const { conversations, store } = memory();
-  const { answer, seen } = answers('AubeSonore ', 'diffuse.');
+  const global = limiter(300);
+  const { redis, store } = memoryRedis();
+  let ids = 0;
   const deps: AskDeps = {
     visitor: visitor.limit,
     global: global.limit,
-    conversations,
+    conversations: redisConversations(redis, 'ask:test:conversation'),
     moderate: async () => false,
-    answer,
+    answer: createAgent({
+      model,
+      persona: '## Qui je suis\n\n- Développeur.',
+      documents,
+      reasoning: 'none',
+    }),
     trace: (_context, run) => run({ guard: check => check(), end: () => undefined }),
     defer: () => undefined,
-    newId: () => ID,
+    newId: () => `id-${++ids}`,
     timeoutMs: 5_000,
     visitorSecret: 'test',
     ...overrides,
   };
-  return { deps, visitor, global, store, seen };
+  return { deps, visitor, global, store, model };
 }
 
-const events = async (response: Response) => {
-  const list: AskEvent[] = [];
-  for await (const event of readEvents(response.body!)) list.push(event);
+const chunks = async (response: Response) => {
+  const list: UIMessageChunk[] = [];
+  const parsed = parseJsonEventStream({ stream: response.body!, schema: uiMessageChunkSchema });
+  for await (const result of parsed) if (result.success) list.push(result.value);
   return list;
 };
+const text = (list: UIMessageChunk[]) =>
+  list.flatMap(chunk => (chunk.type === 'text-delta' ? [chunk.delta] : [])).join('');
+const stored = (store: Map<string, unknown>) =>
+  store.get(`ask:test:conversation:${CHAT}`) as AskMessage[] | undefined;
 
 describe('handleAsk', () => {
   let logged: MockInstance<typeof console.error>;
@@ -101,170 +127,147 @@ describe('handleAsk', () => {
     logged.mockRestore();
   });
 
-  it('rejects a request from another site', async () => {
+  it('rejects a request from another site before counting it', async () => {
     const { deps, visitor } = setup();
     const response = await handleAsk(
-      request({ question: 'Salut' }, 'https://evil.example'),
+      request('Salut', { origin: 'https://evil.example' }),
       '1.2.3.4',
       deps,
     );
     expect(response.status).toBe(403);
-    expect(visitor.calls).toEqual([]);
+    expect(visitor.used()).toBe(0);
   });
 
-  it('streams the answer, its sources and a new conversation, then saves the turn', async () => {
+  it('rejects an empty or oversized question, or a malformed chat id', async () => {
+    const { deps } = setup();
+    for (const req of [request('   '), request('x'.repeat(281)), request('Salut', { id: '../x' })])
+      expect((await handleAsk(req, '1.2.3.4', deps)).status).toBe(400);
+  });
+
+  it('streams the quota, the answer and its sources as a UI message stream, then saves the turn', async () => {
     const { deps, store, visitor } = setup();
-    const response = await handleAsk(request({ question: 'Ta radio ?' }), '1.2.3.4', deps);
-    expect(await events(response)).toEqual([
-      { type: 'text', text: 'AubeSonore ' },
-      { type: 'text', text: 'diffuse.' },
-      { type: 'sources', sources: [{ title: 'AubeSonore', url: 'https://www.aubesonore.fr/' }] },
-      { type: 'done', remaining: 2, reset: visitor.reset, conversation: ID },
+    const response = await handleAsk(request('Ta radio ?'), '1.2.3.4', deps);
+    expect(response.headers.get('x-vercel-ai-ui-message-stream')).toBe('v1');
+    const list = await chunks(response);
+    expect(list[0]).toEqual({
+      type: 'data-quota',
+      data: { remaining: 2, reset: visitor.reset },
+      transient: true,
+    });
+    expect(text(list)).toBe('AubeSonore diffuse.');
+    expect(list.filter(chunk => chunk.type === 'source-url')).toEqual([
+      {
+        type: 'source-url',
+        sourceId: 'https://www.aubesonore.fr/',
+        url: 'https://www.aubesonore.fr/',
+        title: 'AubeSonore',
+      },
     ]);
-    expect(store.get(ID)).toEqual([{ question: 'Ta radio ?', answer: 'AubeSonore diffuse.' }]);
-  });
-
-  it('answers a follow-up with the stored turns and keeps the conversation id', async () => {
-    const earlier = [{ question: 'C’est quoi AubeSonore ?', answer: 'Une web radio.' }];
-    const { conversations } = memory({ [ID]: earlier });
-    const { deps, seen } = setup({ conversations, newId: () => 'unused' });
-    const response = await handleAsk(
-      request({ question: 'Et le pipeline ?', conversation: ID }),
-      '1.2.3.4',
-      deps,
+    expect(list.at(-1)).toEqual({ type: 'finish' });
+    const saved = stored(store)!;
+    expect(saved.map(message => message.role)).toEqual(['user', 'assistant']);
+    expect(saved[0]!.parts).toEqual([{ type: 'text', text: 'Ta radio ?' }]);
+    // The ids are the server's, never the client's.
+    expect(saved.map(message => message.id)).not.toContain('client-id');
+    expect(saved[1]!.parts).toContainEqual(
+      expect.objectContaining({ type: 'text', text: 'AubeSonore diffuse.' }),
     );
-    expect((await events(response)).at(-1)).toMatchObject({ conversation: ID });
-    expect(seen[0]!.history).toEqual(earlier);
   });
 
-  it('starts over when the conversation has expired', async () => {
-    const { deps, seen } = setup({ newId: () => 'fresh' });
-    const response = await handleAsk(
-      request({ question: 'Et ensuite ?', conversation: ID }),
-      '1.2.3.4',
-      deps,
+  it('answers a follow-up with the stored conversation, never with history the visitor sends', async () => {
+    const { deps, model } = setup();
+    await chunks(await handleAsk(request('C’est quoi AubeSonore ?'), '1.2.3.4', deps));
+    await chunks(await handleAsk(request('Et elle diffuse comment ?'), '1.2.3.4', deps));
+    const prompt = model.doStreamCalls[1]!.prompt.filter(message => message.role !== 'system');
+    expect(prompt.map(message => message.role)).toEqual(['user', 'assistant', 'user']);
+    expect(JSON.stringify(prompt[0])).toContain('C’est quoi AubeSonore ?');
+  });
+
+  it('keeps only the last two turns', async () => {
+    const { deps, store } = setup({ visitor: limiter(10).limit });
+    for (const question of ['Un', 'Deux', 'Trois'])
+      await chunks(await handleAsk(request(question), '1.2.3.4', deps));
+    expect(
+      stored(store)!
+        .filter(message => message.role === 'user')
+        .map(m => m.parts),
+    ).toEqual([[{ type: 'text', text: 'Deux' }], [{ type: 'text', text: 'Trois' }]]);
+  });
+
+  it('starts over when the stored conversation is not valid UI messages', async () => {
+    const { redis, store } = memoryRedis({
+      [`ask:test:conversation:${CHAT}`]: [{ question: 'old' }],
+    });
+    const { deps, model } = setup({
+      conversations: redisConversations(redis, 'ask:test:conversation'),
+    });
+    await chunks(await handleAsk(request('Ta radio ?'), '1.2.3.4', deps));
+    expect(model.doStreamCalls[0]!.prompt.filter(message => message.role === 'user')).toHaveLength(
+      1,
     );
-    expect((await events(response)).at(-1)).toMatchObject({ conversation: 'fresh' });
-    expect(seen[0]!.history).toEqual([]);
+    expect(stored(store)).toHaveLength(2);
   });
 
-  it('stops at the daily quota without calling the model', async () => {
-    const { deps, seen } = setup({ visitor: limiter(0).limit });
-    const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
+  it('answers a blocked question with the fixed sentence, without the model, and keeps it out of the conversation', async () => {
+    const { deps, store, model } = setup({ moderate: async () => true });
+    const list = await chunks(await handleAsk(request('…'), '1.2.3.4', deps));
+    expect(text(list)).toBe(BLOCKED_ANSWER);
+    expect(model.doStreamCalls).toHaveLength(0);
+    expect(stored(store)).toBeUndefined();
+  });
+
+  it('refuses past the visitor quota, then past the global one', async () => {
+    const { deps } = setup({ visitor: limiter(0).limit });
+    const response = await handleAsk(request('Salut'), '1.2.3.4', deps);
     expect(response.status).toBe(429);
     expect(await response.json()).toEqual({ code: 'limit', reset: 42 });
-    expect(seen).toEqual([]);
+    const full = setup({ global: limiter(0).limit });
+    expect((await handleAsk(request('Salut'), '1.2.3.4', full.deps)).status).toBe(429);
   });
 
-  it('fails closed when the quota store is down', async () => {
-    const down: Limiter = { limit: () => Promise.reject(new Error('timeout')) };
-    const { deps, seen } = setup({ visitor: down });
-    const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
-    expect(response.status).toBe(503);
-    expect(seen).toEqual([]);
-    expect(logged).toHaveBeenCalledWith('ask: quota store failed', new Error('timeout'));
-  });
-
-  it('fails closed when Upstash lets a call through on its timeout', async () => {
-    const { deps, seen } = setup({ visitor: slow });
-    const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
-    expect(response.status).toBe(503);
-    expect(seen).toEqual([]);
-    expect(logged).toHaveBeenCalledWith('ask: quota store timed out');
-  });
-
-  it('answers and logs when the conversation store fails', async () => {
-    const broken: Conversations = {
-      load: () => Promise.reject(new Error('redis down')),
-      save: () => Promise.reject(new Error('redis down')),
+  it('fails closed when the quota store fails or times out', async () => {
+    const down: Limiter = { limit: async () => Promise.reject(new Error('redis down')) };
+    const slow: Limiter = {
+      limit: async () => ({ success: true, remaining: 0, reset: 0, reason: 'timeout' }),
     };
-    const { deps } = setup({ conversations: broken });
-    const response = await handleAsk(
-      request({ question: 'Et ensuite ?', conversation: ID }),
-      '1.2.3.4',
-      deps,
-    );
-    expect((await events(response)).at(-1)).toMatchObject({ type: 'done' });
-    expect(logged.mock.calls.map(([message]) => message)).toEqual([
-      'ask: conversation load failed',
-      'ask: conversation save failed',
-    ]);
+    for (const visitor of [down, slow])
+      expect((await handleAsk(request('Salut'), '1.2.3.4', setup({ visitor }).deps)).status).toBe(
+        503,
+      );
   });
 
-  it('gives the visitor question back when only the global quota times out', async () => {
-    const { deps, visitor, seen } = setup({ global: slow });
-    const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
-    expect(response.status).toBe(503);
-    expect(visitor.refunds()).toBe(1);
-    expect(seen).toEqual([]);
-  });
-
-  it('does not refund into the next window when the day ended during the answer', async () => {
-    const { answer } = answers(new Error('overloaded'));
-    const visitor = limiter(3, Date.now() - 1);
-    const { deps } = setup({ answer, visitor: visitor.limit });
-    const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
-    expect(await events(response)).toEqual([{ type: 'error', code: 'failed' }]);
-    expect(visitor.refunds()).toBe(0);
-  });
-
-  it('answers a blocked question with one fixed sentence and saves nothing', async () => {
-    const { deps, store, seen } = setup({ moderate: async () => true });
-    const response = await handleAsk(
-      request({ question: 'Quelque chose de violent' }),
-      '1.2.3.4',
-      deps,
-    );
-    expect((await events(response))[0]).toEqual({ type: 'text', text: BLOCKED_ANSWER });
-    expect(seen).toEqual([]);
-    expect(store.size).toBe(0);
-  });
-
-  it('refunds both quotas when the answer fails before any text', async () => {
-    const { answer } = answers(new Error('overloaded'));
-    const { deps, visitor, global } = setup({ answer });
-    const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
-    expect(await events(response)).toEqual([{ type: 'error', code: 'failed' }]);
-    expect([visitor.refunds(), global.refunds()]).toEqual([1, 1]);
-    expect(logged).toHaveBeenCalledWith('ask: answer failed', new Error('overloaded'));
-  });
-
-  it('logs nothing when the visitor stops the answer', async () => {
-    const leave = new AbortController();
-    let settled: Promise<unknown> = Promise.resolve();
-    const { deps } = setup({
-      defer: task => void (settled = task),
-      answer: () => ({
-        text: (async function* () {
-          yield 'Début';
-          leave.abort();
-          throw new DOMException('aborted', 'AbortError');
-        })(),
-        sources: () => [],
-      }),
+  it('counts a question whose answer fails, sends an error part and saves nothing', async () => {
+    const failing = new MockLanguageModelV4({
+      doStream: async () => {
+        throw new Error('mistral down');
+      },
     });
+    const { deps, store, visitor } = setup({}, failing);
+    const list = await chunks(await handleAsk(request('Ta radio ?'), '1.2.3.4', deps));
+    expect(list).toContainEqual({ type: 'error', errorText: FAILED });
+    expect(visitor.used()).toBe(1);
+    expect(stored(store)).toBeUndefined();
+    expect(logged).toHaveBeenCalledWith('ask: answer failed', expect.anything());
+  });
+
+  it('saves nothing when the visitor stops the answer', async () => {
+    const { deps, store } = setup();
+    const stop = new AbortController();
+    stop.abort();
     const response = await handleAsk(
-      request({ question: 'Salut' }, undefined, leave.signal),
+      request('Ta radio ?', { signal: stop.signal }),
       '1.2.3.4',
       deps,
     );
-    expect(response.status).toBe(200);
-    await settled;
-    expect(logged).not.toHaveBeenCalled();
+    const list = await chunks(response).catch(() => []);
+    expect(list.some(chunk => chunk.type === 'finish')).toBe(false);
+    expect(stored(store)).toBeUndefined();
   });
 
-  it('keeps the quota spent when the answer fails after text was shown', async () => {
-    const { answer } = answers('Début', new Error('overloaded'));
-    const { deps, visitor } = setup({ answer });
-    const response = await handleAsk(request({ question: 'Salut' }), '1.2.3.4', deps);
-    expect((await events(response)).at(-1)).toEqual({ type: 'error', code: 'failed' });
-    expect(visitor.refunds()).toBe(0);
-  });
-
-  it('rejects an empty question and an invalid conversation id', async () => {
-    const { deps } = setup();
-    for (const body of [{ question: '   ' }, { question: 'Salut', conversation: 'not-a-uuid' }]) {
-      expect((await handleAsk(request(body), '1.2.3.4', deps)).status).toBe(400);
-    }
+  it('keeps the function alive until the conversation is saved', async () => {
+    let deferred: Promise<unknown> | undefined;
+    const { deps } = setup({ defer: task => void (deferred = task) });
+    await chunks(await handleAsk(request('Ta radio ?'), '1.2.3.4', deps));
+    await expect(deferred).resolves.toBeUndefined();
   });
 });

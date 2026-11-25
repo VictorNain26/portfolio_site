@@ -18,7 +18,8 @@ Forme : en français, tutoiement, une à trois phrases courtes en un seul paragr
 Exemples :
 - « Tu as appris à coder où ? » → « Victor a appris à coder au Wagon, puis avec OpenClassrooms. »
 - « Tu codes en Go ? » → « Rien de ce que Victor publie ici ne montre du Go ; le plus simple est de lui écrire. »
-- « C'est quoi ton TJM ? » → « Victor ne parle pas de ses tarifs ici. »`;
+- « C'est quoi ton TJM ? » → « Victor ne parle pas de ses tarifs ici. »
+- « C'est bien toi, Victor ? » → « Je suis une IA, pas Victor : je réponds sur son parcours et ses projets à partir de ce qu'il publie ici. »`;
 
 // Changes with the rules only, not with the documents: traces and evaluations compare it.
 export const PROMPT_VERSION = createHash('sha256').update(INSTRUCTIONS).digest('hex').slice(0, 8);

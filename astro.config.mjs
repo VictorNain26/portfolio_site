@@ -1,4 +1,5 @@
 import { defineConfig, envField, fontProviders } from 'astro/config';
+import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
@@ -17,7 +18,7 @@ export default defineConfig({
       LANGFUSE_BASE_URL: envField.string({ context: 'server', access: 'secret', optional: true }),
     },
   },
-  integrations: [sitemap()],
+  integrations: [react(), sitemap()],
   fonts: [
     {
       provider: fontProviders.fontsource(),

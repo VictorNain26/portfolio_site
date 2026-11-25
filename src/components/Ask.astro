@@ -1,281 +1,16 @@
+---
+import AskChat from './Ask.tsx';
+---
+
+<!-- The assistant is a React island: useChat (@ai-sdk/react) drives the conversation.
+     https://ai-sdk.dev/docs/ai-sdk-ui/chatbot -->
 <li class="ask-row">
-  <button
-    class="toggle"
-    type="button"
-    id="ask-toggle"
-    aria-expanded="false"
-    aria-controls="ask-panel"
-  >
-    <span class="title-text">Une question sur mon travail ?</span>
-    <span class="count" id="ask-toggle-state">
-      Demander
-    </span>
-  </button>
-  <div class="unfold" id="ask-panel">
-    <div class="panel" inert>
-      <p class="hint">Mon assistant IA y répond, jusqu'à dix par jour.</p>
-      <ol class="thread" aria-live="polite"></ol>
-      <form id="ask-form" class="field">
-        <label class="sr-only" for="ask-input">
-          Ta question pour mon assistant
-        </label>
-        <input
-          id="ask-input"
-          name="question"
-          type="text"
-          maxlength="280"
-          required
-          autocomplete="off"
-          enterkeyhint="send"
-          placeholder="Sur quoi Victor travaille en ce moment ?"
-        />
-        <button type="submit">Envoyer</button>
-      </form>
-      <div class="meta-line">
-        <p class="status" role="status"></p>
-        <button type="button" class="reset" hidden>
-          Nouvelle conversation
-        </button>
-      </div>
-    </div>
-  </div>
+  <AskChat client:visible />
 </li>
 
-<script>
-  import type { Source } from '../lib/agent/sources';
-  import { linkSources, locked, readEvents } from '../lib/ask';
-
-  type Turn = { question: string; answer: string; sources: Source[] };
-  type State = { conversation?: string; turns: Turn[]; status?: string; exhaustedUntil?: number };
-
-  // The thread lives in this tab only, so it survives a visit to another page and back.
-  const STORE = 'ask-thread';
-  const load = (): State => {
-    try {
-      return JSON.parse(sessionStorage.getItem(STORE) ?? '') as State;
-    } catch {
-      return { turns: [] };
-    }
-  };
-  const save = (state: State) => {
-    try {
-      sessionStorage.setItem(STORE, JSON.stringify(state));
-    } catch {
-      // Storage refused (private window): the thread just won't outlive the page.
-    }
-  };
-
-  const errors: Record<string, string> = {
-    limit: 'Tu as posé tes dix questions du jour. Reviens demain, ou écris-moi.',
-    global_limit: "L'assistant a assez parlé pour aujourd'hui. Reviens demain, ou écris-moi.",
-    failed: "L'assistant n'a pas pu répondre. Réessaie dans un moment.",
-  };
-  const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function para(className: string, text = '') {
-    const p = document.createElement('p');
-    p.className = className;
-    p.textContent = text;
-    return p;
-  }
-
-  function fillAnswer(target: HTMLElement, text: string, sources: Source[]) {
-    target.replaceChildren(
-      ...linkSources(text, sources).map(segment => {
-        if (!segment.url) return document.createTextNode(segment.text);
-        const link = document.createElement('a');
-        link.className = 'link';
-        link.href = segment.url;
-        link.textContent = segment.text;
-        if (new URL(segment.url, location.href).origin !== location.origin) {
-          link.target = '_blank';
-          link.rel = 'noopener';
-          const hint = document.createElement('span');
-          hint.className = 'sr-only';
-          hint.textContent = ' (nouvel onglet)';
-          link.append(hint);
-        }
-        return link;
-      }),
-    );
-  }
-
-  function turnElement(question: string, animate: boolean) {
-    const li = document.createElement('li');
-    li.className = animate ? 'turn arrive' : 'turn';
-    const answer = para('answer');
-    li.append(para('who', 'Toi'), para('question', question), para('who', "L'assistant"), answer);
-    return { li, answer };
-  }
-
-  function init() {
-    const toggle = document.querySelector<HTMLButtonElement>('#ask-toggle');
-    if (!toggle) return;
-    const row = toggle.closest('.ask-row')!;
-    const unfold = row.querySelector<HTMLElement>('.unfold')!;
-    const panel = row.querySelector<HTMLElement>('.panel')!;
-    const toggleState = row.querySelector<HTMLElement>('#ask-toggle-state')!;
-    const thread = row.querySelector<HTMLOListElement>('.thread')!;
-    const form = row.querySelector<HTMLFormElement>('#ask-form')!;
-    const input = form.querySelector('input')!;
-    const send = form.querySelector('button')!;
-    const status = row.querySelector<HTMLElement>('.status')!;
-    const reset = row.querySelector<HTMLButtonElement>('.reset')!;
-
-    let state = load();
-    let controller: AbortController | undefined;
-    const exhausted = () => locked(state.exhaustedUntil, Date.now());
-    if (state.exhaustedUntil !== undefined && !exhausted()) {
-      delete state.exhaustedUntil;
-      delete state.status;
-      save(state);
-    }
-    document.addEventListener('astro:before-swap', () => controller?.abort(), { once: true });
-
-    const persist = () => save(state);
-    const setOpen = (open: boolean) => {
-      unfold.classList.toggle('open', open);
-      panel.inert = !open;
-      toggle.setAttribute('aria-expanded', String(open));
-      toggleState.textContent = open ? 'Fermer' : 'Demander';
-    };
-    const lock = () => {
-      input.disabled = exhausted();
-      send.disabled = exhausted();
-    };
-    const setBusy = (busy: boolean) => {
-      input.disabled = busy || exhausted();
-      send.textContent = busy ? 'Arrêter' : 'Envoyer';
-      thread.setAttribute('aria-busy', String(busy));
-    };
-    const setStatus = (text: string) => {
-      status.textContent = text;
-      state.status = text;
-      persist();
-    };
-
-    for (const turn of state.turns) {
-      const { li, answer } = turnElement(turn.question, false);
-      fillAnswer(answer, turn.answer, turn.sources);
-      thread.append(li);
-    }
-    status.textContent = state.status ?? '';
-    reset.hidden = state.turns.length === 0;
-    lock();
-    if (state.turns.length > 0) setOpen(true);
-
-    toggle.addEventListener('click', () => {
-      const open = !unfold.classList.contains('open');
-      setOpen(open);
-      // Wait for the panel to unfold before moving focus into it.
-      if (open && !input.disabled) setTimeout(() => input.focus({ preventScroll: true }), 250);
-    });
-
-    reset.addEventListener('click', () => {
-      controller?.abort();
-      thread.replaceChildren();
-      const { exhaustedUntil, status: spent } = state;
-      state = { turns: [], ...(exhausted() && { exhaustedUntil, status: spent }) };
-      persist();
-      reset.hidden = true;
-      if (!exhausted()) {
-        status.textContent = '';
-        input.focus({ preventScroll: true });
-      }
-    });
-
-    form.addEventListener('submit', async event => {
-      event.preventDefault();
-      if (controller) {
-        controller.abort();
-        return;
-      }
-      const question = input.value.trim();
-      if (!question) return;
-
-      const refocus = form.contains(document.activeElement);
-      controller = new AbortController();
-      const { li, answer } = turnElement(question, !reduce());
-      const dots = document.createElement('span');
-      dots.className = 'dots';
-      const thinking = document.createElement('span');
-      thinking.className = 'sr-only';
-      thinking.textContent = "L'assistant réfléchit";
-      dots.append(thinking, ...Array.from({ length: 3 }, () => document.createElement('i')));
-      answer.append(dots);
-      thread.append(li);
-      input.value = '';
-      reset.hidden = false;
-      setBusy(true);
-      setStatus('');
-
-      let text = '';
-      let sources: Source[] = [];
-      const fail = (message: string) => {
-        dots.remove();
-        li.append(para('note', message));
-        // Nothing was answered: give the question back so it can be sent again.
-        if (!text && !exhausted()) input.value = question;
-      };
-
-      try {
-        const response = await fetch('/api/ask', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ question, conversation: state.conversation }),
-          signal: controller.signal,
-        });
-        if (!response.ok || !response.body) {
-          const { code, reset } = await response.json().catch(() => ({ code: 'failed' }));
-          if (code === 'limit' || code === 'global_limit') {
-            state.exhaustedUntil = reset;
-            lock();
-          }
-          fail(errors[code] ?? errors.failed!);
-          return;
-        }
-        for await (const event of readEvents(response.body)) {
-          if (event.type === 'text') {
-            if (!text) dots.remove();
-            text += event.text;
-            const word = document.createElement('span');
-            word.className = 'ink';
-            word.textContent = event.text;
-            answer.append(word);
-          } else if (event.type === 'sources') {
-            sources = event.sources;
-          } else if (event.type === 'done') {
-            fillAnswer(answer, text, sources);
-            state.conversation = event.conversation;
-            state.turns.push({ question, answer: text, sources });
-            if (event.remaining === 0) {
-              state.exhaustedUntil = event.reset;
-              lock();
-              setStatus("C'était ta dernière question pour aujourd'hui.");
-            } else {
-              setStatus(
-                `Encore ${event.remaining} question${event.remaining > 1 ? 's' : ''} aujourd'hui.`,
-              );
-            }
-          } else {
-            fail(errors.failed!);
-          }
-        }
-      } catch {
-        fail(controller.signal.aborted ? 'Réponse arrêtée.' : errors.failed!);
-      } finally {
-        controller = undefined;
-        setBusy(false);
-        if (refocus && !exhausted()) input.focus({ preventScroll: true });
-      }
-    });
-  }
-
-  document.addEventListener('astro:page-load', init);
-</script>
-
-<style>
-  .toggle {
+<!-- Global: Astro scopes styles to its own markup, and the island's markup is React's. -->
+<style is:global>
+  .ask-row .toggle {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -291,22 +26,22 @@
     cursor: pointer;
   }
 
-  .toggle .count {
+  .ask-row .toggle .count {
     font-size: 1rem;
   }
 
   /* Unfolds to its content's height: grid rows animate where height: auto cannot. */
-  .unfold {
+  .ask-row .unfold {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.5s var(--ease-out);
   }
 
-  .unfold.open {
+  .ask-row .unfold.open {
     grid-template-rows: 1fr;
   }
 
-  .panel {
+  .ask-row .panel {
     overflow: hidden;
     display: grid;
     gap: 0.75rem;
@@ -319,45 +54,45 @@
       padding-bottom 0.5s var(--ease-out);
   }
 
-  .open .panel {
+  .ask-row .open .panel {
     padding-bottom: 1.1rem;
     opacity: 1;
     transform: none;
     transition-delay: 0.12s, 0.12s, 0s;
   }
 
-  .hint,
-  .status,
-  .reset {
+  .ask-row .hint,
+  .ask-row .status,
+  .ask-row .reset {
     margin: 0;
     font-size: 1rem;
     color: var(--muted);
   }
 
-  .thread {
+  .ask-row .thread {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
   }
 
-  .thread:empty {
+  .ask-row .thread:empty {
     display: none;
   }
 
-  .thread :global(.turn) {
+  .ask-row .thread .turn {
     display: grid;
     gap: 0.25rem;
     padding-block: 0.9rem;
     border-top: 1px solid var(--rule);
   }
 
-  .thread :global(.turn:first-child) {
+  .ask-row .thread .turn:first-child {
     border-top: 0;
     padding-top: 0.2rem;
   }
 
-  .thread :global(.arrive) {
+  .ask-row .thread .arrive {
     animation: arrive 0.45s var(--ease-out) both;
   }
 
@@ -368,29 +103,29 @@
     }
   }
 
-  .thread :global(.who) {
+  .ask-row .thread .who {
     margin: 0;
     font-size: 0.85rem;
     color: var(--muted);
   }
 
-  .thread :global(.question) {
+  .ask-row .thread .question {
     margin: 0 0 0.5rem;
     font-weight: 600;
   }
 
-  .thread :global(.answer),
-  .thread :global(.note) {
+  .ask-row .thread .answer,
+  .ask-row .thread .note {
     margin: 0;
   }
 
-  .thread :global(.note) {
+  .ask-row .thread .note {
     margin-top: 0.35rem;
     font-size: 1rem;
     color: var(--muted);
   }
 
-  .thread :global(.ink) {
+  .ask-row .thread .ink {
     animation: ink 0.28s var(--ease-out) both;
   }
 
@@ -400,13 +135,13 @@
     }
   }
 
-  .thread :global(.dots) {
+  .ask-row .thread .dots {
     display: inline-flex;
     gap: 0.3rem;
     padding-block: 0.5rem;
   }
 
-  .thread :global(.dots i) {
+  .ask-row .thread .dots i {
     width: 5px;
     height: 5px;
     border-radius: 50%;
@@ -414,11 +149,11 @@
     animation: pulse 1.2s ease-in-out infinite;
   }
 
-  .thread :global(.dots i:nth-of-type(2)) {
+  .ask-row .thread .dots i:nth-of-type(2) {
     animation-delay: 0.15s;
   }
 
-  .thread :global(.dots i:nth-of-type(3)) {
+  .ask-row .thread .dots i:nth-of-type(3) {
     animation-delay: 0.3s;
   }
 
@@ -433,7 +168,7 @@
     }
   }
 
-  .field {
+  .ask-row .field {
     display: flex;
     align-items: stretch;
     border-bottom: 1px solid var(--muted);
@@ -443,13 +178,13 @@
   }
 
   /* Focus thickens the underline to 2px instead of drawing an outline around the bare input. */
-  .field:focus-within {
+  .ask-row .field:focus-within {
     border-bottom-color: var(--fg);
     box-shadow: 0 1px 0 var(--fg);
   }
 
-  .field input,
-  .field button {
+  .ask-row .field input,
+  .ask-row .field button {
     font: inherit;
     color: inherit;
     background: none;
@@ -457,39 +192,39 @@
     min-height: 2.75rem;
   }
 
-  .field input {
+  .ask-row .field input {
     flex: 1;
     min-width: 0;
     padding: 0;
   }
 
-  .field input::placeholder {
+  .ask-row .field input::placeholder {
     color: var(--muted);
     opacity: 1;
   }
 
-  .field input:focus-visible {
+  .ask-row .field input:focus-visible {
     outline: none;
   }
 
-  .field button {
+  .ask-row .field button {
     padding-inline: 0.75rem 0;
     cursor: pointer;
     background: linear-gradient(currentColor, currentColor) 100% 85% / 0 1px no-repeat;
     transition: background-size 0.4s var(--ease-out);
   }
 
-  .field button:hover {
+  .ask-row .field button:hover {
     background-size: calc(100% - 0.75rem) 1px;
   }
 
-  .field input:disabled,
-  .field button:disabled {
+  .ask-row .field input:disabled,
+  .ask-row .field button:disabled {
     cursor: not-allowed;
     color: var(--muted);
   }
 
-  .meta-line {
+  .ask-row .meta-line {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -497,11 +232,11 @@
     flex-wrap: wrap;
   }
 
-  .status:empty {
+  .ask-row .status:empty {
     display: none;
   }
 
-  .reset {
+  .ask-row .reset {
     padding: 0;
     font: inherit;
     font-size: 1rem;
@@ -517,8 +252,18 @@
       text-decoration-color 0.3s var(--ease-out);
   }
 
-  .reset:hover {
+  .ask-row .reset:hover {
     color: var(--fg);
     text-decoration-color: currentColor;
+  }
+
+  .ask-row .sources {
+    list-style: none;
+    margin: 0.35rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    font-size: 1rem;
   }
 </style>

@@ -1,4 +1,5 @@
-import type { Turn } from '../src/lib/agent/agent';
+// An earlier exchange of the conversation a case starts from.
+export type Turn = { question: string; answer: string };
 
 // What a correct answer does, whatever its wording.
 type Behaviour = 'answer' | 'unknown' | 'untried' | 'decline' | 'ai';
