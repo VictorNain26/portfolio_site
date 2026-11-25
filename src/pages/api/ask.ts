@@ -4,6 +4,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { waitUntil } from '@vercel/functions';
 import type { APIRoute } from 'astro';
+import { checkBotId } from 'botid/server';
 import {
   KV_REST_API_TOKEN,
   KV_REST_API_URL,
@@ -62,6 +63,11 @@ export const POST: APIRoute = async context => {
     visitor,
     global,
     conversations,
+    // Outside Vercel production (`astro dev`, tests), BotID answers « human ».
+    // https://vercel.com/docs/botid/get-started
+    isBot: async request =>
+      (await checkBotId({ advancedOptions: { headers: Object.fromEntries(request.headers) } }))
+        .isBot,
     moderate,
     answer,
     trace: telemetry ? langfuseTracer(PROMPT_VERSION) : noTracer,

@@ -20,6 +20,8 @@ export type AskDeps = {
   visitor: Limiter;
   global: Limiter;
   conversations: Conversations;
+  // Vercel BotID's verdict on the request: a bot is refused before it spends a quota.
+  isBot(request: Request): Promise<boolean>;
   moderate(question: string, signal: AbortSignal): Promise<boolean>;
   answer: Answer;
   trace: Tracer;
@@ -69,6 +71,7 @@ export async function handleAsk(
 ): Promise<Response> {
   if (request.headers.get('origin') !== new URL(request.url).origin)
     return json(403, { code: 'origin' });
+  if (await deps.isBot(request)) return json(403, { code: 'bot' });
   const key = ip === undefined ? undefined : visitorKey(ip, deps.visitorSecret);
   if (!key) return json(400, { code: 'ip' });
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));

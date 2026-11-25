@@ -90,6 +90,7 @@ function setup(
     visitor: visitor.limit,
     global: global.limit,
     conversations: redisConversations(redis, 'ask:test:conversation'),
+    isBot: async () => false,
     moderate: async () => false,
     answer: createAgent({
       model,
@@ -135,6 +136,14 @@ describe('handleAsk', () => {
       deps,
     );
     expect(response.status).toBe(403);
+    expect(visitor.used()).toBe(0);
+  });
+
+  it('refuses a request BotID classifies as a bot, before counting it', async () => {
+    const { deps, visitor } = setup({ isBot: async () => true });
+    const response = await handleAsk(request('Salut'), '1.2.3.4', deps);
+    expect(response.status).toBe(403);
+    expect(await response.json()).toEqual({ code: 'bot' });
     expect(visitor.used()).toBe(0);
   });
 

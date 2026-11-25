@@ -8,6 +8,14 @@ import AskChat from './Ask.tsx';
   <AskChat client:visible />
 </li>
 
+<script>
+  // BotID's invisible challenge, attached to the assistant's requests; /api/ask checks it.
+  // https://vercel.com/docs/botid/get-started
+  import { initBotId } from 'botid/client/core';
+
+  initBotId({ protect: [{ path: '/api/ask', method: 'POST' }] });
+</script>
+
 <!-- Global: Astro scopes styles to its own markup, and the island's markup is React's. -->
 <style is:global>
   .ask-row .toggle {
