@@ -1,4 +1,5 @@
 import { createMistral } from '@ai-sdk/mistral';
+import { Mistral } from '@mistralai/mistralai';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { waitUntil } from '@vercel/functions';
@@ -42,7 +43,7 @@ const global = new Ratelimit({
   prefix: `ask:${environment}:global`,
 });
 const conversations = redisConversations(redis, `ask:${environment}:conversation`);
-const moderate = createModeration({ apiKey: MISTRAL_API_KEY });
+const moderate = createModeration(new Mistral({ apiKey: MISTRAL_API_KEY }));
 const answer = createAgent({
   model: createMistral({ apiKey: MISTRAL_API_KEY })(MODEL),
   persona,
