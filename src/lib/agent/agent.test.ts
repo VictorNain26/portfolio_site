@@ -2,157 +2,112 @@ import type { LanguageModelV4StreamPart } from '@ai-sdk/provider';
 import { convertArrayToReadableStream, MockLanguageModelV4 } from 'ai/test';
 import { describe, expect, it } from 'vitest';
 import { createAgent } from './agent';
-import type { Knowledge } from './knowledge';
-import type { Repo } from './repos';
+import type { Document } from './knowledge';
+import type { AskMessage } from './messages';
 
 const usage = {
   inputTokens: { total: 10, noCache: 10, cacheRead: 0, cacheWrite: 0 },
   outputTokens: { total: 5, text: 5, reasoning: 0 },
 };
-const finish = (unified: 'stop' | 'tool-calls'): LanguageModelV4StreamPart => ({
-  type: 'finish',
-  usage,
-  finishReason: { unified, raw: unified },
-});
 const says = (...chunks: string[]) => ({
   stream: convertArrayToReadableStream<LanguageModelV4StreamPart>([
     { type: 'text-start', id: 't' },
     ...chunks.map(delta => ({ type: 'text-delta' as const, id: 't', delta })),
     { type: 'text-end', id: 't' },
-    finish('stop'),
-  ]),
-});
-const reads = (repo: string) => ({
-  stream: convertArrayToReadableStream<LanguageModelV4StreamPart>([
-    {
-      type: 'tool-call',
-      toolCallId: `call-${repo}`,
-      toolName: 'read_readme',
-      input: JSON.stringify({ repo }),
-    },
-    finish('tool-calls'),
+    { type: 'finish', usage, finishReason: { unified: 'stop', raw: 'stop' } },
   ]),
 });
 
-const aubesonore: Repo = {
-  name: 'aubesonore',
-  description: 'AubeSonore — Web radio diffusée 24 h/24.',
-  url: 'https://github.com/VictorNain26/aubesonore',
-  homepage: 'https://www.aubesonore.fr/',
-  language: 'TypeScript',
-  stars: 0,
-  pushedAt: '2026-09-01',
-  archived: false,
-  topics: ['portfolio', 'typescript'],
-  readme: 'Diffuse via [AzuraCast](https://www.azuracast.com/), le dimanche.',
-};
+const documents: Document[] = [
+  {
+    id: 'project:aubesonore',
+    title: 'AubeSonore',
+    url: 'https://www.aubesonore.fr/',
+    names: ['AubeSonore', 'aubesonore'],
+    text: 'AubeSonore (En ligne) : Web radio diffusée 24 h/24. Diffuse via AzuraCast.',
+  },
+];
+const persona = '## Qui je suis\n\n- Développeur à Paris, passé par le Wagon.';
 
-const knowledge: Omit<Knowledge, 'projects'> = {
-  persona: 'Victor, développeur.',
-  repos: [
-    aubesonore,
-    {
-      name: 'radio-pipeline',
-      description: 'Feeds the radio.',
-      url: 'https://github.com/VictorNain26/radio-pipeline',
-      homepage: null,
-      language: 'Python',
-      stars: 0,
-      pushedAt: '2026-09-01',
-      archived: false,
-      topics: [],
-      readme: 'Uses [AzuraCast](https://www.azuracast.com/) to broadcast.',
-    },
-  ],
-};
-// GitHub as the build snapshot: the agent's own behaviour is under test, not the live fetch.
-const github = {
-  repos: async () => knowledge.repos,
-  readme: async (name: string) => knowledge.repos.find(repo => repo.name === name)?.readme ?? null,
-  search: undefined,
-  activity: async () => [],
-};
-
-const searches = (query: string) => ({
-  stream: convertArrayToReadableStream<LanguageModelV4StreamPart>([
-    {
-      type: 'tool-call',
-      toolCallId: 'call-search',
-      toolName: 'search_code',
-      input: JSON.stringify({ query }),
-    },
-    finish('tool-calls'),
-  ]),
+const ask = (text: string, id: string, role: 'user' | 'assistant' = 'user'): AskMessage => ({
+  id,
+  role,
+  parts: [{ type: 'text', text }],
 });
 
 const run = async (
   model: MockLanguageModelV4,
-  signal = new AbortController().signal,
-  question = 'Ta radio ?',
+  {
+    signal = new AbortController().signal,
+    now = new Date('2026-11-24T12:00:00Z'),
+    messages = [ask('Bonjour', '1'), ask('Bonjour !', '2', 'assistant'), ask('Ta radio ?', '3')],
+  } = {},
 ) => {
-  const answer = createAgent({
-    model,
-    knowledge,
-    github,
-    reasoning: 'none',
-  })({
-    question,
-    history: [],
+  const { result, sources } = await createAgent({ model, persona, documents, reasoning: 'none' })({
+    messages,
     signal,
-    now: new Date(),
+    now,
   });
-  let text = '';
-  for await (const chunk of answer.text) text += chunk;
-  return { text, sources: answer.sources(text) };
+  const text = await result.text;
+  return { text, sources: sources(text), call: model.doStreamCalls[0]! };
 };
 
 describe('createAgent', () => {
-  it('reads projects from the live repo list: a description edited on GitHub needs no deploy', async () => {
-    const model = new MockLanguageModelV4({ doStream: says('Une radio du dimanche.') });
-    const edited = { ...aubesonore, description: 'AubeSonore — Radio du dimanche matin.' };
-    const answer = createAgent({
-      model,
-      knowledge,
-      github: { ...github, repos: async () => [edited] },
-      reasoning: 'none',
-    })({
-      question: 'Ta radio ?',
-      history: [],
-      signal: new AbortController().signal,
-      now: new Date(),
-    });
-    for await (const _ of answer.text);
-    const prompt = JSON.stringify(model.doStreamCalls[0]?.prompt);
-    expect(prompt).toContain('AubeSonore (En ligne) : Radio du dimanche matin.');
-    expect(prompt).not.toContain('Web radio diffusée 24 h/24.');
-  });
-
-  it('reads the README of the project a question names before the model answers', async () => {
-    const model = new MockLanguageModelV4({ doStream: says('Elle diffuse via AzuraCast.') });
-    const { sources } = await run(model, undefined, 'Comment diffuse AubeSonore ?');
-    const prompt = JSON.stringify(model.doStreamCalls[0]?.prompt);
-    expect(prompt).toContain('README du dépôt aubesonore');
-    // Without its links: the model copies them into answers that must stay plain text.
-    expect(prompt).toContain('Diffuse via AzuraCast, le dimanche.');
-    expect(prompt).not.toContain('azuracast.com');
+  it('answers in one model call, with no tools', async () => {
+    const model = new MockLanguageModelV4({ doStream: says('Une radio.') });
+    const { call } = await run(model);
     expect(model.doStreamCalls).toHaveLength(1);
-    expect(sources.map(source => source.title)).toEqual(['aubesonore sur GitHub']);
+    expect(call.tools ?? []).toEqual([]);
   });
 
-  it('reads the README of a repo named directly, and no other', async () => {
-    const model = new MockLanguageModelV4({ doStream: says('Il alimente la radio.') });
-    await run(model, undefined, 'Que fait radio-pipeline ?');
-    const prompt = JSON.stringify(model.doStreamCalls[0]?.prompt);
-    expect(prompt).toContain('README du dépôt radio-pipeline');
-    expect(prompt).not.toContain('README du dépôt aubesonore');
+  it('puts the documents first, the rules after them, and the date last', async () => {
+    const { call } = await run(new MockLanguageModelV4({ doStream: says('Une radio.') }));
+    const system = call.prompt.find(message => message.role === 'system')!.content as string;
+    const at = (text: string) => system.indexOf(text);
+    expect(at('passé par le Wagon')).toBeGreaterThan(-1);
+    expect(at('Diffuse via AzuraCast')).toBeGreaterThan(at('passé par le Wagon'));
+    expect(at('# Consignes')).toBeGreaterThan(at('Diffuse via AzuraCast'));
+    expect(system.trimEnd().endsWith('Nous sommes le 24 novembre 2026.')).toBe(true);
   });
 
-  it('reads no README when the conversation names no project or repo', async () => {
-    const model = new MockLanguageModelV4({ doStream: says('Victor a appris au Wagon.') });
-    await run(model, undefined, 'Tu as appris à coder où ?');
-    const prompt = JSON.stringify(model.doStreamCalls[0]?.prompt);
-    expect(prompt).not.toContain('README du dépôt aubesonore');
-    expect(prompt).not.toContain('README du dépôt radio-pipeline');
+  // A README's own headings (# AubeSonore, ## Stack) must not read as the prompt's structure.
+  it('wraps the persona and each document in a tag, so README headings stay inside', async () => {
+    const { call } = await run(new MockLanguageModelV4({ doStream: says('Une radio.') }));
+    const system = call.prompt.find(message => message.role === 'system')!.content as string;
+    expect(system).toContain('<document title="Fiche de Victor">\n## Qui je suis');
+    expect(system).toContain('<document title="AubeSonore">\nAubeSonore (En ligne)');
+    expect(system.match(/<\/document>/g)).toHaveLength(2);
+    expect(system).toMatch(/victorlenain\.fr.*portfolio_site/);
+  });
+
+  it('cites the project a follow-up is about, though its answer does not name it', async () => {
+    const model = new MockLanguageModelV4({ doStream: says('Elle passe par AzuraCast.') });
+    const { sources } = await run(model, {
+      messages: [
+        ask('C’est quoi AubeSonore ?', '1'),
+        ask('Une web radio.', '2', 'assistant'),
+        ask('Et elle diffuse comment ?', '3'),
+      ],
+    });
+    expect(sources).toEqual([{ title: 'AubeSonore', url: 'https://www.aubesonore.fr/' }]);
+  });
+
+  it('keeps the cache key the same from one day to the next', async () => {
+    const key = async (now: Date) =>
+      (await run(new MockLanguageModelV4({ doStream: says('Oui.') }), { now })).call
+        .providerOptions?.['mistral']?.['promptCacheKey'];
+    const today = await key(new Date('2026-11-24'));
+    expect(today).toMatch(/^[0-9a-f]{16}$/);
+    expect(await key(new Date('2026-11-25'))).toBe(today);
+  });
+
+  it('sends the earlier turns before the question', async () => {
+    const { call } = await run(new MockLanguageModelV4({ doStream: says('Oui.') }));
+    expect(call.prompt.filter(m => m.role !== 'system').map(m => m.role)).toEqual([
+      'user',
+      'assistant',
+      'user',
+    ]);
   });
 
   it('streams the answer and cites the project it names', async () => {
@@ -163,83 +118,15 @@ describe('createAgent', () => {
     expect(sources).toEqual([{ title: 'AubeSonore', url: 'https://www.aubesonore.fr/' }]);
   });
 
-  it('drops markdown asterisks and backticks but keeps underscores in repo names', async () => {
+  // Streamdown renders the answer's markdown on the page: the stream carries it untouched.
+  it('passes the model’s markdown through', async () => {
     const { text } = await run(
-      new MockLanguageModelV4({
-        doStream: says('Le dépôt **portfolio', '_site** et *AubeSonore*, dans `tests/`.'),
-      }),
+      new MockLanguageModelV4({ doStream: says('Le dépôt **portfolio', '_site**.') }),
     );
-    expect(text).toBe('Le dépôt portfolio_site et AubeSonore, dans tests/.');
+    expect(text).toBe('Le dépôt **portfolio_site**.');
   });
 
-  it('keeps the answer on one line when the model breaks lines', async () => {
-    const { text } = await run(
-      new MockLanguageModelV4({
-        doStream: says('Deux usages :\n', 'D’abord la radio.\n\nEnsuite le site.'),
-      }),
-    );
-    expect(text).toBe('Deux usages : D’abord la radio. Ensuite le site.');
-  });
-
-  it('cites a README the model read, and sends the README back to it', async () => {
-    const model = new MockLanguageModelV4({
-      doStream: [reads('radio-pipeline'), says('Elle diffuse avec AzuraCast.')],
-    });
-    const { sources } = await run(model);
-    expect(sources.map(source => source.title)).toEqual(['radio-pipeline sur GitHub']);
-    const prompt = JSON.stringify(model.doStreamCalls[1]!.prompt);
-    expect(prompt).toContain('Uses AzuraCast to broadcast.');
-    expect(prompt).not.toContain('azuracast.com');
-  });
-
-  it('cites the repo of a file found by the code search', async () => {
-    const model = new MockLanguageModelV4({
-      doStream: [searches('streamText'), says('Le flux est dans pipeline.py.')],
-    });
-    const answer = createAgent({
-      model,
-      knowledge,
-      github: {
-        ...github,
-        search: async () => [
-          {
-            repo: 'radio-pipeline',
-            path: 'pipeline.py',
-            url: 'https://github.com/VictorNain26/radio-pipeline/blob/main/pipeline.py',
-            fragments: ['def stream():'],
-          },
-        ],
-      },
-      reasoning: 'none',
-    })({ question: 'Où ?', history: [], signal: new AbortController().signal, now: new Date() });
-    let text = '';
-    for await (const chunk of answer.text) text += chunk;
-    expect(answer.sources(text).map(source => source.title)).toEqual(['radio-pipeline sur GitHub']);
-    expect(JSON.stringify(model.doStreamCalls[1]!.prompt)).toContain('def stream():');
-  });
-
-  it('forbids tools on the last step, so the model has to write', async () => {
-    const model = new MockLanguageModelV4({
-      doStream: [
-        reads('radio-pipeline'),
-        reads('radio-pipeline'),
-        reads('radio-pipeline'),
-        says('Fini.'),
-      ],
-    });
-    expect((await run(model)).text).toBe('Fini.');
-    expect(model.doStreamCalls[3]!.toolChoice).toEqual({ type: 'none' });
-  });
-
-  it('throws when the answer is aborted, instead of ending as if complete', async () => {
-    const stop = new AbortController();
-    stop.abort(new Error('deadline'));
-    await expect(
-      run(new MockLanguageModelV4({ doStream: says('Une réponse ', 'coupée.') }), stop.signal),
-    ).rejects.toThrow('answer aborted');
-  });
-
-  it('throws when the provider fails mid-stream', async () => {
+  it('reports a provider failure in the stream, for the handler to turn into an error part', async () => {
     const model = new MockLanguageModelV4({
       doStream: {
         stream: convertArrayToReadableStream<LanguageModelV4StreamPart>([
@@ -247,6 +134,13 @@ describe('createAgent', () => {
         ]),
       },
     });
-    await expect(run(model)).rejects.toThrow('overloaded');
+    const { result } = await createAgent({ model, persona, documents, reasoning: 'none' })({
+      messages: [ask('Ta radio ?', '1')],
+      signal: new AbortController().signal,
+      now: new Date(),
+    });
+    const parts = [];
+    for await (const part of result.stream) parts.push(part.type);
+    expect(parts).toContain('error');
   });
 });

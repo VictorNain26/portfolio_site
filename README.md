@@ -4,7 +4,10 @@ Site de Victor Lenain, développeur à Paris : <https://www.victorlenain.fr>
 
 Site [Astro](https://astro.build) déployé sur Vercel : une page d'accueil, une
 page projets, toutes deux statiques, et une seule route rendue à la demande,
-`/api/ask`, l'assistant IA qui répond sur Victor et son code.
+`/api/ask`, l'assistant IA qui répond sur Victor et son code. L'assistant suit
+la pile de l'AI SDK : `streamText` et un flux de messages UI côté serveur,
+`useChat` dans une île React côté page, Mistral comme modèle, Upstash pour les
+quotas et les conversations, Vercel BotID contre les bots.
 
 ## Démarrer
 
@@ -16,8 +19,8 @@ npm run dev
 
 ## Ajouter un projet
 
-Mettre le topic `portfolio` sur un dépôt public : l'assistant le lit dans les 10
-minutes, et il apparaît sur `/projets` au passage suivant de `sync.yml`. Une
+Mettre le topic `portfolio` sur un dépôt public : au passage suivant de
+`sync.yml`, il apparaît sur `/projets` et l'assistant lit son README. Une
 description « Nom — accroche » lui donne son nom, sinon c'est celui du dépôt ;
 ses autres topics font sa stack.
 

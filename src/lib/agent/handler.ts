@@ -1,29 +1,39 @@
 import { z } from 'astro/zod';
-import type { Answer, Turn } from './agent';
+import {
+  createUIMessageStream,
+  createUIMessageStreamResponse,
+  toUIMessageStream,
+  type ToolSet,
+} from 'ai';
+import type { Answer } from './agent';
 import type { Conversations } from './conversations';
+import { MAX_QUESTION, textOf, type AskMessage } from './messages';
 import type { Source } from './sources';
 import { visitorKey } from './visitor';
 
 // `reset` ends the counted window; `reason: 'timeout'` is Upstash letting the call through
 // when Redis is too slow to answer.
 type Limit = { success: boolean; remaining: number; reset: number; reason?: string };
-export type Limiter = { limit(id: string, options?: { rate: number }): Promise<Limit> };
+export type Limiter = { limit(id: string): Promise<Limit> };
 
 export type AskDeps = {
   visitor: Limiter;
   global: Limiter;
   conversations: Conversations;
+  // Vercel BotID's verdict on the request: a bot is refused before it spends a quota.
+  isBot(request: Request): Promise<boolean>;
   moderate(question: string, signal: AbortSignal): Promise<boolean>;
-  answer(input: { question: string; history: Turn[]; signal: AbortSignal; now: Date }): Answer;
+  answer: Answer;
   trace: Tracer;
   // Keeps the function alive after the response for work that must not delay it.
   defer(task: Promise<unknown>): void;
+  // Message ids are the server's: the visitor sends text only.
   newId(): string;
   timeoutMs: number;
   visitorSecret: string;
 };
 
-// One trace per question: the guardrail and the model calls nest under it.
+// One trace per question: the guardrail and the model call nest under it.
 type TraceSpan = {
   guard(check: () => Promise<boolean>): Promise<boolean>;
   end(result: { answer: string; sources: Source[] } | { error: string }): void;
@@ -33,19 +43,19 @@ export type Tracer = <T>(
   run: (span: TraceSpan) => Promise<T>,
 ) => Promise<T>;
 
-export type AskEvent =
-  | { type: 'text'; text: string }
-  | { type: 'sources'; sources: Source[] }
-  // `reset` closes the visitor's window: the page unlocks then, not a day after the last refusal.
-  | { type: 'done'; remaining: number; reset: number; conversation: string }
-  | { type: 'error'; code: 'failed' };
-
 export const BLOCKED_ANSWER = 'Je préfère ne pas répondre à ça.';
+// What the visitor reads when an answer fails; the cause goes to the logs.
+export const FAILED = 'failed';
 const GLOBAL_ID = 'global';
 
+// What DefaultChatTransport sends once `prepareSendMessagesRequest` keeps the last message only:
+// the chat id and the visitor's question. https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-message-persistence
 const bodySchema = z.object({
-  question: z.string().trim().min(1).max(280),
-  conversation: z.uuid().optional(),
+  id: z.string().regex(/^[\w-]{1,64}$/),
+  message: z.object({
+    role: z.literal('user'),
+    parts: z.array(z.object({ type: z.literal('text'), text: z.string() })).length(1),
+  }),
 });
 
 const json = (status: number, body: unknown) =>
@@ -61,13 +71,17 @@ export async function handleAsk(
 ): Promise<Response> {
   if (request.headers.get('origin') !== new URL(request.url).origin)
     return json(403, { code: 'origin' });
+  if (await deps.isBot(request)) return json(403, { code: 'bot' });
   const key = ip === undefined ? undefined : visitorKey(ip, deps.visitorSecret);
   if (!key) return json(400, { code: 'ip' });
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));
-  if (!parsed.success) return json(400, { code: 'invalid' });
-  const { question } = parsed.data;
+  const question = parsed.success ? textOf(parsed.data.message).trim() : '';
+  if (!parsed.success || !question || question.length > MAX_QUESTION)
+    return json(400, { code: 'invalid' });
+  const chat = parsed.data.id;
 
-  // A quota store that does not answer fails closed: no free questions while it is down.
+  // A quota store that does not answer fails closed: no free questions while it is down. A
+  // question counts once accepted, even if its answer fails: Upstash documents no refund.
   // Every failure the visitor doesn't see is logged: Vercel files console.error as an error.
   const limit = (limiter: Limiter, id: string) =>
     limiter
@@ -82,99 +96,115 @@ export async function handleAsk(
         return undefined;
       });
   const visitor = await limit(deps.visitor, key);
-  if (!visitor) return json(503, { code: 'failed' });
+  if (!visitor) return json(503, { code: FAILED });
   if (!visitor.success) return json(429, { code: 'limit', reset: visitor.reset });
   const global = await limit(deps.global, GLOBAL_ID);
-  // A refund after the window closed would land on the next one and give a free question.
-  const giveBack = (limiter: Limiter, id: string, reset: number) =>
-    Date.now() < reset
-      ? limiter
-          .limit(id, { rate: -1 })
-          .catch((error: unknown) => console.error('ask: refund failed', error))
-      : undefined;
-  const refundVisitor = () => giveBack(deps.visitor, key, visitor.reset);
-  if (!global) {
-    await refundVisitor();
-    return json(503, { code: 'failed' });
-  }
-  if (!global.success) {
-    await refundVisitor();
-    return json(429, { code: 'global_limit', reset: global.reset });
-  }
-  const refund = () =>
-    Promise.all([refundVisitor(), giveBack(deps.global, GLOBAL_ID, global.reset)]);
+  if (!global) return json(503, { code: FAILED });
+  if (!global.success) return json(429, { code: 'global_limit', reset: global.reset });
 
-  const history = parsed.data.conversation
-    ? await deps.conversations.load(parsed.data.conversation).catch((error: unknown) => {
-        console.error('ask: conversation load failed', error);
-        return [];
-      })
-    : [];
-  const conversation = history.length > 0 ? parsed.data.conversation! : deps.newId();
-
-  const stop = new AbortController();
-  const gone = AbortSignal.any([request.signal, stop.signal]);
-  const signal = AbortSignal.any([gone, AbortSignal.timeout(deps.timeoutMs)]);
-  const encoder = new TextEncoder();
+  const history = await deps.conversations.load(chat).catch((error: unknown) => {
+    console.error('ask: conversation load failed', error);
+    return [];
+  });
+  const asked: AskMessage = {
+    id: deps.newId(),
+    role: 'user',
+    parts: [{ type: 'text', text: question }],
+  };
+  const signal = AbortSignal.any([request.signal, AbortSignal.timeout(deps.timeoutMs)]);
   let settle!: () => void;
   deps.defer(new Promise<void>(resolve => (settle = resolve)));
+  signal.addEventListener('abort', () => settle(), { once: true });
+  let blocked = false;
 
-  const body = new ReadableStream<Uint8Array>({
-    async start(controller) {
-      const send = (event: AskEvent) => {
-        if (!gone.aborted) controller.enqueue(encoder.encode(`${JSON.stringify(event)}\n`));
-      };
-      const done = () =>
-        send({ type: 'done', remaining: visitor.remaining, reset: visitor.reset, conversation });
-      let text = '';
-      try {
-        await deps.trace({ conversation, question, turn: history.length + 1 }, async span => {
+  const stream = createUIMessageStream<AskMessage>({
+    originalMessages: [...history, asked],
+    generateId: deps.newId,
+    onError: error => {
+      console.error('ask: answer failed', error);
+      return FAILED;
+    },
+    execute: ({ writer }) =>
+      deps.trace(
+        { conversation: chat, question, turn: Math.floor(history.length / 2) + 1 },
+        async span => {
+          writer.write({
+            type: 'data-quota',
+            data: { remaining: visitor.remaining, reset: visitor.reset },
+            transient: true,
+          });
           try {
             if (await span.guard(() => deps.moderate(question, signal))) {
-              send({ type: 'text', text: BLOCKED_ANSWER });
-              send({ type: 'sources', sources: [] });
+              blocked = true;
+              writer.write({ type: 'start' });
+              writer.write({ type: 'text-start', id: 'blocked' });
+              writer.write({ type: 'text-delta', id: 'blocked', delta: BLOCKED_ANSWER });
+              writer.write({ type: 'text-end', id: 'blocked' });
+              writer.write({ type: 'finish' });
               span.end({ answer: BLOCKED_ANSWER, sources: [] });
-              done();
               return;
             }
-            const answer = deps.answer({ question, history, signal, now: new Date() });
-            for await (const chunk of answer.text) {
-              text += chunk;
-              send({ type: 'text', text: chunk });
+            const { result, sources } = await deps.answer({
+              messages: [...history, asked],
+              signal,
+              now: new Date(),
+            });
+            let text = '';
+            let failure: unknown;
+            let aborted = false;
+            // Sources come after the text, before the finish: the answer names them.
+            for await (const chunk of toUIMessageStream<ToolSet, AskMessage>({
+              stream: result.stream,
+              sendFinish: false,
+              onError: error => {
+                failure = error;
+                console.error('ask: answer failed', error);
+                return FAILED;
+              },
+            })) {
+              if (chunk.type === 'text-delta') text += chunk.delta;
+              if (chunk.type === 'abort') aborted = true;
+              writer.write(chunk);
+            }
+            // The error or abort chunk is already on its way to the page.
+            if (failure || aborted) {
+              writer.setOutcome(
+                failure ? { status: 'failed', error: failure } : { status: 'aborted' },
+              );
+              span.end({ error: failure instanceof Error ? failure.message : 'answer aborted' });
+              return;
             }
             if (!text.trim()) throw new Error('empty answer');
-            const sources = answer.sources(text);
-            send({ type: 'sources', sources });
-            span.end({ answer: text.trim(), sources });
-            await deps.conversations
-              .save(conversation, [...history, { question, answer: text.trim() }])
-              .catch((error: unknown) => console.error('ask: conversation save failed', error));
-            done();
+            const cited = sources(text);
+            for (const source of cited)
+              writer.write({
+                type: 'source-url',
+                sourceId: source.url,
+                url: source.url,
+                title: source.title,
+              });
+            writer.write({ type: 'finish' });
+            // The stream cannot tell a full answer from a cut one: the code declares it.
+            writer.setOutcome({ status: 'completed' });
+            span.end({ answer: text.trim(), sources: cited });
           } catch (error) {
             span.end({ error: error instanceof Error ? error.message : String(error) });
             throw error;
           }
-        });
-      } catch (error) {
-        // A visitor who stops an answer has spent it. Text already shown is spent too:
-        // refunding it would let a visitor force failures for free answers.
-        if (!gone.aborted) {
-          // The response is already a 200: this log is the only server-side trace without Langfuse.
-          console.error('ask: answer failed', error);
-          if (!text) await refund();
-          send({ type: 'error', code: 'failed' });
-        }
+        },
+      ),
+    onEnd: async ({ messages, outcome }) => {
+      try {
+        // A blocked question, a failed or a stopped answer is not part of the conversation.
+        if (outcome.status === 'completed' && !blocked)
+          await deps.conversations
+            .save(chat, messages)
+            .catch((error: unknown) => console.error('ask: conversation save failed', error));
       } finally {
-        if (!gone.aborted) controller.close();
         settle();
       }
     },
-    cancel() {
-      stop.abort();
-    },
   });
 
-  return new Response(body, {
-    headers: { 'content-type': 'application/x-ndjson; charset=utf-8', 'cache-control': 'no-store' },
-  });
+  return createUIMessageStreamResponse({ stream, headers: { 'cache-control': 'no-store' } });
 }

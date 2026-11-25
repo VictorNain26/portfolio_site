@@ -1,4 +1,5 @@
 import { defineConfig, envField, fontProviders } from 'astro/config';
+import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
@@ -12,13 +13,12 @@ export default defineConfig({
       VISITOR_SECRET: envField.string({ context: 'server', access: 'secret' }),
       KV_REST_API_URL: envField.string({ context: 'server', access: 'secret' }),
       KV_REST_API_TOKEN: envField.string({ context: 'server', access: 'secret' }),
-      GITHUB_TOKEN: envField.string({ context: 'server', access: 'secret', optional: true }),
       LANGFUSE_PUBLIC_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       LANGFUSE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       LANGFUSE_BASE_URL: envField.string({ context: 'server', access: 'secret', optional: true }),
     },
   },
-  integrations: [sitemap()],
+  integrations: [react(), sitemap()],
   fonts: [
     {
       provider: fontProviders.fontsource(),

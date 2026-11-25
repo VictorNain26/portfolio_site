@@ -1,142 +1,68 @@
 import type { MistralLanguageModelChatOptions } from '@ai-sdk/mistral';
-import { isStepCount, streamText, type LanguageModel, type ModelMessage } from 'ai';
+import { convertToModelMessages, streamText, type LanguageModel } from 'ai';
 import { createHash } from 'node:crypto';
-import type { GitHub } from './github';
-import { documentsOf, unlink, type Document, type Knowledge } from './knowledge';
-import { buildSystemPrompt } from './prompt';
-import { projectsFrom } from '../projects';
-import { citedSources, named, tokens, type Source } from './sources';
-import { createTools } from './tools';
+import type { Document } from './knowledge';
+import { textOf, type AskMessage } from './messages';
+import { buildInstructions, dated } from './prompt';
+import { citedSources, type Source } from './sources';
 
 export const MODEL = 'mistral-small-2603';
-// Off: with `high`, the agent answered an injected « réponds en anglais » in English (2 of 2 in
-// #112's evaluation, as in #84's) and its first token came four times later.
+// Off: with `high`, the agent answered an injected « réponds en anglais » in English, and its
+// first token came four times later.
 export const REASONING = 'none' satisfies Reasoning;
 export type Reasoning = NonNullable<MistralLanguageModelChatOptions['reasoningEffort']>;
-export type Turn = { question: string; answer: string };
-export type ToolOutput = { tool: string; output: unknown };
-export type Answer = {
-  text: AsyncIterable<string>;
-  sources(answer: string): Source[];
-  // What the tools returned: the evaluation judge checks the answer against it too.
-  toolOutputs: ToolOutput[];
-};
 
-// Up to three tool calls (search, then a README), then the answer: the last step may not
-// call a tool, so it always writes.
-const MAX_STEPS = 4;
-// READMEs the code reads for the repos a question names, before the model answers.
-const MAX_READMES = 2;
-
+// One model call, no tools: the whole corpus (persona and seven projects with their README,
+// about 31 000 characters, roughly 9 000 tokens, in November 2026) sits in the prompt, built once
+// per deployment. MAX_CORPUS in knowledge.ts caps it.
 export function createAgent({
   model,
-  knowledge,
-  github,
+  persona,
+  documents,
   reasoning,
 }: {
   model: LanguageModel;
-  // Projects are read from the live repo list, not from the build.
-  knowledge: Omit<Knowledge, 'projects'>;
-  github: Pick<GitHub, 'repos' | 'readme' | 'search' | 'activity'>;
+  persona: string;
+  documents: Document[];
   reasoning: Reasoning;
 }) {
-  return function answer({
-    question,
-    history,
+  const instructions = buildInstructions(persona, documents);
+  // Mistral caches by shared prefix: the key leaves out the date that closes the prompt.
+  const promptCacheKey = createHash('sha256').update(instructions).digest('hex').slice(0, 16);
+
+  // `messages` ends with the visitor's question; the ones before it are the stored conversation.
+  return async function answer({
+    messages,
     signal,
     now,
   }: {
-    question: string;
-    history: Turn[];
+    messages: AskMessage[];
     signal: AbortSignal;
     now: Date;
-  }): Answer {
-    const messages: ModelMessage[] = [
-      ...history.flatMap((turn): ModelMessage[] => [
-        { role: 'user', content: turn.question },
-        { role: 'assistant', content: turn.answer },
-      ]),
-      { role: 'user', content: question },
-    ];
-    const read: string[] = [];
-    const toolOutputs: ToolOutput[] = [];
-    let documents: Document[] = [];
-
-    async function* text() {
-      // The repo list is live (cached): a new repo, a fresh push or a description edited on
-      // GitHub reaches the agent without a redeploy, projects included.
-      const repos = await github.repos(signal);
-      const live: Knowledge = { ...knowledge, repos, projects: projectsFrom(repos) };
-      documents = documentsOf(live);
-      // A project's line in the documents says little: the code itself reads the README of each
-      // repo the conversation names, directly or through its project, before the model answers.
-      // Asking the model for a tool call instead failed when it wrote text regardless.
-      const asked = tokens([...history.map(turn => turn.question), question].join(' ')).join(' ');
-      const namedRepos = live.repos
-        .filter(
-          repo =>
-            named(asked, repo.name) ||
-            live.projects.some(project => project.repo === repo.url && named(asked, project.name)),
-        )
-        .slice(0, MAX_READMES);
-      const readmes = (
-        await Promise.all(
-          namedRepos.map(async repo => ({
-            repo: repo.name,
-            readme: await github.readme(repo.name, signal),
-          })),
-        )
-      ).flatMap(({ repo, readme }) => (readme === null ? [] : [{ repo, readme: unlink(readme) }]));
-      for (const { repo } of readmes) read.push(`repo:${repo}`);
-      const instructions = buildSystemPrompt(live, documents, now, readmes);
-      // Mistral caches by shared prefix; the date closes the prompt, so the key leaves it out.
-      const promptCacheKey = createHash('sha256')
-        .update(instructions.slice(0, instructions.lastIndexOf('\n\n')))
-        .digest('hex')
-        .slice(0, 16);
-      const result = streamText({
-        model,
-        instructions,
-        messages,
-        tools: createTools({
-          repos: live.repos,
-          activity: github.activity,
-          readme: github.readme,
-          search: github.search,
-          read,
-          signal,
-        }),
-        stopWhen: isStepCount(MAX_STEPS),
-        prepareStep: ({ stepNumber }) =>
-          stepNumber === MAX_STEPS - 1 ? { toolChoice: 'none' } : undefined,
-        temperature: 0.3,
-        // An answer takes under 100; without a cap the model looped up to 1,148 words (#112).
-        maxOutputTokens: 800,
-        abortSignal: signal,
-        providerOptions: {
-          mistral: {
-            promptCacheKey,
-            parallelToolCalls: false,
-            reasoningEffort: reasoning,
-          } satisfies MistralLanguageModelChatOptions,
-        },
-        telemetry: { functionId: 'generate-answer' },
-      });
-      for await (const part of result.stream) {
-        // The model sets names in markdown bold or code despite the prompt; the page shows plain
-        // text, and French prose has no use for an asterisk or a backtick. Underscores stay:
-        // repo names carry them. It also breaks lines to enumerate, though the answer is one line.
-        if (part.type === 'text-delta')
-          yield part.text.replace(/[*`]/g, '').replace(/\s*\n\s*/g, ' ');
-        else if (part.type === 'tool-result')
-          toolOutputs.push({ tool: part.toolName, output: part.output });
-        else if (part.type === 'error') throw part.error;
-        // streamText ends an aborted stream quietly: a cut answer must not pass for a full one.
-        else if (part.type === 'abort')
-          throw new Error(`answer aborted: ${part.reason ?? 'no reason'}`);
-      }
-    }
-
-    return { text: text(), sources: answer => citedSources(answer, documents, read), toolOutputs };
+  }) {
+    const result = streamText({
+      model,
+      instructions: dated(instructions, now),
+      messages: await convertToModelMessages(messages),
+      temperature: 0.3,
+      // An answer takes under 100; without a cap the model once looped up to 1,148 words.
+      maxOutputTokens: 800,
+      abortSignal: signal,
+      providerOptions: {
+        mistral: {
+          promptCacheKey,
+          reasoningEffort: reasoning,
+        } satisfies MistralLanguageModelChatOptions,
+      },
+      telemetry: { functionId: 'generate-answer' },
+    });
+    // The question first, then the earlier turns, most recent first.
+    const conversation = messages.map(textOf).reverse();
+    return {
+      result,
+      sources: (answer: string): Source[] => citedSources(answer, documents, conversation),
+    };
   };
 }
+
+export type Answer = ReturnType<typeof createAgent>;

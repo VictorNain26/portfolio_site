@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { content } from '../src/lib/agent/content';
-import { unlink } from '../src/lib/agent/knowledge';
 import { cases, type Fact } from './cases';
-import { fileAt, loadWorld } from './world';
+import { loadWorld } from './world';
 
 const world = loadWorld();
-const flat = (text: string) => unlink(text).replace(/\s+/g, ' ');
+const flat = (text: string) => text.replace(/\s+/g, ' ');
 
 function sourceText(source: string): string | undefined {
   const cut = source.indexOf(':');
@@ -14,10 +13,6 @@ function sourceText(source: string): string | undefined {
   if (kind === 'persona') return content.persona;
   if (kind === 'readme') return repo?.readme ?? undefined;
   if (kind === 'description') return repo?.description ?? undefined;
-  if (kind === 'file') {
-    const slash = name.indexOf('/');
-    return fileAt(world, name.slice(0, slash), name.slice(slash + 1));
-  }
   return undefined;
 }
 

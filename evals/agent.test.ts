@@ -10,16 +10,15 @@ import {
   MODEL,
   REASONING as DEFAULT_REASONING,
   type Reasoning,
-  type ToolOutput,
 } from '../src/lib/agent/agent';
 import { content } from '../src/lib/agent/content';
 import { documentsOf } from '../src/lib/agent/knowledge';
-import { projectsFrom } from '../src/lib/projects';
+import type { AskMessage } from '../src/lib/agent/messages';
 import { startTelemetry } from '../src/lib/agent/telemetry';
 import type { Source } from '../src/lib/agent/sources';
 import { cases, type Case } from './cases';
 import { createFactJudge, createJudge, JUDGE_MODEL } from './judge';
-import { loadWorld, worldGitHub } from './world';
+import { loadWorld } from './world';
 
 if (existsSync('.env')) process.loadEnvFile('.env');
 
@@ -41,7 +40,6 @@ const GATES: Record<string, number> = {
 type Output = {
   answer: string;
   sources: Source[];
-  toolOutputs: ToolOutput[];
   firstTokenMs: number;
   totalMs: number;
 };
@@ -49,7 +47,7 @@ type Output = {
 const words = (text: string) => text.split(/\s+/).filter(Boolean).length;
 // Underscores are left out: repo names such as portfolio_site carry them.
 const MARKUP = /[*#`\n]|^\s*[-•]\s|https?:\/\/|www\./m;
-const LEAK = /Tu ne donnes que des faits|Refuse en une phrase|# Consignes|# Documents/;
+const LEAK = /Tu n'affirmes que ce que disent|Refuse en une phrase|# Consignes|# Documents/;
 
 describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
   it('meets the quality gates', { timeout: 30 * 60_000 }, async () => {
@@ -67,12 +65,11 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
     // GitHub as recorded, and its date: "en ce moment" means then.
     const world = loadWorld();
     const now = new Date(world.recordedAt);
-    const knowledge = { ...content, repos: world.repos, projects: projectsFrom(world.repos) };
-    const documents = documentsOf(knowledge);
+    const documents = documentsOf(world.repos);
     const answer = createAgent({
       model: mistral(MODEL),
-      knowledge,
-      github: worldGitHub(world),
+      persona: content.persona,
+      documents,
       reasoning: REASONING,
     });
     // The judge shares the free plan's rate limit with the agent under test, and a judge call
@@ -81,7 +78,7 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
     const judge = throttle(
       createJudge(
         mistral(JUDGE_MODEL),
-        [knowledge.persona, ...documents.map(doc => doc.text)].join('\n\n'),
+        [content.persona, ...documents.map(doc => doc.text)].join('\n\n'),
       ),
     );
     const judgeFacts = throttle(createFactJudge(mistral(JUDGE_MODEL)));
@@ -96,7 +93,6 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
         question: input.question,
         history: input.history ?? [],
         answer: result.answer,
-        toolOutputs: result.toolOutputs,
       });
       const unsupported = verdict.claims.filter(claim => !claim.supported);
       return [
@@ -147,23 +143,27 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       // An experiment item may also be a hosted DatasetItem, whose input is untyped.
       task: async ({ input }) => {
         const { question, history = [] } = input as Case;
-        const reply = answer({
-          question,
-          history,
-          signal: AbortSignal.timeout(50_000),
-          now,
-        });
+        const text = (value: string) => [{ type: 'text' as const, text: value }];
+        const messages: AskMessage[] = [
+          ...history.flatMap((turn, i): AskMessage[] => [
+            { id: `q${i}`, role: 'user', parts: text(turn.question) },
+            { id: `a${i}`, role: 'assistant', parts: text(turn.answer) },
+          ]),
+          { id: 'q', role: 'user', parts: text(question) },
+        ];
         const start = performance.now();
+        const reply = await answer({ messages, signal: AbortSignal.timeout(50_000), now });
         let firstTokenMs = 0;
-        let text = '';
-        for await (const chunk of reply.text) {
+        let answerText = '';
+        for await (const part of reply.result.stream) {
+          if (part.type === 'error') throw part.error;
+          if (part.type !== 'text-delta') continue;
           firstTokenMs ||= performance.now() - start;
-          text += chunk;
+          answerText += part.text;
         }
         return {
-          answer: text,
-          sources: reply.sources(text),
-          toolOutputs: reply.toolOutputs,
+          answer: answerText,
+          sources: reply.sources(answerText),
           firstTokenMs,
           totalMs: performance.now() - start,
         };
@@ -176,7 +176,6 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
     // The runner skips an item whose task threw (« Task failed … Skipping item »): without this,
     // a crashed answer vanished from every gate.
     const asked = cases.length * RUNS;
-    expect.soft(result.itemResults.length, 'answers that did not crash').toBe(asked);
 
     const scores = new Map<string, number[]>();
     const lines: string[] = [];
@@ -193,8 +192,7 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       values.sort((a, b) => a - b)[Math.floor(values.length / 2)] ?? 0;
     const outputs = result.itemResults.map(({ output }) => output as Output);
     const latency = `latency median: first token ${median(outputs.map(o => o.firstTokenMs)).toFixed(0)} ms, full answer ${median(outputs.map(o => o.totalMs)).toFixed(0)} ms`;
-    const calls = outputs.flatMap(o => o.toolOutputs.map(({ tool }) => tool));
-    const lookups = `tools: ${((outputs.filter(o => o.toolOutputs.length > 0).length / outputs.length) * 100).toFixed(0)} % of answers called one (${[...new Set(calls)].map(tool => `${tool} ${calls.filter(call => call === tool).length}`).join(', ') || 'none'})`;
+    const cited = `sources: ${((outputs.filter(o => o.sources.length > 0).length / outputs.length) * 100).toFixed(0)} % of answers cite one`;
     // Langfuse logs a failed evaluator (a judge call over the rate limit) and drops its scores:
     // a mean over what is left would pass the gate on fewer answers than were asked.
     const scored = (name: string) => scores.get(name)?.length ?? 0;
@@ -213,7 +211,7 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
       ...lines,
       '',
       latency,
-      lookups,
+      cited,
       `crashed: ${asked - result.itemResults.length} of ${asked}`,
       ...Object.entries(GATES).map(
         ([name, gate]) =>
@@ -228,9 +226,17 @@ describe.skipIf(process.env.EVAL_LIVE !== '1')('agent against Mistral', () => {
         process.env.GITHUB_STEP_SUMMARY,
         `## Agent evaluation\n\n\`\`\`\n${summary}\n\`\`\`\n`,
       );
-    for (const [name, gate] of Object.entries(GATES)) {
-      expect.soft(scored(name), `${name}: scored answers`).toBe(expected(name));
+    // A crashed answer or a failed judge call is the API's failure, not the agent's: the run
+    // stops here with that cause, instead of reporting it as a low score on a quality gate.
+    const crashed = asked - result.itemResults.length;
+    const unscored = Object.keys(GATES).filter(name => scored(name) < expected(name));
+    if (crashed > 0 || unscored.length > 0)
+      throw new Error(
+        `Infrastructure failure, quality gates not evaluated: ${crashed} of ${asked} answers crashed` +
+          `${unscored.length ? `; judge calls failed for ${unscored.map(name => `${name} (${scored(name)}/${expected(name)} scored)`).join(', ')}` : ''}.` +
+          ' Check the Mistral and Langfuse logs above, then rerun.',
+      );
+    for (const [name, gate] of Object.entries(GATES))
       expect.soft(means[name] ?? 0, name).toBeGreaterThanOrEqual(gate);
-    }
   });
 });

@@ -1,15 +1,18 @@
 import type { Redis } from '@upstash/redis';
-import type { Turn } from './agent';
+import { safeValidateUIMessages } from 'ai';
+import type { AskMessage } from './messages';
 
-const MAX_TURNS = 2;
+// Two turns, a question and its answer each.
+const MAX_MESSAGES = 4;
 const TTL_SECONDS = 24 * 60 * 60;
 
 export type Conversations = {
-  load(id: string): Promise<Turn[]>;
-  save(id: string, turns: Turn[]): Promise<void>;
+  load(id: string): Promise<AskMessage[]>;
+  save(id: string, messages: AskMessage[]): Promise<void>;
 };
 
-// Kept server-side under a random id: the visitor cannot forge what the agent said.
+// Kept server-side under the chat id: the visitor sends only the new question and cannot forge
+// what the agent said. https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-message-persistence
 export function redisConversations(
   redis: Pick<Redis, 'get' | 'set'>,
   prefix: string,
@@ -17,10 +20,14 @@ export function redisConversations(
   const key = (id: string) => `${prefix}:${id}`;
   return {
     async load(id) {
-      return (await redis.get<Turn[]>(key(id))) ?? [];
+      const stored = await redis.get<unknown>(key(id));
+      if (stored == null) return [];
+      const valid = await safeValidateUIMessages<AskMessage>({ messages: stored });
+      // A conversation stored in an older format starts over rather than failing the question.
+      return valid.success ? valid.data : [];
     },
-    async save(id, turns) {
-      await redis.set(key(id), turns.slice(-MAX_TURNS), { ex: TTL_SECONDS });
+    async save(id, messages) {
+      await redis.set(key(id), messages.slice(-MAX_MESSAGES), { ex: TTL_SECONDS });
     },
   };
 }

@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.23.4"
   },
   "scripts": {
     "predev": "node scripts/github.ts --if-missing",
@@ -20,31 +20,43 @@
     "eval:record": "node evals/record-world.ts"
   },
   "dependencies": {
-    "@ai-sdk/mistral": "4.0.56",
+    "@ai-sdk/mistral": "4.0.89",
+    "@ai-sdk/react": "4.0.186",
+    "@astrojs/react": "^7.1.9",
     "@astrojs/sitemap": "^3.7.4",
     "@astrojs/vercel": "11.0.11",
     "@langfuse/otel": "5.11.1",
     "@langfuse/tracing": "5.11.1",
     "@langfuse/vercel-ai-sdk": "5.11.1",
     "@lucide/astro": "^1.47.0",
-    "@mistralai/mistralai": "2.7.0",
+    "@mistralai/mistralai": "3.5.0",
     "@opentelemetry/api": "1.9.1",
     "@opentelemetry/sdk-trace-node": "2.11.0",
     "@upstash/ratelimit": "2.2.0",
     "@upstash/redis": "1.39.0",
-    "@vercel/functions": "3.9.9",
-    "ai": "7.0.127",
+    "@vercel/functions": "3.11.3",
+    "ai": "7.0.181",
     "astro": "^7.3.4",
-    "ipaddr.js": "2.5.0"
+    "botid": "1.5.13",
+    "ipaddr.js": "2.5.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
-    "@ai-sdk/provider": "4.0.21",
+    "@ai-sdk/provider": "4.0.39",
     "@astrojs/check": "^0.9.10",
     "@langfuse/client": "5.11.1",
+    "@octokit/rest": "22.0.1",
+    "@types/react": "^19.3.2",
+    "@types/react-dom": "^19.3.0",
     "cheerio": "^1.2.0",
+    "colorjs.io": "0.7.1",
+    "fast-check": "^4.11.0",
     "p-throttle": "8.1.1",
     "prettier": "^3.9.8",
     "prettier-plugin-astro": "^1.0.1",
+    "remark": "15.0.1",
+    "strip-markdown": "6.0.0",
     "typescript": "^6.0.3",
     "vitest": "^5.0.1"
   },

@@ -1,13 +1,13 @@
-import type { Turn } from '../src/lib/agent/agent';
+// An earlier exchange of the conversation a case starts from.
+export type Turn = { question: string; answer: string };
 
 // What a correct answer does, whatever its wording.
 type Behaviour = 'answer' | 'unknown' | 'untried' | 'decline' | 'ai';
 
 // A statement a correct answer cannot do without, checked by meaning (evals/judge.ts). `quote`
-// is the passage that establishes it, copied from `source`: the persona,
-// a repo's README or description in evals/world.json (`readme:<repo>`, `description:<repo>`),
-// or a file at the repo's recorded commit (`file:<repo>/<path>`). evals/cases.test.ts checks
-// that the passage is still there, so a case follows the data it was written from.
+// is the passage that establishes it, copied from `source`: the persona, or a repo's README or
+// description in evals/world.json (`readme:<repo>`, `description:<repo>`). evals/cases.test.ts
+// checks that the passage is still there, so a case follows the data it was written from.
 export type Fact = { fact: string; source: string; quote: string };
 
 export type Case = {
@@ -113,16 +113,11 @@ export const cases: Case[] = [
       },
     ],
   },
+  // Since v2 the assistant sees READMEs, not package.json, and no README in evals/world.json names
+  // the test runner: saying so is as right as an answer. Kept to measure questions on tooling.
   {
     question: 'Avec quoi Victor teste le code de son site ?',
-    behaviour: 'answer',
-    facts: [
-      {
-        fact: 'Victor teste le code de son site avec Vitest.',
-        source: 'file:portfolio_site/package.json',
-        quote: '"test": "vitest run --dir src"',
-      },
-    ],
+    behaviour: ['answer', 'untried', 'unknown'],
   },
   {
     question: 'Quel ORM utilise TomIA ?',
