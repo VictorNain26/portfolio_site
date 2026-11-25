@@ -4,7 +4,10 @@ Site de Victor Lenain, développeur à Paris : <https://www.victorlenain.fr>
 
 Site [Astro](https://astro.build) déployé sur Vercel : une page d'accueil, une
 page projets, toutes deux statiques, et une seule route rendue à la demande,
-`/api/ask`, l'assistant IA qui répond sur Victor et son code.
+`/api/ask`, l'assistant IA qui répond sur Victor et son code. L'assistant suit
+la pile de l'AI SDK : `streamText` et un flux de messages UI côté serveur,
+`useChat` dans une île React côté page, Mistral comme modèle, Upstash pour les
+quotas et les conversations, Vercel BotID contre les bots.
 
 ## Démarrer
 
