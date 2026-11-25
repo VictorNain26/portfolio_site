@@ -1,5 +1,8 @@
 import { z } from 'astro/zod';
-import { PORTFOLIO_TOPIC } from './github';
+
+// A public repo reaches the site and the assistant only once it carries this topic, which only
+// its owner can set: client work never gets it.
+export const PORTFOLIO_TOPIC = 'portfolio';
 
 export type Project = {
   name: string;

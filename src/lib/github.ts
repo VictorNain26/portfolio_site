@@ -1,90 +1,73 @@
-import { z } from 'astro/zod';
+import { Octokit } from '@octokit/rest';
+import { remark } from 'remark';
+import strip from 'strip-markdown';
 import type { Repo } from './agent/repos';
+import { PORTFOLIO_TOPIC } from './projects.ts';
 
+// A README goes into every prompt: cut once, here, so the site and the evaluation read the same.
 const MAX_README = 6000;
-const TIMEOUT_MS = 5_000;
 
-// A public repo reaches the site and the assistant only once it carries this topic, which only
-// its owner can set: client work never gets it.
-export const PORTFOLIO_TOPIC = 'portfolio';
-
-const reposSchema = z.array(
-  z.object({
-    name: z.string(),
-    description: z.string().nullable(),
-    html_url: z.url(),
-    homepage: z.string().nullable(),
-    language: z.string().nullable(),
-    stargazers_count: z.number(),
-    pushed_at: z.string(),
-    archived: z.boolean(),
-    fork: z.boolean(),
-    topics: z.array(z.string()).optional(),
-  }),
-);
-
-export type Fetcher = (
-  url: string,
-  init: { headers: Record<string, string>; signal: AbortSignal },
-) => Promise<Response>;
+// The model copies the markdown it reads (links, images, badges, code blocks): the corpus keeps
+// the README's text only. https://github.com/remarkjs/strip-markdown
+export async function plainReadme(markdown: string): Promise<string> {
+  const text = String(await remark().use(strip).process(markdown));
+  return text.trim().slice(0, MAX_README).trim();
+}
 
 // GitHub's REST API, read at build time only (scripts/github.ts writes src/data/github.json,
-// and evals/record-world.ts the evaluation's copy): the site and the assistant never call it.
-export function githubApi({
+// evals/record-world.ts the evaluation's copy): the site and the assistant never call it.
+// https://octokit.github.io/rest.js
+export async function readRepos({
   user,
   token,
-  fetch: get = fetch,
+  fetch,
 }: {
   user: string;
   token?: string | undefined;
-  fetch?: Fetcher | undefined;
-}) {
-  const headers: Record<string, string> = {
-    Accept: 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28',
-    ...(token && { Authorization: `Bearer ${token}` }),
-  };
-  const call = (path: string, signal: AbortSignal, accept?: string) =>
-    get(`https://api.github.com${path}`, {
-      headers: accept ? { ...headers, Accept: accept } : headers,
-      signal: AbortSignal.any([signal, AbortSignal.timeout(TIMEOUT_MS)]),
+  fetch?: typeof globalThis.fetch;
+}): Promise<Repo[]> {
+  const octokit = new Octokit({
+    ...(token && { auth: token }),
+    ...(fetch && { request: { fetch } }),
+  });
+  const listed = await octokit.paginate(octokit.rest.repos.listForUser, {
+    username: user,
+    type: 'owner',
+    sort: 'pushed',
+    per_page: 100,
+  });
+  // This endpoint lists public repos only. The profile repo, named after the user, holds the
+  // profile README.
+  const kept = listed.filter(
+    repo => !repo.fork && (repo.topics?.includes(PORTFOLIO_TOPIC) === true || repo.name === user),
+  );
+  return Promise.all(
+    kept.map(async repo => ({
+      name: repo.name,
+      description: repo.description,
+      url: repo.html_url,
+      homepage: repo.homepage || null,
+      language: repo.language ?? null,
+      stars: repo.stargazers_count ?? 0,
+      // The day is enough, and keeps the build snapshot still between two pushes of a day.
+      pushedAt: (repo.pushed_at ?? '').slice(0, 10),
+      archived: repo.archived ?? false,
+      topics: repo.topics ?? [],
+      readme: await readme(octokit, user, repo.name),
+    })),
+  );
+}
+
+async function readme(octokit: Octokit, owner: string, repo: string): Promise<string | null> {
+  try {
+    const { data } = await octokit.rest.repos.getReadme({
+      owner,
+      repo,
+      mediaType: { format: 'raw' },
     });
-
-  return {
-    // This endpoint lists public repos only. The profile repo, named after the user, holds the
-    // profile README.
-    async repos(signal: AbortSignal): Promise<Omit<Repo, 'readme'>[]> {
-      const res = await call(`/users/${user}/repos?per_page=100&type=owner&sort=pushed`, signal);
-      if (!res.ok) throw new Error(`GitHub repos: ${res.status}`);
-      return reposSchema
-        .parse(await res.json())
-        .filter(
-          repo =>
-            !repo.fork && (repo.topics?.includes(PORTFOLIO_TOPIC) === true || repo.name === user),
-        )
-        .map(repo => ({
-          name: repo.name,
-          description: repo.description,
-          url: repo.html_url,
-          homepage: repo.homepage || null,
-          language: repo.language,
-          stars: repo.stargazers_count,
-          // The day is enough, and keeps the build snapshot still between two pushes of a day.
-          pushedAt: repo.pushed_at.slice(0, 10),
-          archived: repo.archived,
-          topics: repo.topics ?? [],
-        }));
-    },
-
-    async readme(name: string, signal: AbortSignal): Promise<string | null> {
-      const res = await call(
-        `/repos/${user}/${name}/readme`,
-        signal,
-        'application/vnd.github.raw+json',
-      );
-      if (res.status === 404) return null;
-      if (!res.ok) throw new Error(`GitHub README ${name}: ${res.status}`);
-      return (await res.text()).slice(0, MAX_README);
-    },
-  };
+    return plainReadme(String(data));
+  } catch (error) {
+    if ((error as { status?: number }).status === 404) return null;
+    throw error;
+  }
 }

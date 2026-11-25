@@ -1,36 +1,17 @@
-import { PORTFOLIO_TOPIC } from '../github';
-import { projectsFrom } from '../projects';
+import { PORTFOLIO_TOPIC, projectsFrom } from '../projects';
 import type { Repo } from './repos';
 
 // What the assistant knows besides the persona, and can cite: one document per project, plus the
 // profile README.
 export type Document = { id: string; title: string; url: string; names: string[]; text: string };
 
-// The build already cuts a README to this; a stale github.json must not grow the prompt either.
-const MAX_README = 6000;
 // The whole corpus, persona included, was 31 124 characters in November 2026 (seven repos, three
-// of them cut at MAX_README). Past this, every question pays for a bigger prompt: the build
-// fails and someone decides what goes.
+// of them cut at the README maximum of src/lib/github.ts). Past this, every question pays for a
+// bigger prompt: the build fails and someone decides what goes.
 export const MAX_CORPUS = 60_000;
 
-// The model copies the markdown links it reads; answers must stay plain text.
-export const unlink = (markdown: string) => markdown.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');
-
-// No URL reaches the model in any form: images, links, references, autolinks, bare addresses.
-const withoutUrls = (markdown: string) =>
-  unlink(
-    markdown
-      .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
-      .replace(/<img\b[^>]*>/gi, '')
-      .replace(/^\s*\[[^\]]+\]:\s*\S+.*$/gm, ''),
-  )
-    .replace(/\[([^\]]+)\]\[[^\]]*\]/g, '$1')
-    .replace(/<(?:https?:\/\/|www\.)[^>]*>/gi, '')
-    .replace(/(?:https?:\/\/|www\.)[^\s)>\]]+/gi, '')
-    .replace(/\n{3,}/g, '\n\n');
-
-const readmeOf = (repo: Repo | undefined) =>
-  repo?.readme ? withoutUrls(repo.readme).trim().slice(0, MAX_README).trim() : '';
+// READMEs arrive as plain text, cleaned and cut when github.json is written (src/lib/github.ts).
+const readmeOf = (repo: Repo | undefined) => repo?.readme?.trim() ?? '';
 
 export function checkBudget(persona: string, documents: Document[], max = MAX_CORPUS): void {
   const size = persona.length + documents.reduce((sum, doc) => sum + doc.text.length, 0);

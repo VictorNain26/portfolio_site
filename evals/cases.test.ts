@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { content } from '../src/lib/agent/content';
-import { unlink } from '../src/lib/agent/knowledge';
 import { cases, type Fact } from './cases';
 import { loadWorld } from './world';
 
 const world = loadWorld();
-const flat = (text: string) => unlink(text).replace(/\s+/g, ' ');
+const flat = (text: string) => text.replace(/\s+/g, ' ');
 
 function sourceText(source: string): string | undefined {
   const cut = source.indexOf(':');

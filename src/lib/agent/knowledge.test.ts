@@ -21,14 +21,8 @@ const aubesonore = repo('aubesonore', {
   homepage: 'https://www.aubesonore.fr/',
   topics: ['portfolio', 'python'],
   language: 'Python',
-  readme: [
-    '![Logo](https://www.aubesonore.fr/logo.png)',
-    'Diffuse via [AzuraCast](https://www.azuracast.com/), le dimanche.',
-    'Démo sur <https://demo.aubesonore.fr> ou https://staging.aubesonore.fr/live, en local http://localhost:3000.',
-    'Voir le [guide][g] et <img src="https://x.fr/a.png" alt="a">.',
-    '',
-    '[g]: https://www.aubesonore.fr/guide',
-  ].join('\n'),
+  // As src/lib/github.ts writes it: plain text, already cut.
+  readme: 'AubeSonore\n\nDiffuse via AzuraCast, le dimanche.',
 });
 const profile = repo('VictorNain26', { topics: [], readme: 'Salut, je suis Victor.' });
 
@@ -44,21 +38,15 @@ describe('documentsOf', () => {
     });
   });
 
-  it('carries the status, the stack and the README without its links', () => {
+  it('carries the status, the stack and the README', () => {
     expect(project.text).toContain('En ligne');
     expect(project.text).toContain('Web radio diffusée 24 h/24.');
     expect(project.text).toContain('python');
     expect(project.text).toContain('Diffuse via AzuraCast, le dimanche.');
-    expect(project.text).not.toContain('azuracast.com');
   });
 
   it('gives the main language GitHub reports', () => {
     expect(project.text).toContain('Langage : Python.');
-  });
-
-  it('leaves no URL in the README: bare, autolinked, referenced, or in an image', () => {
-    expect(project.text).not.toMatch(/https?:\/\/|www\.|<img|!\[|\]:/);
-    expect(project.text).toContain('Voir le guide');
   });
 
   it('keeps the profile README as its own document', () => {
@@ -67,14 +55,6 @@ describe('documentsOf', () => {
       names: ['VictorNain26'],
       text: expect.stringContaining('Salut, je suis Victor.'),
     });
-  });
-
-  it('caps a long README after its links are gone', () => {
-    const link = '[mot](https://example.com/une/longue/adresse/de/page) ';
-    const long = documentsOf([repo('long', { readme: link.repeat(2_000) })]);
-    const readme = long[0]!.text.split('\n\n').at(-1)!;
-    expect(readme.length).toBeGreaterThan(5_900);
-    expect(readme.length).toBeLessThanOrEqual(6_000);
   });
 });
 
